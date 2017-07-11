@@ -7,7 +7,7 @@ class MultiCriteriaOptimization(HasStrictTraits):
     @classmethod
     def from_json(cls, json_data):
         self = cls(
-            type=json_data["type"]
+            name=json_data["name"]
         )
 
         return self

@@ -1,6 +1,8 @@
-from traits.api import Interface
+from traits.api import Interface, String
 
 
 class IMultiCriteriaOptimizer(Interface):
-    def run(self):
+    name = String()
+
+    def run(self, application):
         pass
