@@ -1,9 +1,9 @@
-from traits.api import List
 from envisage.plugin import Plugin
+from traits.api import List
 
-from force_bdss.basic_multi_criteria_optimizer import \
+from force_bdss.mco.basic_multi_criteria_optimizer import \
     BasicMultiCriteriaOptimizer
-from force_bdss.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
+from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
 class MultiCriteriaOptimizersPlugin(Plugin):

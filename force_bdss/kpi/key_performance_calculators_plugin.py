@@ -1,9 +1,9 @@
-from traits.api import List
 from envisage.plugin import Plugin
+from traits.api import List
 
-from force_bdss.basic_key_performance_calculator import \
+from force_bdss.kpi.basic_key_performance_calculator import \
     BasicKeyPerformanceCalculator
-from force_bdss.i_key_performance_calculator import IKeyPerformanceCalculator
+from force_bdss.kpi.i_key_performance_calculator import IKeyPerformanceCalculator
 
 
 class KeyPerformanceCalculatorsPlugin(Plugin):

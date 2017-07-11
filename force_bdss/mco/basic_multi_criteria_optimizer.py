@@ -1,8 +1,9 @@
 import subprocess
 import sys
+
 from traits.api import provides, HasStrictTraits
 
-from force_bdss.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
+from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
 @provides(IMultiCriteriaOptimizer)
