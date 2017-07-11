@@ -5,5 +5,5 @@ from force_bdss.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 @provides(IMultiCriteriaOptimizer)
 class BasicMultiCriteriaOptimizer(HasStrictTraits):
-    def run(self):
-        print("Basic multicriteria optimizer in action")
+    def run(self, workflow):
+        print("Basic multicriteria optimizer in action, {}".format(workflow))

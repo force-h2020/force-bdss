@@ -7,7 +7,6 @@ from force_bdss.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
 class MultiCriteriaOptimizersPlugin(Plugin):
-
     id = "force_bdss.multi_criteria_optimizers_plugin"
 
     multi_criteria_optimizers = List(
