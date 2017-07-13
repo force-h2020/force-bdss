@@ -3,8 +3,8 @@ from envisage.plugin import Plugin
 from traits.has_traits import on_trait_change
 from traits.trait_types import List
 
-from force_bdss.kpi.i_key_performance_calculator import (
-    IKeyPerformanceCalculator)
+from force_bdss.data_sources.i_data_source import (
+    IDataSource)
 from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
@@ -26,21 +26,21 @@ class CoreMCODriver(Plugin):
 
     #: A list of the available Key Performance Indicator calculators.
     #: It will be populated by plugins.
-    key_performance_calculators = ExtensionPoint(
-        List(IKeyPerformanceCalculator),
-        id='force_bdss.key_performance_calculators')
+    data_sources = ExtensionPoint(
+        List(IDataSource),
+        id='force_bdss.data_sources')
 
     @on_trait_change("application:started")
     def application_started(self):
         workflow = self.application.workflow
         if self.application.evaluate:
-            for kpi in workflow.key_performance_indicators:
-                kpc = self._find_kpc_by_computes(kpi)
-                if kpc:
-                    kpc.run(self.application)
+            for requested_ds in workflow.data_sources:
+                data_source = self._find_data_source_by_computes(requested_ds)
+                if data_source:
+                    data_source.run(self.application)
                 else:
-                    raise Exception("Requested KPI {} but don't know how"
-                                    "to compute it.".format(kpi))
+                    raise Exception("Requested data source {} but don't know "
+                                    "to find it.".format(requested_ds))
         else:
             mco_name = workflow.multi_criteria_optimization.name
             mco = self._find_mco_by_name(mco_name)
@@ -50,10 +50,10 @@ class CoreMCODriver(Plugin):
                 raise Exception("Requested MCO {} but it's not available"
                                 "to compute it.".format(mco_name))
 
-    def _find_kpc_by_computes(self, computes):
-        for kpc in self.key_performance_calculators:
-            if kpc.computes == computes:
-                return kpc
+    def _find_data_source_by_computes(self, computes):
+        for ds in self.data_sources:
+            if ds.computes == computes:
+                return ds
 
         return None
 
