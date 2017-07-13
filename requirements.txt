@@ -1,2 +1,0 @@
-envisage==4.6.0
-click==6.7
