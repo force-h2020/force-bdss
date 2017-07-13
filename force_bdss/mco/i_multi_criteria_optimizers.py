@@ -1,4 +1,4 @@
-from traits.api import Interface, String, Instance
+from traits.api import Interface, String
 
 
 class IMultiCriteriaOptimizer(Interface):
