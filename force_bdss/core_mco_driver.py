@@ -39,7 +39,7 @@ class CoreMCODriver(Plugin):
                 if data_source:
                     data_source.run(self.application)
                 else:
-                    raise Exception("Requested sata source {} but don't know "
+                    raise Exception("Requested data source {} but don't know "
                                     "to find it.".format(requested_ds))
         else:
             mco_name = workflow.multi_criteria_optimization.name
