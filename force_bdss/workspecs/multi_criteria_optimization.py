@@ -2,7 +2,7 @@ from traits.api import HasStrictTraits, String
 
 
 class MultiCriteriaOptimization(HasStrictTraits):
-    type = String
+    name = String()
 
     @classmethod
     def from_json(cls, json_data):

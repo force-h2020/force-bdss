@@ -31,9 +31,34 @@ class CoreMCODriver(Plugin):
 
     @on_trait_change("application:started")
     def application_started(self):
+        workflow = self.application.workflow
         if self.application.evaluate:
-            for kpi in self.key_performance_calculators:
-                kpi.run(self.application)
+            for kpi in workflow.key_performance_indicators:
+                kpc = self._find_kpc_by_computes(kpi)
+                if kpc:
+                    kpc.run(self.application)
+                else:
+                    raise Exception("Requested KPI {} but don't know how"
+                                    "to compute it.".format(kpi))
         else:
-            for mco in self.multi_criteria_optimizers:
+            mco_name = workflow.multi_criteria_optimization.name
+            mco = self._find_mco_by_name(mco_name)
+            if mco:
                 mco.run(self.application)
+            else:
+                raise Exception("Requested MCO {} but it's not available"
+                                "to compute it.".format(mco_name))
+
+    def _find_kpc_by_computes(self, computes):
+        for kpc in self.key_performance_calculators:
+            if kpc.computes == computes:
+                return kpc
+
+        return None
+
+    def _find_mco_by_name(self, name):
+        for mco in self.multi_criteria_optimizers:
+            if mco.name == name:
+                return mco
+
+        return None

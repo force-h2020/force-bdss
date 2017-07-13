@@ -1,6 +1,9 @@
 {
     "multi_criteria_optimization": {
         "name": "basic"
-    }
+    },
+    "key_performance_indicators": [
+        "viscosity", "price"
+    ]
 }
 

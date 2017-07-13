@@ -1,8 +1,8 @@
 from envisage.plugin import Plugin
 from traits.api import List
 
-from force_bdss.mco.basic_multi_criteria_optimizer import \
-    BasicMultiCriteriaOptimizer
+from force_bdss.mco.basic import Basic
+from force_bdss.mco.dakota import Dakota
 from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
@@ -15,4 +15,4 @@ class MultiCriteriaOptimizersPlugin(Plugin):
     )
 
     def _multi_criteria_optimizers_default(self):
-        return [BasicMultiCriteriaOptimizer()]
+        return [Basic(), Dakota()]
