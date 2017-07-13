@@ -1,4 +1,4 @@
-from force import *
+from force_bdss import *
 
 wf=Workflow()
 wf.set_mco(Dakota())
