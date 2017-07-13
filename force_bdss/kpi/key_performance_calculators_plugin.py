@@ -1,12 +1,11 @@
 from envisage.plugin import Plugin
 from traits.api import List
 
-from force_bdss.kpi.basic import \
-    Basic
-from force_bdss.kpi.i_key_performance_calculator import IKeyPerformanceCalculator
+from force_bdss.kpi.i_key_performance_calculator import (
+    IKeyPerformanceCalculator)
 
+from force_bdss.kpi.basic import Basic
 from force_bdss.kpi.price import Price
-
 from force_bdss.kpi.viscosity import Viscosity
 
 

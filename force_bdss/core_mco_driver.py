@@ -3,7 +3,8 @@ from envisage.plugin import Plugin
 from traits.has_traits import on_trait_change
 from traits.trait_types import List
 
-from force_bdss.kpi.i_key_performance_calculator import IKeyPerformanceCalculator
+from force_bdss.kpi.i_key_performance_calculator import (
+    IKeyPerformanceCalculator)
 from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
 
 
