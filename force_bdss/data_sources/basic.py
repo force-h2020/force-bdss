@@ -1,10 +1,10 @@
 from traits.api import provides, HasStrictTraits, String
 
-from force_bdss.kpi.i_key_performance_calculator import (
-    IKeyPerformanceCalculator)
+from force_bdss.data_sources.i_data_source import (
+    IDataSource)
 
 
-@provides(IKeyPerformanceCalculator)
+@provides(IDataSource)
 class Basic(HasStrictTraits):
     computes = String("basic")
 

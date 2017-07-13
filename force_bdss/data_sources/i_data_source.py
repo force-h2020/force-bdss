@@ -1,7 +1,7 @@
 from traits.api import Interface, String
 
 
-class IKeyPerformanceCalculator(Interface):
+class IDataSource(Interface):
     computes = String()
 
     def run(self):
