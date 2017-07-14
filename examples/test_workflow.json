@@ -1,9 +1,17 @@
 {
-    "multi_criteria_optimization": {
-        "name": "basic"
+  "multi_criteria_optimizer": {
+    "name": "basic",
+    "model_data": {}
+  },
+  "data_sources": [
+    {
+      "name": "viscosity",
+      "model_data": {}
     },
-    "data_sources": [
-        "viscosity", "price"
-    ]
+    {
+      "name": "price",
+      "model_data": {}
+    }
+  ]
 }
 

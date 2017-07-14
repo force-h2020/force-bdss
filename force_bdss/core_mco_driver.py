@@ -36,34 +36,36 @@ class CoreMCODriver(Plugin):
         workflow = self.application.workflow
         if self.application.evaluate:
             for requested_ds in workflow.data_sources:
-                ds_bundle = self._find_data_source_bundle_by_name(requested_ds)
+                ds_bundle = self._find_data_source_bundle_by_name(
+                    requested_ds.name)
                 if ds_bundle:
                     ds_model = ds_bundle.create_model(requested_ds.model_data)
-                    data_source = ds_bundle.create_data_source(self, ds_model)
+                    data_source = ds_bundle.create_data_source(
+                        self.application, ds_model)
                     data_source.run()
                 else:
                     raise Exception("Requested data source {} but don't know "
-                                    "to find it.".format(requested_ds))
+                                    "to find it.".format(requested_ds.name))
         else:
             mco_data = workflow.multi_criteria_optimizer
             mco_bundle = self._find_mco_bundle_by_name(mco_data.name)
             if mco_bundle:
                 mco_model = mco_bundle.create_model(mco_data.model_data)
-                mco = mco_bundle.create_optimizer(self, mco_model)
+                mco = mco_bundle.create_optimizer(self.application, mco_model)
                 mco.run()
             else:
                 raise Exception("Requested MCO {} but it's not available"
                                 "to compute it.".format(mco_data.name))
 
-    def _find_data_source_by_name(self, name):
-        for ds in self.data_sources:
+    def _find_data_source_bundle_by_name(self, name):
+        for ds in self.data_source_bundles:
             if ds.name == name:
                 return ds
 
         return None
 
-    def _find_mco_by_name(self, name):
-        for mco in self.multi_criteria_optimizers:
+    def _find_mco_bundle_by_name(self, name):
+        for mco in self.mco_bundles:
             if mco.name == name:
                 return mco
 
