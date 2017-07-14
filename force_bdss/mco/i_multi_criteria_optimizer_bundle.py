@@ -7,8 +7,5 @@ class IMultiCriteriaOptimizerBundle(Interface):
     def create_optimizer(self, application, model):
         pass
 
-    def create_ui(self):
-        pass
-
     def create_model(self, model_data):
         pass

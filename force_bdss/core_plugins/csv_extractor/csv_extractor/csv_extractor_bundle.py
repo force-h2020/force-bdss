@@ -14,8 +14,5 @@ class CSVExtractorBundle(HasStrictTraits):
     def create_model(self, model_data):
         return CSVExtractorModel.from_json(model_data)
 
-    def create_ui(self, model):
-        pass
-
     def create_data_source(self, application, model):
         return CSVExtractorDataSource(self, application, model)
