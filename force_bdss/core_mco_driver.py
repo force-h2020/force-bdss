@@ -42,7 +42,7 @@ class CoreMCODriver(Plugin):
                     ds_model = ds_bundle.create_model(requested_ds.model_data)
                     data_source = ds_bundle.create_data_source(
                         self.application, ds_model)
-                    data_source.run()
+                    print(data_source.run())
                 else:
                     raise Exception("Requested data source {} but don't know "
                                     "to find it.".format(requested_ds.name))
