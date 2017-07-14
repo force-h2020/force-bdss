@@ -1,4 +1,4 @@
-from traits.has_traits import HasStrictTraits
+from traits.api import HasStrictTraits
 
 
 class DakotaModel(HasStrictTraits):

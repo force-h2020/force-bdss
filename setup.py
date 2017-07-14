@@ -10,11 +10,8 @@ setup(
             'force_bdss = force_bdss.cli.force_bdss:run',
         ],
         "force.bdss.extensions": [
-            "mco = force_bdss.mco.multi_criteria_optimizers_plugin:"
-            "MultiCriteriaOptimizersPlugin",
-            "data_source = force_bdss.core_plugins."
-            "test_data_sources.data_sources_plugin:"
-            "DataSourcesPlugin",
+            "mco = force_bdss.core_plugins.test_mco.multi_criteria_optimizers_plugin:MultiCriteriaOptimizersPlugin",
+            "data_source = force_bdss.core_plugins.test_data_sources.data_sources_plugin:DataSourcesPlugin",
         ]
     },
     packages=find_packages(),

@@ -1,9 +1,11 @@
 from traits.has_traits import HasStrictTraits, provides
 from traits.trait_types import String
 
-from force_bdss.mco.dakota_optimizer import DakotaOptimizer
-from force_bdss.mco.dakota_model import DakotaModel
-from .i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle
+from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
+    IMultiCriteriaOptimizerBundle)
+
+from .dakota_model import DakotaModel
+from .dakota_optimizer import DakotaOptimizer
 
 
 @provides(IMultiCriteriaOptimizerBundle)

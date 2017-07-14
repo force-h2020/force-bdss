@@ -1,10 +1,11 @@
 from envisage.plugin import Plugin
 from traits.api import List
 
-from .i_multi_criteria_optimizer_bundle import (
+from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
     IMultiCriteriaOptimizerBundle)
-from .dakota_bundle import DakotaBundle
-from .basic_bundle import BasicBundle
+
+from .basic.basic_bundle import BasicBundle
+from .dakota.dakota_bundle import DakotaBundle
 
 
 class MultiCriteriaOptimizersPlugin(Plugin):

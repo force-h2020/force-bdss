@@ -1,7 +1,8 @@
 from traits.has_traits import HasStrictTraits, provides
 from traits.trait_types import String
 
-from .i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle
+from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
+    IMultiCriteriaOptimizerBundle)
 from .basic_model import BasicModel
 from .basic_optimizer import BasicOptimizer
 
