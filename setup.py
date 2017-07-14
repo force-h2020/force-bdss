@@ -20,6 +20,7 @@ setup(
     install_requires=[
         "envisage >= 4.6.0",
         "click >= 6.7",
-        "stevedore >= 1.24.0"
+        "stevedore >= 1.24.0",
+        "six >= 1.10.0"
     ]
 )

@@ -1,7 +1,8 @@
 import abc
+import six
 
 
-class BaseDataSource(metaclass=abc.ABCMeta):
+class BaseDataSource(six.with_metaclass(abc.ABCMeta)):
     def __init__(self, bundle, application, model):
         self.bundle = bundle
         self.application = application
