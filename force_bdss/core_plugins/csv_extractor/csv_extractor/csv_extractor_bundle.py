@@ -16,6 +16,6 @@ class CSVExtractorBundle(HasStrictTraits):
 
     def create_ui(self, model):
         pass
-    
+
     def create_data_source(self, application, model):
         return CSVExtractorDataSource(self, application, model)
