@@ -1,12 +1,10 @@
 import click
+from stevedore import extension
+from stevedore.exception import NoMatches
 from envisage.core_plugin import CorePlugin
 
 from force_bdss.bdss_application import BDSSApplication
 from force_bdss.core_mco_driver import CoreMCODriver
-from force_bdss.data_sources.data_sources_plugin import \
-    DataSourcesPlugin
-from force_bdss.mco.multi_criteria_optimizers_plugin import \
-    MultiCriteriaOptimizersPlugin
 
 
 @click.command()
@@ -17,9 +15,21 @@ def run(evaluate, workflow_filepath):
     plugins = [
         CorePlugin(),
         CoreMCODriver(),
-        DataSourcesPlugin(),
-        MultiCriteriaOptimizersPlugin(),
     ]
+
+    mgr = extension.ExtensionManager(
+        namespace='force.bdss.extensions',
+        invoke_on_load=True
+    )
+
+    def import_extensions(ext):
+        print("Found extension {}".format(ext.name))
+        plugins.append(ext.obj)
+
+    try:
+        mgr.map(import_extensions)
+    except NoMatches:
+        print("No extensions found")
 
     application = BDSSApplication(
         plugins=plugins,
