@@ -1,10 +1,11 @@
 from envisage.plugin import Plugin
 from traits.api import List
 
-from force_bdss.data_sources.basic_bundle import BasicBundle
-from force_bdss.data_sources.price_bundle import PriceBundle
-from force_bdss.data_sources.viscosity_bundle import ViscosityBundle
-from .i_data_source_bundle import IDataSourceBundle
+from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
+
+from .basic.basic_bundle import BasicBundle
+from .price.price_bundle import PriceBundle
+from .viscosity.viscosity_bundle import ViscosityBundle
 
 
 class DataSourcesPlugin(Plugin):

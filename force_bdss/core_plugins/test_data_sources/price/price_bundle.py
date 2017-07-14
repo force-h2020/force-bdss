@@ -2,8 +2,9 @@ from traits.api import provides, HasStrictTraits
 from traits.trait_types import String
 
 from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
-from force_bdss.data_sources.price_data_source import PriceDataSource
-from force_bdss.data_sources.price_model import PriceModel
+
+from .price_model import PriceModel
+from .price_data_source import PriceDataSource
 
 
 @provides(IDataSourceBundle)
