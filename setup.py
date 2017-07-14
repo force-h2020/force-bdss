@@ -11,7 +11,7 @@ setup(
         ],
         "force.bdss.extensions": [
             "mco = force_bdss.mco.multi_criteria_optimizers_plugin:"
-                   "MultiCriteriaOptimizersPlugin",
+            "MultiCriteriaOptimizersPlugin",
             "data_source = force_bdss.data_sources.data_sources_plugin:"
             "DataSourcesPlugin",
         ]
