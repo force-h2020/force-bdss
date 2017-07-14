@@ -1,6 +1,6 @@
 {
   "multi_criteria_optimizer": {
-    "name": "basic",
+    "name": "dakota",
     "model_data": {}
   },
   "data_sources": [
