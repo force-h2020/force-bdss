@@ -12,8 +12,6 @@ setup(
         "force.bdss.extensions": [
             "mco = force_bdss.core_plugins.test_mco."
             "multi_criteria_optimizers_plugin:MultiCriteriaOptimizersPlugin",
-            "data_source = force_bdss.core_plugins.test_data_sources."
-            "data_sources_plugin:DataSourcesPlugin",
             "csv_extractor = force_bdss.core_plugins.csv_extractor"
             ".csv_extractor_plugin:CSVExtractorPlugin",
         ]

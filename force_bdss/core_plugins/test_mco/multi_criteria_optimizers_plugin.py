@@ -4,7 +4,6 @@ from traits.api import List
 from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
     IMultiCriteriaOptimizerBundle)
 
-from .basic.basic_bundle import BasicBundle
 from .dakota.dakota_bundle import DakotaBundle
 
 
@@ -17,4 +16,4 @@ class MultiCriteriaOptimizersPlugin(Plugin):
     )
 
     def _multi_criteria_optimizers_default(self):
-        return [BasicBundle(), DakotaBundle()]
+        return [DakotaBundle()]
