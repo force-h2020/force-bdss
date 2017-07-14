@@ -1,18 +1,19 @@
 from envisage.plugin import Plugin
 from traits.api import List
 
-from force_bdss.mco.basic import Basic
-from force_bdss.mco.dakota import Dakota
-from force_bdss.mco.i_multi_criteria_optimizers import IMultiCriteriaOptimizer
+from .i_multi_criteria_optimizer_bundle import (
+    IMultiCriteriaOptimizerBundle)
+from .dakota_bundle import DakotaBundle
+from .basic_bundle import BasicBundle
 
 
 class MultiCriteriaOptimizersPlugin(Plugin):
-    id = "force_bdss.multi_criteria_optimizers_plugin"
+    id = "force.bdss.mco.plugins.multi_criteria_optimizers_plugin"
 
     multi_criteria_optimizers = List(
-        IMultiCriteriaOptimizer,
-        contributes_to='force_bdss.multi_criteria_optimizers'
+        IMultiCriteriaOptimizerBundle,
+        contributes_to='force.bdss.mco.bundles'
     )
 
     def _multi_criteria_optimizers_default(self):
-        return [Basic(), Dakota()]
+        return [BasicBundle(), DakotaBundle()]
