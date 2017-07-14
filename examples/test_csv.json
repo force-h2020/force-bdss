@@ -1,0 +1,18 @@
+{
+  "multi_criteria_optimizer": {
+    "name": "basic",
+    "model_data": {}
+  },
+  "data_sources": [
+    {
+      "name": "csv_extractor",
+      "model_data": {
+        "filename": "foo.csv",
+        "row": 3,
+        "column": 5,
+        "cuba_type": "PRESSURE"
+      }
+    }
+  ]
+}
+
