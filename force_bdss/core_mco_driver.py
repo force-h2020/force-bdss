@@ -36,9 +36,11 @@ class CoreMCODriver(Plugin):
         workflow = self.application.workflow
         if self.application.evaluate:
             for requested_ds in workflow.data_sources:
-                data_source = self._find_data_source_by_computes(requested_ds)
-                if data_source:
-                    data_source.run(self.application)
+                ds_bundle = self._find_data_source_bundle_by_name(requested_ds)
+                if ds_bundle:
+                    ds_model = ds_bundle.create_model(requested_ds.model_data)
+                    data_source = ds_bundle.create_data_source(self, ds_model)
+                    data_source.run()
                 else:
                     raise Exception("Requested data source {} but don't know "
                                     "to find it.".format(requested_ds))
@@ -53,9 +55,9 @@ class CoreMCODriver(Plugin):
                 raise Exception("Requested MCO {} but it's not available"
                                 "to compute it.".format(mco_data.name))
 
-    def _find_data_source_by_computes(self, computes):
+    def _find_data_source_by_name(self, name):
         for ds in self.data_sources:
-            if ds.computes == computes:
+            if ds.name == name:
                 return ds
 
         return None
