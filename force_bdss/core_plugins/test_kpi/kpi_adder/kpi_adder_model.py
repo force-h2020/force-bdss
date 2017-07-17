@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Int, String
+from traits.api import HasStrictTraits, String
 
 
 class KPIAdderModel(HasStrictTraits):
