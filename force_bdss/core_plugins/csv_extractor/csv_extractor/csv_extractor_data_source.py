@@ -5,7 +5,7 @@ from force_bdss.data_sources.data_source_result import DataSourceResult
 
 
 class CSVExtractorDataSource(BaseDataSource):
-    def run(self):
+    def run(self, parameters):
         with open(self.model.filename) as csvfile:
             reader = csv.reader(csvfile)
             for rowindex, row in enumerate(reader):
@@ -17,7 +17,8 @@ class CSVExtractorDataSource(BaseDataSource):
                         originator=self,
                         value_types=[self.model.cuba_type],
                         values=numpy.array(
-                            row[self.model.column]).reshape(1, 1)
+                            parameters.values[0]+float(
+                                row[self.model.column])).reshape(1, 1)
                     )
 
                 return None

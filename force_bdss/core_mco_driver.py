@@ -41,68 +41,63 @@ class CoreMCODriver(Plugin):
     @on_trait_change("application:started")
     def application_started(self):
         workflow = self.application.workflow
-        if self.application.evaluate:
-            ds_results = []
-            for requested_ds in workflow.data_sources:
-                ds_bundle = self._find_data_source_bundle_by_name(
-                    requested_ds.name)
-                if ds_bundle:
-                    ds_model = ds_bundle.create_model(requested_ds.model_data)
-                    data_source = ds_bundle.create_data_source(
-                        self.application, ds_model)
-                    ds_results.append(data_source.run())
-                else:
-                    raise Exception("Requested data source {} but don't know "
-                                    "to find it.".format(requested_ds.name))
 
-            kpi_results = []
-            for requested_kpic in workflow.kpi_calculators:
-                kpic_bundle = self._find_kpi_calculator_bundle_by_name(
-                    requested_kpic.name)
-                if kpic_bundle:
-                    kpic_model = kpic_bundle.create_model(
-                        requested_kpic.model_data)
-                    kpi_calculator = kpic_bundle.create_data_source(
-                        self.application, kpic_model)
-                    kpi_results.append(kpi_calculator.run(ds_results))
-                else:
-                    raise Exception(
-                        "Requested kpi calculator {} but don't know "
-                        "to find it.".format(requested_kpic.name))
+        mco_data = workflow.multi_criteria_optimizer
+        mco_bundle = self._mco_bundle_by_name(mco_data.name)
+        mco_model = mco_bundle.create_model(mco_data.model_data)
+        mco = mco_bundle.create_optimizer(self.application, mco_model)
+        mco_communicator = mco_bundle.create_communicator(
+            self.application,
+            mco_model)
 
-                print(
-                    kpi_results[0].value_types,
-                    kpi_results[0].values
-                )
+        if not self.application.evaluate:
+            mco.run()
+            return
 
-        else:
-            mco_data = workflow.multi_criteria_optimizer
-            mco_bundle = self._find_mco_bundle_by_name(mco_data.name)
-            if mco_bundle:
-                mco_model = mco_bundle.create_model(mco_data.model_data)
-                mco = mco_bundle.create_optimizer(self.application, mco_model)
-                mco.run()
-            else:
-                raise Exception("Requested MCO {} but it's not available"
-                                "to compute it.".format(mco_data.name))
+        parameters = mco_communicator.receive_from_mco()
 
-    def _find_data_source_bundle_by_name(self, name):
+        ds_results = []
+        for requested_ds in workflow.data_sources:
+            ds_bundle = self._data_source_bundle_by_name(
+                requested_ds.name)
+            ds_model = ds_bundle.create_model(requested_ds.model_data)
+            data_source = ds_bundle.create_data_source(
+                self.application, ds_model)
+            ds_results.append(data_source.run(parameters))
+
+        kpi_results = []
+        for requested_kpic in workflow.kpi_calculators:
+            kpic_bundle = self._kpi_calculator_bundle_by_name(
+                requested_kpic.name)
+            ds_model = kpic_bundle.create_model(
+                requested_kpic.model_data)
+            kpi_calculator = kpic_bundle.create_data_source(
+                self.application, ds_model)
+            kpi_results.append(kpi_calculator.run(ds_results))
+
+        mco_communicator.send_to_mco(kpi_results)
+
+    def _data_source_bundle_by_name(self, name):
         for ds in self.data_source_bundles:
             if ds.name == name:
                 return ds
 
-        return None
+        raise Exception("Requested data source {} but don't know "
+                        "to find it.".format(name))
 
-    def _find_kpi_calculator_bundle_by_name(self, name):
+    def _kpi_calculator_bundle_by_name(self, name):
         for kpic in self.kpi_calculator_bundles:
             if kpic.name == name:
                 return kpic
 
-        return None
+        raise Exception(
+            "Requested kpi calculator {} but don't know "
+            "to find it.".format(name))
 
-    def _find_mco_bundle_by_name(self, name):
+    def _mco_bundle_by_name(self, name):
         for mco in self.mco_bundles:
             if mco.name == name:
                 return mco
 
-        return None
+        raise Exception("Requested MCO {} but it's not available"
+                        "to compute it.".format(name))

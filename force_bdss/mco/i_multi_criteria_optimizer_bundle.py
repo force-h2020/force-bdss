@@ -9,3 +9,6 @@ class IMultiCriteriaOptimizerBundle(Interface):
 
     def create_model(self, model_data):
         pass
+
+    def create_communicator(self, model_data):
+        pass

@@ -1,7 +1,9 @@
 {
   "multi_criteria_optimizer": {
     "name": "dakota",
-    "model_data": {}
+    "model_data": {
+      "value_types": ["DUMMY"]
+    }
   },
   "data_sources": [
     {
