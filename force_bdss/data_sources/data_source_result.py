@@ -18,5 +18,3 @@ class DataSourceResult(HasTraits):
     results = Array(shape=(None, None))
     accuracy = Array(shape=(None, None))
     quality = Array(shape=(None, None))
-
-
