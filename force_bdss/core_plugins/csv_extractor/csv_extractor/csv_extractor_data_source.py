@@ -16,7 +16,8 @@ class CSVExtractorDataSource(BaseDataSource):
                     return DataSourceResult(
                         originator=self,
                         value_types = [self.model.cuba_type],
-                        values=numpy.array(row[self.model.column]).reshape(1,1)
+                        values=numpy.array(
+                            float(row[self.model.column])).reshape(1,1)
                     )
 
                 return None
