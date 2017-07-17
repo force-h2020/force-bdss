@@ -35,6 +35,7 @@ class CoreMCODriver(Plugin):
     def application_started(self):
         workflow = self.application.workflow
         if self.application.evaluate:
+            ds_results = []
             for requested_ds in workflow.data_sources:
                 ds_bundle = self._find_data_source_bundle_by_name(
                     requested_ds.name)
@@ -42,7 +43,7 @@ class CoreMCODriver(Plugin):
                     ds_model = ds_bundle.create_model(requested_ds.model_data)
                     data_source = ds_bundle.create_data_source(
                         self.application, ds_model)
-                    print(data_source.run())
+                    ds_results.append(data_source.run())
                 else:
                     raise Exception("Requested data source {} but don't know "
                                     "to find it.".format(requested_ds.name))
