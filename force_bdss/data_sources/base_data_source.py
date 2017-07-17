@@ -13,7 +13,7 @@ class BaseDataSource(six.with_metaclass(abc.ABCMeta)):
         return self.bundle.name
 
     @abc.abstractmethod
-    def run(self):
+    def run(self, parameters):
         """Executes the data source evaluation/fetching and returns
         the list of results as a DataSourceResult instance."""
         pass

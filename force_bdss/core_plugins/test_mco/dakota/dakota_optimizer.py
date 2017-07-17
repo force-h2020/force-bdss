@@ -10,5 +10,13 @@ from force_bdss.mco.base_multi_criteria_optimizer import (
 class DakotaOptimizer(BaseMultiCriteriaOptimizer):
     def run(self):
         print("Running dakota optimizer")
-        subprocess.check_call([sys.argv[0], "--evaluate",
-                               self.application.workflow_filepath])
+        for initial_value in range(10):
+            ps = subprocess.Popen(
+                [sys.argv[0],
+                 "--evaluate",
+                 self.application.workflow_filepath],
+                stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE)
+
+            out = ps.communicate("{}".format(initial_value).encode("utf-8"))
+            print("{}: {}".format(initial_value, out[0].decode("utf-8")))

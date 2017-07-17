@@ -1,6 +1,8 @@
 from traits.has_traits import HasStrictTraits, provides
 from traits.trait_types import String
 
+from force_bdss.core_plugins.test_mco.dakota.dakota_communicator import \
+    DakotaCommunicator
 from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
     IMultiCriteriaOptimizerBundle)
 
@@ -17,3 +19,6 @@ class DakotaBundle(HasStrictTraits):
 
     def create_optimizer(self, application, model):
         return DakotaOptimizer(self, application, model)
+
+    def create_communicator(self, application, model):
+        return DakotaCommunicator(self, application, model)
