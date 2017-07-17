@@ -100,4 +100,4 @@ class CoreMCODriver(Plugin):
                 return mco
 
         raise Exception("Requested MCO {} but it's not available"
-                        "to compute it.".format(mco_data.name))
+                        "to compute it.".format(name))
