@@ -17,7 +17,6 @@ class KPIAdderCalculator(BaseKPICalculator):
 
         return KPICalculatorResult(
             originator=self,
-            value_types = [self.model.cuba_type_out],
+            value_types=[self.model.cuba_type_out],
             values=numpy.array([sum])
         )
-
