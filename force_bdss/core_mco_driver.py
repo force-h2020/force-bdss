@@ -60,10 +60,10 @@ class CoreMCODriver(Plugin):
                 kpic_bundle = self._find_kpi_calculator_bundle_by_name(
                     requested_kpic.name)
                 if kpic_bundle:
-                    ds_model = kpic_bundle.create_model(
+                    kpic_model = kpic_bundle.create_model(
                         requested_kpic.model_data)
                     kpi_calculator = kpic_bundle.create_data_source(
-                        self.application, ds_model)
+                        self.application, kpic_model)
                     kpi_results.append(kpi_calculator.run(ds_results))
                 else:
                     raise Exception(
