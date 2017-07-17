@@ -1,5 +1,7 @@
 import csv
+import numpy
 from force_bdss.data_sources.base_data_source import BaseDataSource
+from force_bdss.data_sources.data_source_result import DataSourceResult
 
 
 class CSVExtractorDataSource(BaseDataSource):
@@ -11,9 +13,11 @@ class CSVExtractorDataSource(BaseDataSource):
                     continue
 
                 if rowindex == self.model.row:
-                    return {
-                        self.model.cuba_type: row[self.model.column]
-                    }
+                    return DataSourceResult(
+                        originator=self,
+                        value_types = [self.model.cuba_type],
+                        values=numpy.array(row[self.model.column]).reshape(1,1)
+                    )
 
                 return None
             return None

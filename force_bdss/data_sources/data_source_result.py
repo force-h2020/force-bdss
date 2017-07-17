@@ -1,4 +1,4 @@
-from traits.api import HasTraits, Array, List, String, Instance
+from traits.api import HasTraits, Array, ArrayOrNone, List, String, Instance
 
 from .base_data_source import BaseDataSource
 
@@ -12,9 +12,8 @@ class DataSourceResult(HasTraits):
     quality is the level of accuracy of the (e.g.c omputational) method, as
     the importance and reliability of that value. It should be an enumeration
     value such as HIGH, MEDIUM, POOR"""
-
     originator = Instance(BaseDataSource)
     value_types = List(String)
-    results = Array(shape=(None, None))
-    accuracy = Array(shape=(None, None))
-    quality = Array(shape=(None, None))
+    values = Array(shape=(None, None))
+    accuracy = ArrayOrNone(shape=(None, None))
+    quality = ArrayOrNone(shape=(None, None))

@@ -21,6 +21,7 @@ setup(
         "envisage >= 4.6.0",
         "click >= 6.7",
         "stevedore >= 1.24.0",
-        "six >= 1.10.0"
+        "six >= 1.10.0",
+        "numpy >= 1.12.0",
     ]
 )
