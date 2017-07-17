@@ -12,6 +12,24 @@
         "column": 5,
         "cuba_type": "PRESSURE"
       }
+    },
+    {
+      "name": "csv_extractor",
+      "model_data": {
+        "filename": "foo.csv",
+        "row": 3,
+        "column": 5,
+        "cuba_type": "PRESSURE"
+      }
+    }
+  ],
+  "kpi_calculators": [
+    {
+      "name": "kpi_adder",
+      "model_data": {
+        "cuba_type_in": "PRESSURE",
+        "cuba_type_out": "TOTAL_PRESSURE"
+      }
     }
   ]
 }
