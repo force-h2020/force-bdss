@@ -15,8 +15,9 @@ class CSVExtractorDataSource(BaseDataSource):
                 if rowindex == self.model.row:
                     return DataSourceResult(
                         originator=self,
-                        value_types = [self.model.cuba_type],
-                        values=numpy.array(row[self.model.column]).reshape(1,1)
+                        value_types=[self.model.cuba_type],
+                        values=numpy.array(
+                            row[self.model.column]).reshape(1, 1)
                     )
 
                 return None
