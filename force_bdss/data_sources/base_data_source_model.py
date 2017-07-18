@@ -3,6 +3,7 @@ import six
 
 
 class BaseDataSourceModel(six.with_metaclass(abc.ABCMeta)):
-    @abc.abstractclassmethod
+    @classmethod
+    @abc.abstractmethod
     def from_json(self, model_data):
         pass
