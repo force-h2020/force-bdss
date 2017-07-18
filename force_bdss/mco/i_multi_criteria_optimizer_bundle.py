@@ -7,7 +7,7 @@ class IMultiCriteriaOptimizerBundle(Interface):
     def create_optimizer(self, application, model):
         pass
 
-    def create_model(self, model_data):
+    def create_model(self, model_data=None):
         pass
 
     def create_communicator(self, model_data):

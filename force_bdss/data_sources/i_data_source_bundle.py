@@ -7,5 +7,5 @@ class IDataSourceBundle(Interface):
     def create_data_source(self, application, model):
         pass
 
-    def create_model(self, model_data):
+    def create_model(self, model_data=None):
         pass

@@ -14,8 +14,11 @@ from .dakota_optimizer import DakotaOptimizer
 class DakotaBundle(HasStrictTraits):
     name = String("dakota")
 
-    def create_model(self, model_data):
-        return DakotaModel.from_json(model_data)
+    def create_model(self, model_data=None):
+        if model_data is None:
+            return DakotaModel()
+        else:
+            return DakotaModel.from_json(model_data)
 
     def create_optimizer(self, application, model):
         return DakotaOptimizer(self, application, model)

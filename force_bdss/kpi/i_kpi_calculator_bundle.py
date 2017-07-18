@@ -7,5 +7,5 @@ class IKPICalculatorBundle(Interface):
     def create_kpi_calculator(self, application, model):
         pass
 
-    def create_model(self, model_data):
+    def create_model(self, model_data=None):
         pass
