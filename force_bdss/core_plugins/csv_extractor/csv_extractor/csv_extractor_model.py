@@ -1,7 +1,9 @@
-from traits.api import HasStrictTraits, Int, String
+from traits.api import Int, String
+
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 
 
-class CSVExtractorModel(HasStrictTraits):
+class CSVExtractorModel(BaseDataSourceModel):
     filename = String()
     row = Int()
     column = Int()
