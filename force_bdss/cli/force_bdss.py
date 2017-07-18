@@ -1,6 +1,6 @@
 import click
 
-from force_bdss.bdss_application import BDSSApplication
+from ..bdss_application import BDSSApplication
 
 
 @click.command()
