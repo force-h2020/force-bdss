@@ -56,7 +56,6 @@ class BDSSApplication(Application):
 
         super().__init__(plugins=plugins)
 
-
     def _workflow_default(self):
         with open(self.workflow_filepath) as f:
             return Workflow.from_json(json.load(f))
