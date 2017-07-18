@@ -1,7 +1,9 @@
-from traits.api import HasStrictTraits, String
+from traits.api import String
+
+from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 
 
-class KPIAdderModel(HasStrictTraits):
+class KPIAdderModel(BaseKPICalculatorModel):
     cuba_type_in = String()
     cuba_type_out = String()
 

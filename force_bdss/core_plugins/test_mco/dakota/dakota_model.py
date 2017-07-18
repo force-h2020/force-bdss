@@ -1,7 +1,9 @@
-from traits.api import HasStrictTraits, List, String
+from traits.api import List, String
+
+from force_bdss.mco.base_mco_model import BaseMCOModel
 
 
-class DakotaModel(HasStrictTraits):
+class DakotaModel(BaseMCOModel):
     value_types = List(String)
 
     @classmethod
