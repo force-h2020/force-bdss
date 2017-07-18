@@ -1,8 +1,8 @@
 import abc
-import six
+from traits.api import ABCHasStrictTraits
 
 
-class BaseDataSourceModel(six.with_metaclass(abc.ABCMeta)):
+class BaseDataSourceModel(ABCHasStrictTraits):
     @classmethod
     @abc.abstractmethod
     def from_json(self, model_data):

@@ -1,8 +1,8 @@
 import abc
-import six
+from traits.api import ABCHasStrictTraits
 
 
-class BaseMCOModel(six.with_metaclass(abc.ABCMeta)):
+class BaseMCOModel(ABCHasStrictTraits):
     @classmethod
     @abc.abstractmethod
     def from_json(self, model_data):
