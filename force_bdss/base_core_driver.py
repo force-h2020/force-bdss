@@ -1,7 +1,7 @@
 from envisage.plugin import Plugin
 from traits.trait_types import Instance
 
-from force_bdss.bundle_registry import (
+from force_bdss.bundle_registry_plugin import (
     BundleRegistryPlugin,
     BUNDLE_REGISTRY_PLUGIN_ID
 )
