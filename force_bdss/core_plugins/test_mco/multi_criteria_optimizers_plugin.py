@@ -1,4 +1,4 @@
-from force_bdss.base_extension_plugin import BaseExtensionPlugin
+from force_bdss.api import BaseExtensionPlugin
 
 from .dakota.dakota_bundle import DakotaBundle
 

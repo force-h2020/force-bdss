@@ -1,8 +1,7 @@
 import sys
 import numpy
 
-from force_bdss.data_sources.data_source_parameters import DataSourceParameters
-from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
+from force_bdss.api import DataSourceParameters, BaseMCOCommunicator
 
 
 class DakotaCommunicator(BaseMCOCommunicator):

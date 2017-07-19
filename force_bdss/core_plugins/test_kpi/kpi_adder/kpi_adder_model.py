@@ -1,6 +1,6 @@
 from traits.api import String
 
-from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
+from force_bdss.api import BaseKPICalculatorModel
 
 
 class KPIAdderModel(BaseKPICalculatorModel):

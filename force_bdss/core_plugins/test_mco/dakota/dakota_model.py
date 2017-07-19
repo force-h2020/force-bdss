@@ -1,6 +1,6 @@
 from traits.api import List, String
 
-from force_bdss.mco.base_mco_model import BaseMCOModel
+from force_bdss.api import BaseMCOModel
 
 
 class DakotaModel(BaseMCOModel):

@@ -1,7 +1,7 @@
 import numpy
 
-from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
-from force_bdss.kpi.kpi_calculator_result import KPICalculatorResult
+from force_bdss.api import BaseKPICalculator
+from force_bdss.api import KPICalculatorResult
 
 
 class KPIAdderCalculator(BaseKPICalculator):

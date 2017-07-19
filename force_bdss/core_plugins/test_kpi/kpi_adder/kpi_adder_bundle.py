@@ -1,8 +1,7 @@
-from traits.api import provides, HasStrictTraits
-from traits.trait_types import String
+from traits.api import provides, HasStrictTraits, String
 
-from force_bdss.id_generators import bundle_id
-from force_bdss.kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
+from force_bdss.api import bundle_id
+from force_bdss.api import IKPICalculatorBundle
 
 from .kpi_adder_model import KPIAdderModel
 from .kpi_adder_calculator import KPIAdderCalculator

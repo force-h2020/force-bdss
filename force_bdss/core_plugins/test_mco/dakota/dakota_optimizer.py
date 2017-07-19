@@ -2,9 +2,7 @@ import subprocess
 
 import sys
 
-from force_bdss.mco.base_multi_criteria_optimizer import (
-    BaseMultiCriteriaOptimizer
-)
+from force_bdss.api import BaseMultiCriteriaOptimizer
 
 
 class DakotaOptimizer(BaseMultiCriteriaOptimizer):

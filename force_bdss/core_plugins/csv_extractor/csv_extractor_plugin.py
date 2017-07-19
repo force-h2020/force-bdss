@@ -1,4 +1,4 @@
-from force_bdss.base_extension_plugin import BaseExtensionPlugin
+from force_bdss.api import BaseExtensionPlugin
 
 from .csv_extractor.csv_extractor_bundle import CSVExtractorBundle
 

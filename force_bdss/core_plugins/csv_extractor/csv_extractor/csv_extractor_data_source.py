@@ -1,7 +1,7 @@
 import csv
 import numpy
-from force_bdss.data_sources.base_data_source import BaseDataSource
-from force_bdss.data_sources.data_source_result import DataSourceResult
+from force_bdss.api import BaseDataSource
+from force_bdss.api import DataSourceResult
 
 
 class CSVExtractorDataSource(BaseDataSource):
