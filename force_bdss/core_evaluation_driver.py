@@ -13,7 +13,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
         workflow = self.application.workflow
 
         mco_data = workflow.multi_criteria_optimizer
-        mco_bundle = self._mco_bundle_by_id(mco_data.id)
+        mco_bundle = self.bundle_registry.mco_bundle_by_id(mco_data.id)
         mco_model = mco_bundle.create_model(mco_data.model_data)
         mco_communicator = mco_bundle.create_communicator(
             self.application,
@@ -23,7 +23,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
 
         ds_results = []
         for requested_ds in workflow.data_sources:
-            ds_bundle = self._data_source_bundle_by_id(
+            ds_bundle = self.bundle_registry.data_source_bundle_by_id(
                 requested_ds.id)
             ds_model = ds_bundle.create_model(requested_ds.model_data)
             data_source = ds_bundle.create_data_source(
@@ -32,7 +32,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
 
         kpi_results = []
         for requested_kpic in workflow.kpi_calculators:
-            kpic_bundle = self._kpi_calculator_bundle_by_id(
+            kpic_bundle = self.bundle_registry.kpi_calculator_bundle_by_id(
                 requested_kpic.id)
             ds_model = kpic_bundle.create_model(
                 requested_kpic.model_data)

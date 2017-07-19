@@ -5,6 +5,7 @@ from stevedore.exception import NoMatches
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 
+from force_bdss.bundle_registry import BundleRegistryPlugin
 from force_bdss.core_evaluation_driver import CoreEvaluationDriver
 from force_bdss.core_mco_driver import CoreMCODriver
 
@@ -33,7 +34,7 @@ class BDSSApplication(Application):
         self.evaluate = evaluate
         self.workflow_filepath = workflow_filepath
 
-        plugins = [CorePlugin()]
+        plugins = [CorePlugin(), BundleRegistryPlugin()]
 
         if self.evaluate:
             plugins.append(CoreEvaluationDriver())
