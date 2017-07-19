@@ -1,5 +1,3 @@
-import json
-
 from stevedore import extension
 from stevedore.exception import NoMatches
 from envisage.api import Application

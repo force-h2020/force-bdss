@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Instance, String, List
+from traits.api import HasStrictTraits, Instance, List
 
 from ..data_sources.base_data_source_model import BaseDataSourceModel
 from ..kpi.base_kpi_calculator_model import BaseKPICalculatorModel
