@@ -9,7 +9,7 @@ from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
 from force_bdss.core_evaluation_driver import CoreEvaluationDriver
 from force_bdss.core_mco_driver import CoreMCODriver
 
-from traits.api import Unicode, Bool, Instance
+from traits.api import Unicode, Bool
 
 
 class BDSSApplication(Application):
