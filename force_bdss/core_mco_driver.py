@@ -19,10 +19,10 @@ class CoreMCODriver(BaseCoreDriver):
         try:
             workflow = self.application.workflow
         except InvalidVersionException as e:
-            print(e.message)
+            print(str(e), file=sys.stderr)
             sys.exit(1)
         except CorruptedInputFile as e:
-            print(e.message)
+            print(str(e), file=sys.stderr)
             sys.exit(1)
 
         mco_data = workflow.multi_criteria_optimizer
