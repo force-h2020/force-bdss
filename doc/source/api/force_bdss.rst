@@ -11,10 +11,19 @@ Subpackages
     force_bdss.data_sources
     force_bdss.kpi
     force_bdss.mco
+    force_bdss.tests
     force_bdss.workspecs
 
 Submodules
 ----------
+
+force_bdss.api module
+---------------------
+
+.. automodule:: force_bdss.api
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 force_bdss.base_core_driver module
 ----------------------------------
@@ -24,10 +33,26 @@ force_bdss.base_core_driver module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.base_extension_plugin module
+---------------------------------------
+
+.. automodule:: force_bdss.base_extension_plugin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 force_bdss.bdss_application module
 ----------------------------------
 
 .. automodule:: force_bdss.bdss_application
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.bundle_registry_plugin module
+----------------------------------------
+
+.. automodule:: force_bdss.bundle_registry_plugin
     :members:
     :undoc-members:
     :show-inheritance:
@@ -44,6 +69,14 @@ force_bdss.core_mco_driver module
 ---------------------------------
 
 .. automodule:: force_bdss.core_mco_driver
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.id_generators module
+-------------------------------
+
+.. automodule:: force_bdss.id_generators
     :members:
     :undoc-members:
     :show-inheritance:
