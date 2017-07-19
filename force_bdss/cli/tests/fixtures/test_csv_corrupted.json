@@ -1,0 +1,37 @@
+{
+  "multi_criteria_optimizer": {
+    "id": "force.bdss.bundles.enthought.dakota",
+    "model_data": {
+      "value_types": ["DUMMY"]
+    }
+  },
+  "data_sources": [
+    {
+      "id": "force.bdss.bundles.enthought.csv_extractor",
+      "model_data": {
+        "filename": "foo.csv",
+        "row": 3,
+        "column": 5,
+        "cuba_type": "PRESSURE"
+      }
+    },
+    {
+      "id": "force.bdss.bundles.enthought.csv_extractor",
+      "model_data": {
+        "filename": "foo.csv",
+        "row": 3,
+        "column": 5,
+        "cuba_type": "PRESSURE"
+      }
+    }
+  ],
+  "kpi_calculators": [
+    {
+      "id": "force.bdss.bundles.enthought.kpi_adder",
+      "model_data": {
+        "cuba_type_in": "PRESSURE",
+        "cuba_type_out": "TOTAL_PRESSURE"
+      }
+    }
+  ]
+}

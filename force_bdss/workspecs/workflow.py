@@ -11,6 +11,10 @@ class InvalidVersionException(Exception):
     pass
 
 
+class CorruptedInputFile(Exception):
+    pass
+
+
 class Workflow(HasStrictTraits):
     name = String()
     multi_criteria_optimizer = Instance(MultiCriteriaOptimizer)
@@ -19,7 +23,13 @@ class Workflow(HasStrictTraits):
 
     @classmethod
     def from_json(cls, json_data):
-        if json_data["version"] not in SUPPORTED_FILE_VERSIONS:
+        try:
+            version = json_data["version"]
+        except KeyError:
+            raise CorruptedInputFile("Corrupted input file, no version"
+                                     " specified")
+
+        if version not in SUPPORTED_FILE_VERSIONS:
             raise InvalidVersionException(
                 "File version {} not supported".format(json_data["version"]))
 
