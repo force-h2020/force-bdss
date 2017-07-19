@@ -1,7 +1,8 @@
 import click
 
 from ..bdss_application import BDSSApplication
-
+from traits.api import push_exception_handler
+push_exception_handler(reraise_exceptions=True)
 
 @click.command()
 @click.option("--evaluate", is_flag=True)

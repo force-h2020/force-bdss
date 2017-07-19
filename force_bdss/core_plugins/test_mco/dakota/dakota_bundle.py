@@ -12,7 +12,7 @@ from .dakota_optimizer import DakotaOptimizer
 
 @provides(IMultiCriteriaOptimizerBundle)
 class DakotaBundle(HasStrictTraits):
-    name = String("dakota")
+    id = String("enthought.dakota")
 
     def create_model(self, model_data=None):
         if model_data is None:

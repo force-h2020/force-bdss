@@ -2,7 +2,7 @@ from traits.api import Interface, String
 
 
 class IKPICalculatorBundle(Interface):
-    name = String()
+    id = String()
 
     def create_kpi_calculator(self, application, model):
         pass

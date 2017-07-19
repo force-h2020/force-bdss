@@ -9,7 +9,7 @@ from .csv_extractor_data_source import CSVExtractorDataSource
 
 @provides(IDataSourceBundle)
 class CSVExtractorBundle(HasStrictTraits):
-    name = String("csv_extractor")
+    id = String("enthought.csv_extractor")
 
     def create_model(self, model_data=None):
         if model_data is None:

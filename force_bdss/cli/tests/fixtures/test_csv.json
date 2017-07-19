@@ -1,13 +1,13 @@
 {
   "multi_criteria_optimizer": {
-    "name": "dakota",
+    "id": "enthought.dakota",
     "model_data": {
       "value_types": ["DUMMY"]
     }
   },
   "data_sources": [
     {
-      "name": "csv_extractor",
+      "id": "enthought.csv_extractor",
       "model_data": {
         "filename": "foo.csv",
         "row": 3,
@@ -16,7 +16,7 @@
       }
     },
     {
-      "name": "csv_extractor",
+      "id": "enthought.csv_extractor",
       "model_data": {
         "filename": "foo.csv",
         "row": 3,
@@ -27,7 +27,7 @@
   ],
   "kpi_calculators": [
     {
-      "name": "kpi_adder",
+      "id": "enthought.kpi_adder",
       "model_data": {
         "cuba_type_in": "PRESSURE",
         "cuba_type_out": "TOTAL_PRESSURE"

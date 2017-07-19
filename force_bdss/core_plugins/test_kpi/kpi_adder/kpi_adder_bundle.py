@@ -9,7 +9,7 @@ from .kpi_adder_calculator import KPIAdderCalculator
 
 @provides(IKPICalculatorBundle)
 class KPIAdderBundle(HasStrictTraits):
-    name = String("kpi_adder")
+    id = String("enthought.kpi_adder")
 
     def create_model(self, model_data=None):
         if model_data is None:

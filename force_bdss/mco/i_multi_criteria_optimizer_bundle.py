@@ -2,7 +2,7 @@ from traits.api import Interface, String
 
 
 class IMultiCriteriaOptimizerBundle(Interface):
-    name = String()
+    id = String()
 
     def create_optimizer(self, application, model):
         pass

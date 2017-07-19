@@ -2,7 +2,7 @@ from traits.api import Interface, String
 
 
 class IDataSourceBundle(Interface):
-    name = String()
+    id = String()
 
     def create_data_source(self, application, model):
         pass

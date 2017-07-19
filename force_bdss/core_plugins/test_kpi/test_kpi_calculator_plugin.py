@@ -8,7 +8,7 @@ from .kpi_adder.kpi_adder_bundle import KPIAdderBundle
 
 
 class TestKPICalculatorPlugin(Plugin):
-    id = "force.bdss.kpi_calculators.test_kpi_calculator_plugin"
+    id = "force.bdss.plugins.enthought.test_kpi_calculator_plugin"
 
     kpi_calculators = List(
         IKPICalculatorBundle,
