@@ -1,12 +1,7 @@
-from traits.has_traits import HasStrictTraits, provides
-from traits.trait_types import String
+from traits.api import HasStrictTraits, provides, String
+from force_bdss.api import bundle_id, IMultiCriteriaOptimizerBundle
 
-from force_bdss.core_plugins.test_mco.dakota.dakota_communicator import \
-    DakotaCommunicator
-from force_bdss.id_generators import bundle_id
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
-    IMultiCriteriaOptimizerBundle)
-
+from .dakota_communicator import DakotaCommunicator
 from .dakota_model import DakotaModel
 from .dakota_optimizer import DakotaOptimizer
 

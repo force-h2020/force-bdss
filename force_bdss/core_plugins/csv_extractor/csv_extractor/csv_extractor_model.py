@@ -1,6 +1,6 @@
 from traits.api import Int, String
 
-from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.api import BaseDataSourceModel
 
 
 class CSVExtractorModel(BaseDataSourceModel):
