@@ -1,5 +1,5 @@
 {
-  "version": "1",
+  "version": "2",
   "multi_criteria_optimizer": {
     "id": "force.bdss.bundles.enthought.dakota",
     "model_data": {

@@ -6,7 +6,7 @@ from contextlib import contextmanager
 
 @contextmanager
 def cd(dir):
-    cwd = os.curdir
+    cwd = os.getcwd()
     os.chdir(dir)
     try:
         yield
@@ -25,6 +25,11 @@ class TestExecution(unittest.TestCase):
         with cd(fixture_dir()):
             out = subprocess.check_call(["force_bdss", "test_csv.json"])
             self.assertEqual(out, 0)
+
+    def test_unsupported_file_input(self):
+        with cd(fixture_dir()):
+            with self.assertRaises(subprocess.CalledProcessError):
+                subprocess.check_call(["force_bdss", "test_csv_v2.json"])
 
 
 if __name__ == '__main__':
