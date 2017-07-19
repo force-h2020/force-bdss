@@ -1,5 +1,6 @@
 import six
 
+
 def bundle_id(producer, identifier):
     """Creates an id for the bundle.
 
