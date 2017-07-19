@@ -2,6 +2,7 @@ from traits.api import provides, HasStrictTraits
 from traits.trait_types import String
 
 from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
+from force_bdss.id_generators import bundle_id
 
 from .csv_extractor_model import CSVExtractorModel
 from .csv_extractor_data_source import CSVExtractorDataSource
@@ -9,7 +10,7 @@ from .csv_extractor_data_source import CSVExtractorDataSource
 
 @provides(IDataSourceBundle)
 class CSVExtractorBundle(HasStrictTraits):
-    name = String("csv_extractor")
+    id = String(bundle_id("enthought", "csv_extractor"))
 
     def create_model(self, model_data=None):
         if model_data is None:

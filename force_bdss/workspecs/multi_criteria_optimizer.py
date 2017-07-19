@@ -2,13 +2,13 @@ from traits.api import HasStrictTraits, String, Dict
 
 
 class MultiCriteriaOptimizer(HasStrictTraits):
-    name = String()
+    id = String()
     model_data = Dict()
 
     @classmethod
     def from_json(cls, json_data):
         self = cls(
-            name=json_data["name"],
+            id=json_data["id"],
             model_data=json_data["model_data"]
         )
 

@@ -7,8 +7,6 @@ from .csv_extractor.csv_extractor_bundle import CSVExtractorBundle
 
 
 class CSVExtractorPlugin(Plugin):
-    id = "force.bdss.data_sources.csv_extractor"
-
     data_sources = List(
         IDataSourceBundle,
         contributes_to='force.bdss.data_sources.bundles'

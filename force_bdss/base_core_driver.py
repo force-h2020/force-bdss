@@ -37,27 +37,27 @@ class BaseCoreDriver(Plugin):
         List(IKPICalculatorBundle),
         id='force.bdss.kpi_calculators.bundles')
 
-    def _data_source_bundle_by_name(self, name):
+    def _data_source_bundle_by_id(self, id):
         for ds in self.data_source_bundles:
-            if ds.name == name:
+            if ds.id == id:
                 return ds
 
         raise Exception("Requested data source {} but don't know "
-                        "to find it.".format(name))
+                        "to find it.".format(id))
 
-    def _kpi_calculator_bundle_by_name(self, name):
+    def _kpi_calculator_bundle_by_id(self, id):
         for kpic in self.kpi_calculator_bundles:
-            if kpic.name == name:
+            if kpic.id == id:
                 return kpic
 
         raise Exception(
             "Requested kpi calculator {} but don't know "
-            "to find it.".format(name))
+            "to find it.".format(id))
 
-    def _mco_bundle_by_name(self, name):
+    def _mco_bundle_by_id(self, id):
         for mco in self.mco_bundles:
-            if mco.name == name:
+            if mco.id == id:
                 return mco
 
         raise Exception("Requested MCO {} but it's not available"
-                        "to compute it.".format(name))
+                        "to compute it.".format(id))

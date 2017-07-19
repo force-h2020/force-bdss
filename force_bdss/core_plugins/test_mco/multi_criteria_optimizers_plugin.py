@@ -8,8 +8,6 @@ from .dakota.dakota_bundle import DakotaBundle
 
 
 class MultiCriteriaOptimizersPlugin(Plugin):
-    id = "force.bdss.mco.plugins.multi_criteria_optimizers_plugin"
-
     multi_criteria_optimizers = List(
         IMultiCriteriaOptimizerBundle,
         contributes_to='force.bdss.mco.bundles'
