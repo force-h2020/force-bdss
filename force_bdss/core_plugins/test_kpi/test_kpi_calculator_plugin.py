@@ -1,17 +1,8 @@
-from envisage.plugin import Plugin
-from traits.api import List
-
-from force_bdss.kpi.i_kpi_calculator_bundle import (
-    IKPICalculatorBundle)
+from force_bdss.base_extension_plugin import BaseExtensionPlugin
 
 from .kpi_adder.kpi_adder_bundle import KPIAdderBundle
 
 
-class TestKPICalculatorPlugin(Plugin):
-    kpi_calculators = List(
-        IKPICalculatorBundle,
-        contributes_to='force.bdss.kpi_calculators.bundles'
-    )
-
-    def _kpi_calculators_default(self):
+class TestKPICalculatorPlugin(BaseExtensionPlugin):
+    def _kpi_calculator_bundles_default(self):
         return [KPIAdderBundle()]

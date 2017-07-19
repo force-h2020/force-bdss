@@ -1,16 +1,8 @@
-from envisage.plugin import Plugin
-from traits.api import List
-
-from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
+from force_bdss.base_extension_plugin import BaseExtensionPlugin
 
 from .csv_extractor.csv_extractor_bundle import CSVExtractorBundle
 
 
-class CSVExtractorPlugin(Plugin):
-    data_sources = List(
-        IDataSourceBundle,
-        contributes_to='force.bdss.data_sources.bundles'
-    )
-
-    def _data_sources_default(self):
+class CSVExtractorPlugin(BaseExtensionPlugin):
+    def _data_source_bundles_default(self):
         return [CSVExtractorBundle()]
