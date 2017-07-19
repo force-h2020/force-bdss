@@ -9,3 +9,4 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     def __init__(self, bundle, *args, **kwargs):
         self.bundle = bundle
         super(BaseKPICalculatorModel, self).__init__(*args, **kwargs)
+
