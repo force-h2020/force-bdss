@@ -1,9 +1,11 @@
-import abc
-from traits.api import ABCHasStrictTraits
+from traits.api import ABCHasStrictTraits, Instance
+
+from .i_data_source_bundle import IDataSourceBundle
 
 
 class BaseDataSourceModel(ABCHasStrictTraits):
-    @classmethod
-    @abc.abstractmethod
-    def from_json(self, model_data):
-        pass
+    bundle = Instance(IDataSourceBundle)
+
+    def __init__(self, bundle, *args, **kwargs):
+        self.bundle = bundle
+        super(BaseDataSourceModel, self).__init__(self, *args, **kwargs)

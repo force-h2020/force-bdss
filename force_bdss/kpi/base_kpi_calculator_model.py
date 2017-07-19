@@ -1,9 +1,11 @@
-import abc
-from traits.has_traits import ABCHasStrictTraits
+from traits.api import ABCHasStrictTraits, Instance
+
+from .i_kpi_calculator_bundle import IKPICalculatorBundle
 
 
 class BaseKPICalculatorModel(ABCHasStrictTraits):
-    @classmethod
-    @abc.abstractmethod
-    def from_json(self, model_data):
-        pass
+    bundle = Instance(IKPICalculatorBundle)
+
+    def __init__(self, bundle, *args, **kwargs):
+        self.bundle = bundle
+        super(BaseKPICalculatorModel, self).__init__(self, *args, **kwargs)

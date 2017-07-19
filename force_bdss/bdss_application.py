@@ -11,8 +11,6 @@ from force_bdss.core_mco_driver import CoreMCODriver
 
 from traits.api import Unicode, Bool, Instance
 
-from force_bdss.workspecs.workflow import Workflow
-
 
 class BDSSApplication(Application):
     """Main application for the BDSS.
@@ -21,9 +19,6 @@ class BDSSApplication(Application):
 
     #: The path of the workflow file to open
     workflow_filepath = Unicode()
-
-    #: Deserialized content of the workflow file.
-    workflow = Instance(Workflow)
 
     #: This flags signals to the application not to execute and orchestrate
     #: the MCO, but instead to perform a single evaluation under the
@@ -56,7 +51,3 @@ class BDSSApplication(Application):
             print("No extensions found")
 
         super(BDSSApplication, self).__init__(plugins=plugins)
-
-    def _workflow_default(self):
-        with open(self.workflow_filepath) as f:
-            return Workflow.from_json(json.load(f))
