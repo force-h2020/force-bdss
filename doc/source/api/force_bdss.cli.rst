@@ -1,6 +1,13 @@
 force_bdss.cli package
 ======================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    force_bdss.cli.tests
+
 Submodules
 ----------
 
