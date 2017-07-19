@@ -8,4 +8,4 @@ class BaseMCOModel(ABCHasStrictTraits):
 
     def __init__(self, bundle, *args, **kwargs):
         self.bundle = bundle
-        super(BaseMCOModel, self).__init__(self, *args, **kwargs)
+        super(BaseMCOModel, self).__init__(*args, **kwargs)

@@ -13,9 +13,9 @@ class KPIAdderBundle(HasStrictTraits):
 
     def create_model(self, model_data=None):
         if model_data is None:
-            return KPIAdderModel()
-        else:
-            return KPIAdderModel.from_json(model_data)
+            model_data = {}
+
+        return KPIAdderModel(self, **model_data)
 
     def create_data_source(self, application, model):
         return KPIAdderCalculator(self, application, model)

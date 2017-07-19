@@ -8,4 +8,4 @@ class BaseDataSourceModel(ABCHasStrictTraits):
 
     def __init__(self, bundle, *args, **kwargs):
         self.bundle = bundle
-        super(BaseDataSourceModel, self).__init__(self, *args, **kwargs)
+        super(BaseDataSourceModel, self).__init__(*args, **kwargs)

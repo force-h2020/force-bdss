@@ -12,9 +12,9 @@ class CSVExtractorBundle(HasStrictTraits):
 
     def create_model(self, model_data=None):
         if model_data is None:
-            return CSVExtractorModel()
-        else:
-            return CSVExtractorModel.from_json(model_data)
+            model_data = {}
+
+        return CSVExtractorModel(self, **model_data)
 
     def create_data_source(self, application, model):
         return CSVExtractorDataSource(self, application, model)
