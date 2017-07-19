@@ -94,5 +94,6 @@ class TestBundleRegistryWithContent(unittest.TestCase):
             self.assertEqual(self.plugin.kpi_calculator_bundle_by_id(id).id,
                              id)
 
+
 if __name__ == '__main__':
     unittest.main()
