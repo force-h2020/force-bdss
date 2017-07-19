@@ -1,6 +1,7 @@
 from traits.api import provides, HasStrictTraits
 from traits.trait_types import String
 
+from force_bdss.id_generators import bundle_id
 from force_bdss.kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
 
 from .kpi_adder_model import KPIAdderModel
@@ -9,7 +10,7 @@ from .kpi_adder_calculator import KPIAdderCalculator
 
 @provides(IKPICalculatorBundle)
 class KPIAdderBundle(HasStrictTraits):
-    id = String("enthought.kpi_adder")
+    id = String(bundle_id("enthought", "kpi_adder"))
 
     def create_model(self, model_data=None):
         if model_data is None:

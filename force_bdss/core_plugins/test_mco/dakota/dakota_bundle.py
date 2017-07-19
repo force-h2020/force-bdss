@@ -3,6 +3,7 @@ from traits.trait_types import String
 
 from force_bdss.core_plugins.test_mco.dakota.dakota_communicator import \
     DakotaCommunicator
+from force_bdss.id_generators import bundle_id
 from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
     IMultiCriteriaOptimizerBundle)
 
@@ -12,7 +13,7 @@ from .dakota_optimizer import DakotaOptimizer
 
 @provides(IMultiCriteriaOptimizerBundle)
 class DakotaBundle(HasStrictTraits):
-    id = String("enthought.dakota")
+    id = String(bundle_id("enthought", "dakota"))
 
     def create_model(self, model_data=None):
         if model_data is None:
