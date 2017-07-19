@@ -54,7 +54,7 @@ class BDSSApplication(Application):
         except NoMatches:
             print("No extensions found")
 
-        super().__init__(plugins=plugins)
+        super(BDSSApplication, self).__init__(plugins=plugins)
 
     def _workflow_default(self):
         with open(self.workflow_filepath) as f:
