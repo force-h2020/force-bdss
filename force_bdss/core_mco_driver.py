@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 
 from traits.api import on_trait_change
@@ -17,10 +19,10 @@ class CoreMCODriver(BaseCoreDriver):
         try:
             workflow = self.application.workflow
         except InvalidVersionException as e:
-            print e.message
+            print(e.message)
             sys.exit(1)
         except CorruptedInputFile as e:
-            print e.message
+            print(e.message)
             sys.exit(1)
 
         mco_data = workflow.multi_criteria_optimizer
