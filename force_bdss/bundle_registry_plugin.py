@@ -42,26 +42,66 @@ class BundleRegistryPlugin(Plugin):
         id='force.bdss.kpi_calculators.bundles')
 
     def data_source_bundle_by_id(self, id):
+        """Finds a given data source bundle by means of its id.
+        The ID is as obtained by the function bundle_id() in the
+        plugin api.
+
+        Parameters
+        ----------
+        id: str
+            The identifier returned by the bundle_id() function.
+
+        Raises
+        ------
+        ValueError: if the entry is not found.
+        """
         for ds in self.data_source_bundles:
             if ds.id == id:
                 return ds
 
-        raise Exception("Requested data source {} but don't know "
-                        "to find it.".format(id))
+        raise ValueError(
+            "Requested data source {} but don't know how "
+            "to find it.".format(id))
 
     def kpi_calculator_bundle_by_id(self, id):
+        """Finds a given kpi bundle by means of its id.
+        The ID is as obtained by the function bundle_id() in the
+        plugin api.
+
+        Parameters
+        ----------
+        id: str
+            The identifier returned by the bundle_id() function.
+
+        Raises
+        ------
+        ValueError: if the entry is not found.
+        """
         for kpic in self.kpi_calculator_bundles:
             if kpic.id == id:
                 return kpic
 
-        raise Exception(
-            "Requested kpi calculator {} but don't know "
+        raise ValueError(
+            "Requested kpi calculator {} but don't know how "
             "to find it.".format(id))
 
     def mco_bundle_by_id(self, id):
+        """Finds a given Multi Criteria Optimizer (MCO) bundle by means of
+        its id. The ID is as obtained by the function bundle_id() in the
+        plugin api.
+
+        Parameters
+        ----------
+        id: str
+            The identifier returned by the bundle_id() function.
+
+        Raises
+        ------
+        ValueError: if the entry is not found.
+        """
         for mco in self.mco_bundles:
             if mco.id == id:
                 return mco
 
-        raise Exception("Requested MCO {} but it's not available"
-                        "to compute it.".format(id))
+        raise ValueError("Requested MCO {} but don't know how "
+                         "to find it.".format(id))
