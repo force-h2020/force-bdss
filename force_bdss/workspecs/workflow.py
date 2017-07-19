@@ -7,11 +7,11 @@ from .multi_criteria_optimizer import MultiCriteriaOptimizer
 SUPPORTED_FILE_VERSIONS = ["1"]
 
 
-class InvalidVersionException(Exception):
+class InvalidFileException(Exception):
     pass
 
 
-class CorruptedInputFile(Exception):
+class InvalidVersionException(InvalidFileException):
     pass
 
 
@@ -26,8 +26,8 @@ class Workflow(HasStrictTraits):
         try:
             version = json_data["version"]
         except KeyError:
-            raise CorruptedInputFile("Corrupted input file, no version"
-                                     " specified")
+            raise InvalidFileException("Corrupted input file, no version"
+                                       " specified")
 
         if version not in SUPPORTED_FILE_VERSIONS:
             raise InvalidVersionException(

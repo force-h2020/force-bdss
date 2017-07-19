@@ -6,7 +6,7 @@ from traits.api import on_trait_change
 
 from force_bdss.base_core_driver import BaseCoreDriver
 from force_bdss.workspecs.workflow import (InvalidVersionException,
-                                           CorruptedInputFile)
+                                           InvalidFileException)
 
 
 class CoreMCODriver(BaseCoreDriver):
@@ -18,10 +18,7 @@ class CoreMCODriver(BaseCoreDriver):
     def application_started(self):
         try:
             workflow = self.application.workflow
-        except InvalidVersionException as e:
-            print(str(e), file=sys.stderr)
-            sys.exit(1)
-        except CorruptedInputFile as e:
+        except (InvalidVersionException, InvalidFileException) as e:
             print(str(e), file=sys.stderr)
             sys.exit(1)
 
