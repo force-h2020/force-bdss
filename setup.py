@@ -10,12 +10,12 @@ setup(
             'force_bdss = force_bdss.cli.force_bdss:run',
         ],
         "force.bdss.extensions": [
-            "mco = force_bdss.core_plugins.test_mco."
+            "mco = force_bdss.core_plugins.dummy_mco."
             "multi_criteria_optimizers_plugin:MultiCriteriaOptimizersPlugin",
             "csv_extractor = force_bdss.core_plugins.csv_extractor"
             ".csv_extractor_plugin:CSVExtractorPlugin",
-            "kpi_adder = force_bdss.core_plugins.test_kpi"
-            ".test_kpi_calculator_plugin:TestKPICalculatorPlugin",
+            "kpi_adder = force_bdss.core_plugins.dummy_kpi"
+            ".dummy_kpi_calculator_plugin:DummyKPICalculatorPlugin",
         ]
     },
     packages=find_packages(),
