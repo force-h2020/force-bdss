@@ -1,5 +1,7 @@
 import unittest
 
+from force_bdss.base_extension_plugin import (
+    BaseExtensionPlugin)
 from force_bdss.id_generators import bundle_id
 
 try:
@@ -7,9 +9,7 @@ try:
 except ImportError:
     from unittest import mock
 
-from traits.api import List
 from envisage.application import Application
-from envisage.plugin import Plugin
 
 from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
 from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
@@ -31,25 +31,7 @@ class TestBundleRegistry(unittest.TestCase):
         self.assertEqual(self.plugin.kpi_calculator_bundles, [])
 
 
-class BaseBDSSPlugin(Plugin):
-    mco_bundles = List(
-        IMultiCriteriaOptimizerBundle,
-        contributes_to='force.bdss.mco.bundles'
-    )
-
-    #: A list of the available Data Sources.
-    #: It will be populated by plugins.
-    data_source_bundles = List(
-        IDataSourceBundle,
-        contributes_to='force.bdss.data_sources.bundles')
-
-    kpi_calculator_bundles = List(
-        IKPICalculatorBundle,
-        contributes_to='force.bdss.kpi_calculators.bundles'
-    )
-
-
-class MySuperPlugin(BaseBDSSPlugin):
+class MySuperPlugin(BaseExtensionPlugin):
     def _mco_bundles_default(self):
         return [mock.Mock(spec=IMultiCriteriaOptimizerBundle,
                           id=bundle_id("enthought", "mco1"))]
