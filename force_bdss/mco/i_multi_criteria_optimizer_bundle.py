@@ -4,6 +4,8 @@ from traits.api import Interface, String
 class IMultiCriteriaOptimizerBundle(Interface):
     id = String()
 
+    name = String()
+
     def create_optimizer(self, application, model):
         pass
 

@@ -1,14 +1,15 @@
-from traits.api import HasStrictTraits, provides, String
-from force_bdss.api import bundle_id, IMultiCriteriaOptimizerBundle
+from traits.api import String
+from force_bdss.api import bundle_id, BaseMultiCriteriaOptimizerBundle
 
 from .dakota_communicator import DakotaCommunicator
 from .dakota_model import DakotaModel
 from .dakota_optimizer import DakotaOptimizer
 
 
-@provides(IMultiCriteriaOptimizerBundle)
-class DakotaBundle(HasStrictTraits):
+class DakotaBundle(BaseMultiCriteriaOptimizerBundle):
     id = String(bundle_id("enthought", "dakota"))
+
+    name = "Dakota"
 
     def create_model(self, model_data=None):
         if model_data is None:
