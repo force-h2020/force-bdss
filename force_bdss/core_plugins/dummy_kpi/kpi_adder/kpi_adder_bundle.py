@@ -17,5 +17,5 @@ class KPIAdderBundle(HasStrictTraits):
 
         return KPIAdderModel(self, **model_data)
 
-    def create_data_source(self, application, model):
+    def create_kpi_calculator(self, application, model):
         return KPIAdderCalculator(self, application, model)
