@@ -3,6 +3,11 @@ import six
 
 
 class BaseDataSource(six.with_metaclass(abc.ABCMeta)):
+    """Base class for the DataSource, any computational engine/retriever
+    for data.
+
+    Inherit from this class for your specific DataSource.
+    """
     def __init__(self, bundle, application, model):
         self.bundle = bundle
         self.application = application

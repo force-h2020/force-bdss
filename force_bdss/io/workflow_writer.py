@@ -3,7 +3,20 @@ from traits.api import HasStrictTraits
 
 
 class WorkflowWriter(HasStrictTraits):
+    """A Writer for writing the Workflow onto disk.
+    """
     def write(self, workflow, f):
+        """Writes the workflow model object to a file f in JSON format.
+
+        Parameters
+        ----------
+        workflow: Workflow
+            The Workflow instance to write to file
+
+        f: File
+            A file object on which to write the workflow, properly serialized
+            into JSON.
+        """
         data = {
             "version": "1",
             "workflow": {}
