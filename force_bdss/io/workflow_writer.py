@@ -1,7 +1,5 @@
 import json
-from traits.api import Instance, HasStrictTraits
-
-from ..bundle_registry_plugin import BundleRegistryPlugin
+from traits.api import HasStrictTraits
 
 
 class WorkflowWriter(HasStrictTraits):

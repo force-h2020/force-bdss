@@ -28,7 +28,7 @@ class TestWorkflowWriter(unittest.TestCase):
             bundle=mock_mco_bundle
         )
         mock_mco_bundle.create_model = mock.Mock(
-            return_value = mock_mco_model
+            return_value=mock_mco_model
         )
         self.mock_registry.mco_bundle_by_id = mock.Mock(
             return_value=mock_mco_bundle)
