@@ -60,7 +60,13 @@ class WorkflowReader(HasStrictTraits):
     def _extract_mco(self, json_data):
         registry = self.bundle_registry
 
-        mco_id = json_data["multi_criteria_optimizer"]["id"]
+        mco_data = json_data.get("multi_criteria_optimizer")
+        if mco_data is None:
+            # The file was saved without setting an MCO.
+            # The file is valid, we simply can't run any optimization yet.
+            return None
+
+        mco_id = mco_data["id"]
         mco_bundle = registry.mco_bundle_by_id(mco_id)
         return mco_bundle.create_model(
             json_data["multi_criteria_optimizer"]["model_data"])

@@ -6,6 +6,6 @@ from ..mco.base_mco_model import BaseMCOModel
 
 
 class Workflow(HasStrictTraits):
-    multi_criteria_optimizer = Instance(BaseMCOModel)
+    multi_criteria_optimizer = Instance(BaseMCOModel, allow_none=True)
     data_sources = List(BaseDataSourceModel)
     kpi_calculators = List(BaseKPICalculatorModel)
