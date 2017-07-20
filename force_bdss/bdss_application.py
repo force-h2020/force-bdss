@@ -10,7 +10,6 @@ from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
 
 
-
 class BDSSApplication(Application):
     """Main application for the BDSS.
     """
