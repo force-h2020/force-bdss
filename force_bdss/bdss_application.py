@@ -1,13 +1,14 @@
 from stevedore import extension
 from stevedore.exception import NoMatches
+
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
-
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
-from force_bdss.core_evaluation_driver import CoreEvaluationDriver
-from force_bdss.core_mco_driver import CoreMCODriver
-
 from traits.api import Unicode, Bool
+
+from .bundle_registry_plugin import BundleRegistryPlugin
+from .core_evaluation_driver import CoreEvaluationDriver
+from .core_mco_driver import CoreMCODriver
+
 
 
 class BDSSApplication(Application):

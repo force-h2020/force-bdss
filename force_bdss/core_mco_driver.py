@@ -4,9 +4,11 @@ import sys
 
 from traits.api import on_trait_change
 
-from force_bdss.base_core_driver import BaseCoreDriver
-from force_bdss.io.workflow_reader import (InvalidVersionException,
-                                           InvalidFileException)
+from .base_core_driver import BaseCoreDriver
+from .io.workflow_reader import (
+    InvalidVersionException,
+    InvalidFileException
+)
 
 
 class CoreMCODriver(BaseCoreDriver):
