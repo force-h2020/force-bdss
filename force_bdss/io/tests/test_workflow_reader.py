@@ -44,4 +44,3 @@ class TestWorkflowReader(unittest.TestCase):
 
         return fp
 
-    def
