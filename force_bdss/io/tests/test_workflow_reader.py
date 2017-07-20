@@ -43,4 +43,3 @@ class TestWorkflowReader(unittest.TestCase):
         fp.seek(0)
 
         return fp
-
