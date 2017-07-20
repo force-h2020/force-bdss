@@ -39,7 +39,7 @@ class WorkflowReader(HasStrictTraits):
             logging.error(
                 "File contains version {} that is not in the "
                 "list of supported versions {}".format(
-                version, SUPPORTED_FILE_VERSIONS)
+                    version, SUPPORTED_FILE_VERSIONS)
             )
             raise InvalidVersionException(
                 "File version {} not supported".format(json_data["version"]))
