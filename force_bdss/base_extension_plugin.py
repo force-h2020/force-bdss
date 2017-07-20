@@ -1,9 +1,9 @@
 from envisage.plugin import Plugin
 from traits.trait_types import List
 
-from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
-from force_bdss.kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
+from .data_sources.i_data_source_bundle import IDataSourceBundle
+from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
+from .mco.i_multi_criteria_optimizer_bundle import \
     IMultiCriteriaOptimizerBundle
 
 

@@ -4,9 +4,11 @@ import sys
 
 from traits.api import on_trait_change
 
-from force_bdss.base_core_driver import BaseCoreDriver
-from force_bdss.workspecs.workflow import (InvalidVersionException,
-                                           InvalidFileException)
+from .base_core_driver import BaseCoreDriver
+from .io.workflow_reader import (
+    InvalidVersionException,
+    InvalidFileException
+)
 
 
 class CoreMCODriver(BaseCoreDriver):
@@ -17,14 +19,12 @@ class CoreMCODriver(BaseCoreDriver):
     @on_trait_change("application:started")
     def application_started(self):
         try:
-            workflow = self.application.workflow
+            workflow = self.workflow
         except (InvalidVersionException, InvalidFileException) as e:
             print(str(e), file=sys.stderr)
             sys.exit(1)
 
-        mco_data = workflow.multi_criteria_optimizer
-        mco_bundle = self.bundle_registry.mco_bundle_by_id(mco_data.id)
-        mco_model = mco_bundle.create_model(mco_data.model_data)
+        mco_model = workflow.multi_criteria_optimizer
+        mco_bundle = mco_model.bundle
         mco = mco_bundle.create_optimizer(self.application, mco_model)
-
         mco.run()

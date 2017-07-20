@@ -1,6 +1,13 @@
 force_bdss.tests package
 ========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    force_bdss.tests.fixtures
+
 Submodules
 ----------
 

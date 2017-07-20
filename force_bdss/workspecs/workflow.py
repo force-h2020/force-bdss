@@ -1,48 +1,20 @@
-from traits.api import HasStrictTraits, Instance, String, List
+from traits.api import HasStrictTraits, Instance, List
 
-from force_bdss.workspecs.data_source import DataSource
-from force_bdss.workspecs.kpi_calculator import KPICalculator
-from .multi_criteria_optimizer import MultiCriteriaOptimizer
-
-SUPPORTED_FILE_VERSIONS = ["1"]
-
-
-class InvalidFileException(Exception):
-    pass
-
-
-class InvalidVersionException(InvalidFileException):
-    pass
+from ..data_sources.base_data_source_model import BaseDataSourceModel
+from ..kpi.base_kpi_calculator_model import BaseKPICalculatorModel
+from ..mco.base_mco_model import BaseMCOModel
 
 
 class Workflow(HasStrictTraits):
-    name = String()
-    multi_criteria_optimizer = Instance(MultiCriteriaOptimizer)
-    data_sources = List(DataSource)
-    kpi_calculators = List(KPICalculator)
+    """Model object that represents the Workflow as a whole"""
+    #: Contains the bundle-specific MCO Model object.
+    #: Can be None if no MCO has been specified yet.
+    multi_criteria_optimizer = Instance(BaseMCOModel, allow_none=True)
 
-    @classmethod
-    def from_json(cls, json_data):
-        try:
-            version = json_data["version"]
-        except KeyError:
-            raise InvalidFileException("Corrupted input file, no version"
-                                       " specified")
+    #: Contains the bundle-specific DataSource Model objects.
+    #: The list can be empty
+    data_sources = List(BaseDataSourceModel)
 
-        if version not in SUPPORTED_FILE_VERSIONS:
-            raise InvalidVersionException(
-                "File version {} not supported".format(json_data["version"]))
-
-        self = cls(
-            multi_criteria_optimizer=MultiCriteriaOptimizer.from_json(
-                json_data["multi_criteria_optimizer"]
-            ),
-            data_sources=[
-                DataSource.from_json(data_source_data)
-                for data_source_data in json_data["data_sources"]],
-            kpi_calculators=[
-                KPICalculator.from_json(kpi_calculator_data)
-                for kpi_calculator_data in json_data["kpi_calculators"]]
-        )
-
-        return self
+    #: Contains the bundle-specific KPI Calculator Model objects.
+    #: The list can be empty
+    kpi_calculators = List(BaseKPICalculatorModel)

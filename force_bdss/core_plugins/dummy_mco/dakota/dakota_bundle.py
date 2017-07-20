@@ -12,9 +12,8 @@ class DakotaBundle(HasStrictTraits):
 
     def create_model(self, model_data=None):
         if model_data is None:
-            return DakotaModel()
-        else:
-            return DakotaModel.from_json(model_data)
+            model_data = {}
+        return DakotaModel(self, **model_data)
 
     def create_optimizer(self, application, model):
         return DakotaOptimizer(self, application, model)

@@ -1,17 +1,13 @@
-import json
-
 from stevedore import extension
 from stevedore.exception import NoMatches
+
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
+from traits.api import Unicode, Bool
 
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
-from force_bdss.core_evaluation_driver import CoreEvaluationDriver
-from force_bdss.core_mco_driver import CoreMCODriver
-
-from traits.api import Unicode, Bool, Instance
-
-from force_bdss.workspecs.workflow import Workflow
+from .bundle_registry_plugin import BundleRegistryPlugin
+from .core_evaluation_driver import CoreEvaluationDriver
+from .core_mco_driver import CoreMCODriver
 
 
 class BDSSApplication(Application):
@@ -21,9 +17,6 @@ class BDSSApplication(Application):
 
     #: The path of the workflow file to open
     workflow_filepath = Unicode()
-
-    #: Deserialized content of the workflow file.
-    workflow = Instance(Workflow)
 
     #: This flags signals to the application not to execute and orchestrate
     #: the MCO, but instead to perform a single evaluation under the
@@ -56,7 +49,3 @@ class BDSSApplication(Application):
             print("No extensions found")
 
         super(BDSSApplication, self).__init__(plugins=plugins)
-
-    def _workflow_default(self):
-        with open(self.workflow_filepath) as f:
-            return Workflow.from_json(json.load(f))
