@@ -3,6 +3,8 @@ import subprocess
 import os
 from contextlib import contextmanager
 
+from force_bdss.tests import fixtures
+
 
 @contextmanager
 def cd(dir):
@@ -22,17 +24,17 @@ def fixture_dir():
 
 class TestExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
-        with cd(fixture_dir()):
+        with cd(fixtures.dirpath()):
             out = subprocess.check_call(["force_bdss", "test_csv.json"])
             self.assertEqual(out, 0)
 
     def test_unsupported_file_input(self):
-        with cd(fixture_dir()):
+        with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
                 subprocess.check_call(["force_bdss", "test_csv_v2.json"])
 
     def test_corrupted_file_input(self):
-        with cd(fixture_dir()):
+        with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
                 subprocess.check_call(["force_bdss",
                                        "test_csv_corrupted.json"])
