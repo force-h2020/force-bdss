@@ -10,8 +10,8 @@ class ExtensionPointID:
     the appropriate default methods.
     """
     MCO_BUNDLES = 'force.bdss.mco.bundles'
-    DATA_SOURCE_BUNDLES = 'force.bdss.data_sources.bundles'
-    KPI_CALCULATOR_BUNDLES = 'force.bdss.kpi_calculators.bundles'
+    DATA_SOURCE_BUNDLES = 'force.bdss.data_source.bundles'
+    KPI_CALCULATOR_BUNDLES = 'force.bdss.kpi_calculator.bundles'
 
 
 def bundle_id(producer, identifier):
