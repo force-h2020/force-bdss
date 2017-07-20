@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.id_generators import bundle_id
+from force_bdss.ids import bundle_id
 
 
 class TestIdGenerators(unittest.TestCase):

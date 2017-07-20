@@ -1,5 +1,5 @@
 from .base_extension_plugin import BaseExtensionPlugin  # noqa
-from .id_generators import bundle_id  # noqa
+from .ids import bundle_id
 from .data_sources.i_data_source_bundle import IDataSourceBundle  # noqa
 from .mco.i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle  # noqa
 from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle  # noqa

@@ -2,6 +2,7 @@ from envisage.extension_point import ExtensionPoint
 from envisage.plugin import Plugin
 from traits.api import List
 
+from force_bdss.ids import ExtensionPointID
 from .data_sources.i_data_source_bundle import (
     IDataSourceBundle)
 from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
@@ -28,19 +29,19 @@ class BundleRegistryPlugin(Plugin):
     #: This will be populated by MCO plugins.
     mco_bundles = ExtensionPoint(
         List(IMultiCriteriaOptimizerBundle),
-        id='force.bdss.mco.bundles')
+        id=ExtensionPointID.MCO_BUNDLES)
 
     #: A list of the available Data Sources.
     #: It will be populated by plugins.
     data_source_bundles = ExtensionPoint(
         List(IDataSourceBundle),
-        id='force.bdss.data_sources.bundles')
+        id=ExtensionPointID.DATA_SOURCE_BUNDLES)
 
     #: A list of the available Key Performance Indicator calculators.
     #: It will be populated by plugins.
     kpi_calculator_bundles = ExtensionPoint(
         List(IKPICalculatorBundle),
-        id='force.bdss.kpi_calculators.bundles')
+        id=ExtensionPointID.KPI_CALCULATOR_BUNDLES)
 
     def data_source_bundle_by_id(self, id):
         """Finds a given data source bundle by means of its id.

@@ -2,7 +2,7 @@ import unittest
 
 from force_bdss.base_extension_plugin import (
     BaseExtensionPlugin)
-from force_bdss.id_generators import bundle_id
+from force_bdss.ids import bundle_id
 
 try:
     import mock

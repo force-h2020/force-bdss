@@ -1,6 +1,6 @@
 from traits.api import provides, HasStrictTraits, String
 
-from force_bdss.api import bundle_id, IDataSourceBundle
+from force_bdss.api import IDataSourceBundle, bundle_id
 
 from .csv_extractor_model import CSVExtractorModel
 from .csv_extractor_data_source import CSVExtractorDataSource

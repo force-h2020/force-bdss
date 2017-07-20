@@ -1,6 +1,19 @@
 import six
 
 
+class ExtensionPointID:
+    """The envisage extension points ids for the bundles ExtensionPoints.
+    These are populated by the envisage plugins.
+
+    The plugin developer generally does not have to handle these identifiers,
+    as they just have to reimplement the plugin base class and implement
+    the appropriate default methods.
+    """
+    MCO_BUNDLES = 'force.bdss.mco.bundles'
+    DATA_SOURCE_BUNDLES = 'force.bdss.data_sources.bundles'
+    KPI_CALCULATOR_BUNDLES = 'force.bdss.kpi_calculators.bundles'
+
+
 def bundle_id(producer, identifier):
     """Creates an id for the bundle.
 

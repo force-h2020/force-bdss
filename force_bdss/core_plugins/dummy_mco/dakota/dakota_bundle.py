@@ -1,5 +1,5 @@
 from traits.api import HasStrictTraits, provides, String
-from force_bdss.api import bundle_id, IMultiCriteriaOptimizerBundle
+from force_bdss.api import IMultiCriteriaOptimizerBundle, bundle_id
 
 from .dakota_communicator import DakotaCommunicator
 from .dakota_model import DakotaModel
