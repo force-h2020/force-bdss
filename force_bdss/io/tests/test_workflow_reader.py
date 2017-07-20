@@ -24,7 +24,8 @@ class TestWorkflowReader(unittest.TestCase):
 
     def test_invalid_version(self):
         data = {
-            "version": "2"
+            "version": "2",
+            "workflow": {}
         }
 
         with self.assertRaises(InvalidVersionException):

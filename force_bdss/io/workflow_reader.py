@@ -47,12 +47,14 @@ class WorkflowReader(HasStrictTraits):
         wf = Workflow()
 
         try:
-            wf.multi_criteria_optimizer = self._extract_mco(json_data)
-            wf.data_sources[:] = self._extract_data_sources(json_data)
-            wf.kpi_calculators[:] = self._extract_kpi_calculators(json_data)
+            workflow_data = json_data["workflow"]
+            wf.multi_criteria_optimizer = self._extract_mco(workflow_data)
+            wf.data_sources[:] = self._extract_data_sources(workflow_data)
+            wf.kpi_calculators[:] = self._extract_kpi_calculators(workflow_data)
         except KeyError as e:
             logging.exception("Could not read file")
-            raise InvalidFileException("Could not read file. {}".format(e))
+            raise InvalidFileException("Could not read file. "
+                                       "Unable to find key {}".format(e))
 
     def _extract_mco(self, json_data):
         registry = self.bundle_registry
