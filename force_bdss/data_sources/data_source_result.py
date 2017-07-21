@@ -17,3 +17,28 @@ class DataSourceResult(HasTraits):
     values = Array(shape=(None, None))
     accuracy = ArrayOrNone(shape=(None, None))
     quality = ArrayOrNone(shape=(None, None))
+
+    def __str__(self):
+        return """
+        DataSourceResults
+
+        originator:
+        {}
+
+        value_types:
+        {}
+
+        values:
+        {}
+
+        Accuracy:
+        {}
+
+        Quality:
+        {}
+        """.format(
+            self.originator,
+            self.value_types,
+            self.values,
+            self.accuracy,
+            self.quality)
