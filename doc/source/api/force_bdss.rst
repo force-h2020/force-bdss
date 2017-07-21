@@ -74,10 +74,10 @@ force_bdss.core_mco_driver module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.id_generators module
--------------------------------
+force_bdss.ids module
+---------------------
 
-.. automodule:: force_bdss.id_generators
+.. automodule:: force_bdss.ids
     :members:
     :undoc-members:
     :show-inheritance:

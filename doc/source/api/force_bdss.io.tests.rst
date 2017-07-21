@@ -12,6 +12,14 @@ force_bdss.io.tests.test_workflow_reader module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.io.tests.test_workflow_writer module
+-----------------------------------------------
+
+.. automodule:: force_bdss.io.tests.test_workflow_writer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

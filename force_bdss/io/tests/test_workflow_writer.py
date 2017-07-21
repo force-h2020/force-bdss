@@ -10,7 +10,7 @@ try:
 except ImportError:
     from unittest import mock
 
-from force_bdss.id_generators import bundle_id
+from force_bdss.ids import bundle_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
