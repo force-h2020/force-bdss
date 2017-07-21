@@ -1,6 +1,13 @@
 force_bdss.data_sources package
 ===============================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    force_bdss.data_sources.tests
+
 Submodules
 ----------
 
@@ -8,6 +15,14 @@ force_bdss.data_sources.base_data_source module
 -----------------------------------------------
 
 .. automodule:: force_bdss.data_sources.base_data_source
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.data_sources.base_data_source_bundle module
+------------------------------------------------------
+
+.. automodule:: force_bdss.data_sources.base_data_source_bundle
     :members:
     :undoc-members:
     :show-inheritance:
