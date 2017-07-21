@@ -16,11 +16,11 @@ class DummyMCOBundle(BaseMultiCriteriaOptimizerBundle):
     def create_model(self, model_data=None):
         pass
 
-    def create_communicator(self, model_data):
+    def create_communicator(self, application, model):
         pass
 
 
-class TestBaseDataSourceBundle(unittest.TestCase):
+class TestBaseMCOBundle(unittest.TestCase):
     def test_initialization(self):
         bundle = DummyMCOBundle()
         self.assertEqual(bundle.id, 'foo')
