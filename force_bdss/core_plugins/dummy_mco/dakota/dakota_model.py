@@ -1,5 +1,6 @@
+from traits.api import List, String
 from force_bdss.api import BaseMCOModel
 
 
 class DakotaModel(BaseMCOModel):
-    pass
+    value_types = List(String)

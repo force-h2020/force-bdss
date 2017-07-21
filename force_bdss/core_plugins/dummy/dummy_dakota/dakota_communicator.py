@@ -13,6 +13,7 @@ class DummyDakotaCommunicator(BaseMCOCommunicator):
             values=numpy.array(values)
         )
 
+
     def send_to_mco(self, kpi_results):
         data = " ".join(
             [" ".join(list(map(str, r.values.tolist()))) for r in kpi_results]
