@@ -5,6 +5,7 @@ from .base_kpi_calculator import BaseKPICalculator
 
 class KPICalculatorResult(HasTraits):
     originator = Instance(BaseKPICalculator)
+    value_names = List(String)
     value_types = List(String)
     values = Array(shape=(None, ))
     accuracy = ArrayOrNone(shape=(None, ))
