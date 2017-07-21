@@ -5,7 +5,7 @@ import sys
 from force_bdss.api import BaseMultiCriteriaOptimizer
 
 
-class DummyDakotaOptimizer(BaseMultiCriteriaOptimizer):
+class DakotaOptimizer(BaseMultiCriteriaOptimizer):
     def run(self):
         print("Running dakota optimizer")
         for initial_value in range(10):
@@ -18,5 +18,3 @@ class DummyDakotaOptimizer(BaseMultiCriteriaOptimizer):
 
             out = ps.communicate("{}".format(initial_value).encode("utf-8"))
             print("{}: {}".format(initial_value, out[0].decode("utf-8")))
-
-

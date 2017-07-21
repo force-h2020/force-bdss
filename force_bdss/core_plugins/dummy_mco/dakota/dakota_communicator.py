@@ -8,20 +8,14 @@ class DakotaCommunicator(BaseMCOCommunicator):
     def receive_from_mco(self):
         data = sys.stdin.read()
         values = list(map(float, data.split()))
-        parameters = self.model.parameters
 
-        if len(values) != len(parameters):
-            raise ValueError(
-                "The passed information length is {}, but the model "
-                "specifies {} values.".format(
-                    len(values), len(parameters)
-                    ))
-
-        value_types = [p.type for p in parameters]
-        value_names = [p.name for p in parameters]
+        value_types = self.model.value_types
+        if len(values) != len(value_types):
+            raise ValueError("Length of provided data differs from the number "
+                             "of expected types. {} {}".format(values,
+                                                               value_types))
 
         return DataSourceParameters(
-            value_names=value_names,
             value_types=value_types,
             values=numpy.array(values)
         )
