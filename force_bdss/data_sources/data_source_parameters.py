@@ -9,8 +9,12 @@ class DataSourceParameters(HasStrictTraits):
     def __str__(self):
         return """
         DataSourceParameters
+        value_names:
+        {}
         value_types:
         {}
         values:
         {}
-        """.format(str(self.value_types), str(self.values))
+        """.format(str(self.value_names),
+                   str(self.value_types),
+                   str(self.values))
