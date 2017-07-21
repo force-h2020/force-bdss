@@ -13,7 +13,6 @@ class IDataSourceBundle(Interface):
         """Factory method.
         Must return the bundle-specific BaseDataSource instance.
         """
-        pass
 
     def create_model(self, model_data=None):
         """Factory method.
