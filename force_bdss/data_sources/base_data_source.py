@@ -25,12 +25,6 @@ class BaseDataSource(ABCHasStrictTraits):
         self.model = model
         super(BaseDataSource, self).__init__(*args, **kwargs)
 
-    @property
-    def name(self):
-        """Utility property to retrieve the bundle name from the data source
-        object."""
-        return self.bundle.name
-
     @abc.abstractmethod
     def run(self, parameters):
         """Executes the data source evaluation/fetching and returns
