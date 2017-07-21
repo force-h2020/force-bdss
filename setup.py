@@ -14,8 +14,7 @@ setup(
             "multi_criteria_optimizers_plugin:MultiCriteriaOptimizersPlugin",
             "csv_extractor = force_bdss.core_plugins.csv_extractor"
             ".csv_extractor_plugin:CSVExtractorPlugin",
-            "kpi_adder = force_bdss.core_plugins.dummy_kpi"
-            ".dummy_kpi_calculator_plugin:DummyKPICalculatorPlugin",
+            "dummy = force_bdss.core_plugins.dummy.dummy_plugin:DummyPlugin",
         ]
     },
     packages=find_packages(),
