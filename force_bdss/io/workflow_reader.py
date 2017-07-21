@@ -3,6 +3,7 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
+from ..workspecs.mco_parameters import RangedMCOParameter
 from ..workspecs.workflow import Workflow
 from ..bundle_registry_plugin import BundleRegistryPlugin
 
@@ -115,8 +116,11 @@ class WorkflowReader(HasStrictTraits):
 
         mco_id = mco_data["id"]
         mco_bundle = registry.mco_bundle_by_id(mco_id)
-        return mco_bundle.create_model(
+        model = mco_bundle.create_model(
             wf_data["multi_criteria_optimizer"]["model_data"])
+        model.parameters = self._extract_mco_parameters(
+            wf_data["multi_criteria_optimizer"]["parameters"])
+        return model
 
     def _extract_data_sources(self, wf_data):
         """Extracts the data sources from the workflow dictionary data.
@@ -166,3 +170,7 @@ class WorkflowReader(HasStrictTraits):
                 kpic_bundle.create_model(kpic_entry["model_data"]))
 
         return kpi_calculators
+
+    def _extract_mco_parameters(self, parameters_data):
+        return [RangedMCOParameter(**d) for d in parameters_data]
+

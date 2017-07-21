@@ -14,17 +14,16 @@ def rotated_range(start, stop, starting_value):
     return list(d)
 
 
-class DakotaOptimizer(BaseMultiCriteriaOptimizer):
-
+class DummyDakotaOptimizer(BaseMultiCriteriaOptimizer):
     def run(self):
         parameters = self.model.parameters
 
         values = []
         for p in parameters:
             values.append(
-                rotated_range(p.lower_bound,
-                              p.upper_bound,
-                              p.initial_value)
+                rotated_range(int(p.lower_bound),
+                              int(p.upper_bound),
+                              int(p.initial_value))
             )
 
         value_iterator = itertools.product(*values)
