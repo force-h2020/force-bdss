@@ -13,6 +13,7 @@ class DataSourceResult(HasTraits):
     the importance and reliability of that value. It should be an enumeration
     value such as HIGH, MEDIUM, POOR"""
     originator = Instance(BaseDataSource)
+    value_names = List(String)
     value_types = List(String)
     values = Array(shape=(None, None))
     accuracy = ArrayOrNone(shape=(None, None))
@@ -23,6 +24,9 @@ class DataSourceResult(HasTraits):
         DataSourceResults
 
         originator:
+        {}
+
+        value_names:
         {}
 
         value_types:
@@ -38,6 +42,7 @@ class DataSourceResult(HasTraits):
         {}
         """.format(
             self.originator,
+            self.value_names,
             self.value_types,
             self.values,
             self.accuracy,
