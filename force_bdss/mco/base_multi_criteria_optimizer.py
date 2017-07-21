@@ -25,12 +25,6 @@ class BaseMultiCriteriaOptimizer(ABCHasStrictTraits):
         self.model = model
         super(BaseMultiCriteriaOptimizer, self).__init__(*args, **kwargs)
 
-    @property
-    def name(self):
-        """Convenience property to return the name of the bundle from the
-        MCO itself"""
-        return self.bundle.name
-
     @abc.abstractmethod
     def run(self):
         """Reimplement this method to perform the MCO operations."""

@@ -25,11 +25,6 @@ class BaseKPICalculator(ABCHasStrictTraits):
         self.model = model
         super(BaseKPICalculator, self).__init__(*args, **kwargs)
 
-    @property
-    def name(self):
-        """Convenience property. Returns the name of the originating bundle."""
-        return self.bundle.name
-
     @abc.abstractmethod
     def run(self, data_source_results):
         """
