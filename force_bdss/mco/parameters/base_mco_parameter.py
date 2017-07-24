@@ -18,3 +18,7 @@ class BaseMCOParameter(HasStrictTraits):
     factory = Instance(BaseMCOParameterFactory)
     value_name = String()
     value_type = String()
+
+    def __init__(self, factory, *args, **kwargs):
+        self.factory = factory
+        super(BaseMCOParameter, self).__init__(*args, **kwargs)
