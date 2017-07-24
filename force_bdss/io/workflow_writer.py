@@ -27,6 +27,14 @@ class WorkflowWriter(HasStrictTraits):
             "id": workflow.multi_criteria_optimizer.bundle.id,
             "model_data": workflow.multi_criteria_optimizer.__getstate__()
         }
+        wf_data["multi_criteria_optimizer"]["parameters"] = []
+        for param in workflow.multi_criteria_optimizer.parameters:
+            wf_data["multi_criteria_optimizer"]["parameters"].append(
+                {
+                    "id": param.factory.id,
+                    "model_data": param.__getstate__()
+                }
+            )
         kpic_data = []
         for kpic in workflow.kpi_calculators:
             kpic_data.append({

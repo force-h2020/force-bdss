@@ -1,6 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance, List
 
-from ..workspecs.mco_parameters import MCOParameter
+from .parameters.base_mco_parameter import BaseMCOParameter
 from .i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle
 
 
@@ -18,7 +18,7 @@ class BaseMCOModel(ABCHasStrictTraits):
                       visible=False,
                       transient=True)
 
-    parameters = List(MCOParameter)
+    parameters = List(BaseMCOParameter)
 
     def __init__(self, bundle, *args, **kwargs):
         self.bundle = bundle

@@ -3,9 +3,10 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
-from ..workspecs.mco_parameters import RangedMCOParameter
-from ..workspecs.workflow import Workflow
+from ..mco.parameters.parameter_factory_registry import (
+    ParameterFactoryRegistry)
 from ..bundle_registry_plugin import BundleRegistryPlugin
+from ..workspecs.workflow import Workflow
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 
@@ -26,8 +27,13 @@ class WorkflowReader(HasStrictTraits):
     #: The bundle registry. The reader needs it to create the
     #: bundle-specific model objects.
     bundle_registry = Instance(BundleRegistryPlugin)
+    mco_parameter_registry = Instance(ParameterFactoryRegistry)
 
-    def __init__(self, bundle_registry, *args, **kwargs):
+    def __init__(self,
+                 bundle_registry,
+                 mco_parameter_registry,
+                 *args,
+                 **kwargs):
         """Initializes the reader.
 
         Parameters
@@ -37,6 +43,7 @@ class WorkflowReader(HasStrictTraits):
             for a bundle identified by a given id.
         """
         self.bundle_registry = bundle_registry
+        self.mco_parameter_registry = mco_parameter_registry
 
         super(WorkflowReader, self).__init__(*args, **kwargs)
 
@@ -172,5 +179,14 @@ class WorkflowReader(HasStrictTraits):
         return kpi_calculators
 
     def _extract_mco_parameters(self, parameters_data):
-        return [RangedMCOParameter(**d) for d in parameters_data]
+        registry = self.mco_parameter_registry
 
+        parameters = []
+
+        for p in parameters_data:
+            id = p["id"]
+            factory = registry.get_factory_by_id(id)
+            model = factory.create_model(p["model_data"])
+            parameters.append(model)
+
+        return parameters
