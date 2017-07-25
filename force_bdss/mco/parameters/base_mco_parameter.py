@@ -1,20 +1,14 @@
-from traits.api import HasStrictTraits, String, Type, Instance
+from traits.api import HasStrictTraits, String, Instance
 
-
-class BaseMCOParameterFactory(HasStrictTraits):
-    id = String()
-    name = String("Undefined parameter")
-    description = String("Undefined parameter")
-    model_class = Type('BaseMCOParameter')
-
-    def create_model(self, data_values=None):
-        if data_values is None:
-            data_values = {}
-
-        return self.model_class(factory=self, **data_values)
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
+    BaseMCOParameterFactory
 
 
 class BaseMCOParameter(HasStrictTraits):
+    """The base class of all MCO Parameter models.
+    Must be reimplemented by specific classes handling the specific parameter
+    that MCOs understand.
+    """
     factory = Instance(BaseMCOParameterFactory)
     value_name = String()
     value_type = String()

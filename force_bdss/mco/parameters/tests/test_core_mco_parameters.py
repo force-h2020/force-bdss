@@ -1,7 +1,7 @@
 import unittest
 
 from force_bdss.mco.parameters import core_mco_parameters
-from force_bdss.mco.parameters.base_mco_parameter import \
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
 
 
