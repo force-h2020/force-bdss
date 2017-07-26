@@ -32,11 +32,12 @@ class BaseCoreDriver(Plugin):
     def _parameter_factory_registry_default(self):
         registry = MCOParameterFactoryRegistry()
         for f in all_core_factories():
-            self.register(f)
+            registry.register(f)
 
         return registry
 
     def _workflow_default(self):
-        reader = WorkflowReader(self.bundle_registry)
+        reader = WorkflowReader(self.bundle_registry,
+                                self.parameter_factory_registry)
         with open(self.application.workflow_filepath) as f:
             return reader.read(f)

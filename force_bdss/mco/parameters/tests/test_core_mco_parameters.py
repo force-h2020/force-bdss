@@ -6,9 +6,9 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
 
 
 class TestCoreMCOParameters(unittest.TestCase):
-    def test_all_classes(self):
+    def test_all_factories(self):
         factories = core_mco_parameters.all_core_factories()
-        self.assertNotEqual(len(factories), 0)
+        self.assertEqual(len(factories), 1)
 
         for f in factories:
-            self.assertTrue(issubclass(f, BaseMCOParameterFactory))
+            self.assertIsInstance(f, BaseMCOParameterFactory)

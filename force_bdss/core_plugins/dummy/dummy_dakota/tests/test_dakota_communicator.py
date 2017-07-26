@@ -35,4 +35,3 @@ class TestDakotaCommunicator(unittest.TestCase):
             self.assertEqual(len(data.value_names), 1)
             self.assertEqual(len(data.value_types), 1)
             self.assertEqual(len(data.values), 1)
-

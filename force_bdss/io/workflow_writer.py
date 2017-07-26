@@ -39,7 +39,6 @@ class WorkflowWriter(HasStrictTraits):
 
         wf_data["multi_criteria_optimizer"]["model_data"]["parameters"] = parameters_data  # noqa
 
-
         kpic_data = []
         for kpic in workflow.kpi_calculators:
             kpic_data.append({

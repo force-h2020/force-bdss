@@ -26,5 +26,7 @@ def all_core_factories():
     """Produces a list of all factories contained in this module."""
     import inspect
 
-    return [c for c in inspect.getmodule(all_core_factories).__dict__.values()
-            if inspect.isclass(c) and issubclass(c, BaseMCOParameterFactory)]
+    return [c() for c in inspect.getmodule(all_core_factories).__dict__.values()
+            if inspect.isclass(c) and
+            c is not BaseMCOParameterFactory and
+            issubclass(c, BaseMCOParameterFactory)]
