@@ -52,12 +52,17 @@ class BDSSApplication(Application):
 
 
 def _import_extensions(plugins, ext):
+    """Service routine extracted for testing.
+    Imports the extension in the plugins argument.
+    """
     logging.info("Found extension {}".format(ext.obj))
     plugins.append(ext.obj)
 
 
 def _load_failure_callback(plugins, manager, entry_point, exception):
-    """Reports failure to load a module through stevedore.
+    """Service routine extracted for testing.
+    Reports failure to load a module through stevedore, using the
+    on_load_failure_callback option.
     """
     logging.error(
         "Unable to load plugin {}. Exception: {}. Message: {}".format(
