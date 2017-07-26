@@ -3,6 +3,8 @@ import subprocess
 import os
 from contextlib import contextmanager
 
+from six import StringIO
+
 from force_bdss.tests import fixtures
 
 
@@ -30,9 +32,14 @@ class TestExecution(unittest.TestCase):
 
     def test_plain_invocation_evaluate(self):
         with cd(fixtures.dirpath()):
-            out = subprocess.check_call([
-                "force_bdss", "--evaluate", "test_csv.json"])
-            self.assertEqual(out, 0)
+            input = StringIO()
+            proc = subprocess.Popen([
+                "force_bdss", "--evaluate", "test_csv.json"],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE)
+            proc.communicate(b"1")
+            retcode = proc.wait(5)
+            self.assertEqual(retcode, 0)
 
     def test_unsupported_file_input(self):
         with cd(fixtures.dirpath()):
