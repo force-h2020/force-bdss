@@ -41,4 +41,3 @@ class TestBDSSApplication(unittest.TestCase):
         _import_extensions(plugins, ext)
 
         self.assertEqual(plugins[0], plugin)
-
