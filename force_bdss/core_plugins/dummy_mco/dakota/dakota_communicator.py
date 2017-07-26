@@ -19,7 +19,7 @@ class DakotaCommunicator(BaseMCOCommunicator):
                 ))
 
         value_types = [p.value_type for p in parameters]
-        value_names = [p.name for p in parameters]
+        value_names = [p.value_name for p in parameters]
 
         return DataSourceParameters(
             value_names=value_names,
