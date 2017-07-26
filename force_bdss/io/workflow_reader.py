@@ -182,6 +182,17 @@ class WorkflowReader(HasStrictTraits):
         return kpi_calculators
 
     def _extract_mco_parameters(self, parameters_data):
+        """Extracts the MCO parameters from the data as dictionary.
+
+        Parameters
+        ----------
+        parameters_data: dict
+            The content of the parameter data key in the MCO model data.
+
+        Returns
+        -------
+        List of instances of a subclass of BaseMCOParameter
+        """
         registry = self.mco_parameter_registry
 
         parameters = []

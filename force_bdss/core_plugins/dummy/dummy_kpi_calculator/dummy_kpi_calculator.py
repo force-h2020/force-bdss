@@ -12,5 +12,4 @@ class DummyKPICalculator(BaseKPICalculator):
             values=data_source_results[0].values.reshape(
                 data_source_results[0].values.shape[:-1]))
 
-        print(res)
         return res
