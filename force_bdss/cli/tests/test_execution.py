@@ -28,6 +28,16 @@ class TestExecution(unittest.TestCase):
             out = subprocess.check_call(["force_bdss", "test_csv.json"])
             self.assertEqual(out, 0)
 
+    def test_plain_invocation_evaluate(self):
+        with cd(fixtures.dirpath()):
+            proc = subprocess.Popen([
+                "force_bdss", "--evaluate", "test_csv.json"],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE)
+            proc.communicate(b"1")
+            retcode = proc.wait()
+            self.assertEqual(retcode, 0)
+
     def test_unsupported_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):

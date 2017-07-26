@@ -3,8 +3,10 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
-from ..workspecs.workflow import Workflow
+from ..mco.parameters.mco_parameter_factory_registry import (
+    MCOParameterFactoryRegistry)
 from ..bundle_registry_plugin import BundleRegistryPlugin
+from ..workspecs.workflow import Workflow
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 
@@ -26,7 +28,15 @@ class WorkflowReader(HasStrictTraits):
     #: bundle-specific model objects.
     bundle_registry = Instance(BundleRegistryPlugin)
 
-    def __init__(self, bundle_registry, *args, **kwargs):
+    #: The registry for the MCO parameters. At the moment this
+    #: is not extensible via plugins as the one above.
+    mco_parameter_registry = Instance(MCOParameterFactoryRegistry)
+
+    def __init__(self,
+                 bundle_registry,
+                 mco_parameter_registry,
+                 *args,
+                 **kwargs):
         """Initializes the reader.
 
         Parameters
@@ -36,6 +46,7 @@ class WorkflowReader(HasStrictTraits):
             for a bundle identified by a given id.
         """
         self.bundle_registry = bundle_registry
+        self.mco_parameter_registry = mco_parameter_registry
 
         super(WorkflowReader, self).__init__(*args, **kwargs)
 
@@ -115,8 +126,12 @@ class WorkflowReader(HasStrictTraits):
 
         mco_id = mco_data["id"]
         mco_bundle = registry.mco_bundle_by_id(mco_id)
-        return mco_bundle.create_model(
+        model_data = wf_data["multi_criteria_optimizer"]["model_data"]
+        model_data["parameters"] = self._extract_mco_parameters(
+            model_data["parameters"])
+        model = mco_bundle.create_model(
             wf_data["multi_criteria_optimizer"]["model_data"])
+        return model
 
     def _extract_data_sources(self, wf_data):
         """Extracts the data sources from the workflow dictionary data.
@@ -166,3 +181,27 @@ class WorkflowReader(HasStrictTraits):
                 kpic_bundle.create_model(kpic_entry["model_data"]))
 
         return kpi_calculators
+
+    def _extract_mco_parameters(self, parameters_data):
+        """Extracts the MCO parameters from the data as dictionary.
+
+        Parameters
+        ----------
+        parameters_data: dict
+            The content of the parameter data key in the MCO model data.
+
+        Returns
+        -------
+        List of instances of a subclass of BaseMCOParameter
+        """
+        registry = self.mco_parameter_registry
+
+        parameters = []
+
+        for p in parameters_data:
+            id = p["id"]
+            factory = registry.get_factory_by_id(id)
+            model = factory.create_model(p["model_data"])
+            parameters.append(model)
+
+        return parameters

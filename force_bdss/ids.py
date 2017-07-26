@@ -29,13 +29,37 @@ def bundle_id(producer, identifier):
     -------
     str: an identifier to be used in the bundle.
     """
+    return _string_id("bundle", producer, identifier)
+
+
+def mco_parameter_id(producer, identifier):
+    return _string_id("mco_parameter", producer, identifier)
+
+
+def _string_id(entity_namespace, producer, identifier):
+    """Creates an id for a generic entity.
+
+    Parameters
+    ----------
+    entity_namespace: str
+        A namespace for the entity we want to address (e.g. "bundle")
+    producer: str
+        the company or research institute unique identifier (e.g. "enthought")
+    identifier: str
+        A unique identifier for the bundle. The producer has authority and
+        control over the uniqueness of this identifier.
+
+    Returns
+    -------
+    str: an identifier to be used in the bundle.
+    """
     def is_valid(entry):
         return (
             isinstance(entry, six.string_types) and
             " " not in entry and
             len(entry) != 0)
 
-    if not all(map(is_valid, [producer, identifier])):
+    if not all(map(is_valid, [entity_namespace, producer, identifier])):
         raise ValueError("Invalid parameters specified.")
 
-    return "force.bdss.bundles.{}.{}".format(producer, identifier)
+    return "force.bdss.{}.{}.{}".format(entity_namespace, producer, identifier)

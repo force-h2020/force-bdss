@@ -6,7 +6,7 @@ from force_bdss.ids import bundle_id
 class TestIdGenerators(unittest.TestCase):
     def test_bundle_id(self):
         self.assertEqual(bundle_id("foo", "bar"),
-                         "force.bdss.bundles.foo.bar")
+                         "force.bdss.bundle.foo.bar")
 
         for bad_entry in ["", None, "   ", "foo bar"]:
             with self.assertRaises(ValueError):
