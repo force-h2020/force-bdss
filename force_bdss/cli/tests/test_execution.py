@@ -35,7 +35,7 @@ class TestExecution(unittest.TestCase):
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE)
             proc.communicate(b"1")
-            retcode = proc.wait(timeout=5)
+            retcode = proc.wait()
             self.assertEqual(retcode, 0)
 
     def test_unsupported_file_input(self):
