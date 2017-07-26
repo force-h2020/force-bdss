@@ -3,8 +3,6 @@ import subprocess
 import os
 from contextlib import contextmanager
 
-from six import StringIO
-
 from force_bdss.tests import fixtures
 
 
@@ -32,7 +30,6 @@ class TestExecution(unittest.TestCase):
 
     def test_plain_invocation_evaluate(self):
         with cd(fixtures.dirpath()):
-            input = StringIO()
             proc = subprocess.Popen([
                 "force_bdss", "--evaluate", "test_csv.json"],
                 stdin=subprocess.PIPE,
