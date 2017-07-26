@@ -126,10 +126,11 @@ class WorkflowReader(HasStrictTraits):
 
         mco_id = mco_data["id"]
         mco_bundle = registry.mco_bundle_by_id(mco_id)
+        model_data = wf_data["multi_criteria_optimizer"]["model_data"]
+        model_data["parameters"] = self._extract_mco_parameters(
+            model_data["parameters"])
         model = mco_bundle.create_model(
             wf_data["multi_criteria_optimizer"]["model_data"])
-        model.parameters = self._extract_mco_parameters(
-            wf_data["multi_criteria_optimizer"]["model_data"]["parameters"])
         return model
 
     def _extract_data_sources(self, wf_data):
