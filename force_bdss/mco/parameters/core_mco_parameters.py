@@ -10,8 +10,8 @@ class RangedMCOParameter(BaseMCOParameter):
     """Expresses a MCO parameter that has a range between two floating
     point values."""
     initial_value = Float()
-    upper_bound = Float()
     lower_bound = Float()
+    upper_bound = Float(1)
 
 
 class RangedMCOParameterFactory(BaseMCOParameterFactory):
