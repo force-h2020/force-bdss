@@ -8,7 +8,7 @@ class DummyDakotaCommunicator(BaseMCOCommunicator):
     def receive_from_mco(self):
         data = sys.stdin.read()
         values = list(map(float, data.split()))
-        value_names = [p.name for p in self.model.parameters]
+        value_names = [p.value_name for p in self.model.parameters]
         value_types = [p.value_type for p in self.model.parameters]
 
         return DataSourceParameters(
