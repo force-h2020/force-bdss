@@ -40,7 +40,8 @@ class BDSSApplication(Application):
         mgr = ExtensionManager(
             namespace='force.bdss.extensions',
             invoke_on_load=True,
-            on_load_failure_callback=functools.partial(_load_failure_callback)
+            on_load_failure_callback=functools.partial(_load_failure_callback,
+                                                       plugins)
         )
 
         try:
