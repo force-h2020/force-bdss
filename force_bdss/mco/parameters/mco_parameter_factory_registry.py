@@ -4,7 +4,7 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
 
 
-class ParameterFactoryRegistry(HasStrictTraits):
+class MCOParameterFactoryRegistry(HasStrictTraits):
     """Registry to keep the parameter factories and lookup them.
     """
     # Temp: this will become an extension point.

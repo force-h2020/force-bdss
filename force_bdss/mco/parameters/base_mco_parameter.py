@@ -9,8 +9,14 @@ class BaseMCOParameter(HasStrictTraits):
     Must be reimplemented by specific classes handling the specific parameter
     that MCOs understand.
     """
-    factory = Instance(BaseMCOParameterFactory)
+
+    #: The generating factory. Used to retrieve the ID at serialization.
+    factory = Instance(BaseMCOParameterFactory, visible=False, transient=True)
+
+    #: A user defined name for the parameter
     value_name = String()
+
+    #: A CUBA key describing the type of the parameter
     value_type = String()
 
     def __init__(self, factory, *args, **kwargs):

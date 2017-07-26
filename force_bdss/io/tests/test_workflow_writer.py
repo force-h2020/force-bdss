@@ -4,13 +4,18 @@ from six import StringIO
 
 from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
 from force_bdss.io.workflow_reader import WorkflowReader
+from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
+    BaseMCOParameterFactory
+from force_bdss.mco.parameters.mco_parameter_factory_registry import \
+    MCOParameterFactoryRegistry
 
 try:
     import mock
 except ImportError:
     from unittest import mock
 
-from force_bdss.ids import bundle_id
+from force_bdss.ids import bundle_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
@@ -33,6 +38,9 @@ class TestWorkflowWriter(unittest.TestCase):
         self.mock_registry.mco_bundle_by_id = mock.Mock(
             return_value=mock_mco_bundle)
 
+        self.mock_mco_parameter_registry = mock.Mock(
+            spec=MCOParameterFactoryRegistry)
+
     def test_write(self):
         wfwriter = WorkflowWriter()
         fp = StringIO()
@@ -51,7 +59,8 @@ class TestWorkflowWriter(unittest.TestCase):
         wf = self._create_mock_workflow()
         wfwriter.write(wf, fp)
         fp.seek(0)
-        wfreader = WorkflowReader(self.mock_registry)
+        wfreader = WorkflowReader(self.mock_registry,
+                                  self.mock_mco_parameter_registry)
         wf_result = wfreader.read(fp)
         self.assertEqual(wf_result.multi_criteria_optimizer.bundle.id,
                          wf.multi_criteria_optimizer.bundle.id)
@@ -62,4 +71,12 @@ class TestWorkflowWriter(unittest.TestCase):
             mock.Mock(
                 spec=IMultiCriteriaOptimizerBundle,
                 id=bundle_id("enthought", "mock")))
+        wf.multi_criteria_optimizer.parameters = [
+            BaseMCOParameter(
+                factory=mock.Mock(
+                    spec=BaseMCOParameterFactory,
+                    id=mco_parameter_id("enthought", "mock")
+                )
+            )
+        ]
         return wf

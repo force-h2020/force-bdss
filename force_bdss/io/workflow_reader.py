@@ -3,8 +3,8 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
-from ..mco.parameters.parameter_factory_registry import (
-    ParameterFactoryRegistry)
+from ..mco.parameters.mco_parameter_factory_registry import (
+    MCOParameterFactoryRegistry)
 from ..bundle_registry_plugin import BundleRegistryPlugin
 from ..workspecs.workflow import Workflow
 
@@ -27,7 +27,10 @@ class WorkflowReader(HasStrictTraits):
     #: The bundle registry. The reader needs it to create the
     #: bundle-specific model objects.
     bundle_registry = Instance(BundleRegistryPlugin)
-    mco_parameter_registry = Instance(ParameterFactoryRegistry)
+
+    #: The registry for the MCO parameters. At the moment this
+    #: is not extensible via plugins as the one above.
+    mco_parameter_registry = Instance(MCOParameterFactoryRegistry)
 
     def __init__(self,
                  bundle_registry,
@@ -126,7 +129,7 @@ class WorkflowReader(HasStrictTraits):
         model = mco_bundle.create_model(
             wf_data["multi_criteria_optimizer"]["model_data"])
         model.parameters = self._extract_mco_parameters(
-            wf_data["multi_criteria_optimizer"]["parameters"])
+            wf_data["multi_criteria_optimizer"]["model_data"]["parameters"])
         return model
 
     def _extract_data_sources(self, wf_data):

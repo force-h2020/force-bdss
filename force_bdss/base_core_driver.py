@@ -7,7 +7,8 @@ from .bundle_registry_plugin import (
 )
 from .io.workflow_reader import WorkflowReader
 from .workspecs.workflow import Workflow
-from .mco.parameters.parameter_factory_registry import ParameterFactoryRegistry
+from .mco.parameters.mco_parameter_factory_registry import (
+    MCOParameterFactoryRegistry)
 from .mco.parameters.core_mco_parameters import all_core_factories
 
 
@@ -16,9 +17,11 @@ class BaseCoreDriver(Plugin):
     or the evaluation.
     """
 
+    #: The registry of the bundles.
     bundle_registry = Instance(BundleRegistryPlugin)
 
-    parameter_factory_registry = Instance(ParameterFactoryRegistry)
+    #: The registry of the MCO parameters
+    parameter_factory_registry = Instance(MCOParameterFactoryRegistry)
 
     #: Deserialized content of the workflow file.
     workflow = Instance(Workflow)
@@ -27,7 +30,7 @@ class BaseCoreDriver(Plugin):
         return self.application.get_plugin(BUNDLE_REGISTRY_PLUGIN_ID)
 
     def _parameter_factory_registry_default(self):
-        registry = ParameterFactoryRegistry()
+        registry = MCOParameterFactoryRegistry()
         for f in all_core_factories():
             self.register(f)
 
