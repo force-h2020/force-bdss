@@ -37,8 +37,6 @@ class BDSSApplication(Application):
         else:
             plugins.append(CoreMCODriver())
 
-
-
         mgr = ExtensionManager(
             namespace='force.bdss.extensions',
             invoke_on_load=True,

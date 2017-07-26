@@ -32,3 +32,13 @@ class TestBDSSApplication(unittest.TestCase):
                               "Exception. Message: hello")
         )
         self.assertEqual(plugins, [])
+
+    def test_import_extension(self):
+        plugins = []
+        plugin = mock.Mock()
+        ext = mock.Mock()
+        ext.obj = plugin
+        _import_extensions(plugins, ext)
+
+        self.assertEqual(plugins[0], plugin)
+
