@@ -4,7 +4,13 @@
     "multi_criteria_optimizer": {
       "id": "force.bdss.bundle.enthought.dakota",
       "model_data": {
-        "parameters" : []
+        "parameters" : [
+          {
+            "id": "force.bdss.mco_parameter.enthought.ranged",
+            "model_data": {
+            }
+          }
+        ]
       }
     },
     "data_sources": [
