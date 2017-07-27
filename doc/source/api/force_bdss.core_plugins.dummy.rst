@@ -8,6 +8,7 @@ Subpackages
 
     force_bdss.core_plugins.dummy.csv_extractor
     force_bdss.core_plugins.dummy.dummy_dakota
+    force_bdss.core_plugins.dummy.dummy_data_source
     force_bdss.core_plugins.dummy.dummy_kpi_calculator
     force_bdss.core_plugins.dummy.kpi_adder
 

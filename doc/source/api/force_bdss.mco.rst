@@ -12,6 +12,22 @@ Subpackages
 Submodules
 ----------
 
+force_bdss.mco.base_mco module
+------------------------------
+
+.. automodule:: force_bdss.mco.base_mco
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.mco.base_mco_bundle module
+-------------------------------------
+
+.. automodule:: force_bdss.mco.base_mco_bundle
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 force_bdss.mco.base_mco_communicator module
 -------------------------------------------
 
@@ -28,26 +44,10 @@ force_bdss.mco.base_mco_model module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.mco.base_multi_criteria_optimizer module
----------------------------------------------------
+force_bdss.mco.i_mco_bundle module
+----------------------------------
 
-.. automodule:: force_bdss.mco.base_multi_criteria_optimizer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force_bdss.mco.base_multi_criteria_optimizer_bundle module
-----------------------------------------------------------
-
-.. automodule:: force_bdss.mco.base_multi_criteria_optimizer_bundle
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force_bdss.mco.i_multi_criteria_optimizer_bundle module
--------------------------------------------------------
-
-.. automodule:: force_bdss.mco.i_multi_criteria_optimizer_bundle
+.. automodule:: force_bdss.mco.i_mco_bundle
     :members:
     :undoc-members:
     :show-inheritance:
