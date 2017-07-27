@@ -27,10 +27,10 @@ force_bdss.tests.test_bundle_registry_plugin module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.tests.test_id_generators module
-------------------------------------------
+force_bdss.tests.test_ids module
+--------------------------------
 
-.. automodule:: force_bdss.tests.test_id_generators
+.. automodule:: force_bdss.tests.test_ids
     :members:
     :undoc-members:
     :show-inheritance:
