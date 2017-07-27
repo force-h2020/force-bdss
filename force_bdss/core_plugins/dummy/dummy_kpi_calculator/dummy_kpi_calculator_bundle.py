@@ -15,5 +15,5 @@ class DummyKPICalculatorBundle(BaseKPICalculatorBundle):
 
         return DummyKPICalculatorModel(self, **model_data)
 
-    def create_kpi_calculator(self, application, model):
-        return DummyKPICalculator(self, application, model)
+    def create_kpi_calculator(self):
+        return DummyKPICalculator(self)

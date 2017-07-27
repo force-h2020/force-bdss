@@ -1,5 +1,12 @@
 import unittest
 
+try:
+    import mock
+except ImportError:
+    from unittest import mock
+
+from envisage.plugin import Plugin
+
 from force_bdss.mco.base_mco_bundle import BaseMCOBundle
 
 
@@ -8,18 +15,18 @@ class DummyMCOBundle(BaseMCOBundle):
 
     name = "bar"
 
-    def create_optimizer(self, application, model):
+    def create_optimizer(self):
         pass
 
     def create_model(self, model_data=None):
         pass
 
-    def create_communicator(self, application, model):
+    def create_communicator(self):
         pass
 
 
 class TestBaseMCOBundle(unittest.TestCase):
     def test_initialization(self):
-        bundle = DummyMCOBundle()
+        bundle = DummyMCOBundle(mock.Mock(spec=Plugin))
         self.assertEqual(bundle.id, 'foo')
         self.assertEqual(bundle.name, 'bar')

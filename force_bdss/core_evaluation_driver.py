@@ -32,15 +32,13 @@ class CoreEvaluationDriver(BaseCoreDriver):
         ds_results = []
         for ds_model in workflow.data_sources:
             ds_bundle = ds_model.bundle
-            data_source = ds_bundle.create_data_source(self.application,
-                                                       ds_model)
-            ds_results.append(data_source.run(parameters))
+            data_source = ds_bundle.create_data_source()
+            ds_results.append(data_source.run(ds_model, parameters))
 
         kpi_results = []
         for kpic_model in workflow.kpi_calculators:
             kpic_bundle = kpic_model.bundle
-            kpi_calculator = kpic_bundle.create_kpi_calculator(
-                self.application, kpic_model)
-            kpi_results.append(kpi_calculator.run(ds_results))
+            kpi_calculator = kpic_bundle.create_kpi_calculator()
+            kpi_results.append(kpi_calculator.run(kpic_model, ds_results))
 
         mco_communicator.send_to_mco(mco_model, kpi_results)

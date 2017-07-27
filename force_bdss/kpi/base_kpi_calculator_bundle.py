@@ -27,7 +27,7 @@ class BaseKPICalculatorBundle(ABCHasStrictTraits):
         super(BaseKPICalculatorBundle, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def create_kpi_calculator(self, application, model):
+    def create_kpi_calculator(self):
         """Factory method.
         Creates and returns an instance of a KPI Calculator, associated
         to the given application and model.

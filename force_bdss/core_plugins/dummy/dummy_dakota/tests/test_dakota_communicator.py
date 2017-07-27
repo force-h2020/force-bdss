@@ -1,6 +1,11 @@
 import unittest
 
-from force_bdss.bdss_application import BDSSApplication
+try:
+    import mock
+except ImportError:
+    from unittest import mock
+
+from envisage.plugin import Plugin
 
 from force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle import (
     DummyDakotaBundle)
@@ -10,15 +15,10 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
 from force_bdss.mco.parameters.core_mco_parameters import RangedMCOParameter
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
 
 class TestDakotaCommunicator(unittest.TestCase):
     def test_receive_from_mco(self):
-        bundle = DummyDakotaBundle()
+        bundle = DummyDakotaBundle(mock.Mock(spec=Plugin))
         mock_parameter_factory = mock.Mock(spec=BaseMCOParameterFactory)
         model = bundle.create_model()
         model.parameters = [

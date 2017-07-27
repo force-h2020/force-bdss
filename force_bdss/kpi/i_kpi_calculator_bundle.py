@@ -1,4 +1,5 @@
-from traits.api import Interface, String
+from traits.api import Interface, String, Instance
+from envisage.plugin import Plugin
 
 
 class IKPICalculatorBundle(Interface):
@@ -8,7 +9,8 @@ class IKPICalculatorBundle(Interface):
 
     name = String()
 
-    def create_kpi_calculator(self, application, model):
+    plugin = Instance(Plugin)
+    def create_kpi_calculator(self):
         pass
 
     def create_model(self, model_data=None):

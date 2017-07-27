@@ -2,7 +2,7 @@ from force_bdss.api import BaseDataSource, DataSourceResult
 
 
 class DummyDataSource(BaseDataSource):
-    def run(self, parameters):
+    def run(self, model, parameters):
         print(parameters)
         return DataSourceResult(
                 originator=self,

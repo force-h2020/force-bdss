@@ -26,7 +26,7 @@ class BaseDataSourceBundle(ABCHasStrictTraits):
         super(BaseDataSourceBundle, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def create_data_source(self, application, model):
+    def create_data_source(self):
         """Factory method.
         Must return the bundle-specific BaseDataSource instance.
 

@@ -1,4 +1,5 @@
-from traits.api import Interface, String
+from traits.api import Interface, String, Instance
+from envisage.plugin import Plugin
 
 
 class IMCOBundle(Interface):
@@ -8,6 +9,8 @@ class IMCOBundle(Interface):
     id = String()
 
     name = String()
+
+    plugin = Instance(Plugin)
 
     def create_optimizer(self):
         pass
