@@ -6,9 +6,7 @@ Subpackages
 
 .. toctree::
 
-    force_bdss.core_plugins.csv_extractor
-    force_bdss.core_plugins.dummy_kpi
-    force_bdss.core_plugins.dummy_mco
+    force_bdss.core_plugins.dummy
 
 Module contents
 ---------------

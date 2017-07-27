@@ -6,6 +6,7 @@ Subpackages
 
 .. toctree::
 
+    force_bdss.mco.parameters
     force_bdss.mco.tests
 
 Submodules

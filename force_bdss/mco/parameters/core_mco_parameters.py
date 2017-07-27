@@ -9,9 +9,9 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
 class RangedMCOParameter(BaseMCOParameter):
     """Expresses a MCO parameter that has a range between two floating
     point values."""
-    initial_value = Float()
-    upper_bound = Float()
-    lower_bound = Float()
+    initial_value = Float(0.0)
+    lower_bound = Float(0.0)
+    upper_bound = Float(1.0)
 
 
 class RangedMCOParameterFactory(BaseMCOParameterFactory):

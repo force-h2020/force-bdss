@@ -2,12 +2,15 @@
   "version": "1",
   "workflow": {
     "multi_criteria_optimizer": {
-      "id": "force.bdss.bundle.enthought.dakota",
+      "id": "force.bdss.bundle.enthought.dummy_dakota",
       "model_data": {
         "parameters" : [
           {
             "id": "force.bdss.mco_parameter.enthought.ranged",
             "model_data": {
+                "initial_value": 3,
+                "lower_bound": 0,
+                "upper_bound": 10
             }
           }
         ]
