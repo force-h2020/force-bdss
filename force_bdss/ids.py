@@ -37,6 +37,9 @@ def mco_parameter_id(producer, identifier):
 
 
 def plugin_id(producer, identifier):
+    """Creates an ID for the plugins. These must be defined, otherwise 
+    the envisage system will complain (but not break)
+    """
     return _string_id("plugin", producer, identifier)
 
 
