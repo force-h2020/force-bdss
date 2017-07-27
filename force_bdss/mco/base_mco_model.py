@@ -1,7 +1,7 @@
 from traits.api import ABCHasStrictTraits, Instance, List
 
 from .parameters.base_mco_parameter import BaseMCOParameter
-from .i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle
+from .i_mco_bundle import IMCOBundle
 
 
 class BaseMCOModel(ABCHasStrictTraits):
@@ -14,7 +14,7 @@ class BaseMCOModel(ABCHasStrictTraits):
     """
     #: A reference to the creating bundle, so that we can
     #: retrieve it as the originating factory.
-    bundle = Instance(IMultiCriteriaOptimizerBundle,
+    bundle = Instance(IMCOBundle,
                       visible=False,
                       transient=True)
 

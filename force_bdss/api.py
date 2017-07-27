@@ -16,6 +16,6 @@ from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle  # noqa
 
 from .mco.base_mco_model import BaseMCOModel  # noqa
 from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
-from .mco.base_multi_criteria_optimizer import BaseMultiCriteriaOptimizer  # noqa
-from .mco.base_multi_criteria_optimizer_bundle import BaseMultiCriteriaOptimizerBundle  # noqa
-from .mco.i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle  # noqa
+from .mco.base_mco import BaseMCO  # noqa
+from .mco.base_mco_bundle import BaseMCOBundle  # noqa
+from .mco.i_mco_bundle import IMCOBundle  # noqa

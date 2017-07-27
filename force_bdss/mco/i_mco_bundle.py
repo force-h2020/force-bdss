@@ -1,7 +1,7 @@
 from traits.api import Interface, String
 
 
-class IMultiCriteriaOptimizerBundle(Interface):
+class IMCOBundle(Interface):
     """Interface for the MultiCriteria Optimizer bundle.
     You should not need it, as its main use is for envisage support.
     """

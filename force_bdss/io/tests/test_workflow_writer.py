@@ -18,15 +18,15 @@ except ImportError:
 from force_bdss.ids import bundle_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
-    IMultiCriteriaOptimizerBundle
+from force_bdss.mco.i_mco_bundle import \
+    IMCOBundle
 from force_bdss.workspecs.workflow import Workflow
 
 
 class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
         self.mock_registry = mock.Mock(spec=BundleRegistryPlugin)
-        mock_mco_bundle = mock.Mock(spec=IMultiCriteriaOptimizerBundle,
+        mock_mco_bundle = mock.Mock(spec=IMCOBundle,
                                     id=bundle_id("enthought", "mock"))
         mock_mco_model = mock.Mock(
             spec=BaseMCOModel,
@@ -69,7 +69,7 @@ class TestWorkflowWriter(unittest.TestCase):
         wf = Workflow()
         wf.multi_criteria_optimizer = BaseMCOModel(
             mock.Mock(
-                spec=IMultiCriteriaOptimizerBundle,
+                spec=IMCOBundle,
                 id=bundle_id("enthought", "mock")))
         wf.multi_criteria_optimizer.parameters = [
             BaseMCOParameter(

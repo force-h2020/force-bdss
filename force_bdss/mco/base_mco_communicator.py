@@ -4,7 +4,7 @@ from traits.api import ABCHasStrictTraits, Instance
 
 from .base_mco_model import BaseMCOModel
 from ..bdss_application import BDSSApplication
-from .i_multi_criteria_optimizer_bundle import IMultiCriteriaOptimizerBundle
+from .i_mco_bundle import IMCOBundle
 
 
 class BaseMCOCommunicator(ABCHasStrictTraits):
@@ -19,7 +19,7 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
     again specified by the MCO.
     """
     #: A reference to the bundle
-    bundle = Instance(IMultiCriteriaOptimizerBundle)
+    bundle = Instance(IMCOBundle)
     #: A reference to the application
     application = Instance(BDSSApplication)
     #: A reference to the model class

@@ -1,11 +1,9 @@
 import unittest
 
-from force_bdss.mco.base_multi_criteria_optimizer_bundle import (
-    BaseMultiCriteriaOptimizerBundle
-)
+from force_bdss.mco.base_mco_bundle import BaseMCOBundle
 
 
-class DummyMCOBundle(BaseMultiCriteriaOptimizerBundle):
+class DummyMCOBundle(BaseMCOBundle):
     id = "foo"
 
     name = "bar"
