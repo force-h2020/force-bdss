@@ -1,5 +1,6 @@
 import abc
-from traits.api import ABCHasStrictTraits, provides, String
+from traits.api import ABCHasStrictTraits, provides, String, Instance
+from envisage.plugin import Plugin
 
 from .i_data_source_bundle import IDataSourceBundle
 
@@ -17,6 +18,12 @@ class BaseDataSourceBundle(ABCHasStrictTraits):
 
     #: A human readable name of the bundle. Spaces allowed
     name = String()
+
+    plugin = Instance(Plugin)
+
+    def __init__(self, plugin, *args, **kwargs):
+        self.plugin = plugin
+        super(BaseDataSourceBundle, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
     def create_data_source(self, application, model):

@@ -16,8 +16,8 @@ class DummyDakotaBundle(BaseMCOBundle):
             model_data = {}
         return DummyDakotaModel(self, **model_data)
 
-    def create_optimizer(self, application, model):
-        return DummyDakotaOptimizer(self, application, model)
+    def create_optimizer(self):
+        return DummyDakotaOptimizer(self)
 
-    def create_communicator(self, application, model):
-        return DummyDakotaCommunicator(self, application, model)
+    def create_communicator(self):
+        return DummyDakotaCommunicator(self)

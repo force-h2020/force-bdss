@@ -1,7 +1,6 @@
 import unittest
 
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
-from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.i_mco_bundle import IMCOBundle
 
 try:
@@ -9,24 +8,18 @@ try:
 except ImportError:
     from unittest import mock
 
-from force_bdss.bdss_application import BDSSApplication
-
 
 class DummyMCOCommunicator(BaseMCOCommunicator):
-    def receive_from_mco(self):
+    def receive_from_mco(self, model):
         pass
 
-    def send_to_mco(self, kpi_results):
+    def send_to_mco(self, model, kpi_results):
         pass
 
 
 class TestBaseMCOCommunicator(unittest.TestCase):
     def test_initialization(self):
         bundle = mock.Mock(spec=IMCOBundle)
-        application = mock.Mock(spec=BDSSApplication)
-        model = mock.Mock(spec=BaseMCOModel)
-        mcocomm = DummyMCOCommunicator(bundle, application, model)
+        mcocomm = DummyMCOCommunicator(bundle)
 
         self.assertEqual(mcocomm.bundle, bundle)
-        self.assertEqual(mcocomm.application, application)
-        self.assertEqual(mcocomm.model, model)

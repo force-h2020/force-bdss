@@ -15,8 +15,8 @@ def rotated_range(start, stop, starting_value):
 
 
 class DummyDakotaOptimizer(BaseMCO):
-    def run(self):
-        parameters = self.model.parameters
+    def run(self, model):
+        parameters = model.parameters
 
         values = []
         for p in parameters:
@@ -28,11 +28,13 @@ class DummyDakotaOptimizer(BaseMCO):
 
         value_iterator = itertools.product(*values)
 
+        application = self.bundle.plugin.application
+
         for value in value_iterator:
             ps = subprocess.Popen(
                 [sys.argv[0],
                  "--evaluate",
-                 self.application.workflow_filepath],
+                 application.workflow_filepath],
                 stdout=subprocess.PIPE,
                 stdin=subprocess.PIPE)
 

@@ -9,11 +9,11 @@ class IMCOBundle(Interface):
 
     name = String()
 
-    def create_optimizer(self, application, model):
+    def create_optimizer(self):
         pass
 
     def create_model(self, model_data=None):
         pass
 
-    def create_communicator(self, application, model):
+    def create_communicator(self):
         pass

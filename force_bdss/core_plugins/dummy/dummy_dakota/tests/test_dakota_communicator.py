@@ -19,18 +19,17 @@ except ImportError:
 class TestDakotaCommunicator(unittest.TestCase):
     def test_receive_from_mco(self):
         bundle = DummyDakotaBundle()
-        mock_application = mock.Mock(spec=BDSSApplication)
         mock_parameter_factory = mock.Mock(spec=BaseMCOParameterFactory)
         model = bundle.create_model()
         model.parameters = [
             RangedMCOParameter(mock_parameter_factory)
         ]
-        comm = bundle.create_communicator(mock_application, model)
+        comm = bundle.create_communicator()
 
         with mock.patch("sys.stdin") as stdin:
             stdin.read.return_value = "1"
 
-            data = comm.receive_from_mco()
+            data = comm.receive_from_mco(model)
             self.assertIsInstance(data, DataSourceParameters)
             self.assertEqual(len(data.value_names), 1)
             self.assertEqual(len(data.value_types), 1)
