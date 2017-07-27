@@ -23,7 +23,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
             print(str(e), file=sys.stderr)
             sys.exit(1)
 
-        mco_model = workflow.multi_criteria_optimizer
+        mco_model = workflow.mco
         mco_bundle = mco_model.bundle
         mco_communicator = mco_bundle.create_communicator(
             self.application,

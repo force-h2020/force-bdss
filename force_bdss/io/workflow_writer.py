@@ -23,13 +23,13 @@ class WorkflowWriter(HasStrictTraits):
         }
 
         wf_data = data["workflow"]
-        wf_data["multi_criteria_optimizer"] = {
-            "id": workflow.multi_criteria_optimizer.bundle.id,
-            "model_data": workflow.multi_criteria_optimizer.__getstate__()
+        wf_data["mco"] = {
+            "id": workflow.mco.bundle.id,
+            "model_data": workflow.mco.__getstate__()
         }
 
         parameters_data = []
-        for param in wf_data["multi_criteria_optimizer"]["model_data"]["parameters"]:  # noqa
+        for param in wf_data["mco"]["model_data"]["parameters"]:  # noqa
             parameters_data.append(
                 {
                     "id": param.factory.id,
@@ -37,7 +37,7 @@ class WorkflowWriter(HasStrictTraits):
                 }
             )
 
-        wf_data["multi_criteria_optimizer"]["model_data"]["parameters"] = parameters_data  # noqa
+        wf_data["mco"]["model_data"]["parameters"] = parameters_data  # noqa
 
         kpic_data = []
         for kpic in workflow.kpi_calculators:

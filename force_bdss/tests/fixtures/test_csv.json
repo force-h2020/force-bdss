@@ -1,7 +1,7 @@
 {
   "version": "1",
   "workflow": {
-    "multi_criteria_optimizer": {
+    "mco": {
       "id": "force.bdss.bundle.enthought.dummy_dakota",
       "model_data": {
         "parameters" : [
