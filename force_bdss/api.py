@@ -19,3 +19,6 @@ from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
 from .mco.base_mco import BaseMCO  # noqa
 from .mco.base_mco_bundle import BaseMCOBundle  # noqa
 from .mco.i_mco_bundle import IMCOBundle  # noqa
+
+from .mco.parameters.base_mco_parameter_factory import BaseMCOParameterFactory  # noqa
+from .mco.parameters.base_mco_parameter import BaseMCOParameter  # noqa
