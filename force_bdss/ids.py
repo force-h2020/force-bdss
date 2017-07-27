@@ -36,6 +36,10 @@ def mco_parameter_id(producer, identifier):
     return _string_id("mco_parameter", producer, identifier)
 
 
+def plugin_id(producer, identifier):
+    return _string_id("plugin", producer, identifier)
+
+
 def _string_id(entity_namespace, producer, identifier):
     """Creates an id for a generic entity.
 
