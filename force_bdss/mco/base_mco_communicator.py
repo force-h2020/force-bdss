@@ -2,8 +2,6 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from .base_mco_model import BaseMCOModel
-from ..bdss_application import BDSSApplication
 from .i_mco_bundle import IMCOBundle
 
 

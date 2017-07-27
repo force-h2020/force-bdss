@@ -10,6 +10,7 @@ class IKPICalculatorBundle(Interface):
     name = String()
 
     plugin = Instance(Plugin)
+
     def create_kpi_calculator(self):
         pass
 
