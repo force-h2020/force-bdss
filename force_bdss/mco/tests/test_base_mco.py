@@ -1,10 +1,8 @@
 import unittest
 
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.base_multi_criteria_optimizer import \
-    BaseMultiCriteriaOptimizer
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
-    IMultiCriteriaOptimizerBundle
+from force_bdss.mco.base_mco import BaseMCO
+from force_bdss.mco.i_mco_bundle import IMCOBundle
 
 try:
     import mock
@@ -14,14 +12,14 @@ except ImportError:
 from force_bdss.bdss_application import BDSSApplication
 
 
-class DummyMCO(BaseMultiCriteriaOptimizer):
+class DummyMCO(BaseMCO):
     def run(self, *args, **kwargs):
         pass
 
 
 class TestBaseMultiCriteriaOptimizer(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IMultiCriteriaOptimizerBundle)
+        bundle = mock.Mock(spec=IMCOBundle)
         application = mock.Mock(spec=BDSSApplication)
         model = mock.Mock(spec=BaseMCOModel)
         mco = DummyMCO(bundle, application, model)

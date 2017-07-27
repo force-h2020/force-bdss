@@ -14,8 +14,8 @@ from envisage.application import Application
 from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
 from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
 from force_bdss.kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
-    IMultiCriteriaOptimizerBundle
+from force_bdss.mco.i_mco_bundle import \
+    IMCOBundle
 
 
 class TestBundleRegistry(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestBundleRegistry(unittest.TestCase):
 
 class MySuperPlugin(BaseExtensionPlugin):
     def _mco_bundles_default(self):
-        return [mock.Mock(spec=IMultiCriteriaOptimizerBundle,
+        return [mock.Mock(spec=IMCOBundle,
                           id=bundle_id("enthought", "mco1"))]
 
     def _data_source_bundles_default(self):

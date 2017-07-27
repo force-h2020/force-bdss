@@ -3,7 +3,7 @@ import sys
 import itertools
 import collections
 
-from force_bdss.api import BaseMultiCriteriaOptimizer
+from force_bdss.api import BaseMCO
 
 
 def rotated_range(start, stop, starting_value):
@@ -14,7 +14,7 @@ def rotated_range(start, stop, starting_value):
     return list(d)
 
 
-class DummyDakotaOptimizer(BaseMultiCriteriaOptimizer):
+class DummyDakotaOptimizer(BaseMCO):
     def run(self):
         parameters = self.model.parameters
 

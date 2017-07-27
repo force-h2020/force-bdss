@@ -3,13 +3,11 @@ import abc
 from traits.api import ABCHasStrictTraits, String
 from traits.has_traits import provides
 
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import (
-    IMultiCriteriaOptimizerBundle
-)
+from force_bdss.mco.i_mco_bundle import IMCOBundle
 
 
-@provides(IMultiCriteriaOptimizerBundle)
-class BaseMultiCriteriaOptimizerBundle(ABCHasStrictTraits):
+@provides(IMCOBundle)
+class BaseMCOBundle(ABCHasStrictTraits):
     """Base class for the MultiCriteria Optimizer bundle.
     """
     # NOTE: any changes to the interface of this class must be replicated

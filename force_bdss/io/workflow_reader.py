@@ -93,7 +93,7 @@ class WorkflowReader(HasStrictTraits):
 
         try:
             wf_data = json_data["workflow"]
-            wf.multi_criteria_optimizer = self._extract_mco(wf_data)
+            wf.mco = self._extract_mco(wf_data)
             wf.data_sources[:] = self._extract_data_sources(wf_data)
             wf.kpi_calculators[:] = self._extract_kpi_calculators(wf_data)
         except KeyError as e:
@@ -118,7 +118,7 @@ class WorkflowReader(HasStrictTraits):
         """
         registry = self.bundle_registry
 
-        mco_data = wf_data.get("multi_criteria_optimizer")
+        mco_data = wf_data.get("mco")
         if mco_data is None:
             # The file was saved without setting an MCO.
             # The file is valid, we simply can't run any optimization yet.
@@ -126,11 +126,11 @@ class WorkflowReader(HasStrictTraits):
 
         mco_id = mco_data["id"]
         mco_bundle = registry.mco_bundle_by_id(mco_id)
-        model_data = wf_data["multi_criteria_optimizer"]["model_data"]
+        model_data = wf_data["mco"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
             model_data["parameters"])
         model = mco_bundle.create_model(
-            wf_data["multi_criteria_optimizer"]["model_data"])
+            wf_data["mco"]["model_data"])
         return model
 
     def _extract_data_sources(self, wf_data):

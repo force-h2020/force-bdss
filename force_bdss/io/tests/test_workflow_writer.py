@@ -18,15 +18,14 @@ except ImportError:
 from force_bdss.ids import bundle_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.i_multi_criteria_optimizer_bundle import \
-    IMultiCriteriaOptimizerBundle
+from force_bdss.mco.i_mco_bundle import IMCOBundle
 from force_bdss.workspecs.workflow import Workflow
 
 
 class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
         self.mock_registry = mock.Mock(spec=BundleRegistryPlugin)
-        mock_mco_bundle = mock.Mock(spec=IMultiCriteriaOptimizerBundle,
+        mock_mco_bundle = mock.Mock(spec=IMCOBundle,
                                     id=bundle_id("enthought", "mock"))
         mock_mco_model = mock.Mock(
             spec=BaseMCOModel,
@@ -49,7 +48,7 @@ class TestWorkflowWriter(unittest.TestCase):
         result = json.loads(fp.getvalue())
         self.assertIn("version", result)
         self.assertIn("workflow", result)
-        self.assertIn("multi_criteria_optimizer", result["workflow"])
+        self.assertIn("mco", result["workflow"])
         self.assertIn("data_sources", result["workflow"])
         self.assertIn("kpi_calculators", result["workflow"])
 
@@ -62,16 +61,16 @@ class TestWorkflowWriter(unittest.TestCase):
         wfreader = WorkflowReader(self.mock_registry,
                                   self.mock_mco_parameter_registry)
         wf_result = wfreader.read(fp)
-        self.assertEqual(wf_result.multi_criteria_optimizer.bundle.id,
-                         wf.multi_criteria_optimizer.bundle.id)
+        self.assertEqual(wf_result.mco.bundle.id,
+                         wf.mco.bundle.id)
 
     def _create_mock_workflow(self):
         wf = Workflow()
-        wf.multi_criteria_optimizer = BaseMCOModel(
+        wf.mco = BaseMCOModel(
             mock.Mock(
-                spec=IMultiCriteriaOptimizerBundle,
+                spec=IMCOBundle,
                 id=bundle_id("enthought", "mock")))
-        wf.multi_criteria_optimizer.parameters = [
+        wf.mco.parameters = [
             BaseMCOParameter(
                 factory=mock.Mock(
                     spec=BaseMCOParameterFactory,

@@ -24,7 +24,7 @@ class CoreMCODriver(BaseCoreDriver):
             print(str(e), file=sys.stderr)
             sys.exit(1)
 
-        mco_model = workflow.multi_criteria_optimizer
+        mco_model = workflow.mco
         mco_bundle = mco_model.bundle
         mco = mco_bundle.create_optimizer(self.application, mco_model)
         mco.run()

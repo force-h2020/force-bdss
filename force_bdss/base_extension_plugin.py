@@ -4,8 +4,7 @@ from traits.trait_types import List
 from .ids import ExtensionPointID
 from .data_sources.i_data_source_bundle import IDataSourceBundle
 from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_multi_criteria_optimizer_bundle import \
-    IMultiCriteriaOptimizerBundle
+from .mco.i_mco_bundle import IMCOBundle
 
 
 class BaseExtensionPlugin(Plugin):
@@ -25,7 +24,7 @@ class BaseExtensionPlugin(Plugin):
 
     #: A list of available Multi Criteria Optimizers this plugin exports.
     mco_bundles = List(
-        IMultiCriteriaOptimizerBundle,
+        IMCOBundle,
         contributes_to=ExtensionPointID.MCO_BUNDLES
     )
 

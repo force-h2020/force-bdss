@@ -1,12 +1,12 @@
 from traits.api import String
-from force_bdss.api import bundle_id, BaseMultiCriteriaOptimizerBundle
+from force_bdss.api import bundle_id, BaseMCOBundle
 
 from .dakota_communicator import DummyDakotaCommunicator
 from .dakota_model import DummyDakotaModel
 from .dakota_optimizer import DummyDakotaOptimizer
 
 
-class DummyDakotaBundle(BaseMultiCriteriaOptimizerBundle):
+class DummyDakotaBundle(BaseMCOBundle):
     id = String(bundle_id("enthought", "dummy_dakota"))
 
     name = "Dummy Dakota"

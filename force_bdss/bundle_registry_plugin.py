@@ -6,8 +6,8 @@ from force_bdss.ids import ExtensionPointID
 from .data_sources.i_data_source_bundle import (
     IDataSourceBundle)
 from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_multi_criteria_optimizer_bundle import (
-    IMultiCriteriaOptimizerBundle
+from .mco.i_mco_bundle import (
+    IMCOBundle
 )
 
 
@@ -28,7 +28,7 @@ class BundleRegistryPlugin(Plugin):
     #: A List of the available Multi Criteria Optimizers.
     #: This will be populated by MCO plugins.
     mco_bundles = ExtensionPoint(
-        List(IMultiCriteriaOptimizerBundle),
+        List(IMCOBundle),
         id=ExtensionPointID.MCO_BUNDLES)
 
     #: A list of the available Data Sources.
