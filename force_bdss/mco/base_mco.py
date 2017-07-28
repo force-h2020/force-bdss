@@ -14,10 +14,24 @@ class BaseMCO(ABCHasStrictTraits):
     bundle = Instance(IMCOBundle)
 
     def __init__(self, bundle, *args, **kwargs):
+        """Initializes the MCO.
+
+        Parameters
+        ----------
+        bundle: BaseMCOBundle
+            The bundle this BaseMCO belongs to
+        """
         self.bundle = bundle
         super(BaseMCO, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
     def run(self, model):
-        """Reimplement this method to perform the MCO operations."""
-        pass
+        """Performs the actual MCO operations.
+        Reimplement this method to tailor to your MCO.
+
+        Parameters
+        ----------
+        model: BaseMCOModel
+            An instance of the model information, as created from
+            create_model()
+        """

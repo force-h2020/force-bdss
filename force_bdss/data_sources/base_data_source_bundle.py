@@ -19,6 +19,7 @@ class BaseDataSourceBundle(ABCHasStrictTraits):
     #: A human readable name of the bundle. Spaces allowed
     name = String()
 
+    #: Reference to the plugin that carries this bundle
     plugin = Instance(Plugin)
 
     def __init__(self, plugin, *args, **kwargs):
@@ -29,13 +30,6 @@ class BaseDataSourceBundle(ABCHasStrictTraits):
     def create_data_source(self):
         """Factory method.
         Must return the bundle-specific BaseDataSource instance.
-
-        Parameters
-        ----------
-        application: Application
-            The envisage application.
-        model: BaseDataSourceModel
-            The model of the data source, instantiated with create_model()
 
         Returns
         -------

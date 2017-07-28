@@ -32,6 +32,11 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
         Must return a single DataSourceParameters object, containing
         the parameters as passed by the MCO.
 
+        Parameters
+        ----------
+        model: BaseMCOModel
+            The model of the optimizer, instantiated through create_model()
+
         Returns
         -------
         DataSourceParameters
@@ -48,6 +53,9 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
 
         Parameters
         ----------
+        model: BaseMCOModel
+            The model of the optimizer, instantiated through create_model()
+
         kpi_results: List(KPICalculatorResult)
             A list of KPI calculator results, one per each KPI calculator.
         """

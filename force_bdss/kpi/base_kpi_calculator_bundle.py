@@ -20,9 +20,17 @@ class BaseKPICalculatorBundle(ABCHasStrictTraits):
     #: A UI friendly name for the bundle. Can contain spaces.
     name = String()
 
+    #: A reference to the plugin that holds this bundle.
     plugin = Instance(Plugin)
 
     def __init__(self, plugin, *args, **kwargs):
+        """Initializes the instance.
+
+        Parameters
+        ----------
+        plugin: Plugin
+            The plugin that holds this bundle.
+        """
         self.plugin = plugin
         super(BaseKPICalculatorBundle, self).__init__(*args, **kwargs)
 
@@ -31,13 +39,6 @@ class BaseKPICalculatorBundle(ABCHasStrictTraits):
         """Factory method.
         Creates and returns an instance of a KPI Calculator, associated
         to the given application and model.
-
-        Parameters
-        ----------
-        application: Application
-            The envisage application.
-        model: BaseKPICalculatorModel
-            The model of the calculator, instantiated with create_model()
 
         Returns
         -------

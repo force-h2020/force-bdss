@@ -4,7 +4,10 @@ from envisage.plugin import Plugin
 
 class IKPICalculatorBundle(Interface):
     """Envisage required interface for the BaseKPICalculatorBundle.
-    You should not need to use this directly."""
+    You should not need to use this directly.
+
+    Refer to the BaseKPICalculatorBundle for documentation.
+    """
     id = String()
 
     name = String()

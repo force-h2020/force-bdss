@@ -3,8 +3,10 @@ from envisage.plugin import Plugin
 
 
 class IMCOBundle(Interface):
-    """Interface for the MultiCriteria Optimizer bundle.
+    """Interface for the BaseMCOBundle.
     You should not need it, as its main use is for envisage support.
+
+    Refer to BaseMCOBundle for documentation
     """
     id = String()
 
