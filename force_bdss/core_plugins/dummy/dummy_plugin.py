@@ -1,4 +1,4 @@
-from force_bdss.api import BaseExtensionPlugin
+from force_bdss.api import BaseExtensionPlugin, plugin_id
 from .csv_extractor.csv_extractor_bundle import CSVExtractorBundle
 from .kpi_adder.kpi_adder_bundle import KPIAdderBundle
 from .dummy_dakota.dakota_bundle import DummyDakotaBundle
@@ -9,6 +9,8 @@ from .dummy_kpi_calculator.dummy_kpi_calculator_bundle import (
 
 
 class DummyPlugin(BaseExtensionPlugin):
+    id = plugin_id("enthought", "DummyPlugin")
+
     def _data_source_bundles_default(self):
         return [DummyDataSourceBundle(self),
                 CSVExtractorBundle(self)]

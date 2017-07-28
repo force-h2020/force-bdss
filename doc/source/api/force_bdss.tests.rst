@@ -35,10 +35,10 @@ force\_bdss\.tests\.test\_core\_evaluation\_driver module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.test\_id\_generators module
------------------------------------------------
+force\_bdss\.tests\.test\_ids module
+------------------------------------
 
-.. automodule:: force_bdss.tests.test_id_generators
+.. automodule:: force_bdss.tests.test_ids
     :members:
     :undoc-members:
     :show-inheritance:

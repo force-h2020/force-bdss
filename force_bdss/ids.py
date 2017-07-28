@@ -33,7 +33,16 @@ def bundle_id(producer, identifier):
 
 
 def mco_parameter_id(producer, identifier):
+    """Creates an ID for an MCO parameter, so that it can be identified
+    uniquely."""
     return _string_id("mco_parameter", producer, identifier)
+
+
+def plugin_id(producer, identifier):
+    """Creates an ID for the plugins. These must be defined, otherwise
+    the envisage system will complain (but not break)
+    """
+    return _string_id("plugin", producer, identifier)
 
 
 def _string_id(entity_namespace, producer, identifier):
