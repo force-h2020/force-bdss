@@ -38,7 +38,7 @@ class TestDakotaOptimizer(unittest.TestCase):
         ]
 
         mock_process = mock.Mock()
-        mock_process.communicate = mock.Mock(return_value=("1 2 3", ""))
+        mock_process.communicate = mock.Mock(return_value=(b"1 2 3", b""))
 
         with mock.patch("subprocess.Popen") as mock_popen:
             mock_popen.return_value = mock_process
