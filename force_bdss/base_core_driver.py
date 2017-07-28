@@ -6,10 +6,9 @@ from .bundle_registry_plugin import (
     BUNDLE_REGISTRY_PLUGIN_ID
 )
 from .io.workflow_reader import WorkflowReader
-from .workspecs.workflow import Workflow
 from .mco.parameters.mco_parameter_factory_registry import (
     MCOParameterFactoryRegistry)
-from .mco.parameters.core_mco_parameters import all_core_factories
+from .workspecs.workflow import Workflow
 
 
 class BaseCoreDriver(Plugin):
@@ -31,8 +30,10 @@ class BaseCoreDriver(Plugin):
 
     def _parameter_factory_registry_default(self):
         registry = MCOParameterFactoryRegistry()
-        for f in all_core_factories():
-            registry.register(f)
+
+        for mco_bundle in self.bundle_registry.mco_bundles:
+            for factory in mco_bundle.parameter_factories():
+                registry.register(factory)
 
         return registry
 

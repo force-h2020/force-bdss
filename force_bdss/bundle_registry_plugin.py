@@ -107,3 +107,13 @@ class BundleRegistryPlugin(Plugin):
 
         raise ValueError("Requested MCO {} but don't know how "
                          "to find it.".format(id))
+
+    def mco_parameters_by_id(self, mco_id, parameter_id):
+        mco_bundle = self.mco_bundle_by_id(mco_id)
+
+        for factory in mco_bundle.parameter_factories():
+            if factory.id == parameter_id:
+                return factory
+
+        raise ValueError("Requested MCO parameter {}:{} but don't know"
+                         " how to find it.".format(mco_id, parameter_id))

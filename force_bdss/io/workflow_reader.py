@@ -128,6 +128,7 @@ class WorkflowReader(HasStrictTraits):
         mco_bundle = registry.mco_bundle_by_id(mco_id)
         model_data = wf_data["mco"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
+            mco_id,
             model_data["parameters"])
         model = mco_bundle.create_model(
             wf_data["mco"]["model_data"])
@@ -182,7 +183,7 @@ class WorkflowReader(HasStrictTraits):
 
         return kpi_calculators
 
-    def _extract_mco_parameters(self, parameters_data):
+    def _extract_mco_parameters(self, mco_id, parameters_data):
         """Extracts the MCO parameters from the data as dictionary.
 
         Parameters
@@ -200,7 +201,7 @@ class WorkflowReader(HasStrictTraits):
 
         for p in parameters_data:
             id = p["id"]
-            factory = registry.get_factory_by_id(id)
+            factory = registry.get_factory(mco_id, id)
             model = factory.create_model(p["model_data"])
             parameters.append(model)
 

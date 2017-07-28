@@ -68,3 +68,12 @@ class BaseMCOBundle(ABCHasStrictTraits):
         BaseMCOCommunicator
             An instance of the communicator
         """
+
+    @abc.abstractmethod
+    def parameter_factories(self):
+        """Returns the parameter factories supported by this MCO
+
+        Returns
+        -------
+        List of BaseMCOParameterFactory
+        """

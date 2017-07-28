@@ -1,10 +1,10 @@
 import unittest
 
+from force_bdss.core_plugins.dummy.dummy_dakota.parameters import RangedMCOParameter, \
+    RangedMCOParameterFactory
 from force_bdss.core_plugins.dummy.dummy_dakota.dakota_model import \
     DummyDakotaModel
 from force_bdss.mco.base_mco_bundle import BaseMCOBundle
-from force_bdss.mco.parameters.core_mco_parameters import RangedMCOParameter, \
-    RangedMCOParameterFactory
 
 try:
     import mock
