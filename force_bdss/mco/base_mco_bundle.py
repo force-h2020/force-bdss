@@ -1,9 +1,9 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, String
-from traits.has_traits import provides
+from traits.api import ABCHasStrictTraits, String, provides, Instance
+from envisage.plugin import Plugin
 
-from force_bdss.mco.i_mco_bundle import IMCOBundle
+from .i_mco_bundle import IMCOBundle
 
 
 @provides(IMCOBundle)
@@ -19,19 +19,18 @@ class BaseMCOBundle(ABCHasStrictTraits):
     #: A user friendly name of the bundle. Spaces allowed.
     name = String()
 
+    #: A reference to the Plugin that holds this bundle.
+    plugin = Instance(Plugin)
+
+    def __init__(self, plugin, *args, **kwargs):
+        self.plugin = plugin
+        super(BaseMCOBundle, self).__init__(*args, **kwargs)
+
     @abc.abstractmethod
-    def create_optimizer(self, application, model):
+    def create_optimizer(self):
         """Factory method.
         Creates the optimizer with the given application
         and model and returns it to the caller.
-
-        Parameters
-        ----------
-        application: Application
-            The envisage application instance
-        model: BaseMCOModel
-            The model to associate to the optimizer, instantiated through
-            create_model()
 
         Returns
         -------
@@ -60,15 +59,12 @@ class BaseMCOBundle(ABCHasStrictTraits):
         """
 
     @abc.abstractmethod
-    def create_communicator(self, application, model):
+    def create_communicator(self):
         """Factory method. Returns the communicator class that allows
         exchange between the MCO and the evaluator code.
 
-        Parameters
-        ----------
-        application: Application
-            The envisage application instance
-        model: BaseMCOModel
-            The model to associate to the optimizer, instantiated through
-            create_model()
+        Returns
+        -------
+        BaseMCOCommunicator
+            An instance of the communicator
         """

@@ -1,27 +1,34 @@
-force_bdss.core_plugins.dummy.dummy_data_source package
-=======================================================
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source package
+==============================================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    force_bdss.core_plugins.dummy.dummy_data_source.tests
 
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source module
-------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source module
+----------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_bundle module
--------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source\_bundle module
+------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model module
-------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source\_model module
+-----------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model
     :members:

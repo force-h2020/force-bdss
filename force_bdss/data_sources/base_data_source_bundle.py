@@ -1,5 +1,6 @@
 import abc
-from traits.api import ABCHasStrictTraits, provides, String
+from traits.api import ABCHasStrictTraits, provides, String, Instance
+from envisage.plugin import Plugin
 
 from .i_data_source_bundle import IDataSourceBundle
 
@@ -18,17 +19,17 @@ class BaseDataSourceBundle(ABCHasStrictTraits):
     #: A human readable name of the bundle. Spaces allowed
     name = String()
 
+    #: Reference to the plugin that carries this bundle
+    plugin = Instance(Plugin)
+
+    def __init__(self, plugin, *args, **kwargs):
+        self.plugin = plugin
+        super(BaseDataSourceBundle, self).__init__(*args, **kwargs)
+
     @abc.abstractmethod
-    def create_data_source(self, application, model):
+    def create_data_source(self):
         """Factory method.
         Must return the bundle-specific BaseDataSource instance.
-
-        Parameters
-        ----------
-        application: Application
-            The envisage application.
-        model: BaseDataSourceModel
-            The model of the data source, instantiated with create_model()
 
         Returns
         -------

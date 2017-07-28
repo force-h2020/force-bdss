@@ -12,12 +12,12 @@ class DummyPlugin(BaseExtensionPlugin):
     id = plugin_id("enthought", "DummyPlugin")
 
     def _data_source_bundles_default(self):
-        return [DummyDataSourceBundle(),
-                CSVExtractorBundle()]
+        return [DummyDataSourceBundle(self),
+                CSVExtractorBundle(self)]
 
     def _mco_bundles_default(self):
-        return [DummyDakotaBundle()]
+        return [DummyDakotaBundle(self)]
 
     def _kpi_calculator_bundles_default(self):
-        return [DummyKPICalculatorBundle(),
-                KPIAdderBundle()]
+        return [DummyKPICalculatorBundle(self),
+                KPIAdderBundle(self)]

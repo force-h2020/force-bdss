@@ -4,19 +4,36 @@ from .base_data_source import BaseDataSource
 
 
 class DataSourceResult(HasTraits):
-    """Represents the result of a simulator.
-    It contains the resulting cuba key, the associated uncertainty and the
-    originating simulator.
-    Difference between uncertainty and quality: uncertainty is a numerical
-    value of the value, as in the case of an experimental simulation.
-    quality is the level of accuracy of the (e.g. computational) method, as
-    the importance and reliability of that value. It should be an enumeration
-    value such as HIGH, MEDIUM, POOR"""
+    """Represents the result of a DataSource evaluation.
+
+    Note
+    ----
+    Difference between accuracy and quality:
+      - uncertainty is a numerical quantity defining the accuracy of the value.
+        For example, a pressure can be 10.4 +/- 0.1, with 0.1 being the
+        accuracy
+      - quality is the level of importance and reliability of that value.
+        It should be considered as a weight of how much trust one should hold
+        on this information.
+    """
+
+    #: A reference to the DataSource that computed this result.
     originator = Instance(BaseDataSource)
+
+    #: The user-defined names associated to each result.
     value_names = List(String)
+
+    #: The CUBA types of each value.
     value_types = List(String)
+
+    #: The values for each entry. Note that this is a NxM array, allowing
+    #: to propagate more than single scalar values associated to a given value.
     values = Array(shape=(None, None))
+
+    #: If present, the numerical accuracy of the above values.
     accuracy = ArrayOrNone(shape=(None, None))
+
+    #: If present, the assessed quality of the above values.
     quality = ArrayOrNone(shape=(None, None))
 
     def __str__(self):

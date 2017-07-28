@@ -2,8 +2,6 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from ..bdss_application import BDSSApplication
-from .base_mco_model import BaseMCOModel
 from .i_mco_bundle import IMCOBundle
 
 
@@ -14,18 +12,26 @@ class BaseMCO(ABCHasStrictTraits):
     """
     #: A reference to the bundle
     bundle = Instance(IMCOBundle)
-    #: A reference to the application
-    application = Instance(BDSSApplication)
-    #: A reference to the model class
-    model = Instance(BaseMCOModel)
 
-    def __init__(self, bundle, application, model, *args, **kwargs):
+    def __init__(self, bundle, *args, **kwargs):
+        """Initializes the MCO.
+
+        Parameters
+        ----------
+        bundle: BaseMCOBundle
+            The bundle this BaseMCO belongs to
+        """
         self.bundle = bundle
-        self.application = application
-        self.model = model
         super(BaseMCO, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def run(self):
-        """Reimplement this method to perform the MCO operations."""
-        pass
+    def run(self, model):
+        """Performs the actual MCO operations.
+        Reimplement this method to tailor to your MCO.
+
+        Parameters
+        ----------
+        model: BaseMCOModel
+            An instance of the model information, as created from
+            create_model()
+        """

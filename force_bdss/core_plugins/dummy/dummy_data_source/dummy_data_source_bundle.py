@@ -12,5 +12,5 @@ class DummyDataSourceBundle(BaseDataSourceBundle):
 
         return DummyDataSourceModel(self, **model_data)
 
-    def create_data_source(self, application, model):
-        return DummyDataSource(self, application, model)
+    def create_data_source(self):
+        return DummyDataSource(self)

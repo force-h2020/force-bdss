@@ -17,5 +17,5 @@ class KPIAdderBundle(BaseKPICalculatorBundle):
 
         return KPIAdderModel(self, **model_data)
 
-    def create_kpi_calculator(self, application, model):
-        return KPIAdderCalculator(self, application, model)
+    def create_kpi_calculator(self):
+        return KPIAdderCalculator(self)

@@ -1,8 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance
 import abc
 
-from .base_data_source_model import BaseDataSourceModel
-from ..bdss_application import BDSSApplication
 from ..data_sources.i_data_source_bundle import IDataSourceBundle
 
 
@@ -14,18 +12,28 @@ class BaseDataSource(ABCHasStrictTraits):
     """
     #: A reference to the bundle
     bundle = Instance(IDataSourceBundle)
-    #: A reference to the application
-    application = Instance(BDSSApplication)
-    #: A reference to the model class
-    model = Instance(BaseDataSourceModel)
 
-    def __init__(self, bundle, application, model, *args, **kwargs):
+    def __init__(self, bundle, *args, **kwargs):
         self.bundle = bundle
-        self.application = application
-        self.model = model
         super(BaseDataSource, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def run(self, parameters):
-        """Executes the data source evaluation/fetching and returns
-        the list of results as a DataSourceResult instance."""
+    def run(self, model, parameters):
+        """
+        Executes the KPI evaluation and returns the results it computes.
+        Reimplement this method in your specific KPI calculator.
+
+        Parameters
+        ----------
+        model: BaseDataSourceModel
+            The model of the DataSource, instantiated through create_model()
+
+        parameters: DataSourceParameters
+            a DataResultParameters instance containing the information coming
+            from the MCO
+
+        Returns
+        -------
+        DataSourceResult
+            Instance that holds the results computed by this DataSource.
+        """

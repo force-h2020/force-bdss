@@ -30,5 +30,5 @@ class CoreMCODriver(BaseCoreDriver):
 
         mco_model = workflow.mco
         mco_bundle = mco_model.bundle
-        mco = mco_bundle.create_optimizer(self.application, mco_model)
-        mco.run()
+        mco = mco_bundle.create_optimizer()
+        mco.run(mco_model)

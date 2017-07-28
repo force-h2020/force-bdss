@@ -1,20 +1,21 @@
-from traits.api import Interface, String
+from envisage.api import Plugin
+from traits.api import Interface, String, Instance
 
 
 class IDataSourceBundle(Interface):
-    #: Unique identifier that identifies the bundle uniquely in the
-    #: universe of bundles. Create one with the function bundle_id()
+    """Envisage required interface for the BaseDataSourceBundle.
+    You should not need to use this directly.
+
+    Refer to the BaseDataSourceBundle for documentation.
+    """
     id = String()
 
-    #: A human readable name of the bundle
     name = String()
 
-    def create_data_source(self, application, model):
-        """Factory method.
-        Must return the bundle-specific BaseDataSource instance.
-        """
+    plugin = Instance(Plugin)
+
+    def create_data_source(self):
+        """"""
 
     def create_model(self, model_data=None):
-        """Factory method.
-        Must return the bundle-specific BaseDataSourceModel instance.
-        """
+        """"""

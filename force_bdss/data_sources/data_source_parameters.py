@@ -2,8 +2,14 @@ from traits.api import HasStrictTraits, Array, List, String
 
 
 class DataSourceParameters(HasStrictTraits):
+    """Contains the parameters as passed from the MCO."""
+    #: The user-defined names associated to the values.
     value_names = List(String)
+
+    #: The CUBA types associated to the values
     value_types = List(String)
+
+    #: The values as a single array.
     values = Array(shape=(None,))
 
     def __str__(self):

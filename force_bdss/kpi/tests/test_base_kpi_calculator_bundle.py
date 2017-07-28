@@ -1,4 +1,10 @@
 import unittest
+from envisage.plugin import Plugin
+
+try:
+    import mock
+except ImportError:
+    from unittest import mock
 
 from force_bdss.kpi.base_kpi_calculator_bundle import \
     BaseKPICalculatorBundle
@@ -9,7 +15,7 @@ class DummyKPICalculatorBundle(BaseKPICalculatorBundle):
 
     name = "bar"
 
-    def create_kpi_calculator(self, application, model):
+    def create_kpi_calculator(self):
         pass
 
     def create_model(self, model_data=None):
@@ -18,6 +24,6 @@ class DummyKPICalculatorBundle(BaseKPICalculatorBundle):
 
 class TestBaseKPICalculatorBundle(unittest.TestCase):
     def test_initialization(self):
-        bundle = DummyKPICalculatorBundle()
+        bundle = DummyKPICalculatorBundle(mock.Mock(spec=Plugin))
         self.assertEqual(bundle.id, 'foo')
         self.assertEqual(bundle.name, 'bar')

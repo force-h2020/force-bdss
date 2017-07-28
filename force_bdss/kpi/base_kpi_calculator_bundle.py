@@ -1,5 +1,6 @@
 import abc
-from traits.api import ABCHasStrictTraits, provides, String
+from envisage.plugin import Plugin
+from traits.api import ABCHasStrictTraits, provides, String, Instance
 
 from .i_kpi_calculator_bundle import IKPICalculatorBundle
 
@@ -19,18 +20,25 @@ class BaseKPICalculatorBundle(ABCHasStrictTraits):
     #: A UI friendly name for the bundle. Can contain spaces.
     name = String()
 
-    @abc.abstractmethod
-    def create_kpi_calculator(self, application, model):
-        """Factory method.
-        Creates and returns an instance of a KPI Calculator, associated
-        to the given application and model.
+    #: A reference to the plugin that holds this bundle.
+    plugin = Instance(Plugin)
+
+    def __init__(self, plugin, *args, **kwargs):
+        """Initializes the instance.
 
         Parameters
         ----------
-        application: Application
-            The envisage application.
-        model: BaseKPICalculatorModel
-            The model of the calculator, instantiated with create_model()
+        plugin: Plugin
+            The plugin that holds this bundle.
+        """
+        self.plugin = plugin
+        super(BaseKPICalculatorBundle, self).__init__(*args, **kwargs)
+
+    @abc.abstractmethod
+    def create_kpi_calculator(self):
+        """Factory method.
+        Creates and returns an instance of a KPI Calculator, associated
+        to the given application and model.
 
         Returns
         -------

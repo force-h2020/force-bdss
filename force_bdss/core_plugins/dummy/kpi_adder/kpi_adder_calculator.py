@@ -5,11 +5,11 @@ from force_bdss.api import KPICalculatorResult
 
 
 class KPIAdderCalculator(BaseKPICalculator):
-    def run(self, data_source_results):
+    def run(self, model, data_source_results):
         sum = 0.0
         for res in data_source_results:
             try:
-                value_idx = res.value_types.index(self.model.cuba_type_in)
+                value_idx = res.value_types.index(model.cuba_type_in)
             except ValueError:
                 continue
 
@@ -17,6 +17,6 @@ class KPIAdderCalculator(BaseKPICalculator):
 
         return KPICalculatorResult(
             originator=self,
-            value_types=[self.model.cuba_type_out],
+            value_types=[model.cuba_type_out],
             values=numpy.array([sum])
         )

@@ -1,11 +1,11 @@
-force_bdss.workspecs package
-============================
+force\_bdss\.workspecs package
+==============================
 
 Submodules
 ----------
 
-force_bdss.workspecs.workflow module
-------------------------------------
+force\_bdss\.workspecs\.workflow module
+---------------------------------------
 
 .. automodule:: force_bdss.workspecs.workflow
     :members:

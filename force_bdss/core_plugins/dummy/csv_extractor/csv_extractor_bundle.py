@@ -17,5 +17,5 @@ class CSVExtractorBundle(BaseDataSourceBundle):
 
         return CSVExtractorModel(self, **model_data)
 
-    def create_data_source(self, application, model):
-        return CSVExtractorDataSource(self, application, model)
+    def create_data_source(self):
+        return CSVExtractorDataSource(self)

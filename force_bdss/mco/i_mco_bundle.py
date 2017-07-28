@@ -1,19 +1,24 @@
-from traits.api import Interface, String
+from traits.api import Interface, String, Instance
+from envisage.plugin import Plugin
 
 
 class IMCOBundle(Interface):
-    """Interface for the MultiCriteria Optimizer bundle.
+    """Interface for the BaseMCOBundle.
     You should not need it, as its main use is for envisage support.
+
+    Refer to BaseMCOBundle for documentation
     """
     id = String()
 
     name = String()
 
-    def create_optimizer(self, application, model):
-        pass
+    plugin = Instance(Plugin)
+
+    def create_optimizer(self):
+        """"""
 
     def create_model(self, model_data=None):
-        pass
+        """"""
 
-    def create_communicator(self, application, model):
-        pass
+    def create_communicator(self):
+        """"""
