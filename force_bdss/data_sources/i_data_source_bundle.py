@@ -15,11 +15,7 @@ class IDataSourceBundle(Interface):
     plugin = Instance(Plugin)
 
     def create_data_source(self):
-        """Factory method.
-        Must return the bundle-specific BaseDataSource instance.
-        """
+        """"""
 
     def create_model(self, model_data=None):
-        """Factory method.
-        Must return the bundle-specific BaseDataSourceModel instance.
-        """
+        """"""

@@ -15,10 +15,10 @@ class IMCOBundle(Interface):
     plugin = Instance(Plugin)
 
     def create_optimizer(self):
-        pass
+        """"""
 
     def create_model(self, model_data=None):
-        pass
+        """"""
 
     def create_communicator(self):
-        pass
+        """"""

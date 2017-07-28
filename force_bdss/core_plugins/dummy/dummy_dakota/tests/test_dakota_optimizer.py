@@ -30,7 +30,8 @@ class TestDakotaOptimizer(unittest.TestCase):
         opt = DummyDakotaOptimizer(self.bundle)
         model = DummyDakotaModel(self.bundle)
         model.parameters = [
-            RangedMCOParameter(mock.Mock(spec=RangedMCOParameterFactory),
+            RangedMCOParameter(
+                mock.Mock(spec=RangedMCOParameterFactory),
                 lower_bound=1,
                 upper_bound=3,
                 initial_value=2)

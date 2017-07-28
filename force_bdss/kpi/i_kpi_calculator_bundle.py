@@ -15,7 +15,7 @@ class IKPICalculatorBundle(Interface):
     plugin = Instance(Plugin)
 
     def create_kpi_calculator(self):
-        pass
+        """"""
 
     def create_model(self, model_data=None):
-        pass
+        """"""
