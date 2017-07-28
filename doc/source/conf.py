@@ -9,7 +9,9 @@ import os
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..")
     )
-print(sys.path)
+
+from force_bdss.__version__ import VERSION as RELEASE
+
 MOCK_MODULES=[]
 
 def _warn_node(self, msg, node, **kwargs):
@@ -58,8 +60,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = u'FORCE'
 copyright = u'2017, FORCE Project'
-version = '0.1.0'
-release = '0.1.0.dev0'
+version = ".".join(RELEASE.split(".")[0:3])
+release = RELEASE
 pygments_style = 'sphinx'
 html_theme = 'classic'
 html_static_path = ['_static']
