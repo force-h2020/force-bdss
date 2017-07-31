@@ -201,7 +201,7 @@ class WorkflowReader(HasStrictTraits):
 
         for p in parameters_data:
             id = p["id"]
-            factory = registry.get_factory(mco_id, id)
+            factory = registry.get_factory_by_id(mco_id, id)
             model = factory.create_model(p["model_data"])
             parameters.append(model)
 

@@ -24,6 +24,9 @@ class DummyMCOBundle(BaseMCOBundle):
     def create_communicator(self):
         pass
 
+    def parameter_factories(self):
+        return []
+
 
 class TestBaseMCOBundle(unittest.TestCase):
     def test_initialization(self):
