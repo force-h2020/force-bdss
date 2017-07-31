@@ -16,7 +16,7 @@ class RangedMCOParameter(BaseMCOParameter):
 
 class RangedMCOParameterFactory(BaseMCOParameterFactory):
     """The factory of the above model"""
-    id = mco_parameter_id("enthought", "ranged")
+    id = mco_parameter_id("enthought", "dummy_dakota", "ranged")
     model_class = RangedMCOParameter
     name = "Range"
     description = "A ranged parameter in floating point values."

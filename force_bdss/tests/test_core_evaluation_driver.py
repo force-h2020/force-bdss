@@ -44,7 +44,7 @@ class NullParameter(BaseMCOParameter):
 
 
 class NullParameterFactory(BaseMCOParameterFactory):
-    id = mco_parameter_id("enthought", "ranged")
+    id = mco_parameter_id("enthought", "dummy_dakota", "ranged")
     model_class = NullParameter
 
 

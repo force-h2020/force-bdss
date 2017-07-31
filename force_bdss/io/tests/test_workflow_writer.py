@@ -68,7 +68,7 @@ class TestWorkflowWriter(unittest.TestCase):
             BaseMCOParameter(
                 factory=mock.Mock(
                     spec=BaseMCOParameterFactory,
-                    id=mco_parameter_id("enthought", "mock")
+                    id=mco_parameter_id("enthought", "mock", "mock")
                 )
             )
         ]
