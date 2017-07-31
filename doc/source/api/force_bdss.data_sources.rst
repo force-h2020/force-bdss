@@ -1,5 +1,5 @@
-force\_bdss\.data\_sources package
-==================================
+force_bdss.data_sources package
+===============================
 
 Subpackages
 -----------
@@ -11,48 +11,48 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.data\_sources\.base\_data\_source module
------------------------------------------------------
+force_bdss.data_sources.base_data_source module
+-----------------------------------------------
 
 .. automodule:: force_bdss.data_sources.base_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.base\_data\_source\_bundle module
--------------------------------------------------------------
+force_bdss.data_sources.base_data_source_bundle module
+------------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.base_data_source_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.base\_data\_source\_model module
-------------------------------------------------------------
+force_bdss.data_sources.base_data_source_model module
+-----------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.base_data_source_model
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.data\_source\_parameters module
------------------------------------------------------------
+force_bdss.data_sources.data_source_parameters module
+-----------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.data_source_parameters
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.data\_source\_result module
--------------------------------------------------------
+force_bdss.data_sources.data_source_result module
+-------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.data_source_result
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.i\_data\_source\_bundle module
-----------------------------------------------------------
+force_bdss.data_sources.i_data_source_bundle module
+---------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.i_data_source_bundle
     :members:

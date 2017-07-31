@@ -1,5 +1,5 @@
-force\_bdss\.cli package
-========================
+force_bdss.cli package
+======================
 
 Subpackages
 -----------
@@ -11,8 +11,8 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.cli\.force\_bdss module
-------------------------------------
+force_bdss.cli.force_bdss module
+--------------------------------
 
 .. automodule:: force_bdss.cli.force_bdss
     :members:

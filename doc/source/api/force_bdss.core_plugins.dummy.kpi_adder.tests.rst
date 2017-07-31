@@ -1,11 +1,11 @@
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder\.tests package
-============================================================
+force_bdss.core_plugins.dummy.kpi_adder.tests package
+=====================================================
 
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder\.tests\.test\_kpi\_adder\_bundle module
--------------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.kpi_adder.tests.test_kpi_adder_bundle module
+--------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.kpi_adder.tests.test_kpi_adder_bundle
     :members:
