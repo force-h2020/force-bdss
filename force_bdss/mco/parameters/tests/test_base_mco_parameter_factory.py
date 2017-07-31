@@ -1,4 +1,11 @@
 import unittest
+
+from force_bdss.mco.base_mco_bundle import BaseMCOBundle
+
+try:
+    import mock
+except ImportError:
+    from unittest import mock
 from traits.api import Int
 
 
@@ -20,7 +27,11 @@ class DummyMCOParameterFactory(BaseMCOParameterFactory):
 
 class TestBaseMCOParameterFactory(unittest.TestCase):
     def test_initialization(self):
-        factory = DummyMCOParameterFactory()
+        factory = DummyMCOParameterFactory(mock.Mock(spec=BaseMCOBundle))
         model = factory.create_model({"x": 42})
         self.assertIsInstance(model, DummyMCOParameter)
         self.assertEqual(model.x, 42)
+
+        model = factory.create_model()
+        self.assertIsInstance(model, DummyMCOParameter)
+        self.assertEqual(model.x, 0)

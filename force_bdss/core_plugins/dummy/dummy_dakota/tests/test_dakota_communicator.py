@@ -13,7 +13,8 @@ from force_bdss.data_sources.data_source_parameters import DataSourceParameters
 
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
-from force_bdss.mco.parameters.core_mco_parameters import RangedMCOParameter
+from force_bdss.core_plugins.dummy.dummy_dakota.parameters import \
+    RangedMCOParameter
 
 
 class TestDakotaCommunicator(unittest.TestCase):

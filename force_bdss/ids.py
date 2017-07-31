@@ -29,23 +29,27 @@ def bundle_id(producer, identifier):
     -------
     str: an identifier to be used in the bundle.
     """
-    return _string_id("bundle", producer, identifier)
+    return _string_id(producer, "bundle", identifier)
 
 
-def mco_parameter_id(producer, identifier):
+def mco_parameter_id(producer, mco_identifier, parameter_identifier):
     """Creates an ID for an MCO parameter, so that it can be identified
     uniquely."""
-    return _string_id("mco_parameter", producer, identifier)
+    return _string_id(producer,
+                      "bundle",
+                      mco_identifier,
+                      "parameter",
+                      parameter_identifier)
 
 
 def plugin_id(producer, identifier):
     """Creates an ID for the plugins. These must be defined, otherwise
     the envisage system will complain (but not break)
     """
-    return _string_id("plugin", producer, identifier)
+    return _string_id(producer, "plugin", identifier)
 
 
-def _string_id(entity_namespace, producer, identifier):
+def _string_id(*args):
     """Creates an id for a generic entity.
 
     Parameters
@@ -68,7 +72,8 @@ def _string_id(entity_namespace, producer, identifier):
             " " not in entry and
             len(entry) != 0)
 
-    if not all(map(is_valid, [entity_namespace, producer, identifier])):
-        raise ValueError("Invalid parameters specified.")
+    if not all(map(is_valid, args)):
+        raise ValueError("One or more of the specified parameters was "
+                         "invalid: {}".format(str(args)))
 
-    return "force.bdss.{}.{}.{}".format(entity_namespace, producer, identifier)
+    return ".".join(["force", "bdss"]+list(args))

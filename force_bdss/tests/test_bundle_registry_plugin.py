@@ -2,7 +2,9 @@ import unittest
 
 from force_bdss.base_extension_plugin import (
     BaseExtensionPlugin)
-from force_bdss.ids import bundle_id
+from force_bdss.ids import bundle_id, mco_parameter_id
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
+    BaseMCOParameterFactory
 
 try:
     import mock
@@ -33,8 +35,17 @@ class TestBundleRegistry(unittest.TestCase):
 
 class MySuperPlugin(BaseExtensionPlugin):
     def _mco_bundles_default(self):
-        return [mock.Mock(spec=IMCOBundle,
-                          id=bundle_id("enthought", "mco1"))]
+        return [
+            mock.Mock(
+                spec=IMCOBundle,
+                id=bundle_id("enthought", "mco1"),
+                parameter_factories=mock.Mock(return_value=[
+                    mock.Mock(
+                        spec=BaseMCOParameterFactory,
+                        id=mco_parameter_id("enthought", "mco1", "ranged")
+                    )
+                ]),
+            )]
 
     def _data_source_bundles_default(self):
         return [mock.Mock(spec=IDataSourceBundle,
@@ -64,8 +75,10 @@ class TestBundleRegistryWithContent(unittest.TestCase):
         self.assertEqual(len(self.plugin.kpi_calculator_bundles), 3)
 
     def test_lookup(self):
-        id = bundle_id("enthought", "mco1")
-        self.assertEqual(self.plugin.mco_bundle_by_id(id).id, id)
+        mco_id = bundle_id("enthought", "mco1")
+        parameter_id = mco_parameter_id("enthought", "mco1", "ranged")
+        self.assertEqual(self.plugin.mco_bundle_by_id(mco_id).id, mco_id)
+        self.plugin.mco_parameter_factory_by_id(mco_id, parameter_id)
 
         for entry in ["ds1", "ds2"]:
             id = bundle_id("enthought", entry)
@@ -75,6 +88,31 @@ class TestBundleRegistryWithContent(unittest.TestCase):
             id = bundle_id("enthought", entry)
             self.assertEqual(self.plugin.kpi_calculator_bundle_by_id(id).id,
                              id)
+
+        with self.assertRaises(KeyError):
+            self.plugin.mco_bundle_by_id(
+                bundle_id("enthought", "foo"))
+
+        with self.assertRaises(KeyError):
+            self.plugin.mco_parameter_factory_by_id(
+                mco_id,
+                mco_parameter_id("enthought", "mco1", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.data_source_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.data_source_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.kpi_calculator_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
 
 
 if __name__ == '__main__':

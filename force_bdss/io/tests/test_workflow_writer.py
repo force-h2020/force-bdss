@@ -7,8 +7,6 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
-from force_bdss.mco.parameters.mco_parameter_factory_registry import \
-    MCOParameterFactoryRegistry
 
 try:
     import mock
@@ -37,9 +35,6 @@ class TestWorkflowWriter(unittest.TestCase):
         self.mock_registry.mco_bundle_by_id = mock.Mock(
             return_value=mock_mco_bundle)
 
-        self.mock_mco_parameter_registry = mock.Mock(
-            spec=MCOParameterFactoryRegistry)
-
     def test_write(self):
         wfwriter = WorkflowWriter()
         fp = StringIO()
@@ -58,8 +53,7 @@ class TestWorkflowWriter(unittest.TestCase):
         wf = self._create_mock_workflow()
         wfwriter.write(wf, fp)
         fp.seek(0)
-        wfreader = WorkflowReader(self.mock_registry,
-                                  self.mock_mco_parameter_registry)
+        wfreader = WorkflowReader(self.mock_registry)
         wf_result = wfreader.read(fp)
         self.assertEqual(wf_result.mco.bundle.id,
                          wf.mco.bundle.id)
@@ -74,7 +68,7 @@ class TestWorkflowWriter(unittest.TestCase):
             BaseMCOParameter(
                 factory=mock.Mock(
                     spec=BaseMCOParameterFactory,
-                    id=mco_parameter_id("enthought", "mock")
+                    id=mco_parameter_id("enthought", "mock", "mock")
                 )
             )
         ]

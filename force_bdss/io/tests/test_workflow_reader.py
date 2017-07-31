@@ -6,8 +6,6 @@ from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
     InvalidVersionException, InvalidFileException)
-from force_bdss.mco.parameters.mco_parameter_factory_registry import \
-    MCOParameterFactoryRegistry
 
 try:
     import mock
@@ -18,12 +16,8 @@ except ImportError:
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
         self.mock_bundle_registry = mock.Mock(spec=BundleRegistryPlugin)
-        self.mock_mco_parameter_registry = mock.Mock(
-            spec=MCOParameterFactoryRegistry)
 
-        self.wfreader = WorkflowReader(
-            self.mock_bundle_registry,
-            self.mock_mco_parameter_registry)
+        self.wfreader = WorkflowReader(self.mock_bundle_registry)
 
     def test_initialization(self):
         self.assertEqual(self.wfreader.bundle_registry,

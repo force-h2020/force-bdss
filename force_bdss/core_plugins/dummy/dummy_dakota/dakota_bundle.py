@@ -1,5 +1,7 @@
 from traits.api import String
 from force_bdss.api import bundle_id, BaseMCOBundle
+from force_bdss.core_plugins.dummy.dummy_dakota.parameters import \
+    RangedMCOParameterFactory
 
 from .dakota_communicator import DummyDakotaCommunicator
 from .dakota_model import DummyDakotaModel
@@ -21,3 +23,8 @@ class DummyDakotaBundle(BaseMCOBundle):
 
     def create_communicator(self):
         return DummyDakotaCommunicator(self)
+
+    def parameter_factories(self):
+        return [
+            RangedMCOParameterFactory(self)
+        ]
