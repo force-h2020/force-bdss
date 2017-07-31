@@ -20,7 +20,9 @@ class DataSourceResult(HasTraits):
     #: A reference to the DataSource that computed this result.
     originator = Instance(BaseDataSource)
 
-    #: The user-defined names associated to each result.
+    #: The user-defined names associated to each result. You should
+    #: not define these in your result. They will be assigned by the user
+    #: through the output slot names automatically.
     value_names = List(String)
 
     #: The CUBA types of each value.

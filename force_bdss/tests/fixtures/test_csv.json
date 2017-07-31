@@ -8,6 +8,8 @@
           {
             "id": "force.bdss.enthought.bundle.dummy_dakota.parameter.ranged",
             "model_data": {
+                "value_name": "r1",
+                "value_type": "PRESSURE",
                 "initial_value": 3,
                 "lower_bound": 0,
                 "upper_bound": 10
