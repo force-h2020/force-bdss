@@ -18,7 +18,7 @@ class BaseDataSource(ABCHasStrictTraits):
         super(BaseDataSource, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def run(self, model, parameters):
+    def run(self, model, slot_values):
         """
         Executes the KPI evaluation and returns the results it computes.
         Reimplement this method in your specific KPI calculator.
