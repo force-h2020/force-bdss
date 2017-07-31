@@ -55,13 +55,13 @@ class BundleRegistryPlugin(Plugin):
 
         Raises
         ------
-        ValueError: if the entry is not found.
+        KeyError: if the entry is not found.
         """
         for ds in self.data_source_bundles:
             if ds.id == id:
                 return ds
 
-        raise ValueError(
+        raise KeyError(
             "Requested data source {} but don't know how "
             "to find it.".format(id))
 
@@ -77,13 +77,13 @@ class BundleRegistryPlugin(Plugin):
 
         Raises
         ------
-        ValueError: if the entry is not found.
+        KeyError: if the entry is not found.
         """
         for kpic in self.kpi_calculator_bundles:
             if kpic.id == id:
                 return kpic
 
-        raise ValueError(
+        raise KeyError(
             "Requested kpi calculator {} but don't know how "
             "to find it.".format(id))
 
@@ -99,14 +99,14 @@ class BundleRegistryPlugin(Plugin):
 
         Raises
         ------
-        ValueError: if the entry is not found.
+        KeyError: if the entry is not found.
         """
         for mco in self.mco_bundles:
             if mco.id == id:
                 return mco
 
-        raise ValueError("Requested MCO {} but don't know how "
-                         "to find it.".format(id))
+        raise KeyError("Requested MCO {} but don't know how "
+                       "to find it.".format(id))
 
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
         """Retrieves the MCO parameter factory for a given MCO id and
@@ -125,7 +125,7 @@ class BundleRegistryPlugin(Plugin):
 
         Raises
         ------
-        ValueError:
+        KeyError:
             if the entry is not found
         """
         mco_bundle = self.mco_bundle_by_id(mco_id)
@@ -134,5 +134,5 @@ class BundleRegistryPlugin(Plugin):
             if factory.id == parameter_id:
                 return factory
 
-        raise ValueError("Requested MCO parameter {}:{} but don't know"
-                         " how to find it.".format(mco_id, parameter_id))
+        raise KeyError("Requested MCO parameter {}:{} but don't know"
+                       " how to find it.".format(mco_id, parameter_id))

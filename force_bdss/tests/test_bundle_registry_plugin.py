@@ -89,6 +89,31 @@ class TestBundleRegistryWithContent(unittest.TestCase):
             self.assertEqual(self.plugin.kpi_calculator_bundle_by_id(id).id,
                              id)
 
+        with self.assertRaises(KeyError):
+            self.plugin.mco_bundle_by_id(
+                bundle_id("enthought", "foo"))
+
+        with self.assertRaises(KeyError):
+            self.plugin.mco_parameter_factory_by_id(
+                mco_id,
+                mco_parameter_id("enthought", "mco1", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.data_source_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.data_source_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.kpi_calculator_bundle_by_id(
+                bundle_id("enthought", "foo")
+            )
+
 
 if __name__ == '__main__':
     unittest.main()
