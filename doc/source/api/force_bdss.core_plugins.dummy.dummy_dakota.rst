@@ -43,6 +43,14 @@ force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.core_plugins.dummy.dummy_dakota.parameters module
+------------------------------------------------------------
+
+.. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.parameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
