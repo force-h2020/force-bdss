@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins\.dummy\.csv\_extractor package
-=========================================================
+force_bdss.core_plugins.dummy.csv_extractor package
+===================================================
 
 Subpackages
 -----------
@@ -11,24 +11,24 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.csv\_extractor\_bundle module
---------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_bundle module
+-----------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.csv\_extractor\_data\_source module
---------------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_data_source module
+----------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.csv\_extractor\_model module
--------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_model module
+----------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_model
     :members:

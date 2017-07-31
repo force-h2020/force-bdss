@@ -1,5 +1,5 @@
-force\_bdss package
-===================
+force_bdss package
+==================
 
 Subpackages
 -----------
@@ -18,66 +18,74 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.api module
------------------------
+force_bdss.api module
+---------------------
 
 .. automodule:: force_bdss.api
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.base\_core\_driver module
---------------------------------------
+force_bdss.base_core_driver module
+----------------------------------
 
 .. automodule:: force_bdss.base_core_driver
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.base\_extension\_plugin module
--------------------------------------------
+force_bdss.base_extension_plugin module
+---------------------------------------
 
 .. automodule:: force_bdss.base_extension_plugin
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.bdss\_application module
--------------------------------------
+force_bdss.bdss_application module
+----------------------------------
 
 .. automodule:: force_bdss.bdss_application
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.bundle\_registry\_plugin module
---------------------------------------------
+force_bdss.bundle_registry_plugin module
+----------------------------------------
 
 .. automodule:: force_bdss.bundle_registry_plugin
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_evaluation\_driver module
---------------------------------------------
+force_bdss.core_evaluation_driver module
+----------------------------------------
 
 .. automodule:: force_bdss.core_evaluation_driver
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_mco\_driver module
--------------------------------------
+force_bdss.core_mco_driver module
+---------------------------------
 
 .. automodule:: force_bdss.core_mco_driver
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.ids module
------------------------
+force_bdss.ids module
+---------------------
 
 .. automodule:: force_bdss.ids
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.version module
+-------------------------
+
+.. automodule:: force_bdss.version
     :members:
     :undoc-members:
     :show-inheritance:

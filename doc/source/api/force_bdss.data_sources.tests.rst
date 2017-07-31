@@ -1,19 +1,19 @@
-force\_bdss\.data\_sources\.tests package
-=========================================
+force_bdss.data_sources.tests package
+=====================================
 
 Submodules
 ----------
 
-force\_bdss\.data\_sources\.tests\.test\_base\_data\_source module
-------------------------------------------------------------------
+force_bdss.data_sources.tests.test_base_data_source module
+----------------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.tests.test_base_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.data\_sources\.tests\.test\_base\_data\_source\_bundle module
---------------------------------------------------------------------------
+force_bdss.data_sources.tests.test_base_data_source_bundle module
+-----------------------------------------------------------------
 
 .. automodule:: force_bdss.data_sources.tests.test_base_data_source_bundle
     :members:

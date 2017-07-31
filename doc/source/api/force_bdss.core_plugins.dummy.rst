@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins\.dummy package
-=========================================
+force_bdss.core_plugins.dummy package
+=====================================
 
 Subpackages
 -----------
@@ -16,8 +16,8 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_plugin module
--------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_plugin module
+-------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_plugin
     :members:

@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source package
-==============================================================
+force_bdss.core_plugins.dummy.dummy_data_source package
+=======================================================
 
 Subpackages
 -----------
@@ -11,24 +11,24 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source module
-----------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source module
+------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source\_bundle module
-------------------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_bundle module
+-------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.dummy\_data\_source\_model module
------------------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model module
+------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model
     :members:

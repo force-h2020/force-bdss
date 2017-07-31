@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder package
-=====================================================
+force_bdss.core_plugins.dummy.kpi_adder package
+===============================================
 
 Subpackages
 -----------
@@ -11,24 +11,24 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder\.kpi\_adder\_bundle module
-------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_bundle module
+---------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder\.kpi\_adder\_calculator module
-----------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_calculator module
+-------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_calculator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.kpi\_adder\.kpi\_adder\_model module
------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_model module
+--------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_model
     :members:
