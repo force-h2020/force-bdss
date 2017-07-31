@@ -1,19 +1,19 @@
-force\_bdss\.kpi\.tests package
-===============================
+force_bdss.kpi.tests package
+============================
 
 Submodules
 ----------
 
-force\_bdss\.kpi\.tests\.test\_base\_kpi\_calculator module
------------------------------------------------------------
+force_bdss.kpi.tests.test_base_kpi_calculator module
+----------------------------------------------------
 
 .. automodule:: force_bdss.kpi.tests.test_base_kpi_calculator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.kpi\.tests\.test\_base\_kpi\_calculator\_bundle module
--------------------------------------------------------------------
+force_bdss.kpi.tests.test_base_kpi_calculator_bundle module
+-----------------------------------------------------------
 
 .. automodule:: force_bdss.kpi.tests.test_base_kpi_calculator_bundle
     :members:

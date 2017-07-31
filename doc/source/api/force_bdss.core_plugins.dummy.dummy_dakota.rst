@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins\.dummy\.dummy\_dakota package
-========================================================
+force_bdss.core_plugins.dummy.dummy_dakota package
+==================================================
 
 Subpackages
 -----------
@@ -11,32 +11,32 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_bundle module
------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle module
+---------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_communicator module
------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator module
+---------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_model module
-----------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_dakota.dakota_model module
+--------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_model
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_optimizer module
---------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer module
+------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer
     :members:

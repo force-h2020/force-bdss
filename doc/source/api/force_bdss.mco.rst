@@ -1,5 +1,5 @@
-force\_bdss\.mco package
-========================
+force_bdss.mco package
+======================
 
 Subpackages
 -----------
@@ -12,40 +12,40 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.mco\.base\_mco module
-----------------------------------
+force_bdss.mco.base_mco module
+------------------------------
 
 .. automodule:: force_bdss.mco.base_mco
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.mco\.base\_mco\_bundle module
-------------------------------------------
+force_bdss.mco.base_mco_bundle module
+-------------------------------------
 
 .. automodule:: force_bdss.mco.base_mco_bundle
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.mco\.base\_mco\_communicator module
-------------------------------------------------
+force_bdss.mco.base_mco_communicator module
+-------------------------------------------
 
 .. automodule:: force_bdss.mco.base_mco_communicator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.mco\.base\_mco\_model module
------------------------------------------
+force_bdss.mco.base_mco_model module
+------------------------------------
 
 .. automodule:: force_bdss.mco.base_mco_model
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.mco\.i\_mco\_bundle module
----------------------------------------
+force_bdss.mco.i_mco_bundle module
+----------------------------------
 
 .. automodule:: force_bdss.mco.i_mco_bundle
     :members:

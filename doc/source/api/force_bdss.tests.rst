@@ -1,5 +1,5 @@
-force\_bdss\.tests package
-==========================
+force_bdss.tests package
+========================
 
 Subpackages
 -----------
@@ -11,32 +11,32 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.tests\.test\_bdss\_application module
---------------------------------------------------
+force_bdss.tests.test_bdss_application module
+---------------------------------------------
 
 .. automodule:: force_bdss.tests.test_bdss_application
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.test\_bundle\_registry\_plugin module
----------------------------------------------------------
+force_bdss.tests.test_bundle_registry_plugin module
+---------------------------------------------------
 
 .. automodule:: force_bdss.tests.test_bundle_registry_plugin
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.test\_core\_evaluation\_driver module
----------------------------------------------------------
+force_bdss.tests.test_core_evaluation_driver module
+---------------------------------------------------
 
 .. automodule:: force_bdss.tests.test_core_evaluation_driver
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.test\_ids module
-------------------------------------
+force_bdss.tests.test_ids module
+--------------------------------
 
 .. automodule:: force_bdss.tests.test_ids
     :members:
