@@ -31,3 +31,7 @@ class TestBaseMCOParameterFactory(unittest.TestCase):
         model = factory.create_model({"x": 42})
         self.assertIsInstance(model, DummyMCOParameter)
         self.assertEqual(model.x, 42)
+
+        model = factory.create_model()
+        self.assertIsInstance(model, DummyMCOParameter)
+        self.assertEqual(model.x, 0)
