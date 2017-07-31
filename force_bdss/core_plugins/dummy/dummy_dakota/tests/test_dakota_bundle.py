@@ -41,3 +41,7 @@ class TestDakotaBundle(unittest.TestCase):
         bundle = DummyDakotaBundle(self.plugin)
         ds = bundle.create_optimizer()
         self.assertIsInstance(ds, DummyDakotaOptimizer)
+
+    def test_parameter_factories(self):
+        bundle = DummyDakotaBundle(self.plugin)
+        self.assertNotEqual(len(bundle.parameter_factories()), 0)
