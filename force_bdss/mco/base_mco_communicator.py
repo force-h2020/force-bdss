@@ -39,8 +39,8 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
 
         Returns
         -------
-        DataSourceParameters
-            An instance of the DataSourceParameters with the appropriate
+        List(MCOParameterData)
+            A list of MCOParameterData with the appropriate
             information filled in.
         """
 
