@@ -124,6 +124,3 @@ class CoreEvaluationDriver(BaseCoreDriver):
             passed_data_values.append(lookup_map[slot_map.name])
 
         return passed_data_values
-
-
-
