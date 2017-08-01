@@ -10,4 +10,3 @@ class TestDataValue(unittest.TestCase):
         self.assertEqual(dv.value, None)
         self.assertEqual(dv.accuracy, None)
         self.assertEqual(dv.quality, "AVERAGE")
-

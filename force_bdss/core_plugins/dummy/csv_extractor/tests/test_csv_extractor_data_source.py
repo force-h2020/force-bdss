@@ -50,5 +50,3 @@ class TestCSVExtractorDataSource(unittest.TestCase):
         model.column = 50
         with self.assertRaises(IndexError):
             ds.run(model, mock_params)
-
-
