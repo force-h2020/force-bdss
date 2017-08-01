@@ -53,7 +53,7 @@ class NullMCOCommunicator(BaseMCOCommunicator):
         pass
 
     def receive_from_mco(self, model):
-        pass
+        return []
 
 
 class NullMCOBundle(BaseMCOBundle):
@@ -78,7 +78,7 @@ class NullKPICalculatorModel(BaseKPICalculatorModel):
 
 class NullKPICalculator(BaseKPICalculator):
     def run(self, model, data_source_results):
-        pass
+        return []
 
 
 class NullKPICalculatorBundle(BaseKPICalculatorBundle):
@@ -95,7 +95,7 @@ class NullDataSourceModel(BaseDataSourceModel):
 
 class NullDataSource(BaseDataSource):
     def run(self, model, parameters):
-        pass
+        return []
 
 
 class NullDataSourceBundle(BaseDataSourceBundle):

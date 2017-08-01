@@ -18,5 +18,5 @@ class CSVExtractorDataSource(BaseDataSource):
                         )
                     ]
 
-                return None
-            return None
+                return []
+            return []

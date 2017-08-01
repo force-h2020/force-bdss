@@ -9,7 +9,6 @@ from envisage.plugin import Plugin
 
 from force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle import (
     DummyDakotaBundle)
-from force_bdss.data_sources.data_source_parameters import DataSourceParameters
 
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
@@ -31,7 +30,7 @@ class TestDakotaCommunicator(unittest.TestCase):
             stdin.read.return_value = "1"
 
             data = comm.receive_from_mco(model)
-            self.assertIsInstance(data, DataSourceParameters)
-            self.assertEqual(len(data.value_names), 1)
-            self.assertEqual(len(data.value_types), 1)
-            self.assertEqual(len(data.values), 1)
+            self.assertIsInstance(data, list)
+            self.assertEqual(len(data), 1)
+            self.assertEqual(data[0].value, 1)
+            self.assertEqual(data[0].type, "")

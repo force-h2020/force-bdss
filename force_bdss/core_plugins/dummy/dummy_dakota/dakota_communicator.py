@@ -17,8 +17,6 @@ class DummyDakotaCommunicator(BaseMCOCommunicator):
             for type_, name, value in zip(
                 value_types, value_names, values)]
 
-    def send_to_mco(self, model, kpi_results):
-        data = " ".join(
-            [" ".join(list(map(str, r.values.tolist()))) for r in kpi_results]
-        )
+    def send_to_mco(self, model, data_values):
+        data = " ".join([str(dv.value) for dv in data_values])
         sys.stdout.write(data)
