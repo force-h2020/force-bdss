@@ -18,7 +18,7 @@ class BaseDataSource(ABCHasStrictTraits):
         super(BaseDataSource, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def run(self, model, parameters):
+    def run(self, model, slot_values):
         """
         Executes the KPI evaluation and returns the results it computes.
         Reimplement this method in your specific KPI calculator.
@@ -36,4 +36,27 @@ class BaseDataSource(ABCHasStrictTraits):
         -------
         DataSourceResult
             Instance that holds the results computed by this DataSource.
+        """
+
+    @abc.abstractmethod
+    def slots(self, model):
+        """Returns the input (and output) slots of the DataSource.
+        Slots are the entities that are needed (and produced) by this
+        DataSource.
+
+        The slots may depend on the configuration options, and thus the model.
+        This allows, for example, to change the slots depending if an option
+        is enabled or not.
+
+        Parameters
+        ----------
+        model: BaseDataSourceModel
+            The model of the DataSource, instantiated through create_model()
+
+        Returns
+        -------
+        list[tuple, tuple]
+            A list containing two tuples, the first element is the input slots,
+            the second element is the output slots. Each slot must be an
+            instance of the Slot class.
         """

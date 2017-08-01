@@ -9,7 +9,7 @@ from envisage.plugin import Plugin
 
 from force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle import (
     DummyDakotaBundle)
-from force_bdss.data_sources.data_source_parameters import DataSourceParameters
+from force_bdss.core.data_value import DataSourceParameters
 
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
