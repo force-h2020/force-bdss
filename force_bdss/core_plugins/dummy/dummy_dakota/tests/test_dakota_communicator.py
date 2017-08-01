@@ -1,5 +1,7 @@
 import unittest
 
+from force_bdss.core.data_value import DataValue
+
 try:
     import mock
 except ImportError:
@@ -34,3 +36,16 @@ class TestDakotaCommunicator(unittest.TestCase):
             self.assertEqual(len(data), 1)
             self.assertEqual(data[0].value, 1)
             self.assertEqual(data[0].type, "")
+
+    def test_send_to_mco(self):
+        bundle = DummyDakotaBundle(mock.Mock(spec=Plugin))
+        model = bundle.create_model()
+        comm = bundle.create_communicator()
+
+        with mock.patch("sys.stdout") as stdout:
+            dv = DataValue(value=100)
+            comm.send_to_mco(model, [dv, dv])
+            self.assertEqual(stdout.write.call_args[0][0], '100 100')
+
+            comm.send_to_mco(model, [])
+            self.assertEqual(stdout.write.call_args[0][0], '')
