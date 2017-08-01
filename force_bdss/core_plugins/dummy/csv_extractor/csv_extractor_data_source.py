@@ -9,16 +9,14 @@ class CSVExtractorDataSource(BaseDataSource):
             for rowindex, row in enumerate(reader):
                 if rowindex < model.row:
                     continue
-
-                if rowindex == model.row:
+                elif rowindex == model.row:
                     return [
                         DataValue(
                             type=model.cuba_type,
                             value=float(row[model.column])
                         )
                     ]
+                else:
+                    break
 
-                raise IndexError("Could not find specified data. "
-                                 "Unexistent column.")
-
-            raise IndexError("Could not find specified data. Unexistent row.")
+            raise IndexError("Could not find specified data.")

@@ -35,3 +35,20 @@ class TestCSVExtractorDataSource(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertIsInstance(result[0], DataValue)
         self.assertEqual(result[0].value, 42)
+
+    def test_run_with_exception(self):
+        ds = CSVExtractorDataSource(self.bundle)
+        model = CSVExtractorModel(self.bundle)
+        model.filename = fixtures.get("foo.csv")
+        mock_params = []
+        model.row = 30
+        model.column = 5
+        with self.assertRaises(IndexError):
+            ds.run(model, mock_params)
+
+        model.row = 3
+        model.column = 50
+        with self.assertRaises(IndexError):
+            ds.run(model, mock_params)
+
+
