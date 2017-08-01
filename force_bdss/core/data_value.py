@@ -23,8 +23,12 @@ class DataValue(HasStrictTraits):
     quality = Enum("AVERAGE", "POOR", "GOOD")
 
     def __str__(self):
-        return """
-        {} {} : {}
-        """.format(str(self.type),
-                   str(self.name),
-                   str(self.value))
+
+        s = "{} {} = {}".format(
+            str(self.type), str(self.name), str(self.value))
+
+        if self.accuracy is not None:
+            s += " +/- {}".format(str(self.accuracy))
+
+        s += " ({})".format(str(self.quality))
+        return s
