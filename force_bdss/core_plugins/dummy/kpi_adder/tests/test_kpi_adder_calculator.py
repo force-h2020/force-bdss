@@ -22,6 +22,7 @@ class TestKPIAdderCalculator(unittest.TestCase):
         model.cuba_type_out = "TOTAL_PRESSURE"
         dv1 = DataValue(type="PRESSURE", value=10)
         dv2 = DataValue(type="PRESSURE", value=30)
-        res = kpic.run(model, [dv1, dv2])
+        dv3 = DataValue(type="VOLUME", value=100)
+        res = kpic.run(model, [dv1, dv2, dv3])
         self.assertEqual(res[0].type, "TOTAL_PRESSURE")
         self.assertEqual(res[0].value, 40)
