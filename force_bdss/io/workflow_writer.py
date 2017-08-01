@@ -19,17 +19,34 @@ class WorkflowWriter(HasStrictTraits):
         """
         data = {
             "version": "1",
-            "workflow": {}
         }
 
-        wf_data = data["workflow"]
-        wf_data["mco"] = {
-            "id": workflow.mco.bundle.id,
-            "model_data": workflow.mco.__getstate__()
+        data["workflow"] = self._workflow_data(workflow)
+        json.dump(data, f)
+
+    def _workflow_data(self, workflow):
+        workflow_data = {
+            "mco": self._mco_data(workflow.mco),
+            "kpi_calculators": [
+                self._bundle_model_data(kpic)
+                for kpic in workflow.kpi_calculators],
+            "data_sources": [
+                self._bundle_model_data(ds)
+                for ds in workflow.data_sources]
         }
+
+        return workflow_data
+
+    def _mco_data(self, mco):
+        """Extracts the data from the MCO object and returns its dictionary.
+        If the MCO is None, returns None"""
+        if mco is None:
+            return None
+
+        data = self._bundle_model_data(mco)
 
         parameters_data = []
-        for param in wf_data["mco"]["model_data"]["parameters"]:  # noqa
+        for param in data["model_data"]["parameters"]:
             parameters_data.append(
                 {
                     "id": param.factory.id,
@@ -37,24 +54,14 @@ class WorkflowWriter(HasStrictTraits):
                 }
             )
 
-        wf_data["mco"]["model_data"]["parameters"] = parameters_data  # noqa
+        data["model_data"]["parameters"] = parameters_data
+        return data
 
-        kpic_data = []
-        for kpic in workflow.kpi_calculators:
-            kpic_data.append({
-                "id": kpic.bundle.id,
-                "model_data": kpic.__getstate__()}
-            )
-
-        wf_data["kpi_calculators"] = kpic_data
-
-        ds_data = []
-        for ds in workflow.data_sources:
-            ds_data.append({
-                "id": ds.bundle.id,
-                "model_data": ds.__getstate__()
-            })
-
-        wf_data["data_sources"] = ds_data
-
-        json.dump(data, f)
+    def _bundle_model_data(self, bundle_model):
+        """
+        Extracts the data from a bundle model and returns its dictionary
+        """
+        return {
+            "id": bundle_model.bundle.id,
+            "model_data": bundle_model.__getstate__()
+        }

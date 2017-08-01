@@ -52,6 +52,7 @@ class TestWorkflowWriter(unittest.TestCase):
         fp = StringIO()
         wf = self._create_mock_workflow()
         wfwriter.write(wf, fp)
+        print(fp.getvalue())
         fp.seek(0)
         wfreader = WorkflowReader(self.mock_registry)
         wf_result = wfreader.read(fp)
@@ -73,3 +74,13 @@ class TestWorkflowWriter(unittest.TestCase):
             )
         ]
         return wf
+
+    def test_write_and_read_empty_workflow(self):
+        wf = Workflow()
+        wfwriter = WorkflowWriter()
+        fp = StringIO()
+        wfwriter.write(wf, fp)
+        fp.seek(0)
+        wfreader = WorkflowReader(self.mock_registry)
+        wf_result = wfreader.read(fp)
+        self.assertIsNone(wf_result.mco)
