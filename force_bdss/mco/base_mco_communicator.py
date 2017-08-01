@@ -55,6 +55,6 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
         model: BaseMCOModel
             The model of the optimizer, instantiated through create_model()
 
-        kpi_results: List(KPICalculatorResult)
+        kpi_results: List(DataValue)
             A list of KPI calculator results, one per each KPI calculator.
         """

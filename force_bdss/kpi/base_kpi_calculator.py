@@ -18,7 +18,7 @@ class BaseKPICalculator(ABCHasStrictTraits):
         super(BaseKPICalculator, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def run(self, model, data_source_results):
+    def run(self, model, data_values):
         """
         Executes the KPI evaluation and returns the results it computes.
         Reimplement this method in your specific KPI calculator.
@@ -29,13 +29,12 @@ class BaseKPICalculator(ABCHasStrictTraits):
             The model of the KPI Calculator, instantiated through
             create_model()
 
-        data_source_results:
-            a list of DataSourceResult instances containing the results of the
-            evaluation. Each DataSourceResult contains the results from one
-            specific DataSource.
+        data_values:
+            a list of DataValue instances containing data from the
+            MCO and DataSources.
 
         Returns
         -------
-        KPICalculatorResult
-            Instance that holds the results computed by this KPICalculator.
+        List[DataValue]:
+            The result of this KPI evaluation, as a list of DataValues.
         """

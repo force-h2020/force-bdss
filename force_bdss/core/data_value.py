@@ -1,16 +1,24 @@
-from traits.api import HasStrictTraits, Any, String
+from traits.api import HasStrictTraits, Any, String, Int
 
 
 class DataValue(HasStrictTraits):
-    """Contains the parameters as passed from the MCO."""
-    #: The CUBA types associated to the values
+    """Contains in-transit data between the various components (MCO/DS/KPI).
+    Each DataValue instance holds information about the CUBA type it
+    contains, the name as assigned by the user, and the value (which can be
+    anything.
+    """
+    #: The CUBA type associated to the value.
     type = String()
 
-    #: The user-defined names associated to the values.
+    #: The user-defined name associated to the value.
     name = String()
 
-    #: The values as a single array.
+    #: The value.
     value = Any()
+
+    accuracy = Any()
+
+    quality = Int()
 
     def __str__(self):
         return """
