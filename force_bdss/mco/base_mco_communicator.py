@@ -29,8 +29,8 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
         The conversion is specific to the format of the communication
         between the MCO and its evaluator program.
 
-        Must return a single DataSourceParameters object, containing
-        the parameters as passed by the MCO.
+        Must return a list of DataValue objects, containing the data passed
+        by the MCO.
 
         Parameters
         ----------
@@ -39,9 +39,8 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
 
         Returns
         -------
-        DataSourceParameters
-            An instance of the DataSourceParameters with the appropriate
-            information filled in.
+        List(DataValue)
+            A list of the DataValues with the appropriate information filled in
         """
 
     @abc.abstractmethod

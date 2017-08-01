@@ -1,5 +1,6 @@
 from .base_extension_plugin import BaseExtensionPlugin  # noqa
 from .ids import bundle_id, plugin_id  # noqa
+from .core.data_value import DataValue  # noqa
 
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.data_source_result import DataSourceResult  # noqa

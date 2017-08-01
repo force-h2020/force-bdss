@@ -1,12 +1,6 @@
-from force_bdss.api import BaseDataSource, DataSourceResult
+from force_bdss.api import BaseDataSource
 
 
 class DummyDataSource(BaseDataSource):
     def run(self, model, parameters):
-        print(parameters)
-        return DataSourceResult(
-                originator=self,
-                value_names=parameters.value_names,
-                value_types=parameters.value_types,
-                values=parameters.values.reshape(
-                    parameters.values.shape + (1,)))
+        return parameters
