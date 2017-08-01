@@ -20,20 +20,20 @@ class BaseDataSource(ABCHasStrictTraits):
     @abc.abstractmethod
     def run(self, model, parameters):
         """
-        Executes the KPI evaluation and returns the results it computes.
-        Reimplement this method in your specific KPI calculator.
+        Executes the Data Source evaluation and returns the results it
+        computes. Reimplement this method in your specific DataSource.
 
         Parameters
         ----------
         model: BaseDataSourceModel
             The model of the DataSource, instantiated through create_model()
 
-        parameters: DataSourceParameters
-            a DataResultParameters instance containing the information coming
-            from the MCO
+        parameters: List(DataValue)
+            a list of DataValue objects containing the information needed
+            for the execution of the DataSource.
 
         Returns
         -------
-        DataSourceResult
-            Instance that holds the results computed by this DataSource.
+        List(DataValue)
+            A list containing the computed Data Values.
         """

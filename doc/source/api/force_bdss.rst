@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     force_bdss.cli
+    force_bdss.core
     force_bdss.core_plugins
     force_bdss.data_sources
     force_bdss.io

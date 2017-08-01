@@ -1,7 +1,8 @@
 import sys
-import numpy
 
-from force_bdss.api import DataSourceParameters, BaseMCOCommunicator
+from force_bdss.api import (
+    BaseMCOCommunicator,
+    DataValue)
 
 
 class DummyDakotaCommunicator(BaseMCOCommunicator):
@@ -11,14 +12,11 @@ class DummyDakotaCommunicator(BaseMCOCommunicator):
         value_names = [p.value_name for p in model.parameters]
         value_types = [p.value_type for p in model.parameters]
 
-        return DataSourceParameters(
-            value_names=value_names,
-            value_types=value_types,
-            values=numpy.array(values)
-        )
+        return [
+            DataValue(type=type_, name=name, value=value)
+            for type_, name, value in zip(
+                value_types, value_names, values)]
 
-    def send_to_mco(self, model, kpi_results):
-        data = " ".join(
-            [" ".join(list(map(str, r.values.tolist()))) for r in kpi_results]
-        )
+    def send_to_mco(self, model, data_values):
+        data = " ".join([str(dv.value) for dv in data_values])
         sys.stdout.write(data)

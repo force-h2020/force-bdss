@@ -1,7 +1,5 @@
 import csv
-import numpy
-from force_bdss.api import BaseDataSource
-from force_bdss.api import DataSourceResult
+from force_bdss.api import BaseDataSource, DataValue
 
 
 class CSVExtractorDataSource(BaseDataSource):
@@ -11,15 +9,14 @@ class CSVExtractorDataSource(BaseDataSource):
             for rowindex, row in enumerate(reader):
                 if rowindex < model.row:
                     continue
+                elif rowindex == model.row:
+                    return [
+                        DataValue(
+                            type=model.cuba_type,
+                            value=float(row[model.column])
+                        )
+                    ]
+                else:
+                    break
 
-                if rowindex == model.row:
-                    return DataSourceResult(
-                        originator=self,
-                        value_types=[model.cuba_type],
-                        values=numpy.array(
-                            parameters.values[0]+float(
-                                row[model.column])).reshape(1, 1)
-                    )
-
-                return None
-            return None
+            raise IndexError("Could not find specified data.")

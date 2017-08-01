@@ -1,22 +1,18 @@
-import numpy
-
-from force_bdss.api import BaseKPICalculator
-from force_bdss.api import KPICalculatorResult
+from force_bdss.api import BaseKPICalculator, DataValue
 
 
 class KPIAdderCalculator(BaseKPICalculator):
     def run(self, model, data_source_results):
         sum = 0.0
+
         for res in data_source_results:
-            try:
-                value_idx = res.value_types.index(model.cuba_type_in)
-            except ValueError:
+            if res.type != model.cuba_type_in:
                 continue
 
-            sum += res.values[value_idx].sum()
+            sum += res.value
 
-        return KPICalculatorResult(
-            originator=self,
-            value_types=[model.cuba_type_out],
-            values=numpy.array([sum])
-        )
+        return [
+            DataValue(
+                type=model.cuba_type_out,
+                value=sum
+            )]
