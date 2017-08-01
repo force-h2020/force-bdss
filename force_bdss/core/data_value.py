@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Any, String, Int
+from traits.api import HasStrictTraits, Any, String, Int, Enum
 
 
 class DataValue(HasStrictTraits):
@@ -16,9 +16,11 @@ class DataValue(HasStrictTraits):
     #: The value.
     value = Any()
 
+    # The numerical accuracy of the value.
     accuracy = Any()
 
-    quality = Int()
+    #: A flag for the quality of the data.
+    quality = Enum("AVERAGE", "POOR", "GOOD")
 
     def __str__(self):
         return """
