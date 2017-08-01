@@ -10,7 +10,9 @@
             "model_data": {
                 "initial_value": 3,
                 "lower_bound": 0,
-                "upper_bound": 10
+                "upper_bound": 10,
+                "name": "p0",
+                "type": "PRESSURE"
             }
           }
         ]
@@ -53,6 +55,9 @@
           "cuba_type_in": "PRESSURE",
           "cuba_type_out": "TOTAL_PRESSURE",
           "input_slot_maps": [
+            {
+              "name": "p0"
+            },
             {
               "name": "p1"
             },

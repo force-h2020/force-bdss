@@ -22,6 +22,8 @@ class KPIAdderCalculator(BaseKPICalculator):
         return (
             (
                 Slot(type=model.cuba_type_in),
+                Slot(type=model.cuba_type_in),
+                Slot(type=model.cuba_type_in),
             ),
             (
                 Slot(type=model.cuba_type_out),
