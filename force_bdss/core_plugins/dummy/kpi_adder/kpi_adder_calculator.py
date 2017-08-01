@@ -1,4 +1,5 @@
 from force_bdss.api import BaseKPICalculator, DataValue
+from force_bdss.core.slot import Slot
 
 
 class KPIAdderCalculator(BaseKPICalculator):
@@ -16,3 +17,13 @@ class KPIAdderCalculator(BaseKPICalculator):
                 type=model.cuba_type_out,
                 value=sum
             )]
+
+    def slots(self, model):
+        return (
+            (
+                Slot(type=model.cuba_type_in),
+            ),
+            (
+                Slot(type=model.cuba_type_out),
+            )
+        )

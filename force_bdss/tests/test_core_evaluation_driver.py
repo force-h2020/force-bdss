@@ -80,6 +80,9 @@ class NullKPICalculator(BaseKPICalculator):
     def run(self, model, data_source_results):
         return []
 
+    def slots(self, model):
+        return (), ()
+
 
 class NullKPICalculatorBundle(BaseKPICalculatorBundle):
     def create_model(self, model_data=None):
@@ -96,6 +99,9 @@ class NullDataSourceModel(BaseDataSourceModel):
 class NullDataSource(BaseDataSource):
     def run(self, model, parameters):
         return []
+
+    def slots(self, model):
+        return (), ()
 
 
 class NullDataSourceBundle(BaseDataSourceBundle):

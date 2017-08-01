@@ -12,6 +12,9 @@ class DummyKPICalculator(BaseKPICalculator):
     def run(self, *args, **kwargs):
         pass
 
+    def slots(self, model):
+        return (), ()
+
 
 class TestBaseKPICalculator(unittest.TestCase):
     def test_initialization(self):

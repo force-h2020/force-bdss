@@ -55,8 +55,14 @@ class BaseDataSource(ABCHasStrictTraits):
 
         Returns
         -------
-        list[tuple, tuple]
-            A list containing two tuples, the first element is the input slots,
-            the second element is the output slots. Each slot must be an
-            instance of the Slot class.
+        (input_slots, output_slots): tuple[tuple, tuple]
+            A tuple containing two tuples.
+            The first element is the input slots, the second element is
+            the output slots. Each slot must be an instance of the Slot class.
+            It is possible for each of the two inside tuples to be empty.
+            The case of an empty input slot is common: the DataSource does
+            not need any information from the MCO to operate.
+            The case of an empty output slot is uncommon, but supported:
+            the DataSource does not produce any output and is therefore
+            useless.
         """
