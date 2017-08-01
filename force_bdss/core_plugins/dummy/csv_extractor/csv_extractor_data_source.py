@@ -18,5 +18,7 @@ class CSVExtractorDataSource(BaseDataSource):
                         )
                     ]
 
-                return []
-            return []
+                raise IndexError("Could not find specified data. "
+                                 "Unexistent column.")
+
+            raise IndexError("Could not find specified data. Unexistent row.")
