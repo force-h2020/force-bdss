@@ -65,4 +65,3 @@ class WorkflowWriter(HasStrictTraits):
             "id": bundle_model.bundle.id,
             "model_data": bundle_model.__getstate__()
         }
-
