@@ -43,14 +43,6 @@ force_bdss.kpi.i_kpi_calculator_bundle module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.kpi.kpi_calculator_result module
--------------------------------------------
-
-.. automodule:: force_bdss.kpi.kpi_calculator_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------
