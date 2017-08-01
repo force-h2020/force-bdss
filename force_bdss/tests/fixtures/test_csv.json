@@ -23,7 +23,12 @@
           "filename": "foo.csv",
           "row": 3,
           "column": 5,
-          "cuba_type": "PRESSURE"
+          "cuba_type": "PRESSURE",
+          "input_slot_maps": [
+          ],
+          "output_slot_names": [
+            "p1"
+          ]
         }
       },
       {
@@ -32,7 +37,12 @@
           "filename": "foo.csv",
           "row": 3,
           "column": 5,
-          "cuba_type": "PRESSURE"
+          "cuba_type": "PRESSURE",
+          "input_slot_maps": [
+          ],
+          "output_slot_names": [
+            "p2"
+          ]
         }
       }
     ],
@@ -41,7 +51,18 @@
         "id": "force.bdss.enthought.bundle.kpi_adder",
         "model_data": {
           "cuba_type_in": "PRESSURE",
-          "cuba_type_out": "TOTAL_PRESSURE"
+          "cuba_type_out": "TOTAL_PRESSURE",
+          "input_slot_maps": [
+            {
+              "name": "p1"
+            },
+            {
+              "name": "p2"
+            }
+          ],
+          "output_slot_names": [
+            "ptot"
+          ]
         }
       }
     ]
