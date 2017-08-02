@@ -1,8 +1,8 @@
 from traits.api import HasStrictTraits, Instance, List
 
-from ..data_sources.base_data_source_model import BaseDataSourceModel
-from ..kpi.base_kpi_calculator_model import BaseKPICalculatorModel
-from ..mco.base_mco_model import BaseMCOModel
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
+from force_bdss.mco.base_mco_model import BaseMCOModel
 
 
 class Workflow(HasStrictTraits):

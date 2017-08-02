@@ -19,6 +19,14 @@ force_bdss.core.data_value module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.core.workflow module
+-------------------------------
+
+.. automodule:: force_bdss.core.workflow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
