@@ -1,6 +1,8 @@
 import unittest
-from traits.api import Float
+from traits.api import Float, List
 from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.core.data_value import DataValue
+from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source import BaseDataSource
 from force_bdss.data_sources.base_data_source_bundle import \
     BaseDataSourceBundle
@@ -37,15 +39,15 @@ class NullMCO(BaseMCO):
         pass
 
 
-class NullParameter(BaseMCOParameter):
+class RangedParameter(BaseMCOParameter):
     initial_value = Float()
     lower_bound = Float()
     upper_bound = Float()
 
 
-class NullParameterFactory(BaseMCOParameterFactory):
-    id = mco_parameter_id("enthought", "dummy_dakota", "ranged")
-    model_class = NullParameter
+class RangedParameterFactory(BaseMCOParameterFactory):
+    id = mco_parameter_id("enthought", "null_mco", "null")
+    model_class = RangedParameter
 
 
 class NullMCOCommunicator(BaseMCOCommunicator):
@@ -56,11 +58,23 @@ class NullMCOCommunicator(BaseMCOCommunicator):
         return []
 
 
+class OneDataValueMCOCommunicator(BaseMCOCommunicator):
+    """A communicator that returns one single datavalue, for testing purposes.
+    """
+    def send_to_mco(self, model, kpi_results):
+        pass
+
+    def receive_from_mco(self, model):
+        return [
+            DataValue()
+        ]
+
+
 class NullMCOBundle(BaseMCOBundle):
-    id = bundle_id("enthought", "dummy_dakota")
+    id = bundle_id("enthought", "null_mco")
 
     def create_model(self, model_data=None):
-        return NullMCOModel(self)
+        return NullMCOModel(self, **model_data)
 
     def create_communicator(self):
         return NullMCOCommunicator(self)
@@ -69,7 +83,7 @@ class NullMCOBundle(BaseMCOBundle):
         return NullMCO(self)
 
     def parameter_factories(self):
-        return [NullParameterFactory(self)]
+        return []
 
 
 class NullKPICalculatorModel(BaseKPICalculatorModel):
@@ -84,7 +98,26 @@ class NullKPICalculator(BaseKPICalculator):
         return (), ()
 
 
+class BrokenOneValueKPICalculator(BaseKPICalculator):
+    def run(self, model, data_source_results):
+        return [DataValue()]
+
+    def slots(self, model):
+        return (), ()
+
+
+class OneValueKPICalculator(BaseKPICalculator):
+    def run(self, model, data_source_results):
+        return [DataValue()]
+
+    def slots(self, model):
+        return (), (Slot(), )
+
+
 class NullKPICalculatorBundle(BaseKPICalculatorBundle):
+    id = bundle_id("enthought", "null_kpic")
+    name = "null_kpic"
+
     def create_model(self, model_data=None):
         return NullKPICalculatorModel(self)
 
@@ -104,7 +137,32 @@ class NullDataSource(BaseDataSource):
         return (), ()
 
 
+class BrokenOneValueDataSource(BaseDataSource):
+    """Incorrect data source implementation whose run returns a data value
+    but no slot was specified for it."""
+    def run(self, model, parameters):
+        return [DataValue()]
+
+    def slots(self, model):
+        return (), ()
+
+
+class OneValueDataSource(BaseDataSource):
+    """Incorrect data source implementation whose run returns a data value
+    but no slot was specified for it."""
+    def run(self, model, parameters):
+        return [DataValue()]
+
+    def slots(self, model):
+        return (), (
+            Slot(),
+        )
+
+
 class NullDataSourceBundle(BaseDataSourceBundle):
+    id = bundle_id("enthought", "null_ds")
+    name = "null_ds"
+
     def create_model(self, model_data=None):
         return NullDataSourceModel(self)
 
@@ -112,16 +170,20 @@ class NullDataSourceBundle(BaseDataSourceBundle):
         return NullDataSource(self)
 
 
+class DummyBundleRegistryPlugin(BundleRegistryPlugin):
+    mco_bundles = List()
+    kpi_calculator_bundles = List()
+    data_source_bundles = List()
+
+
 def mock_bundle_registry_plugin():
-    bundle_registry_plugin = mock.Mock(spec=BundleRegistryPlugin)
+    bundle_registry_plugin = DummyBundleRegistryPlugin()
     bundle_registry_plugin.mco_bundles = [
         NullMCOBundle(bundle_registry_plugin)]
-    bundle_registry_plugin.mco_bundle_by_id = mock.Mock(
-        return_value=NullMCOBundle(bundle_registry_plugin))
-    bundle_registry_plugin.kpi_calculator_bundle_by_id = mock.Mock(
-        return_value=NullKPICalculatorBundle(bundle_registry_plugin))
-    bundle_registry_plugin.data_source_bundle_by_id = mock.Mock(
-        return_value=NullDataSourceBundle(bundle_registry_plugin))
+    bundle_registry_plugin.kpi_calculator_bundles = [
+        NullKPICalculatorBundle(bundle_registry_plugin)]
+    bundle_registry_plugin.data_source_bundles = [
+        NullDataSourceBundle(bundle_registry_plugin)]
     return bundle_registry_plugin
 
 
@@ -132,7 +194,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         application.get_plugin = mock.Mock(
             return_value=self.mock_bundle_registry_plugin
         )
-        application.workflow_filepath = fixtures.get("test_csv.json")
+        application.workflow_filepath = fixtures.get("test_null.json")
         self.mock_application = application
 
     def test_initialization(self):
@@ -140,3 +202,77 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application,
         )
         driver.application_started()
+
+    def test_error_for_non_matching_mco_parameters(self):
+        bundle = self.mock_bundle_registry_plugin.mco_bundles[0]
+        with mock.patch.object(bundle.__class__,
+                               "create_communicator") as create_comm:
+            create_comm.return_value = OneDataValueMCOCommunicator(
+                bundle)
+            driver = CoreEvaluationDriver(
+                application=self.mock_application,
+            )
+            with self.assertRaisesRegexp(
+                    RuntimeError,
+                    "The number of data values returned by the MCO"):
+                driver.application_started()
+
+    def test_error_for_incorrect_output_slots(self):
+        bundle = self.mock_bundle_registry_plugin.data_source_bundles[0]
+        with mock.patch.object(bundle.__class__,
+                               "create_data_source") as create_ds:
+            create_ds.return_value = BrokenOneValueDataSource(bundle)
+            driver = CoreEvaluationDriver(
+                application=self.mock_application,
+            )
+            with self.assertRaisesRegexp(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by the DataSource 'null_ds' does not match"
+                    " the number of output slots"):
+                driver.application_started()
+
+    def test_error_for_missing_ds_output_names(self):
+        bundle = self.mock_bundle_registry_plugin.data_source_bundles[0]
+        with mock.patch.object(bundle.__class__,
+                               "create_data_source") as create_ds:
+            create_ds.return_value = OneValueDataSource(bundle)
+            driver = CoreEvaluationDriver(
+                application=self.mock_application,
+            )
+            with self.assertRaisesRegexp(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by the DataSource 'null_ds' does not match"
+                    " the number of user-defined names"):
+                driver.application_started()
+
+    def test_error_for_incorrect_kpic_output_slots(self):
+        bundle = self.mock_bundle_registry_plugin.kpi_calculator_bundles[0]
+        with mock.patch.object(bundle.__class__,
+                               "create_kpi_calculator") as create_kpic:
+            create_kpic.return_value = BrokenOneValueKPICalculator(bundle)
+            driver = CoreEvaluationDriver(
+                application=self.mock_application,
+            )
+            with self.assertRaisesRegexp(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by the KPICalculator 'null_kpic' does not match"
+                    " the number of output slots"):
+                driver.application_started()
+
+    def test_error_for_missing_kpic_output_names(self):
+        bundle = self.mock_bundle_registry_plugin.kpi_calculator_bundles[0]
+        with mock.patch.object(bundle.__class__,
+                               "create_kpi_calculator") as create_kpic:
+            create_kpic.return_value = OneValueKPICalculator(bundle)
+            driver = CoreEvaluationDriver(
+                application=self.mock_application,
+            )
+            with self.assertRaisesRegexp(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by the KPICalculator 'null_kpic' does not match"
+                    " the number of user-defined names"):
+                driver.application_started()

@@ -1,0 +1,34 @@
+{
+  "version": "1",
+  "workflow": {
+    "mco": {
+      "id": "force.bdss.enthought.bundle.null_mco",
+      "model_data": {
+        "parameters" : [
+        ]
+      }
+    },
+    "data_sources": [
+      {
+        "id": "force.bdss.enthought.bundle.null_ds",
+        "model_data": {
+          "input_slot_maps": [
+          ],
+          "output_slot_names": [
+          ]
+        }
+      }
+    ],
+    "kpi_calculators": [
+      {
+        "id": "force.bdss.enthought.bundle.null_kpic",
+        "model_data": {
+          "input_slot_maps": [
+          ],
+          "output_slot_names": [
+          ]
+        }
+      }
+    ]
+  }
+}
