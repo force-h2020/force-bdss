@@ -21,3 +21,9 @@ class TestDummyKPICalculator(unittest.TestCase):
         input_ = []
         output = kpic.run(model, [])
         self.assertEqual(input_, output)
+
+    def test_slots(self):
+        bundle = mock.Mock(spec=DummyKPICalculatorBundle)
+        kpic = DummyKPICalculator(bundle)
+        model = DummyKPICalculatorModel(bundle)
+        self.assertEqual(kpic.slots(model), ((), ()))
