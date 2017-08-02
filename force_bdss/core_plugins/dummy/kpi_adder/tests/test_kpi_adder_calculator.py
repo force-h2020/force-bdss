@@ -33,4 +33,3 @@ class TestKPIAdderCalculator(unittest.TestCase):
         in_slot, out_slot = kpic.slots(model)
         self.assertEqual(len(in_slot), 3)
         self.assertEqual(len(out_slot), 1)
-
