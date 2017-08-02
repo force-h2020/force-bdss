@@ -1,6 +1,7 @@
 import unittest
 
 from force_bdss.core.data_value import DataValue
+from force_bdss.core.slot import Slot
 from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_data_source \
     import CSVExtractorDataSource
 from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_model import \
@@ -50,3 +51,12 @@ class TestCSVExtractorDataSource(unittest.TestCase):
         model.column = 50
         with self.assertRaises(IndexError):
             ds.run(model, mock_params)
+
+    def test_slots(self):
+        ds = CSVExtractorDataSource(self.bundle)
+        model = CSVExtractorModel(self.bundle)
+        slots = ds.slots(model)
+        self.assertEqual(len(slots), 2)
+        self.assertEqual(len(slots[0]), 0)
+        self.assertEqual(len(slots[1]), 1)
+        self.assertIsInstance(slots[1][0], Slot)
