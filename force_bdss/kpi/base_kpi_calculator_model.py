@@ -34,3 +34,4 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
         state["input_slot_maps"] = [
             x.__getstate__() for x in self.input_slot_maps
             ]
+        return state
