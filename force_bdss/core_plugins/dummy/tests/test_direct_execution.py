@@ -55,4 +55,3 @@ class TestDirectExecution(unittest.TestCase):
             write_args = stdout.write.call_args
 
         self.assertEqual(write_args[0][0], "85.0")
-

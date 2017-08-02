@@ -27,4 +27,3 @@ class TestDummyDataSource(unittest.TestCase):
         model = DummyDataSourceModel(self.bundle)
         slots = ds.slots(model)
         self.assertEqual(slots, ((), ()))
-
