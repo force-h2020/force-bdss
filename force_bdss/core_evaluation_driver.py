@@ -215,10 +215,10 @@ class CoreEvaluationDriver(BaseCoreDriver):
         passed_data_values = []
         lookup_map = {dv.name: dv for dv in available_data_values}
 
-        if len(slots) > len(model_slot_map):
-            raise RuntimeError("The length of the slots is greater than"
+        if len(slots) != len(model_slot_map):
+            raise RuntimeError("The length of the slots is not equal to"
                                " the length of the slot map. This may"
-                               " indicate a file error")
+                               " indicate a file error.")
 
         for slot, slot_map in zip(slots, model_slot_map):
             passed_data_values.append(lookup_map[slot_map.name])
