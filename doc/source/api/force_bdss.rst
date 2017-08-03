@@ -14,7 +14,6 @@ Subpackages
     force_bdss.kpi
     force_bdss.mco
     force_bdss.tests
-    force_bdss.workspecs
 
 Submodules
 ----------
@@ -79,6 +78,14 @@ force_bdss.ids module
 ---------------------
 
 .. automodule:: force_bdss.ids
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.local_traits module
+------------------------------
+
+.. automodule:: force_bdss.local_traits
     :members:
     :undoc-members:
     :show-inheritance:

@@ -20,6 +20,14 @@ force_bdss.kpi.tests.test_base_kpi_calculator_bundle module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.kpi.tests.test_base_kpi_calculator_model module
+----------------------------------------------------------
+
+.. automodule:: force_bdss.kpi.tests.test_base_kpi_calculator_model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

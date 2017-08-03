@@ -4,8 +4,8 @@ import logging
 from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.workflow import Workflow
 from ..bundle_registry_plugin import BundleRegistryPlugin
-from ..workspecs.workflow import Workflow
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 

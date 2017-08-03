@@ -20,6 +20,14 @@ force_bdss.data_sources.tests.test_base_data_source_bundle module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.data_sources.tests.test_base_data_source_model module
+----------------------------------------------------------------
+
+.. automodule:: force_bdss.data_sources.tests.test_base_data_source_model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

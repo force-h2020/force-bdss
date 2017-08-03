@@ -1,5 +1,6 @@
-import unittest
 import json
+import unittest
+
 from six import StringIO
 
 from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
@@ -17,7 +18,7 @@ from force_bdss.ids import bundle_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.i_mco_bundle import IMCOBundle
-from force_bdss.workspecs.workflow import Workflow
+from force_bdss.core.workflow import Workflow
 
 
 class TestWorkflowWriter(unittest.TestCase):

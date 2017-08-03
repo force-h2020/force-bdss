@@ -19,10 +19,26 @@ force_bdss.core.data_value module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.core.input_slot_map module
+-------------------------------------
+
+.. automodule:: force_bdss.core.input_slot_map
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 force_bdss.core.slot module
 ---------------------------
 
 .. automodule:: force_bdss.core.slot
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.core.workflow module
+-------------------------------
+
+.. automodule:: force_bdss.core.workflow
     :members:
     :undoc-members:
     :show-inheritance:
