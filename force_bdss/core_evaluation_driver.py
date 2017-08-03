@@ -96,7 +96,8 @@ class CoreEvaluationDriver(BaseCoreDriver):
                     "The number of data values ({} values) returned"
                     " by the DataSource '{}' does not match the number"
                     " of user-defined names specified ({} values)."
-                    " This is likely a DataSource plugin error.").format(
+                    " This is either a DataSource plugin error or a file"
+                    " error.").format(
                     len(res),
                     ds_bundle.name,
                     len(ds_model.output_slot_names)
