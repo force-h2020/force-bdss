@@ -14,7 +14,6 @@ Subpackages
     force_bdss.kpi
     force_bdss.mco
     force_bdss.tests
-    force_bdss.workspecs
 
 Submodules
 ----------

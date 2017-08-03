@@ -1,12 +1,12 @@
 from envisage.plugin import Plugin
 from traits.trait_types import Instance
 
+from .core.workflow import Workflow
 from .bundle_registry_plugin import (
     BundleRegistryPlugin,
     BUNDLE_REGISTRY_PLUGIN_ID
 )
 from .io.workflow_reader import WorkflowReader
-from .workspecs.workflow import Workflow
 
 
 class BaseCoreDriver(Plugin):
