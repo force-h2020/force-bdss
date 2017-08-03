@@ -13,6 +13,9 @@ class DummyDataSource(BaseDataSource):
     def run(self, *args, **kwargs):
         pass
 
+    def slots(self, model):
+        return (), ()
+
 
 class TestBaseDataSource(unittest.TestCase):
     def test_initialization(self):

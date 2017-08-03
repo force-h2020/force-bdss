@@ -1,5 +1,6 @@
 import csv
 from force_bdss.api import BaseDataSource, DataValue
+from force_bdss.core.slot import Slot
 
 
 class CSVExtractorDataSource(BaseDataSource):
@@ -20,3 +21,11 @@ class CSVExtractorDataSource(BaseDataSource):
                     break
 
             raise IndexError("Could not find specified data.")
+
+    def slots(self, model):
+        return (
+            (),
+            (
+                Slot(type=model.cuba_type),
+            )
+        )

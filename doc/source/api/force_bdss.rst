@@ -82,6 +82,14 @@ force_bdss.ids module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.local_traits module
+------------------------------
+
+.. automodule:: force_bdss.local_traits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 force_bdss.version module
 -------------------------
 

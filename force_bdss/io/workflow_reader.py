@@ -3,6 +3,7 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
+from force_bdss.core.input_slot_map import InputSlotMap
 from force_bdss.core.workflow import Workflow
 from ..bundle_registry_plugin import BundleRegistryPlugin
 
@@ -145,7 +146,11 @@ class WorkflowReader(HasStrictTraits):
         for ds_entry in wf_data["data_sources"]:
             ds_id = ds_entry["id"]
             ds_bundle = registry.data_source_bundle_by_id(ds_id)
-            data_sources.append(ds_bundle.create_model(ds_entry["model_data"]))
+            model_data = ds_entry["model_data"]
+            model_data["input_slot_maps"] = self._extract_input_slot_maps(
+                model_data["input_slot_maps"]
+            )
+            data_sources.append(ds_bundle.create_model(model_data))
 
         return data_sources
 
@@ -169,9 +174,14 @@ class WorkflowReader(HasStrictTraits):
         for kpic_entry in wf_data["kpi_calculators"]:
             kpic_id = kpic_entry["id"]
             kpic_bundle = registry.kpi_calculator_bundle_by_id(kpic_id)
+            model_data = kpic_entry["model_data"]
+            model_data["input_slot_maps"] = self._extract_input_slot_maps(
+                model_data["input_slot_maps"]
+            )
 
             kpi_calculators.append(
-                kpic_bundle.create_model(kpic_entry["model_data"]))
+                kpic_bundle.create_model(model_data)
+            )
 
         return kpi_calculators
 
@@ -198,3 +208,6 @@ class WorkflowReader(HasStrictTraits):
             parameters.append(model)
 
         return parameters
+
+    def _extract_input_slot_maps(self, maps_data):
+        return [InputSlotMap(**d) for d in maps_data]

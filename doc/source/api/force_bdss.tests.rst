@@ -43,6 +43,14 @@ force_bdss.tests.test_ids module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.tests.test_local_traits module
+-----------------------------------------
+
+.. automodule:: force_bdss.tests.test_local_traits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

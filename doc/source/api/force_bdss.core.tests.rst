@@ -12,6 +12,22 @@ force_bdss.core.tests.test_data_value module
     :undoc-members:
     :show-inheritance:
 
+force_bdss.core.tests.test_input_slot_map module
+------------------------------------------------
+
+.. automodule:: force_bdss.core.tests.test_input_slot_map
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.core.tests.test_slot module
+--------------------------------------
+
+.. automodule:: force_bdss.core.tests.test_slot
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

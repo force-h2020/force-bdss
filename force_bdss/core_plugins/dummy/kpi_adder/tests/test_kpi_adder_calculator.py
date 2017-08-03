@@ -26,3 +26,10 @@ class TestKPIAdderCalculator(unittest.TestCase):
         res = kpic.run(model, [dv1, dv2, dv3])
         self.assertEqual(res[0].type, "TOTAL_PRESSURE")
         self.assertEqual(res[0].value, 40)
+
+    def test_slots(self):
+        kpic = KPIAdderCalculator(mock.Mock(spec=BaseKPICalculatorBundle))
+        model = KPIAdderModel(mock.Mock(spec=BaseKPICalculatorBundle))
+        in_slot, out_slot = kpic.slots(model)
+        self.assertEqual(len(in_slot), 3)
+        self.assertEqual(len(out_slot), 1)
