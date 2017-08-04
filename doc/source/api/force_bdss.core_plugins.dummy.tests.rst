@@ -4,18 +4,18 @@ force_bdss.core_plugins.dummy.tests package
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.tests.data_source_bundle_test_mixin module
-------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin module
+-------------------------------------------------------------------------
 
-.. automodule:: force_bdss.core_plugins.dummy.tests.data_source_bundle_test_mixin
+.. automodule:: force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.tests.kpi_calculator_bundle_test_mixin module
----------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.tests.kpi_calculator_factory_test_mixin module
+----------------------------------------------------------------------------
 
-.. automodule:: force_bdss.core_plugins.dummy.tests.kpi_calculator_bundle_test_mixin
+.. automodule:: force_bdss.core_plugins.dummy.tests.kpi_calculator_factory_test_mixin
     :members:
     :undoc-members:
     :show-inheritance:

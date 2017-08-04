@@ -20,18 +20,18 @@ force_bdss.mco.base_mco module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.mco.base_mco_bundle module
--------------------------------------
-
-.. automodule:: force_bdss.mco.base_mco_bundle
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force_bdss.mco.base_mco_communicator module
 -------------------------------------------
 
 .. automodule:: force_bdss.mco.base_mco_communicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.mco.base_mco_factory module
+--------------------------------------
+
+.. automodule:: force_bdss.mco.base_mco_factory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -44,10 +44,10 @@ force_bdss.mco.base_mco_model module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.mco.i_mco_bundle module
-----------------------------------
+force_bdss.mco.i_mco_factory module
+-----------------------------------
 
-.. automodule:: force_bdss.mco.i_mco_bundle
+.. automodule:: force_bdss.mco.i_mco_factory
     :members:
     :undoc-members:
     :show-inheritance:

@@ -50,14 +50,6 @@ force_bdss.bdss_application module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.bundle_registry_plugin module
-----------------------------------------
-
-.. automodule:: force_bdss.bundle_registry_plugin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force_bdss.core_evaluation_driver module
 ----------------------------------------
 
@@ -70,6 +62,14 @@ force_bdss.core_mco_driver module
 ---------------------------------
 
 .. automodule:: force_bdss.core_mco_driver
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.factory_registry_plugin module
+-----------------------------------------
+
+.. automodule:: force_bdss.factory_registry_plugin
     :members:
     :undoc-members:
     :show-inheritance:

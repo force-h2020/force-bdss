@@ -12,10 +12,10 @@ force_bdss.data_sources.tests.test_base_data_source module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.data_sources.tests.test_base_data_source_bundle module
------------------------------------------------------------------
+force_bdss.data_sources.tests.test_base_data_source_factory module
+------------------------------------------------------------------
 
-.. automodule:: force_bdss.data_sources.tests.test_base_data_source_bundle
+.. automodule:: force_bdss.data_sources.tests.test_base_data_source_factory
     :members:
     :undoc-members:
     :show-inheritance:

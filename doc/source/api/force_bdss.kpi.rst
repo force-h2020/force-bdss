@@ -19,10 +19,10 @@ force_bdss.kpi.base_kpi_calculator module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.kpi.base_kpi_calculator_bundle module
-------------------------------------------------
+force_bdss.kpi.base_kpi_calculator_factory module
+-------------------------------------------------
 
-.. automodule:: force_bdss.kpi.base_kpi_calculator_bundle
+.. automodule:: force_bdss.kpi.base_kpi_calculator_factory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -35,10 +35,10 @@ force_bdss.kpi.base_kpi_calculator_model module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.kpi.i_kpi_calculator_bundle module
----------------------------------------------
+force_bdss.kpi.i_kpi_calculator_factory module
+----------------------------------------------
 
-.. automodule:: force_bdss.kpi.i_kpi_calculator_bundle
+.. automodule:: force_bdss.kpi.i_kpi_calculator_factory
     :members:
     :undoc-members:
     :show-inheritance:
