@@ -2,7 +2,7 @@ import six
 
 
 class ExtensionPointID:
-    """The envisage extension points ids for the bundles ExtensionPoints.
+    """The envisage extension points ids for the factorys ExtensionPoints.
     These are populated by the envisage plugins.
 
     The plugin developer generally does not have to handle these identifiers,
@@ -27,7 +27,7 @@ def factory_id(producer, identifier):
 
     Returns
     -------
-    str: an identifier to be used in the bundle.
+    str: an identifier to be used in the factory.
     """
     return _string_id(producer, "factory", identifier)
 
@@ -55,16 +55,16 @@ def _string_id(*args):
     Parameters
     ----------
     entity_namespace: str
-        A namespace for the entity we want to address (e.g. "bundle")
+        A namespace for the entity we want to address (e.g. "factory")
     producer: str
         the company or research institute unique identifier (e.g. "enthought")
     identifier: str
-        A unique identifier for the bundle. The producer has authority and
+        A unique identifier for the factory. The producer has authority and
         control over the uniqueness of this identifier.
 
     Returns
     -------
-    str: an identifier to be used in the bundle.
+    str: an identifier to be used in the factory.
     """
     def is_valid(entry):
         return (

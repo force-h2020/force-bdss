@@ -11,13 +11,13 @@ from .dummy_kpi_calculator.dummy_kpi_calculator_factory import (
 class DummyPlugin(BaseExtensionPlugin):
     id = plugin_id("enthought", "DummyPlugin")
 
-    def _data_source_bundles_default(self):
+    def _data_source_factories_default(self):
         return [DummyDataSourceFactory(self),
                 CSVExtractorFactory(self)]
 
-    def _mco_bundles_default(self):
+    def _mco_factories_default(self):
         return [DummyDakotaFactory(self)]
 
-    def _kpi_calculator_bundles_default(self):
+    def _kpi_calculator_factories_default(self):
         return [DummyKPICalculatorFactory(self),
                 KPIAdderFactory(self)]

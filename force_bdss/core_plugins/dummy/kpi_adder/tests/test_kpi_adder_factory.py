@@ -11,7 +11,7 @@ from force_bdss.core_plugins.dummy.tests.kpi_calculator_factory_test_mixin \
     KPICalculatorFactoryTestMixin
 
 
-class TestDummyKPICalculatorBundle(
+class TestDummyKPICalculatorFactory(
         KPICalculatorFactoryTestMixin, unittest.TestCase):
 
     @property

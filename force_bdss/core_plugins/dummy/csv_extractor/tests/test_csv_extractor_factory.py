@@ -1,7 +1,7 @@
 import unittest
 
-from force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin import \
-    DataSourceFactoryTestMixin
+from force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin \
+    import DataSourceFactoryTestMixin
 from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_factory import \
     CSVExtractorFactory
 from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_data_source \

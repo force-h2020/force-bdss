@@ -6,11 +6,12 @@ from force_bdss.core_plugins.dummy.dummy_data_source\
     .dummy_data_source_factory import DummyDataSourceFactory
 from force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model\
     import DummyDataSourceModel
-from force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin import \
-    DataSourceFactoryTestMixin
+from force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin \
+    import DataSourceFactoryTestMixin
 
 
-class TestDummyDataSourceBundle(DataSourceFactoryTestMixin, unittest.TestCase):
+class TestDummyDataSourceFactory(
+        DataSourceFactoryTestMixin, unittest.TestCase):
     @property
     def factory_class(self):
         return DummyDataSourceFactory

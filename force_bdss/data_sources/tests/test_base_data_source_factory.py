@@ -9,7 +9,7 @@ from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
 
 
-class DummyDataSourceBundle(BaseDataSourceFactory):
+class DummyDataSourceFactory(BaseDataSourceFactory):
     id = "foo"
 
     name = "bar"
@@ -21,8 +21,8 @@ class DummyDataSourceBundle(BaseDataSourceFactory):
         pass
 
 
-class TestBaseDataSourceBundle(unittest.TestCase):
+class TestBaseDataSourceFactory(unittest.TestCase):
     def test_initialization(self):
-        bundle = DummyDataSourceBundle(mock.Mock(spec=Plugin))
-        self.assertEqual(bundle.id, 'foo')
-        self.assertEqual(bundle.name, 'bar')
+        factory = DummyDataSourceFactory(mock.Mock(spec=Plugin))
+        self.assertEqual(factory.id, 'foo')
+        self.assertEqual(factory.name, 'bar')

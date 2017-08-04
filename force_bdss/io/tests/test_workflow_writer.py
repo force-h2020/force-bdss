@@ -33,7 +33,7 @@ class TestWorkflowWriter(unittest.TestCase):
         mock_mco_factory.create_model = mock.Mock(
             return_value=mock_mco_model
         )
-        self.mock_registry.mco_bundle_by_id = mock.Mock(
+        self.mock_registry.mco_factory_by_id = mock.Mock(
             return_value=mock_mco_factory)
 
     def test_write(self):

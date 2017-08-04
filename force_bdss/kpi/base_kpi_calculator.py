@@ -10,7 +10,7 @@ class BaseKPICalculator(ABCHasStrictTraits):
 
     Inherit this class for your KPI calculator.
     """
-    #: A reference to the bundle
+    #: A reference to the factory
     factory = Instance(IKPICalculatorFactory)
 
     def __init__(self, factory, *args, **kwargs):

@@ -5,14 +5,14 @@ from .i_data_source_factory import IDataSourceFactory
 
 
 class BaseDataSourceModel(ABCHasStrictTraits):
-    """Base class for the bundle specific DataSource models.
+    """Base class for the factory specific DataSource models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
 
-    In your bundle definition, your bundle-specific model must reimplement
+    In your factory definition, your factory-specific model must reimplement
     this class.
     """
-    #: A reference to the creating bundle, so that we can
+    #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
     factory = Instance(IDataSourceFactory, visible=False, transient=True)
 

@@ -15,15 +15,15 @@ from force_bdss.core_plugins.dummy.dummy_kpi_calculator \
 
 class TestDummyKPICalculator(unittest.TestCase):
     def test_run(self):
-        bundle = mock.Mock(spec=DummyKPICalculatorFactory)
-        kpic = DummyKPICalculator(bundle)
-        model = DummyKPICalculatorModel(bundle)
+        factory = mock.Mock(spec=DummyKPICalculatorFactory)
+        kpic = DummyKPICalculator(factory)
+        model = DummyKPICalculatorModel(factory)
         input_ = []
         output = kpic.run(model, [])
         self.assertEqual(input_, output)
 
     def test_slots(self):
-        bundle = mock.Mock(spec=DummyKPICalculatorFactory)
-        kpic = DummyKPICalculator(bundle)
-        model = DummyKPICalculatorModel(bundle)
+        factory = mock.Mock(spec=DummyKPICalculatorFactory)
+        kpic = DummyKPICalculator(factory)
+        model = DummyKPICalculatorModel(factory)
         self.assertEqual(kpic.slots(model), ((), ()))
