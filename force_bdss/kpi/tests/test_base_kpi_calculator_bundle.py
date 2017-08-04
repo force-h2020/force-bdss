@@ -6,11 +6,11 @@ try:
 except ImportError:
     from unittest import mock
 
-from force_bdss.kpi.base_kpi_calculator_bundle import \
-    BaseKPICalculatorBundle
+from force_bdss.kpi.base_kpi_calculator_factory import \
+    BaseKPICalculatorFactory
 
 
-class DummyKPICalculatorBundle(BaseKPICalculatorBundle):
+class DummyKPICalculatorBundle(BaseKPICalculatorFactory):
     id = "foo"
 
     name = "bar"

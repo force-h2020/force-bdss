@@ -5,7 +5,7 @@ from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.input_slot_map import InputSlotMap
 from force_bdss.core.workflow import Workflow
-from ..bundle_registry_plugin import BundleRegistryPlugin
+from ..factory_registry_plugin import FactoryRegistryPlugin
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 
@@ -23,9 +23,9 @@ class WorkflowReader(HasStrictTraits):
     """
     Reads the workflow from a file.
     """
-    #: The bundle registry. The reader needs it to create the
-    #: bundle-specific model objects.
-    bundle_registry = Instance(BundleRegistryPlugin)
+    #: The Factory registry. The reader needs it to create the
+    #: specific model objects.
+    factory_registry = Instance(FactoryRegistryPlugin)
 
     def __init__(self,
                  bundle_registry,
@@ -35,11 +35,11 @@ class WorkflowReader(HasStrictTraits):
 
         Parameters
         ----------
-        bundle_registry: BundleRegistryPlugin
+        bundle_registry: FactoryRegistryPlugin
             The bundle registry that provides lookup services
             for a bundle identified by a given id.
         """
-        self.bundle_registry = bundle_registry
+        self.factory_registry = bundle_registry
 
         super(WorkflowReader, self).__init__(*args, **kwargs)
 
@@ -105,11 +105,11 @@ class WorkflowReader(HasStrictTraits):
 
         Returns
         -------
-        a BaseMCOModel instance of the bundle-specific MCO driver, or None
+        a BaseMCOModel instance of the specific MCO driver, or None
         if no MCO is specified in the file (as in the case of premature
         saving).
         """
-        registry = self.bundle_registry
+        registry = self.factory_registry
 
         mco_data = wf_data.get("mco")
         if mco_data is None:
@@ -118,12 +118,12 @@ class WorkflowReader(HasStrictTraits):
             return None
 
         mco_id = mco_data["id"]
-        mco_bundle = registry.mco_bundle_by_id(mco_id)
+        mco_factory = registry.mco_bundle_by_id(mco_id)
         model_data = wf_data["mco"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id,
             model_data["parameters"])
-        model = mco_bundle.create_model(
+        model = mco_factory.create_model(
             wf_data["mco"]["model_data"])
         return model
 
@@ -138,19 +138,19 @@ class WorkflowReader(HasStrictTraits):
         Returns
         -------
         list of BaseDataSourceModel instances. Each BaseDataSourceModel is an
-        instance of the bundle specific model class. The list can be empty.
+        instance of the specific model class. The list can be empty.
         """
-        registry = self.bundle_registry
+        registry = self.factory_registry
 
         data_sources = []
         for ds_entry in wf_data["data_sources"]:
             ds_id = ds_entry["id"]
-            ds_bundle = registry.data_source_bundle_by_id(ds_id)
+            ds_factory = registry.data_source_bundle_by_id(ds_id)
             model_data = ds_entry["model_data"]
             model_data["input_slot_maps"] = self._extract_input_slot_maps(
                 model_data["input_slot_maps"]
             )
-            data_sources.append(ds_bundle.create_model(model_data))
+            data_sources.append(ds_factory.create_model(model_data))
 
         return data_sources
 
@@ -165,22 +165,22 @@ class WorkflowReader(HasStrictTraits):
         Returns
         -------
         list of BaseKPICalculatorModel instances. Each BaseKPICalculatorModel
-        is an instance of the bundle specific model class. The list can be
+        is an instance of the specific model class. The list can be
         empty.
         """
-        registry = self.bundle_registry
+        registry = self.factory_registry
 
         kpi_calculators = []
         for kpic_entry in wf_data["kpi_calculators"]:
             kpic_id = kpic_entry["id"]
-            kpic_bundle = registry.kpi_calculator_bundle_by_id(kpic_id)
+            kpic_factory = registry.kpi_calculator_bundle_by_id(kpic_id)
             model_data = kpic_entry["model_data"]
             model_data["input_slot_maps"] = self._extract_input_slot_maps(
                 model_data["input_slot_maps"]
             )
 
             kpi_calculators.append(
-                kpic_bundle.create_model(model_data)
+                kpic_factory.create_model(model_data)
             )
 
         return kpi_calculators
@@ -197,7 +197,7 @@ class WorkflowReader(HasStrictTraits):
         -------
         List of instances of a subclass of BaseMCOParameter
         """
-        registry = self.bundle_registry
+        registry = self.factory_registry
 
         parameters = []
 

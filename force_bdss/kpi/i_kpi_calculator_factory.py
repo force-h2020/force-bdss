@@ -1,12 +1,12 @@
-from envisage.api import Plugin
 from traits.api import Interface, String, Instance
+from envisage.plugin import Plugin
 
 
-class IDataSourceBundle(Interface):
-    """Envisage required interface for the BaseDataSourceBundle.
+class IKPICalculatorFactory(Interface):
+    """Envisage required interface for the BaseKPICalculatorFactory.
     You should not need to use this directly.
 
-    Refer to the BaseDataSourceBundle for documentation.
+    Refer to the BaseKPICalculatorFactory for documentation.
     """
     id = String()
 
@@ -14,7 +14,7 @@ class IDataSourceBundle(Interface):
 
     plugin = Instance(Plugin)
 
-    def create_data_source(self):
+    def create_kpi_calculator(self):
         """"""
 
     def create_model(self, model_data=None):

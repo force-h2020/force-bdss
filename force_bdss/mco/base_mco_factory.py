@@ -3,11 +3,11 @@ import abc
 from traits.api import ABCHasStrictTraits, String, provides, Instance
 from envisage.plugin import Plugin
 
-from .i_mco_bundle import IMCOBundle
+from .i_mco_factory import IMCOFactory
 
 
-@provides(IMCOBundle)
-class BaseMCOBundle(ABCHasStrictTraits):
+@provides(IMCOFactory)
+class BaseMCOFactory(ABCHasStrictTraits):
     """Base class for the MultiCriteria Optimizer bundle.
     """
     # NOTE: any changes to the interface of this class must be replicated
@@ -24,7 +24,7 @@ class BaseMCOBundle(ABCHasStrictTraits):
 
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
-        super(BaseMCOBundle, self).__init__(*args, **kwargs)
+        super(BaseMCOFactory, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
     def create_optimizer(self):

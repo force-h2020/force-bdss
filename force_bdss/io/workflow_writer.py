@@ -28,10 +28,10 @@ class WorkflowWriter(HasStrictTraits):
         workflow_data = {
             "mco": self._mco_data(workflow.mco),
             "kpi_calculators": [
-                self._bundle_model_data(kpic)
+                self._model_data(kpic)
                 for kpic in workflow.kpi_calculators],
             "data_sources": [
-                self._bundle_model_data(ds)
+                self._model_data(ds)
                 for ds in workflow.data_sources]
         }
 
@@ -43,7 +43,7 @@ class WorkflowWriter(HasStrictTraits):
         if mco is None:
             return None
 
-        data = self._bundle_model_data(mco)
+        data = self._model_data(mco)
 
         parameters_data = []
         for param in data["model_data"]["parameters"]:
@@ -57,11 +57,11 @@ class WorkflowWriter(HasStrictTraits):
         data["model_data"]["parameters"] = parameters_data
         return data
 
-    def _bundle_model_data(self, bundle_model):
+    def _model_data(self, model):
         """
-        Extracts the data from a bundle model and returns its dictionary
+        Extracts the data from an external model and returns its dictionary
         """
         return {
-            "id": bundle_model.bundle.id,
-            "model_data": bundle_model.__getstate__()
+            "id": model.factory.id,
+            "model_data": model.__getstate__()
         }

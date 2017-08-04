@@ -2,7 +2,7 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from .i_mco_bundle import IMCOBundle
+from .i_mco_factory import IMCOFactory
 
 
 class BaseMCO(ABCHasStrictTraits):
@@ -11,17 +11,17 @@ class BaseMCO(ABCHasStrictTraits):
     Inherit this class for your MCO implementation
     """
     #: A reference to the bundle
-    bundle = Instance(IMCOBundle)
+    factory = Instance(IMCOFactory)
 
-    def __init__(self, bundle, *args, **kwargs):
+    def __init__(self, factory, *args, **kwargs):
         """Initializes the MCO.
 
         Parameters
         ----------
-        bundle: BaseMCOBundle
+        factory: BaseMCOBundle
             The bundle this BaseMCO belongs to
         """
-        self.bundle = bundle
+        self.factory = factory
         super(BaseMCO, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod

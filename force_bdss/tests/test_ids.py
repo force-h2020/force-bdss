@@ -1,18 +1,18 @@
 import unittest
 
-from force_bdss.ids import bundle_id, plugin_id
+from force_bdss.ids import factory_id, plugin_id
 
 
 class TestIdGenerators(unittest.TestCase):
     def test_bundle_id(self):
-        self.assertEqual(bundle_id("foo", "bar"),
+        self.assertEqual(factory_id("foo", "bar"),
                          "force.bdss.foo.bundle.bar")
 
         for bad_entry in ["", None, "   ", "foo bar"]:
             with self.assertRaises(ValueError):
-                bundle_id(bad_entry, "bar")
+                factory_id(bad_entry, "bar")
             with self.assertRaises(ValueError):
-                bundle_id("foo", bad_entry)
+                factory_id("foo", bad_entry)
 
     def test_plugin_id(self):
         self.assertEqual(plugin_id("foo", "bar"), "force.bdss.foo.plugin.bar")

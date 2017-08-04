@@ -1,22 +1,22 @@
 import unittest
 
-from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_bundle import \
-    KPIAdderBundle
+from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_factory import \
+    KPIAdderFactory
 from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_calculator import \
     KPIAdderCalculator
 from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_model import \
     KPIAdderModel
-from force_bdss.core_plugins.dummy.tests.kpi_calculator_bundle_test_mixin \
+from force_bdss.core_plugins.dummy.tests.kpi_calculator_factory_test_mixin \
     import \
-    KPICalculatorBundleTestMixin
+    KPICalculatorFactoryTestMixin
 
 
 class TestDummyKPICalculatorBundle(
-        KPICalculatorBundleTestMixin, unittest.TestCase):
+        KPICalculatorFactoryTestMixin, unittest.TestCase):
 
     @property
-    def bundle_class(self):
-        return KPIAdderBundle
+    def factory_class(self):
+        return KPIAdderFactory
 
     @property
     def kpi_calculator_class(self):

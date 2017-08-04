@@ -9,8 +9,8 @@ except ImportError:
 
 from envisage.plugin import Plugin
 
-from force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle import (
-    DummyDakotaBundle)
+from force_bdss.core_plugins.dummy.dummy_dakota.dakota_factory import (
+    DummyDakotaFactory)
 
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
@@ -20,7 +20,7 @@ from force_bdss.core_plugins.dummy.dummy_dakota.parameters import \
 
 class TestDakotaCommunicator(unittest.TestCase):
     def test_receive_from_mco(self):
-        bundle = DummyDakotaBundle(mock.Mock(spec=Plugin))
+        bundle = DummyDakotaFactory(mock.Mock(spec=Plugin))
         mock_parameter_factory = mock.Mock(spec=BaseMCOParameterFactory)
         model = bundle.create_model()
         model.parameters = [
@@ -38,7 +38,7 @@ class TestDakotaCommunicator(unittest.TestCase):
             self.assertEqual(data[0].type, "")
 
     def test_send_to_mco(self):
-        bundle = DummyDakotaBundle(mock.Mock(spec=Plugin))
+        bundle = DummyDakotaFactory(mock.Mock(spec=Plugin))
         model = bundle.create_model()
         comm = bundle.create_communicator()
 

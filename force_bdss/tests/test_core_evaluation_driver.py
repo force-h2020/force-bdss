@@ -1,18 +1,18 @@
 import unittest
 from traits.api import Float, List
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source import BaseDataSource
-from force_bdss.data_sources.base_data_source_bundle import \
-    BaseDataSourceBundle
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-from force_bdss.ids import mco_parameter_id, bundle_id
+from force_bdss.ids import mco_parameter_id, factory_id
 from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
-from force_bdss.kpi.base_kpi_calculator_bundle import BaseKPICalculatorBundle
+from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
 from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 from force_bdss.mco.base_mco import BaseMCO
-from force_bdss.mco.base_mco_bundle import BaseMCOBundle
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
@@ -70,8 +70,8 @@ class OneDataValueMCOCommunicator(BaseMCOCommunicator):
         ]
 
 
-class NullMCOBundle(BaseMCOBundle):
-    id = bundle_id("enthought", "null_mco")
+class NullMCOFactory(BaseMCOFactory):
+    id = factory_id("enthought", "null_mco")
 
     def create_model(self, model_data=None):
         return NullMCOModel(self, **model_data)
@@ -114,8 +114,8 @@ class OneValueKPICalculator(BaseKPICalculator):
         return (), (Slot(), )
 
 
-class NullKPICalculatorBundle(BaseKPICalculatorBundle):
-    id = bundle_id("enthought", "null_kpic")
+class NullKPICalculatorFactory(BaseKPICalculatorFactory):
+    id = factory_id("enthought", "null_kpic")
     name = "null_kpic"
 
     def create_model(self, model_data=None):
@@ -159,8 +159,8 @@ class OneValueDataSource(BaseDataSource):
         )
 
 
-class NullDataSourceBundle(BaseDataSourceBundle):
-    id = bundle_id("enthought", "null_ds")
+class NullDataSourceBundle(BaseDataSourceFactory):
+    id = factory_id("enthought", "null_ds")
     name = "null_ds"
 
     def create_model(self, model_data=None):
@@ -170,18 +170,18 @@ class NullDataSourceBundle(BaseDataSourceBundle):
         return NullDataSource(self)
 
 
-class DummyBundleRegistryPlugin(BundleRegistryPlugin):
+class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
     mco_bundles = List()
     kpi_calculator_bundles = List()
     data_source_bundles = List()
 
 
-def mock_bundle_registry_plugin():
-    bundle_registry_plugin = DummyBundleRegistryPlugin()
+def mock_factory_registry_plugin():
+    bundle_registry_plugin = DummyFactoryRegistryPlugin()
     bundle_registry_plugin.mco_bundles = [
-        NullMCOBundle(bundle_registry_plugin)]
+        NullMCOFactory(bundle_registry_plugin)]
     bundle_registry_plugin.kpi_calculator_bundles = [
-        NullKPICalculatorBundle(bundle_registry_plugin)]
+        NullKPICalculatorFactory(bundle_registry_plugin)]
     bundle_registry_plugin.data_source_bundles = [
         NullDataSourceBundle(bundle_registry_plugin)]
     return bundle_registry_plugin
@@ -189,7 +189,7 @@ def mock_bundle_registry_plugin():
 
 class TestCoreEvaluationDriver(unittest.TestCase):
     def setUp(self):
-        self.mock_bundle_registry_plugin = mock_bundle_registry_plugin()
+        self.mock_bundle_registry_plugin = mock_factory_registry_plugin()
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
             return_value=self.mock_bundle_registry_plugin

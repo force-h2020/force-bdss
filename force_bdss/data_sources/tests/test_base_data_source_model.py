@@ -7,8 +7,8 @@ try:
 except ImportError:
     from unittest import mock
 
-from force_bdss.data_sources.base_data_source_bundle import \
-    BaseDataSourceBundle
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 
 
@@ -18,7 +18,7 @@ class DummyDataSourceModel(BaseDataSourceModel):
 
 class TestBaseDataSourceModel(unittest.TestCase):
     def test_getstate(self):
-        model = DummyDataSourceModel(mock.Mock(spec=BaseDataSourceBundle))
+        model = DummyDataSourceModel(mock.Mock(spec=BaseDataSourceFactory))
         self.assertEqual(
             model.__getstate__(),
             {

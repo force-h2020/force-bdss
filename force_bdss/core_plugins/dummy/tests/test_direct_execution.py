@@ -3,7 +3,7 @@ from traits.api import List
 
 from envisage.application import Application
 
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.cli.tests.test_execution import cd
 
 try:
@@ -16,7 +16,7 @@ from force_bdss.core_plugins.dummy.dummy_plugin import DummyPlugin
 from force_bdss.tests import fixtures
 
 
-class DummyBundleRegistryPlugin(BundleRegistryPlugin):
+class DummyBundleRegistryPlugin(FactoryRegistryPlugin):
     mco_bundles = List()
     kpi_calculator_bundles = List()
     data_source_bundles = List()

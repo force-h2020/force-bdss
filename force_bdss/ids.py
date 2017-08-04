@@ -14,7 +14,7 @@ class ExtensionPointID:
     KPI_CALCULATOR_BUNDLES = 'force.bdss.kpi_calculator.bundles'
 
 
-def bundle_id(producer, identifier):
+def factory_id(producer, identifier):
     """Creates an id for the bundle.
 
     Parameters

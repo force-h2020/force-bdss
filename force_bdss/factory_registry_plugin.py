@@ -3,18 +3,18 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
-from .data_sources.i_data_source_bundle import (
-    IDataSourceBundle)
-from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_mco_bundle import (
-    IMCOBundle
+from .data_sources.i_data_source_factory import (
+    IDataSourceFactory)
+from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
+from .mco.i_mco_factory import (
+    IMCOFactory
 )
 
 
 BUNDLE_REGISTRY_PLUGIN_ID = "force.bdss.plugins.bundle_registry"
 
 
-class BundleRegistryPlugin(Plugin):
+class FactoryRegistryPlugin(Plugin):
     """Main plugin that handles the execution of the MCO
     or the evaluation.
     """
@@ -28,19 +28,19 @@ class BundleRegistryPlugin(Plugin):
     #: A List of the available Multi Criteria Optimizers.
     #: This will be populated by MCO plugins.
     mco_bundles = ExtensionPoint(
-        List(IMCOBundle),
+        List(IMCOFactory),
         id=ExtensionPointID.MCO_BUNDLES)
 
     #: A list of the available Data Sources.
     #: It will be populated by plugins.
     data_source_bundles = ExtensionPoint(
-        List(IDataSourceBundle),
+        List(IDataSourceFactory),
         id=ExtensionPointID.DATA_SOURCE_BUNDLES)
 
     #: A list of the available Key Performance Indicator calculators.
     #: It will be populated by plugins.
     kpi_calculator_bundles = ExtensionPoint(
-        List(IKPICalculatorBundle),
+        List(IKPICalculatorFactory),
         id=ExtensionPointID.KPI_CALCULATOR_BUNDLES)
 
     def data_source_bundle_by_id(self, id):

@@ -5,11 +5,11 @@ except ImportError:
     from unittest import mock
 
 from envisage.plugin import Plugin
-from force_bdss.data_sources.base_data_source_bundle import \
-    BaseDataSourceBundle
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
 
 
-class DummyDataSourceBundle(BaseDataSourceBundle):
+class DummyDataSourceBundle(BaseDataSourceFactory):
     id = "foo"
 
     name = "bar"

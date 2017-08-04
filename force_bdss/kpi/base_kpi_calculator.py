@@ -2,7 +2,7 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from .i_kpi_calculator_bundle import IKPICalculatorBundle
+from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
 class BaseKPICalculator(ABCHasStrictTraits):
@@ -11,10 +11,10 @@ class BaseKPICalculator(ABCHasStrictTraits):
     Inherit this class for your KPI calculator.
     """
     #: A reference to the bundle
-    bundle = Instance(IKPICalculatorBundle)
+    factory = Instance(IKPICalculatorFactory)
 
-    def __init__(self, bundle, *args, **kwargs):
-        self.bundle = bundle
+    def __init__(self, factory, *args, **kwargs):
+        self.factory = factory
         super(BaseKPICalculator, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod

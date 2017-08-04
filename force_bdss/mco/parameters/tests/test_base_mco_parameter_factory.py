@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.mco.base_mco_bundle import BaseMCOBundle
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 try:
     import mock
@@ -27,7 +27,7 @@ class DummyMCOParameterFactory(BaseMCOParameterFactory):
 
 class TestBaseMCOParameterFactory(unittest.TestCase):
     def test_initialization(self):
-        factory = DummyMCOParameterFactory(mock.Mock(spec=BaseMCOBundle))
+        factory = DummyMCOParameterFactory(mock.Mock(spec=BaseMCOFactory))
         model = factory.create_model({"x": 42})
         self.assertIsInstance(model, DummyMCOParameter)
         self.assertEqual(model.x, 42)

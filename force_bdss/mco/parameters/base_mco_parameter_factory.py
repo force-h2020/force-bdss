@@ -1,6 +1,6 @@
 from traits.api import HasStrictTraits, String, Type, Instance
 
-from ..base_mco_bundle import BaseMCOBundle
+from ..base_mco_factory import BaseMCOFactory
 
 
 class BaseMCOParameterFactory(HasStrictTraits):
@@ -13,7 +13,7 @@ class BaseMCOParameterFactory(HasStrictTraits):
     """
 
     #: A reference to the bundle this parameter factory lives in.
-    bundle = Instance(BaseMCOBundle)
+    bundle = Instance(BaseMCOFactory)
 
     #: A unique string identifying the parameter
     id = String()

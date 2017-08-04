@@ -1,7 +1,7 @@
 import unittest
 
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
-from force_bdss.mco.i_mco_bundle import IMCOBundle
+from force_bdss.mco.i_mco_factory import IMCOFactory
 
 try:
     import mock
@@ -19,7 +19,7 @@ class DummyMCOCommunicator(BaseMCOCommunicator):
 
 class TestBaseMCOCommunicator(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IMCOBundle)
+        bundle = mock.Mock(spec=IMCOFactory)
         mcocomm = DummyMCOCommunicator(bundle)
 
         self.assertEqual(mcocomm.bundle, bundle)

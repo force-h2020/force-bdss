@@ -2,8 +2,8 @@ from envisage.plugin import Plugin
 from traits.trait_types import Instance
 
 from .core.workflow import Workflow
-from .bundle_registry_plugin import (
-    BundleRegistryPlugin,
+from .factory_registry_plugin import (
+    FactoryRegistryPlugin,
     BUNDLE_REGISTRY_PLUGIN_ID
 )
 from .io.workflow_reader import WorkflowReader
@@ -15,7 +15,7 @@ class BaseCoreDriver(Plugin):
     """
 
     #: The registry of the bundles.
-    bundle_registry = Instance(BundleRegistryPlugin)
+    bundle_registry = Instance(FactoryRegistryPlugin)
 
     #: Deserialized content of the workflow file.
     workflow = Instance(Workflow)

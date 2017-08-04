@@ -3,17 +3,17 @@ import unittest
 from force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source import \
     DummyDataSource
 from force_bdss.core_plugins.dummy.dummy_data_source\
-    .dummy_data_source_bundle import DummyDataSourceBundle
+    .dummy_data_source_factory import DummyDataSourceFactory
 from force_bdss.core_plugins.dummy.dummy_data_source.dummy_data_source_model\
     import DummyDataSourceModel
-from force_bdss.core_plugins.dummy.tests.data_source_bundle_test_mixin import \
-    DataSourceBundleTestMixin
+from force_bdss.core_plugins.dummy.tests.data_source_factory_test_mixin import \
+    DataSourceFactoryTestMixin
 
 
-class TestDummyDataSourceBundle(DataSourceBundleTestMixin, unittest.TestCase):
+class TestDummyDataSourceBundle(DataSourceFactoryTestMixin, unittest.TestCase):
     @property
-    def bundle_class(self):
-        return DummyDataSourceBundle
+    def factory_class(self):
+        return DummyDataSourceFactory
 
     @property
     def model_class(self):

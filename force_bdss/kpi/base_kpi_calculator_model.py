@@ -1,7 +1,7 @@
 from traits.api import ABCHasStrictTraits, Instance, List, String
 
 from ..core.input_slot_map import InputSlotMap
-from .i_kpi_calculator_bundle import IKPICalculatorBundle
+from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
 class BaseKPICalculatorModel(ABCHasStrictTraits):
@@ -14,7 +14,7 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     """
     #: A reference to the creating bundle, so that we can
     #: retrieve it as the originating factory.
-    bundle = Instance(IKPICalculatorBundle, visible=False, transient=True)
+    factory = Instance(IKPICalculatorFactory, visible=False, transient=True)
 
     #: Specifies binding between input slots and source for that value.
     #: Each InputSlotMap instance specifies this information for each of the
@@ -26,7 +26,7 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     output_slot_names = List(String())
 
     def __init__(self, bundle, *args, **kwargs):
-        self.bundle = bundle
+        self.factory = bundle
         super(BaseKPICalculatorModel, self).__init__(*args, **kwargs)
 
     def __getstate__(self):

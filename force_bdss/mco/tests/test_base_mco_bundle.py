@@ -7,10 +7,10 @@ except ImportError:
 
 from envisage.plugin import Plugin
 
-from force_bdss.mco.base_mco_bundle import BaseMCOBundle
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 
-class DummyMCOBundle(BaseMCOBundle):
+class DummyMCOBundle(BaseMCOFactory):
     id = "foo"
 
     name = "bar"

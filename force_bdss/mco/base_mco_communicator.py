@@ -2,7 +2,7 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from .i_mco_bundle import IMCOBundle
+from .i_mco_factory import IMCOFactory
 
 
 class BaseMCOCommunicator(ABCHasStrictTraits):
@@ -17,7 +17,7 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
     again specified by the MCO.
     """
     #: A reference to the bundle
-    bundle = Instance(IMCOBundle)
+    bundle = Instance(IMCOFactory)
 
     def __init__(self, bundle):
         self.bundle = bundle

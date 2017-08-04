@@ -1,7 +1,7 @@
 from traits.api import ABCHasStrictTraits, Instance
 import abc
 
-from ..data_sources.i_data_source_bundle import IDataSourceBundle
+from ..data_sources.i_data_source_factory import IDataSourceFactory
 
 
 class BaseDataSource(ABCHasStrictTraits):
@@ -11,10 +11,10 @@ class BaseDataSource(ABCHasStrictTraits):
     Inherit from this class for your specific DataSource.
     """
     #: A reference to the bundle
-    bundle = Instance(IDataSourceBundle)
+    factory = Instance(IDataSourceFactory)
 
-    def __init__(self, bundle, *args, **kwargs):
-        self.bundle = bundle
+    def __init__(self, factory, *args, **kwargs):
+        self.factory = factory
         super(BaseDataSource, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod

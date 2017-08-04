@@ -1,5 +1,5 @@
 from traits.api import String
-from force_bdss.api import bundle_id, BaseMCOBundle
+from force_bdss.api import factory_id, BaseMCOFactory
 from force_bdss.core_plugins.dummy.dummy_dakota.parameters import \
     RangedMCOParameterFactory
 
@@ -8,8 +8,8 @@ from .dakota_model import DummyDakotaModel
 from .dakota_optimizer import DummyDakotaOptimizer
 
 
-class DummyDakotaBundle(BaseMCOBundle):
-    id = String(bundle_id("enthought", "dummy_dakota"))
+class DummyDakotaFactory(BaseMCOFactory):
+    id = String(factory_id("enthought", "dummy_dakota"))
 
     name = "Dummy Dakota"
 

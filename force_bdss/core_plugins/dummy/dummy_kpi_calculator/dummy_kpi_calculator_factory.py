@@ -1,11 +1,11 @@
 from traits.api import String
-from force_bdss.api import bundle_id, BaseKPICalculatorBundle
+from force_bdss.api import factory_id, BaseKPICalculatorFactory
 from .dummy_kpi_calculator import DummyKPICalculator
 from .dummy_kpi_calculator_model import DummyKPICalculatorModel
 
 
-class DummyKPICalculatorBundle(BaseKPICalculatorBundle):
-    id = String(bundle_id("enthought", "dummy_kpi_calculator"))
+class DummyKPICalculatorFactory(BaseKPICalculatorFactory):
+    id = String(factory_id("enthought", "dummy_kpi_calculator"))
 
     name = String("Dummy KPI")
 

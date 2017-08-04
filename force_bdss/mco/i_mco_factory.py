@@ -2,7 +2,7 @@ from traits.api import Interface, String, Instance
 from envisage.plugin import Plugin
 
 
-class IMCOBundle(Interface):
+class IMCOFactory(Interface):
     """Interface for the BaseMCOBundle.
     You should not need it, as its main use is for envisage support.
 
