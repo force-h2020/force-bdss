@@ -2,25 +2,25 @@ import abc
 from envisage.plugin import Plugin
 from traits.api import ABCHasStrictTraits, provides, String, Instance
 
-from .i_kpi_calculator_bundle import IKPICalculatorBundle
+from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
-@provides(IKPICalculatorBundle)
-class BaseKPICalculatorBundle(ABCHasStrictTraits):
-    """Base class for the Key Performance Indicator calculator bundles.
-    Inherit from this class to create a bundle, and reimplement the abstract
+@provides(IKPICalculatorFactory)
+class BaseKPICalculatorFactory(ABCHasStrictTraits):
+    """Base class for the Key Performance Indicator calculator factories.
+    Inherit from this class to create a factory, and reimplement the abstract
     methods.
     """
     # NOTE: any changes in this interface must be ported to
-    # IKPICalculatorBundle
+    # IKPICalculatorFactory
 
-    #: A unique ID generated with bundle_id() routine
+    #: A unique ID generated with factory_id() routine
     id = String()
 
-    #: A UI friendly name for the bundle. Can contain spaces.
+    #: A UI friendly name for the factory. Can contain spaces.
     name = String()
 
-    #: A reference to the plugin that holds this bundle.
+    #: A reference to the plugin that holds this factory.
     plugin = Instance(Plugin)
 
     def __init__(self, plugin, *args, **kwargs):
@@ -29,10 +29,10 @@ class BaseKPICalculatorBundle(ABCHasStrictTraits):
         Parameters
         ----------
         plugin: Plugin
-            The plugin that holds this bundle.
+            The plugin that holds this factory.
         """
         self.plugin = plugin
-        super(BaseKPICalculatorBundle, self).__init__(*args, **kwargs)
+        super(BaseKPICalculatorFactory, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
     def create_kpi_calculator(self):

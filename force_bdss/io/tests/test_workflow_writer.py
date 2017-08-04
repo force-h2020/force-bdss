@@ -3,7 +3,7 @@ import unittest
 
 from six import StringIO
 
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
@@ -14,27 +14,27 @@ try:
 except ImportError:
     from unittest import mock
 
-from force_bdss.ids import bundle_id, mco_parameter_id
+from force_bdss.ids import factory_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.i_mco_bundle import IMCOBundle
+from force_bdss.mco.i_mco_factory import IMCOFactory
 from force_bdss.core.workflow import Workflow
 
 
 class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
-        self.mock_registry = mock.Mock(spec=BundleRegistryPlugin)
-        mock_mco_bundle = mock.Mock(spec=IMCOBundle,
-                                    id=bundle_id("enthought", "mock"))
+        self.mock_registry = mock.Mock(spec=FactoryRegistryPlugin)
+        mock_mco_factory = mock.Mock(spec=IMCOFactory,
+                                     id=factory_id("enthought", "mock"))
         mock_mco_model = mock.Mock(
             spec=BaseMCOModel,
-            bundle=mock_mco_bundle
+            factory=mock_mco_factory
         )
-        mock_mco_bundle.create_model = mock.Mock(
+        mock_mco_factory.create_model = mock.Mock(
             return_value=mock_mco_model
         )
-        self.mock_registry.mco_bundle_by_id = mock.Mock(
-            return_value=mock_mco_bundle)
+        self.mock_registry.mco_factory_by_id = mock.Mock(
+            return_value=mock_mco_factory)
 
     def test_write(self):
         wfwriter = WorkflowWriter()
@@ -57,15 +57,15 @@ class TestWorkflowWriter(unittest.TestCase):
         fp.seek(0)
         wfreader = WorkflowReader(self.mock_registry)
         wf_result = wfreader.read(fp)
-        self.assertEqual(wf_result.mco.bundle.id,
-                         wf.mco.bundle.id)
+        self.assertEqual(wf_result.mco.factory.id,
+                         wf.mco.factory.id)
 
     def _create_mock_workflow(self):
         wf = Workflow()
         wf.mco = BaseMCOModel(
             mock.Mock(
-                spec=IMCOBundle,
-                id=bundle_id("enthought", "mock")))
+                spec=IMCOFactory,
+                id=factory_id("enthought", "mock")))
         wf.mco.parameters = [
             BaseMCOParameter(
                 factory=mock.Mock(

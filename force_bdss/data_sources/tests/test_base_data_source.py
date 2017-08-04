@@ -1,7 +1,7 @@
 import unittest
 
 from force_bdss.data_sources.base_data_source import BaseDataSource
-from force_bdss.data_sources.i_data_source_bundle import IDataSourceBundle
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
 try:
     import mock
@@ -19,7 +19,7 @@ class DummyDataSource(BaseDataSource):
 
 class TestBaseDataSource(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IDataSourceBundle)
-        ds = DummyDataSource(bundle)
+        factory = mock.Mock(spec=IDataSourceFactory)
+        ds = DummyDataSource(factory)
 
-        self.assertEqual(ds.bundle, bundle)
+        self.assertEqual(ds.factory, factory)

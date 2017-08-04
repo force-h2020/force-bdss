@@ -1,13 +1,13 @@
 from traits.api import String
 
-from force_bdss.api import bundle_id, BaseDataSourceBundle
+from force_bdss.api import factory_id, BaseDataSourceFactory
 
 from .csv_extractor_model import CSVExtractorModel
 from .csv_extractor_data_source import CSVExtractorDataSource
 
 
-class CSVExtractorBundle(BaseDataSourceBundle):
-    id = String(bundle_id("enthought", "csv_extractor"))
+class CSVExtractorFactory(BaseDataSourceFactory):
+    id = String(factory_id("enthought", "csv_extractor"))
 
     name = String("CSV Extractor")
 

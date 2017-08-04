@@ -12,10 +12,10 @@ force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source mod
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_bundle module
-------------------------------------------------------------------------------------------
+force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_factory module
+-------------------------------------------------------------------------------------------
 
-.. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_bundle
+.. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_factory
     :members:
     :undoc-members:
     :show-inheritance:

@@ -7,7 +7,7 @@ from force_bdss.core_plugins.dummy.dummy_dakota.parameters import (
 from force_bdss.core_plugins.dummy.dummy_dakota.dakota_model import (
     DummyDakotaModel
 )
-from force_bdss.mco.base_mco_bundle import BaseMCOBundle
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 try:
     import mock
@@ -20,18 +20,18 @@ from force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer import \
 
 class TestDakotaOptimizer(unittest.TestCase):
     def setUp(self):
-        self.bundle = mock.Mock(spec=BaseMCOBundle)
-        self.bundle.plugin = mock.Mock()
-        self.bundle.plugin.application = mock.Mock()
-        self.bundle.plugin.application.workflow_filepath = "whatever"
+        self.factory = mock.Mock(spec=BaseMCOFactory)
+        self.factory.plugin = mock.Mock()
+        self.factory.plugin.application = mock.Mock()
+        self.factory.plugin.application.workflow_filepath = "whatever"
 
     def test_initialization(self):
-        opt = DummyDakotaOptimizer(self.bundle)
-        self.assertEqual(opt.bundle, self.bundle)
+        opt = DummyDakotaOptimizer(self.factory)
+        self.assertEqual(opt.factory, self.factory)
 
     def test_run(self):
-        opt = DummyDakotaOptimizer(self.bundle)
-        model = DummyDakotaModel(self.bundle)
+        opt = DummyDakotaOptimizer(self.factory)
+        model = DummyDakotaModel(self.factory)
         model.parameters = [
             RangedMCOParameter(
                 mock.Mock(spec=RangedMCOParameterFactory),

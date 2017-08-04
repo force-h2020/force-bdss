@@ -1,7 +1,7 @@
 import unittest
 
 from force_bdss.mco.base_mco import BaseMCO
-from force_bdss.mco.i_mco_bundle import IMCOBundle
+from force_bdss.mco.i_mco_factory import IMCOFactory
 
 try:
     import mock
@@ -16,7 +16,7 @@ class DummyMCO(BaseMCO):
 
 class TestBaseMultiCriteriaOptimizer(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IMCOBundle)
-        mco = DummyMCO(bundle)
+        factory = mock.Mock(spec=IMCOFactory)
+        mco = DummyMCO(factory)
 
-        self.assertEqual(mco.bundle, bundle)
+        self.assertEqual(mco.factory, factory)

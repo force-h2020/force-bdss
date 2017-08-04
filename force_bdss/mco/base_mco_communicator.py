@@ -2,7 +2,7 @@ import abc
 
 from traits.api import ABCHasStrictTraits, Instance
 
-from .i_mco_bundle import IMCOBundle
+from .i_mco_factory import IMCOFactory
 
 
 class BaseMCOCommunicator(ABCHasStrictTraits):
@@ -16,11 +16,11 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
     that we interpret as KPIs. These KPIs are encoded in some form, which is
     again specified by the MCO.
     """
-    #: A reference to the bundle
-    bundle = Instance(IMCOBundle)
+    #: A reference to the factory
+    factory = Instance(IMCOFactory)
 
-    def __init__(self, bundle):
-        self.bundle = bundle
+    def __init__(self, factory):
+        self.factory = factory
 
     @abc.abstractmethod
     def receive_from_mco(self, model):

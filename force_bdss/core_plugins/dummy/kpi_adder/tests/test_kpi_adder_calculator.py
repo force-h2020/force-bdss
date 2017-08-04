@@ -3,7 +3,7 @@ import unittest
 from force_bdss.core.data_value import DataValue
 from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_model import \
     KPIAdderModel
-from force_bdss.kpi.base_kpi_calculator_bundle import BaseKPICalculatorBundle
+from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
 
 try:
     import mock
@@ -16,8 +16,8 @@ from force_bdss.core_plugins.dummy.kpi_adder.kpi_adder_calculator import \
 
 class TestKPIAdderCalculator(unittest.TestCase):
     def test_basic_functionality(self):
-        kpic = KPIAdderCalculator(mock.Mock(spec=BaseKPICalculatorBundle))
-        model = KPIAdderModel(mock.Mock(spec=BaseKPICalculatorBundle))
+        kpic = KPIAdderCalculator(mock.Mock(spec=BaseKPICalculatorFactory))
+        model = KPIAdderModel(mock.Mock(spec=BaseKPICalculatorFactory))
         model.cuba_type_in = "PRESSURE"
         model.cuba_type_out = "TOTAL_PRESSURE"
         dv1 = DataValue(type="PRESSURE", value=10)
@@ -28,8 +28,8 @@ class TestKPIAdderCalculator(unittest.TestCase):
         self.assertEqual(res[0].value, 40)
 
     def test_slots(self):
-        kpic = KPIAdderCalculator(mock.Mock(spec=BaseKPICalculatorBundle))
-        model = KPIAdderModel(mock.Mock(spec=BaseKPICalculatorBundle))
+        kpic = KPIAdderCalculator(mock.Mock(spec=BaseKPICalculatorFactory))
+        model = KPIAdderModel(mock.Mock(spec=BaseKPICalculatorFactory))
         in_slot, out_slot = kpic.slots(model)
         self.assertEqual(len(in_slot), 3)
         self.assertEqual(len(out_slot), 1)

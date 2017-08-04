@@ -3,22 +3,22 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
-from .data_sources.i_data_source_bundle import (
-    IDataSourceBundle)
-from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_mco_bundle import (
-    IMCOBundle
+from .data_sources.i_data_source_factory import (
+    IDataSourceFactory)
+from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
+from .mco.i_mco_factory import (
+    IMCOFactory
 )
 
 
-BUNDLE_REGISTRY_PLUGIN_ID = "force.bdss.plugins.bundle_registry"
+FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
 
 
-class BundleRegistryPlugin(Plugin):
+class FactoryRegistryPlugin(Plugin):
     """Main plugin that handles the execution of the MCO
     or the evaluation.
     """
-    id = BUNDLE_REGISTRY_PLUGIN_ID
+    id = FACTORY_REGISTRY_PLUGIN_ID
 
     # Note: we are forced to declare these extensions points here instead
     # of the application object, and this is why we have to use this plugin.
@@ -27,37 +27,37 @@ class BundleRegistryPlugin(Plugin):
 
     #: A List of the available Multi Criteria Optimizers.
     #: This will be populated by MCO plugins.
-    mco_bundles = ExtensionPoint(
-        List(IMCOBundle),
-        id=ExtensionPointID.MCO_BUNDLES)
+    mco_factories = ExtensionPoint(
+        List(IMCOFactory),
+        id=ExtensionPointID.MCO_FACTORIES)
 
     #: A list of the available Data Sources.
     #: It will be populated by plugins.
-    data_source_bundles = ExtensionPoint(
-        List(IDataSourceBundle),
-        id=ExtensionPointID.DATA_SOURCE_BUNDLES)
+    data_source_factories = ExtensionPoint(
+        List(IDataSourceFactory),
+        id=ExtensionPointID.DATA_SOURCE_FACTORIES)
 
     #: A list of the available Key Performance Indicator calculators.
     #: It will be populated by plugins.
-    kpi_calculator_bundles = ExtensionPoint(
-        List(IKPICalculatorBundle),
-        id=ExtensionPointID.KPI_CALCULATOR_BUNDLES)
+    kpi_calculator_factories = ExtensionPoint(
+        List(IKPICalculatorFactory),
+        id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
 
-    def data_source_bundle_by_id(self, id):
-        """Finds a given data source bundle by means of its id.
-        The ID is as obtained by the function bundle_id() in the
+    def data_source_factory_by_id(self, id):
+        """Finds a given data source factory by means of its id.
+        The ID is as obtained by the function factory_id() in the
         plugin api.
 
         Parameters
         ----------
         id: str
-            The identifier returned by the bundle_id() function.
+            The identifier returned by the factory_id() function.
 
         Raises
         ------
         KeyError: if the entry is not found.
         """
-        for ds in self.data_source_bundles:
+        for ds in self.data_source_factories:
             if ds.id == id:
                 return ds
 
@@ -65,21 +65,21 @@ class BundleRegistryPlugin(Plugin):
             "Requested data source {} but don't know how "
             "to find it.".format(id))
 
-    def kpi_calculator_bundle_by_id(self, id):
-        """Finds a given kpi bundle by means of its id.
-        The ID is as obtained by the function bundle_id() in the
+    def kpi_calculator_factory_by_id(self, id):
+        """Finds a given kpi factory by means of its id.
+        The ID is as obtained by the function factory_id() in the
         plugin api.
 
         Parameters
         ----------
         id: str
-            The identifier returned by the bundle_id() function.
+            The identifier returned by the factory_id() function.
 
         Raises
         ------
         KeyError: if the entry is not found.
         """
-        for kpic in self.kpi_calculator_bundles:
+        for kpic in self.kpi_calculator_factories:
             if kpic.id == id:
                 return kpic
 
@@ -87,21 +87,21 @@ class BundleRegistryPlugin(Plugin):
             "Requested kpi calculator {} but don't know how "
             "to find it.".format(id))
 
-    def mco_bundle_by_id(self, id):
-        """Finds a given Multi Criteria Optimizer (MCO) bundle by means of
-        its id. The ID is as obtained by the function bundle_id() in the
+    def mco_factory_by_id(self, id):
+        """Finds a given Multi Criteria Optimizer (MCO) factory by means of
+        its id. The ID is as obtained by the function factory_id() in the
         plugin api.
 
         Parameters
         ----------
         id: str
-            The identifier returned by the bundle_id() function.
+            The identifier returned by the factory_id() function.
 
         Raises
         ------
         KeyError: if the entry is not found.
         """
-        for mco in self.mco_bundles:
+        for mco in self.mco_factories:
             if mco.id == id:
                 return mco
 
@@ -128,9 +128,9 @@ class BundleRegistryPlugin(Plugin):
         KeyError:
             if the entry is not found
         """
-        mco_bundle = self.mco_bundle_by_id(mco_id)
+        mco_factory = self.mco_factory_by_id(mco_id)
 
-        for factory in mco_bundle.parameter_factories():
+        for factory in mco_factory.parameter_factories():
             if factory.id == parameter_id:
                 return factory
 

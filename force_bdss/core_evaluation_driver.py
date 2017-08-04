@@ -30,8 +30,8 @@ class CoreEvaluationDriver(BaseCoreDriver):
             sys.exit(1)
 
         mco_model = workflow.mco
-        mco_bundle = mco_model.bundle
-        mco_communicator = mco_bundle.create_communicator()
+        mco_factory = mco_model.factory
+        mco_communicator = mco_factory.create_communicator()
 
         mco_data_values = self._get_data_values_from_mco(mco_model,
                                                          mco_communicator)
@@ -54,8 +54,8 @@ class CoreEvaluationDriver(BaseCoreDriver):
         ds_results = []
 
         for ds_model in workflow.data_sources:
-            ds_bundle = ds_model.bundle
-            data_source = ds_bundle.create_data_source()
+            ds_factory = ds_model.factory
+            data_source = ds_factory.create_data_source()
 
             # Get the slots for this data source. These must be matched to
             # the appropriate values in the environment data values.
@@ -76,7 +76,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
 
             # execute data source, passing only relevant data values.
             logging.info("Evaluating for Data Source {}".format(
-                ds_bundle.name))
+                ds_factory.name))
             res = data_source.run(ds_model, passed_data_values)
 
             if len(res) != len(out_slots):
@@ -85,7 +85,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
                     " by the DataSource '{}' does not match the number"
                     " of output slots it specifies ({} values)."
                     " This is likely a DataSource plugin error.").format(
-                    len(res), ds_bundle.name, len(out_slots)
+                    len(res), ds_factory.name, len(out_slots)
                 )
 
                 logging.error(error_txt)
@@ -99,7 +99,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
                     " This is either a DataSource plugin error or a file"
                     " error.").format(
                     len(res),
-                    ds_bundle.name,
+                    ds_factory.name,
                     len(ds_model.output_slot_names)
                 )
 
@@ -125,8 +125,8 @@ class CoreEvaluationDriver(BaseCoreDriver):
         kpi_results = []
 
         for kpic_model in workflow.kpi_calculators:
-            kpic_bundle = kpic_model.bundle
-            kpi_calculator = kpic_bundle.create_kpi_calculator()
+            kpic_factory = kpic_model.factory
+            kpi_calculator = kpic_factory.create_kpi_calculator()
 
             in_slots, out_slots = kpi_calculator.slots(kpic_model)
 
@@ -136,7 +136,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
                 in_slots)
 
             logging.info("Evaluating for KPICalculator {}".format(
-                kpic_bundle.name))
+                kpic_factory.name))
 
             res = kpi_calculator.run(kpic_model, passed_data_values)
 
@@ -146,7 +146,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
                     " the KPICalculator '{}' does not match the"
                     " number of output slots ({} values). This is"
                     " likely a KPICalculator plugin error."
-                ).format(len(res), kpic_bundle.name, len(out_slots))
+                ).format(len(res), kpic_factory.name, len(out_slots))
                 logging.error(error_txt)
                 raise RuntimeError(error_txt)
 
@@ -157,7 +157,7 @@ class CoreEvaluationDriver(BaseCoreDriver):
                     " number of user-defined names specified ({} values)."
                     " This is either an input file error or a plugin"
                     " error."
-                ).format(len(res), kpic_bundle.name,
+                ).format(len(res), kpic_factory.name,
                          len(kpic_model.output_slot_names))
                 logging.error(error_txt)
                 raise RuntimeError(error_txt)

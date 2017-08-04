@@ -11,18 +11,18 @@ Subpackages
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle module
----------------------------------------------------------------
-
-.. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_bundle
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator module
 ---------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.core_plugins.dummy.dummy_dakota.dakota_factory module
+----------------------------------------------------------------
+
+.. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_factory
     :members:
     :undoc-members:
     :show-inheritance:

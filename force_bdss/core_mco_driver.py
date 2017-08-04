@@ -29,6 +29,6 @@ class CoreMCODriver(BaseCoreDriver):
             sys.exit(1)
 
         mco_model = workflow.mco
-        mco_bundle = mco_model.bundle
-        mco = mco_bundle.create_optimizer()
+        mco_factory = mco_model.factory
+        mco = mco_factory.create_optimizer()
         mco.run(mco_model)
