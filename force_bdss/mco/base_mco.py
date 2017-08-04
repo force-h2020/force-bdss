@@ -1,6 +1,6 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance
+from traits.api import ABCHasStrictTraits, Instance, Event
 
 from .i_mco_bundle import IMCOBundle
 
@@ -12,6 +12,12 @@ class BaseMCO(ABCHasStrictTraits):
     """
     #: A reference to the bundle
     bundle = Instance(IMCOBundle)
+
+    started = Event()
+
+    finished = Event()
+
+    progress = Event()
 
     def __init__(self, bundle, *args, **kwargs):
         """Initializes the MCO.

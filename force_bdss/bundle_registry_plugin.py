@@ -3,6 +3,8 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
+from force_bdss.notification_listeners.i_notification_listener_bundle import \
+    INotificationListenerBundle
 from .data_sources.i_data_source_bundle import (
     IDataSourceBundle)
 from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
@@ -42,6 +44,11 @@ class BundleRegistryPlugin(Plugin):
     kpi_calculator_bundles = ExtensionPoint(
         List(IKPICalculatorBundle),
         id=ExtensionPointID.KPI_CALCULATOR_BUNDLES)
+
+    notification_listener_bundles = ExtensionPoint(
+        List(INotificationListenerBundle),
+        id=ExtensionPointID.NOTIFICATION_LISTENER_BUNDLE
+    )
 
     def data_source_bundle_by_id(self, id):
         """Finds a given data source bundle by means of its id.
@@ -136,3 +143,25 @@ class BundleRegistryPlugin(Plugin):
 
         raise KeyError("Requested MCO parameter {}:{} but don't know"
                        " how to find it.".format(mco_id, parameter_id))
+
+    def notification_listener_bundle_by_id(self, id):
+        """Finds a given notification listener by means of its id.
+        The ID is as obtained by the function bundle_id() in the
+        plugin api.
+
+        Parameters
+        ----------
+        id: str
+            The identifier returned by the bundle_id() function.
+
+        Raises
+        ------
+        KeyError: if the entry is not found.
+        """
+        for nl in self.notification_listener_bundles:
+            if nl.id == id:
+                return nl
+
+        raise KeyError(
+            "Requested notification listener {} but don't know how "
+            "to find it.".format(id))

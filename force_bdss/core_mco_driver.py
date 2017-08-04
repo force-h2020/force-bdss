@@ -2,8 +2,9 @@ from __future__ import print_function
 
 import sys
 
-from traits.api import on_trait_change
+from traits.api import on_trait_change, Instance
 
+from force_bdss.mco.base_mco import BaseMCO
 from .ids import plugin_id
 from .base_core_driver import BaseCoreDriver
 from .io.workflow_reader import (
@@ -20,6 +21,10 @@ class CoreMCODriver(BaseCoreDriver):
     """
     id = CORE_MCO_DRIVER_ID
 
+    mco = Instance(BaseMCO, allow_none=True)
+
+    listeners = Instance(BaseNotificationListener)
+
     @on_trait_change("application:started")
     def application_started(self):
         try:
@@ -30,5 +35,6 @@ class CoreMCODriver(BaseCoreDriver):
 
         mco_model = workflow.mco
         mco_bundle = mco_model.bundle
-        mco = mco_bundle.create_optimizer()
-        mco.run(mco_model)
+        self.mco = mco_bundle.create_optimizer()
+        self.mco.run(mco_model)
+

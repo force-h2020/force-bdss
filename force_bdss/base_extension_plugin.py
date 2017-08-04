@@ -17,7 +17,7 @@ class BaseExtensionPlugin(Plugin):
     specific trait you want to populate. For example::
 
         class MyPlugin(BaseExtensionPlugin):
-            def _data_source_bundles(self):
+            def _data_source_bundles_default(self):
                 return [MyDataSourceBundle1(),
                         MyDataSourceBundle2()]
     """
@@ -38,4 +38,9 @@ class BaseExtensionPlugin(Plugin):
     kpi_calculator_bundles = List(
         IKPICalculatorBundle,
         contributes_to=ExtensionPointID.KPI_CALCULATOR_BUNDLES
+    )
+
+    notification_listener_bundles = List(
+        INotificationListenerBundle,
+        contributes_to=ExtensionPointID.NOTIFICATION_LISTENER_BUNDLES
     )
