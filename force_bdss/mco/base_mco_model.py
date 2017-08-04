@@ -11,7 +11,7 @@ class BaseMCOModel(ABCHasStrictTraits):
 
     In your definition, your specific model must reimplement this class.
     """
-    #: A reference to the creating bundle, so that we can
+    #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
     factory = Instance(IMCOFactory,
                        visible=False,

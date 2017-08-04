@@ -159,7 +159,7 @@ class OneValueDataSource(BaseDataSource):
         )
 
 
-class NullDataSourceBundle(BaseDataSourceFactory):
+class NullDataSourceFactory(BaseDataSourceFactory):
     id = factory_id("enthought", "null_ds")
     name = "null_ds"
 
@@ -171,28 +171,28 @@ class NullDataSourceBundle(BaseDataSourceFactory):
 
 
 class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
-    mco_bundles = List()
-    kpi_calculator_bundles = List()
-    data_source_bundles = List()
+    mco_factories = List()
+    kpi_calculator_factories = List()
+    data_source_factories = List()
 
 
 def mock_factory_registry_plugin():
-    bundle_registry_plugin = DummyFactoryRegistryPlugin()
-    bundle_registry_plugin.mco_bundles = [
-        NullMCOFactory(bundle_registry_plugin)]
-    bundle_registry_plugin.kpi_calculator_bundles = [
-        NullKPICalculatorFactory(bundle_registry_plugin)]
-    bundle_registry_plugin.data_source_bundles = [
-        NullDataSourceBundle(bundle_registry_plugin)]
-    return bundle_registry_plugin
+    factory_registry_plugin = DummyFactoryRegistryPlugin()
+    factory_registry_plugin.mco_factories = [
+        NullMCOFactory(factory_registry_plugin)]
+    factory_registry_plugin.kpi_calculator_factories = [
+        NullKPICalculatorFactory(factory_registry_plugin)]
+    factory_registry_plugin.data_source_factories = [
+        NullDataSourceFactory(factory_registry_plugin)]
+    return factory_registry_plugin
 
 
 class TestCoreEvaluationDriver(unittest.TestCase):
     def setUp(self):
-        self.mock_bundle_registry_plugin = mock_factory_registry_plugin()
+        self.mock_factory_registry_plugin = mock_factory_registry_plugin()
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
-            return_value=self.mock_bundle_registry_plugin
+            return_value=self.mock_factory_registry_plugin
         )
         application.workflow_filepath = fixtures.get("test_null.json")
         self.mock_application = application
@@ -204,11 +204,11 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver.application_started()
 
     def test_error_for_non_matching_mco_parameters(self):
-        bundle = self.mock_bundle_registry_plugin.mco_bundles[0]
-        with mock.patch.object(bundle.__class__,
+        factory = self.mock_factory_registry_plugin.mco_factories[0]
+        with mock.patch.object(factory.__class__,
                                "create_communicator") as create_comm:
             create_comm.return_value = OneDataValueMCOCommunicator(
-                bundle)
+                factory)
             driver = CoreEvaluationDriver(
                 application=self.mock_application,
             )
@@ -218,10 +218,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_incorrect_output_slots(self):
-        bundle = self.mock_bundle_registry_plugin.data_source_bundles[0]
-        with mock.patch.object(bundle.__class__,
+        factory = self.mock_factory_registry_plugin.data_source_factories[0]
+        with mock.patch.object(factory.__class__,
                                "create_data_source") as create_ds:
-            create_ds.return_value = BrokenOneValueDataSource(bundle)
+            create_ds.return_value = BrokenOneValueDataSource(factory)
             driver = CoreEvaluationDriver(
                 application=self.mock_application,
             )
@@ -233,10 +233,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):
-        bundle = self.mock_bundle_registry_plugin.data_source_bundles[0]
-        with mock.patch.object(bundle.__class__,
+        factory = self.mock_factory_registry_plugin.data_source_factories[0]
+        with mock.patch.object(factory.__class__,
                                "create_data_source") as create_ds:
-            create_ds.return_value = OneValueDataSource(bundle)
+            create_ds.return_value = OneValueDataSource(factory)
             driver = CoreEvaluationDriver(
                 application=self.mock_application,
             )
@@ -248,10 +248,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_incorrect_kpic_output_slots(self):
-        bundle = self.mock_bundle_registry_plugin.kpi_calculator_bundles[0]
-        with mock.patch.object(bundle.__class__,
+        factory = self.mock_factory_registry_plugin.kpi_calculator_factories[0]
+        with mock.patch.object(factory.__class__,
                                "create_kpi_calculator") as create_kpic:
-            create_kpic.return_value = BrokenOneValueKPICalculator(bundle)
+            create_kpic.return_value = BrokenOneValueKPICalculator(factory)
             driver = CoreEvaluationDriver(
                 application=self.mock_application,
             )
@@ -263,10 +263,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_missing_kpic_output_names(self):
-        bundle = self.mock_bundle_registry_plugin.kpi_calculator_bundles[0]
-        with mock.patch.object(bundle.__class__,
+        factory = self.mock_factory_registry_plugin.kpi_calculator_factories[0]
+        with mock.patch.object(factory.__class__,
                                "create_kpi_calculator") as create_kpic:
-            create_kpic.return_value = OneValueKPICalculator(bundle)
+            create_kpic.return_value = OneValueKPICalculator(factory)
             driver = CoreEvaluationDriver(
                 application=self.mock_application,
             )

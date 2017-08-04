@@ -4,9 +4,9 @@ from force_bdss.ids import factory_id, plugin_id
 
 
 class TestIdGenerators(unittest.TestCase):
-    def test_bundle_id(self):
+    def test_factory_id(self):
         self.assertEqual(factory_id("foo", "bar"),
-                         "force.bdss.foo.bundle.bar")
+                         "force.bdss.foo.factory.bar")
 
         for bad_entry in ["", None, "   ", "foo bar"]:
             with self.assertRaises(ValueError):

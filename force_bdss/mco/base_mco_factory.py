@@ -8,18 +8,18 @@ from .i_mco_factory import IMCOFactory
 
 @provides(IMCOFactory)
 class BaseMCOFactory(ABCHasStrictTraits):
-    """Base class for the MultiCriteria Optimizer bundle.
+    """Base class for the MultiCriteria Optimizer factory.
     """
     # NOTE: any changes to the interface of this class must be replicated
-    # in the IMultiCriteriaOptimizerBundle interface class.
+    # in the IMultiCriteriaOptimizerFactory interface class.
 
-    #: A unique ID produced with the bundle_id() routine.
+    #: A unique ID produced with the factory_id() routine.
     id = String()
 
-    #: A user friendly name of the bundle. Spaces allowed.
+    #: A user friendly name of the factory. Spaces allowed.
     name = String()
 
-    #: A reference to the Plugin that holds this bundle.
+    #: A reference to the Plugin that holds this factory.
     plugin = Instance(Plugin)
 
     def __init__(self, plugin, *args, **kwargs):

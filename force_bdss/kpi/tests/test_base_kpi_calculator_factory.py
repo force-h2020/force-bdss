@@ -10,7 +10,7 @@ from force_bdss.kpi.base_kpi_calculator_factory import \
     BaseKPICalculatorFactory
 
 
-class DummyKPICalculatorBundle(BaseKPICalculatorFactory):
+class DummyKPICalculatorFactory(BaseKPICalculatorFactory):
     id = "foo"
 
     name = "bar"
@@ -22,8 +22,8 @@ class DummyKPICalculatorBundle(BaseKPICalculatorFactory):
         pass
 
 
-class TestBaseKPICalculatorBundle(unittest.TestCase):
+class TestBaseKPICalculatorFactory(unittest.TestCase):
     def test_initialization(self):
-        bundle = DummyKPICalculatorBundle(mock.Mock(spec=Plugin))
-        self.assertEqual(bundle.id, 'foo')
-        self.assertEqual(bundle.name, 'bar')
+        factory = DummyKPICalculatorFactory(mock.Mock(spec=Plugin))
+        self.assertEqual(factory.id, 'foo')
+        self.assertEqual(factory.name, 'bar')

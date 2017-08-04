@@ -9,34 +9,34 @@ class ExtensionPointID:
     as they just have to reimplement the plugin base class and implement
     the appropriate default methods.
     """
-    MCO_BUNDLES = 'force.bdss.mco.bundles'
-    DATA_SOURCE_BUNDLES = 'force.bdss.data_source.bundles'
-    KPI_CALCULATOR_BUNDLES = 'force.bdss.kpi_calculator.bundles'
+    MCO_FACTORIES = 'force.bdss.mco.factories'
+    DATA_SOURCE_FACTORIES = 'force.bdss.data_source.factories'
+    KPI_CALCULATOR_FACTORIES = 'force.bdss.kpi_calculator.factories'
 
 
 def factory_id(producer, identifier):
-    """Creates an id for the bundle.
+    """Creates an id for the factory.
 
     Parameters
     ----------
     producer: str
         the company or research institute unique identifier (e.g. "enthought")
     identifier: str
-        A unique identifier for the bundle. The producer has authority and
+        A unique identifier for the factory. The producer has authority and
         control over the uniqueness of this identifier.
 
     Returns
     -------
     str: an identifier to be used in the bundle.
     """
-    return _string_id(producer, "bundle", identifier)
+    return _string_id(producer, "factory", identifier)
 
 
 def mco_parameter_id(producer, mco_identifier, parameter_identifier):
     """Creates an ID for an MCO parameter, so that it can be identified
     uniquely."""
     return _string_id(producer,
-                      "bundle",
+                      "factory",
                       mco_identifier,
                       "parameter",
                       parameter_identifier)

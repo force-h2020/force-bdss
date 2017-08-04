@@ -19,7 +19,7 @@ class DummyMCOCommunicator(BaseMCOCommunicator):
 
 class TestBaseMCOCommunicator(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IMCOFactory)
-        mcocomm = DummyMCOCommunicator(bundle)
+        factory = mock.Mock(spec=IMCOFactory)
+        mcocomm = DummyMCOCommunicator(factory)
 
-        self.assertEqual(mcocomm.bundle, bundle)
+        self.assertEqual(mcocomm.factory, factory)

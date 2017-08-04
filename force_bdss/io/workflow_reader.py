@@ -28,18 +28,18 @@ class WorkflowReader(HasStrictTraits):
     factory_registry = Instance(FactoryRegistryPlugin)
 
     def __init__(self,
-                 bundle_registry,
+                 factory_registry,
                  *args,
                  **kwargs):
         """Initializes the reader.
 
         Parameters
         ----------
-        bundle_registry: FactoryRegistryPlugin
-            The bundle registry that provides lookup services
-            for a bundle identified by a given id.
+        factory_registry: FactoryRegistryPlugin
+            The factory registry that provides lookup services
+            for a factory identified by a given id.
         """
-        self.factory_registry = bundle_registry
+        self.factory_registry = factory_registry
 
         super(WorkflowReader, self).__init__(*args, **kwargs)
 
@@ -118,7 +118,7 @@ class WorkflowReader(HasStrictTraits):
             return None
 
         mco_id = mco_data["id"]
-        mco_factory = registry.mco_bundle_by_id(mco_id)
+        mco_factory = registry.mco_factory_by_id(mco_id)
         model_data = wf_data["mco"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id,
@@ -145,7 +145,7 @@ class WorkflowReader(HasStrictTraits):
         data_sources = []
         for ds_entry in wf_data["data_sources"]:
             ds_id = ds_entry["id"]
-            ds_factory = registry.data_source_bundle_by_id(ds_id)
+            ds_factory = registry.data_source_factory_by_id(ds_id)
             model_data = ds_entry["model_data"]
             model_data["input_slot_maps"] = self._extract_input_slot_maps(
                 model_data["input_slot_maps"]
@@ -173,7 +173,7 @@ class WorkflowReader(HasStrictTraits):
         kpi_calculators = []
         for kpic_entry in wf_data["kpi_calculators"]:
             kpic_id = kpic_entry["id"]
-            kpic_factory = registry.kpi_calculator_bundle_by_id(kpic_id)
+            kpic_factory = registry.kpi_calculator_factory_by_id(kpic_id)
             model_data = kpic_entry["model_data"]
             model_data["input_slot_maps"] = self._extract_input_slot_maps(
                 model_data["input_slot_maps"]

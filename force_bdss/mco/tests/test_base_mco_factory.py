@@ -10,7 +10,7 @@ from envisage.plugin import Plugin
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 
-class DummyMCOBundle(BaseMCOFactory):
+class DummyMCOFactory(BaseMCOFactory):
     id = "foo"
 
     name = "bar"
@@ -28,8 +28,8 @@ class DummyMCOBundle(BaseMCOFactory):
         return []
 
 
-class TestBaseMCOBundle(unittest.TestCase):
+class TestBaseMCOFactory(unittest.TestCase):
     def test_initialization(self):
-        bundle = DummyMCOBundle(mock.Mock(spec=Plugin))
-        self.assertEqual(bundle.id, 'foo')
-        self.assertEqual(bundle.name, 'bar')
+        factory = DummyMCOFactory(mock.Mock(spec=Plugin))
+        self.assertEqual(factory.id, 'foo')
+        self.assertEqual(factory.name, 'bar')

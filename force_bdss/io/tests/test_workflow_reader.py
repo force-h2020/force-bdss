@@ -15,13 +15,13 @@ except ImportError:
 
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
-        self.mock_bundle_registry = mock.Mock(spec=FactoryRegistryPlugin)
+        self.mock_factory_registry = mock.Mock(spec=FactoryRegistryPlugin)
 
-        self.wfreader = WorkflowReader(self.mock_bundle_registry)
+        self.wfreader = WorkflowReader(self.mock_factory_registry)
 
     def test_initialization(self):
         self.assertEqual(self.wfreader.factory_registry,
-                         self.mock_bundle_registry)
+                         self.mock_factory_registry)
 
     def test_invalid_version(self):
         data = {

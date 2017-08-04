@@ -2,11 +2,11 @@
   "version": "1",
   "workflow": {
     "mco": {
-      "id": "force.bdss.enthought.bundle.dummy_dakota",
+      "id": "force.bdss.enthought.factory.dummy_dakota",
       "model_data": {
         "parameters" : [
           {
-            "id": "force.bdss.enthought.bundle.dummy_dakota.parameter.ranged",
+            "id": "force.bdss.enthought.factory.dummy_dakota.parameter.ranged",
             "model_data": {
                 "initial_value": 3,
                 "lower_bound": 0,
@@ -20,7 +20,7 @@
     },
     "data_sources": [
       {
-        "id": "force.bdss.enthought.bundle.csv_extractor",
+        "id": "force.bdss.enthought.factory.csv_extractor",
         "model_data": {
           "filename": "foo.csv",
           "row": 3,
@@ -34,7 +34,7 @@
         }
       },
       {
-        "id": "force.bdss.enthought.bundle.csv_extractor",
+        "id": "force.bdss.enthought.factory.csv_extractor",
         "model_data": {
           "filename": "foo.csv",
           "row": 3,
@@ -50,7 +50,7 @@
     ],
     "kpi_calculators": [
       {
-        "id": "force.bdss.enthought.bundle.kpi_adder",
+        "id": "force.bdss.enthought.factory.kpi_adder",
         "model_data": {
           "cuba_type_in": "PRESSURE",
           "cuba_type_out": "TOTAL_PRESSURE",

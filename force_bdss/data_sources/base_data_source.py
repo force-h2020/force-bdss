@@ -10,7 +10,7 @@ class BaseDataSource(ABCHasStrictTraits):
 
     Inherit from this class for your specific DataSource.
     """
-    #: A reference to the bundle
+    #: A reference to the factory
     factory = Instance(IDataSourceFactory)
 
     def __init__(self, factory, *args, **kwargs):

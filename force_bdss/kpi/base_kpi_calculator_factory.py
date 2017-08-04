@@ -7,8 +7,8 @@ from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 @provides(IKPICalculatorFactory)
 class BaseKPICalculatorFactory(ABCHasStrictTraits):
-    """Base class for the Key Performance Indicator calculator bundles.
-    Inherit from this class to create a bundle, and reimplement the abstract
+    """Base class for the Key Performance Indicator calculator factories.
+    Inherit from this class to create a factory, and reimplement the abstract
     methods.
     """
     # NOTE: any changes in this interface must be ported to
@@ -29,7 +29,7 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
         Parameters
         ----------
         plugin: Plugin
-            The plugin that holds this bundle.
+            The plugin that holds this factory.
         """
         self.plugin = plugin
         super(BaseKPICalculatorFactory, self).__init__(*args, **kwargs)

@@ -5,14 +5,14 @@ from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
 class BaseKPICalculatorModel(ABCHasStrictTraits):
-    """Base class for the bundle specific KPI calculator models.
+    """Base class for the factory specific KPI calculator models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
 
-    In your bundle definition, your bundle-specific model must reimplement
+    In your factory definition, your factory-specific model must reimplement
     this class.
     """
-    #: A reference to the creating bundle, so that we can
+    #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
     factory = Instance(IKPICalculatorFactory, visible=False, transient=True)
 
@@ -25,8 +25,8 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     #: referenced somewhere else (e.g. the KPICalculators).
     output_slot_names = List(String())
 
-    def __init__(self, bundle, *args, **kwargs):
-        self.factory = bundle
+    def __init__(self, factory, *args, **kwargs):
+        self.factory = factory
         super(BaseKPICalculatorModel, self).__init__(*args, **kwargs)
 
     def __getstate__(self):

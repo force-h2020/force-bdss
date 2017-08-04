@@ -10,7 +10,7 @@ from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_model import \
     CSVExtractorModel
 
 
-class TestCSVExtractorBundle(DataSourceFactoryTestMixin, unittest.TestCase):
+class TestCSVExtractorFactory(DataSourceFactoryTestMixin, unittest.TestCase):
     @property
     def factory_class(self):
         return CSVExtractorFactory

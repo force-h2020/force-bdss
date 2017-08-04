@@ -3,10 +3,10 @@ from envisage.plugin import Plugin
 
 
 class IMCOFactory(Interface):
-    """Interface for the BaseMCOBundle.
+    """Interface for the BaseMCOFactory.
     You should not need it, as its main use is for envisage support.
 
-    Refer to BaseMCOBundle for documentation
+    Refer to BaseMCOFactory for documentation
     """
     id = String()
 

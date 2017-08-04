@@ -18,7 +18,7 @@ class DummyKPICalculator(BaseKPICalculator):
 
 class TestBaseKPICalculator(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IKPICalculatorFactory)
-        kpic = DummyKPICalculator(bundle)
+        factory = mock.Mock(spec=IKPICalculatorFactory)
+        kpic = DummyKPICalculator(factory)
 
-        self.assertEqual(kpic.factory, bundle)
+        self.assertEqual(kpic.factory, factory)

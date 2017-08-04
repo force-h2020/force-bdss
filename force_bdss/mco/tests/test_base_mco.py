@@ -16,7 +16,7 @@ class DummyMCO(BaseMCO):
 
 class TestBaseMultiCriteriaOptimizer(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IMCOFactory)
-        mco = DummyMCO(bundle)
+        factory = mock.Mock(spec=IMCOFactory)
+        mco = DummyMCO(factory)
 
-        self.assertEqual(mco.factory, bundle)
+        self.assertEqual(mco.factory, factory)

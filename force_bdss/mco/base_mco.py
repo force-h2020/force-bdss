@@ -10,7 +10,7 @@ class BaseMCO(ABCHasStrictTraits):
 
     Inherit this class for your MCO implementation
     """
-    #: A reference to the bundle
+    #: A reference to the factory
     factory = Instance(IMCOFactory)
 
     def __init__(self, factory, *args, **kwargs):
@@ -18,8 +18,8 @@ class BaseMCO(ABCHasStrictTraits):
 
         Parameters
         ----------
-        factory: BaseMCOBundle
-            The bundle this BaseMCO belongs to
+        factory: BaseMCOFactory
+            The factory this BaseMCO belongs to
         """
         self.factory = factory
         super(BaseMCO, self).__init__(*args, **kwargs)

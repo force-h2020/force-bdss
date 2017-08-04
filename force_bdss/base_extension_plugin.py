@@ -17,25 +17,25 @@ class BaseExtensionPlugin(Plugin):
     specific trait you want to populate. For example::
 
         class MyPlugin(BaseExtensionPlugin):
-            def _data_source_bundles(self):
-                return [MyDataSourceBundle1(),
-                        MyDataSourceBundle2()]
+            def _data_source_factories_default(self):
+                return [MyDataSourceFactory1(),
+                        MyDataSourceFactory2()]
     """
 
     #: A list of available Multi Criteria Optimizers this plugin exports.
-    mco_bundles = List(
+    mco_factories = List(
         IMCOFactory,
-        contributes_to=ExtensionPointID.MCO_BUNDLES
+        contributes_to=ExtensionPointID.MCO_FACTORIES
     )
 
     #: A list of the available Data Sources this plugin exports.
-    data_source_bundles = List(
+    data_source_factories = List(
         IDataSourceFactory,
-        contributes_to=ExtensionPointID.DATA_SOURCE_BUNDLES
+        contributes_to=ExtensionPointID.DATA_SOURCE_FACTORIES
     )
 
     #: A list of the available KPI calculators this plugin exports.
-    kpi_calculator_bundles = List(
+    kpi_calculator_factories = List(
         IKPICalculatorFactory,
-        contributes_to=ExtensionPointID.KPI_CALCULATOR_BUNDLES
+        contributes_to=ExtensionPointID.KPI_CALCULATOR_FACTORIES
     )

@@ -15,33 +15,33 @@ except ImportError:
     from unittest import mock
 
 
-class TestDakotaBundle(unittest.TestCase):
+class TestDakotaFactory(unittest.TestCase):
     def setUp(self):
         self.plugin = mock.Mock(spec=Plugin)
 
     def test_initialization(self):
-        bundle = DummyDakotaFactory(self.plugin)
-        self.assertIn("dummy_dakota", bundle.id)
-        self.assertEqual(bundle.plugin, self.plugin)
+        factory = DummyDakotaFactory(self.plugin)
+        self.assertIn("dummy_dakota", factory.id)
+        self.assertEqual(factory.plugin, self.plugin)
 
     def test_create_model(self):
-        bundle = DummyDakotaFactory(self.plugin)
-        model = bundle.create_model({})
+        factory = DummyDakotaFactory(self.plugin)
+        model = factory.create_model({})
         self.assertIsInstance(model, DummyDakotaModel)
 
-        model = bundle.create_model()
+        model = factory.create_model()
         self.assertIsInstance(model, DummyDakotaModel)
 
     def test_create_mco(self):
-        bundle = DummyDakotaFactory(self.plugin)
-        ds = bundle.create_optimizer()
+        factory = DummyDakotaFactory(self.plugin)
+        ds = factory.create_optimizer()
         self.assertIsInstance(ds, DummyDakotaOptimizer)
 
     def test_create_communicator(self):
-        bundle = DummyDakotaFactory(self.plugin)
-        ds = bundle.create_optimizer()
+        factory = DummyDakotaFactory(self.plugin)
+        ds = factory.create_optimizer()
         self.assertIsInstance(ds, DummyDakotaOptimizer)
 
     def test_parameter_factories(self):
-        bundle = DummyDakotaFactory(self.plugin)
-        self.assertNotEqual(len(bundle.parameter_factories()), 0)
+        factory = DummyDakotaFactory(self.plugin)
+        self.assertNotEqual(len(factory.parameter_factories()), 0)
