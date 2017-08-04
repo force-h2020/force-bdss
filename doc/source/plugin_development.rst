@@ -5,9 +5,8 @@ A single Plugin can provide one or more of the pluggable entities
 described elsewhere (MCO/KPICalculators/DataSources). Multiple plugins can
 be installed to provide a broad range of functionalities.
 
-Plugins must return "Bundles". Each Bundle acts as a Factory, providing
-factory methods for one of the above pluggable entities and its associated
-classes.
+Plugins must return Factories. Each Factory provides factory methods for 
+one of the above pluggable entities and its associated classes.
 
 To implement a new plugin, you must
 
@@ -17,9 +16,9 @@ To implement a new plugin, you must
 - Define the model that this DataSource needs, by extending
   ``BaseDataSourceModel`` and adding, with traits, the appropriate data that
   are required by your data source to perform its task.
-- Define the Bundle, by reimplementing BaseDataSourceBundle and reimplementing
+- Define the Factory, by reimplementing BaseDataSourceFactory and reimplementing
   its ``create_*`` methods to return the above entities.
 - Define a ``Plugin`` by reimplementing ``BaseExtensionPlugin`` and
-  reimplementing its initialization defaults methods to return your bundle.
+  reimplementing its initialization defaults methods to return your factory.
 - add the plugin class in the setup.py entry_point, under the namespace
   ``force.bdss.extensions``
