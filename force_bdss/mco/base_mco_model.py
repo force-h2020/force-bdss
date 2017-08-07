@@ -18,7 +18,7 @@ class BaseMCOModel(ABCHasStrictTraits):
                        transient=True)
 
     # A list of the parameters for the MCO
-    parameters = List(BaseMCOParameter)
+    parameters = List(BaseMCOParameter, visible=False)
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
