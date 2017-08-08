@@ -1,4 +1,4 @@
-from traits.api import ABCHasStrictTraits, Instance, List, String
+from traits.api import ABCHasStrictTraits, Instance, List, String, Event
 
 from force_bdss.core.input_slot_map import InputSlotMap
 from .i_data_source_factory import IDataSourceFactory
@@ -25,6 +25,12 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     #: referenced somewhere else (e.g. the KPICalculators).
     output_slot_names = List(String(), visible=False)
 
+    #: This event claims that a change in the model influences the slots
+    #: (either input or output). It must be triggered every time a specific
+    #: option in your model implies a change in the slots. The UI will detect
+    #: this and adapt the visual entries.
+    changes_slots = Event()
+
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
         super(BaseDataSourceModel, self).__init__(*args, **kwargs)
@@ -35,3 +41,4 @@ class BaseDataSourceModel(ABCHasStrictTraits):
             x.__getstate__() for x in self.input_slot_maps
         ]
         return state
+
