@@ -228,7 +228,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by the DataSource 'null_ds' does not match"
+                    " returned by 'null_ds' does not match"
                     " the number of output slots"):
                 driver.application_started()
 
@@ -243,7 +243,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by the DataSource 'null_ds' does not match"
+                    " returned by 'null_ds' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
 
@@ -258,7 +258,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by the KPICalculator 'null_kpic' does not match"
+                    " returned by 'null_kpic' does not match"
                     " the number of output slots"):
                 driver.application_started()
 
@@ -273,6 +273,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by the KPICalculator 'null_kpic' does not match"
+                    " returned by 'null_kpic' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
