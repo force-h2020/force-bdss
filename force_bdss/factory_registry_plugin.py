@@ -3,22 +3,11 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
-<<<<<<< HEAD:force_bdss/bundle_registry_plugin.py
-from force_bdss.notification_listeners.i_notification_listener_bundle import \
-    INotificationListenerBundle
-from .data_sources.i_data_source_bundle import (
-    IDataSourceBundle)
-from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_mco_bundle import (
-    IMCOBundle
-=======
+from force_bdss.notifier.i_notifier_factory import INotifierFactory
 from .data_sources.i_data_source_factory import (
     IDataSourceFactory)
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
-from .mco.i_mco_factory import (
-    IMCOFactory
->>>>>>> master:force_bdss/factory_registry_plugin.py
-)
+from .mco.i_mco_factory import IMCOFactory
 
 
 FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
@@ -53,20 +42,14 @@ class FactoryRegistryPlugin(Plugin):
         List(IKPICalculatorFactory),
         id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
 
-<<<<<<< HEAD:force_bdss/bundle_registry_plugin.py
-    notification_listener_bundles = ExtensionPoint(
-        List(INotificationListenerBundle),
-        id=ExtensionPointID.NOTIFICATION_LISTENER_BUNDLE
+    notifier_factories = ExtensionPoint(
+        List(INotifierFactory),
+        id=ExtensionPointID.NOTIFIER_FACTORY
     )
 
-    def data_source_bundle_by_id(self, id):
-        """Finds a given data source bundle by means of its id.
-        The ID is as obtained by the function bundle_id() in the
-=======
     def data_source_factory_by_id(self, id):
         """Finds a given data source factory by means of its id.
         The ID is as obtained by the function factory_id() in the
->>>>>>> master:force_bdss/factory_registry_plugin.py
         plugin api.
 
         Parameters
@@ -158,7 +141,7 @@ class FactoryRegistryPlugin(Plugin):
         raise KeyError("Requested MCO parameter {}:{} but don't know"
                        " how to find it.".format(mco_id, parameter_id))
 
-    def notification_listener_bundle_by_id(self, id):
+    def notifier_factory_by_id(self, id):
         """Finds a given notification listener by means of its id.
         The ID is as obtained by the function bundle_id() in the
         plugin api.
@@ -172,10 +155,10 @@ class FactoryRegistryPlugin(Plugin):
         ------
         KeyError: if the entry is not found.
         """
-        for nl in self.notification_listener_bundles:
+        for nl in self.notifier_factories:
             if nl.id == id:
                 return nl
 
         raise KeyError(
-            "Requested notification listener {} but don't know how "
+            "Requested notifier_factory {} but don't know how "
             "to find it.".format(id))

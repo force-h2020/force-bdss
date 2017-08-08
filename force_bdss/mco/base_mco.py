@@ -13,17 +13,13 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-<<<<<<< HEAD
     started = Event()
 
     finished = Event()
 
     progress = Event()
 
-    def __init__(self, bundle, *args, **kwargs):
-=======
     def __init__(self, factory, *args, **kwargs):
->>>>>>> master
         """Initializes the MCO.
 
         Parameters

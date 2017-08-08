@@ -2,11 +2,11 @@ from traits.api import Interface, String, Instance
 from envisage.plugin import Plugin
 
 
-class INotificationListenerBundle(Interface):
-    """Envisage required interface for the BaseNotificationListenerBundle.
+class INotifierFactory(Interface):
+    """Envisage required interface for the BaseNotifierFactory.
     You should not need to use this directly.
 
-    Refer to the BaseNotificationListenerBundle for documentation.
+    Refer to the BaseNotifier for documentation.
     """
     id = String()
 
