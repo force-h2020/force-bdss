@@ -1,4 +1,4 @@
-from traits.api import Interface, String, Instance
+from traits.api import Interface, String, Instance, Any
 from envisage.plugin import Plugin
 
 
@@ -14,8 +14,13 @@ class INotificationListenerFactory(Interface):
 
     plugin = Instance(Plugin)
 
-    def create_object(self):
+    persistent_state = Any
+
+    def create_listener(self):
         """"""
 
     def create_model(self, model_data=None):
         """"""
+
+    def init_persistent_state(self):
+        pass

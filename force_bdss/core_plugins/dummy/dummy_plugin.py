@@ -1,4 +1,7 @@
 from force_bdss.api import BaseExtensionPlugin, plugin_id
+from force_bdss.core_plugins.dummy.dummy_notification_listener\
+    .dummy_notification_listener_factory import \
+    DummyNotificationListenerFactory
 from .csv_extractor.csv_extractor_factory import CSVExtractorFactory
 from .kpi_adder.kpi_adder_factory import KPIAdderFactory
 from .dummy_dakota.dakota_factory import DummyDakotaFactory
@@ -23,4 +26,4 @@ class DummyPlugin(BaseExtensionPlugin):
                 KPIAdderFactory(self)]
 
     def _notification_listener_factories_default(self):
-        return [GUINotificationListenerFactory()]
+        return [DummyNotificationListenerFactory(self)]

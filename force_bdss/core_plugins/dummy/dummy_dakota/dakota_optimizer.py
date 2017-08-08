@@ -16,6 +16,7 @@ def rotated_range(start, stop, starting_value):
 
 class DummyDakotaOptimizer(BaseMCO):
     def run(self, model):
+        self.started = True
         parameters = model.parameters
 
         values = []
@@ -42,3 +43,6 @@ class DummyDakotaOptimizer(BaseMCO):
                 " ".join([str(v) for v in value]).encode("utf-8"))
             print("{}: {}".format(" ".join([str(v) for v in value]),
                                   out[0].decode("utf-8")))
+            self.progress = True
+
+        self.finished = True
