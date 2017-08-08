@@ -1,6 +1,7 @@
-from traits.api import ABCHasStrictTraits, Instance, List, String
+from traits.api import ABCHasStrictTraits, Instance, List
 
 from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.local_traits import Identifier
 from .i_data_source_factory import IDataSourceFactory
 
 
@@ -23,7 +24,10 @@ class BaseDataSourceModel(ABCHasStrictTraits):
 
     #: Allows to assign names to the output slots, so that they can be
     #: referenced somewhere else (e.g. the KPICalculators).
-    output_slot_names = List(String(), visible=False)
+    #: If the name is the empty string, it means that the user is not
+    #: interested in preserving the information, and should therefore be
+    #: discarded and not propagated further.
+    output_slot_names = List(Identifier(), visible=False)
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory

@@ -137,7 +137,9 @@ class CoreEvaluationDriver(BaseCoreDriver):
             for dv, output_slot_name in zip(res, model.output_slot_names):
                 dv.name = output_slot_name
 
-            results.extend(res)
+            # If the name was not specified, simply discard the value,
+            # because apparently the user is not interested in it.
+            results.extend([r for r in res if r.name != ""])
 
         # Finally, return all the computed data values from all evaluators,
         # properly named.
