@@ -21,3 +21,6 @@ class DummyPlugin(BaseExtensionPlugin):
     def _kpi_calculator_factories_default(self):
         return [DummyKPICalculatorFactory(self),
                 KPIAdderFactory(self)]
+
+    def _notification_listener_factories_default(self):
+        return [GUINotificationListenerFactory()]

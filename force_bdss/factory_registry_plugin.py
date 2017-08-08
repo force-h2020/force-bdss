@@ -3,7 +3,8 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
-from force_bdss.notifier.i_notifier_factory import INotifierFactory
+from force_bdss.notification_listeners.i_notification_listener_factory import \
+    INotificationListenerFactory
 from .data_sources.i_data_source_factory import (
     IDataSourceFactory)
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
@@ -42,9 +43,9 @@ class FactoryRegistryPlugin(Plugin):
         List(IKPICalculatorFactory),
         id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
 
-    notifier_factories = ExtensionPoint(
-        List(INotifierFactory),
-        id=ExtensionPointID.NOTIFIER_FACTORY
+    notification_listener_factories = ExtensionPoint(
+        List(INotificationListenerFactory),
+        id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
     )
 
     def data_source_factory_by_id(self, id):
@@ -141,7 +142,7 @@ class FactoryRegistryPlugin(Plugin):
         raise KeyError("Requested MCO parameter {}:{} but don't know"
                        " how to find it.".format(mco_id, parameter_id))
 
-    def notifier_factory_by_id(self, id):
+    def notification_listener_factory_by_id(self, id):
         """Finds a given notification listener by means of its id.
         The ID is as obtained by the function bundle_id() in the
         plugin api.
@@ -155,7 +156,7 @@ class FactoryRegistryPlugin(Plugin):
         ------
         KeyError: if the entry is not found.
         """
-        for nl in self.notifier_factories:
+        for nl in self.notification_listener_factories:
             if nl.id == id:
                 return nl
 

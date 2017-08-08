@@ -23,7 +23,7 @@ class CoreMCODriver(BaseCoreDriver):
 
     mco = Instance(BaseMCO, allow_none=True)
 
-    listeners = Instance(BaseNotifier)
+    listeners = Instance(BaseNotificationListener)
 
     @on_trait_change("application:started")
     def application_started(self):
