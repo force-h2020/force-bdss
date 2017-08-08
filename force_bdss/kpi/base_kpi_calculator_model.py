@@ -1,4 +1,4 @@
-from traits.api import ABCHasStrictTraits, Instance, List
+from traits.api import ABCHasStrictTraits, Instance, List, Event
 
 from force_bdss.local_traits import Identifier
 from ..core.input_slot_map import InputSlotMap
@@ -28,6 +28,12 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     #: interested in preserving the information, and should therefore be
     #: discarded and not propagated further.
     output_slot_names = List(Identifier(), visible=False)
+
+    #: This event claims that a change in the model influences the slots
+    #: (either input or output). It must be triggered every time a specific
+    #: option in your model implies a change in the slots. The UI will detect
+    #: this and adapt the visual entries.
+    changes_slots = Event()
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
