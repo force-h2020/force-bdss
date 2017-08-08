@@ -3,7 +3,7 @@ from traits.api import List
 
 from envisage.application import Application
 
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.cli.tests.test_execution import cd
 
 try:
@@ -16,28 +16,29 @@ from force_bdss.core_plugins.dummy.dummy_plugin import DummyPlugin
 from force_bdss.tests import fixtures
 
 
-class DummyBundleRegistryPlugin(BundleRegistryPlugin):
-    mco_bundles = List()
-    kpi_calculator_bundles = List()
-    data_source_bundles = List()
+class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
+    mco_factories = List()
+    kpi_calculator_factories = List()
+    data_source_factories = List()
 
 
-def mock_bundle_registry_plugin():
+def mock_factory_registry_plugin():
     plugin = DummyPlugin()
-    bundle_registry_plugin = DummyBundleRegistryPlugin()
-    bundle_registry_plugin.mco_bundles = plugin.mco_bundles
-    bundle_registry_plugin.kpi_calculator_bundles = \
-        plugin.kpi_calculator_bundles
-    bundle_registry_plugin.data_source_bundles = plugin.data_source_bundles
-    return bundle_registry_plugin
+    factory_registry_plugin = DummyFactoryRegistryPlugin()
+    factory_registry_plugin.mco_factories = plugin.mco_factories
+    factory_registry_plugin.kpi_calculator_factories = \
+        plugin.kpi_calculator_factories
+    factory_registry_plugin.data_source_factories = \
+        plugin.data_source_factories
+    return factory_registry_plugin
 
 
 class TestDirectExecution(unittest.TestCase):
     def setUp(self):
-        self.mock_bundle_registry_plugin = mock_bundle_registry_plugin()
+        self.mock_factory_registry_plugin = mock_factory_registry_plugin()
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
-            return_value=self.mock_bundle_registry_plugin
+            return_value=self.mock_factory_registry_plugin
         )
         application.workflow_filepath = fixtures.get("test_csv.json")
         self.mock_application = application

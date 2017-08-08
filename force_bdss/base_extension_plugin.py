@@ -2,9 +2,9 @@ from envisage.plugin import Plugin
 from traits.trait_types import List
 
 from .ids import ExtensionPointID
-from .data_sources.i_data_source_bundle import IDataSourceBundle
-from .kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
-from .mco.i_mco_bundle import IMCOBundle
+from .data_sources.i_data_source_factory import IDataSourceFactory
+from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
+from .mco.i_mco_factory import IMCOFactory
 
 
 class BaseExtensionPlugin(Plugin):
@@ -17,30 +17,30 @@ class BaseExtensionPlugin(Plugin):
     specific trait you want to populate. For example::
 
         class MyPlugin(BaseExtensionPlugin):
-            def _data_source_bundles_default(self):
-                return [MyDataSourceBundle1(),
-                        MyDataSourceBundle2()]
+            def _data_source_factories_default(self):
+                return [MyDataSourceFactory1(),
+                        MyDataSourceFactory2()]
     """
 
     #: A list of available Multi Criteria Optimizers this plugin exports.
-    mco_bundles = List(
-        IMCOBundle,
-        contributes_to=ExtensionPointID.MCO_BUNDLES
+    mco_factories = List(
+        IMCOFactory,
+        contributes_to=ExtensionPointID.MCO_FACTORIES
     )
 
     #: A list of the available Data Sources this plugin exports.
-    data_source_bundles = List(
-        IDataSourceBundle,
-        contributes_to=ExtensionPointID.DATA_SOURCE_BUNDLES
+    data_source_factories = List(
+        IDataSourceFactory,
+        contributes_to=ExtensionPointID.DATA_SOURCE_FACTORIES
     )
 
     #: A list of the available KPI calculators this plugin exports.
-    kpi_calculator_bundles = List(
-        IKPICalculatorBundle,
-        contributes_to=ExtensionPointID.KPI_CALCULATOR_BUNDLES
+    kpi_calculator_factories = List(
+        IKPICalculatorFactory,
+        contributes_to=ExtensionPointID.KPI_CALCULATOR_FACTORIES
     )
 
-    notification_listener_bundles = List(
-        INotificationListenerBundle,
-        contributes_to=ExtensionPointID.NOTIFICATION_LISTENER_BUNDLES
+    notifier_factory = List(
+        INotifierFactory,
+        contributes_to=ExtensionPointID.NOTIFIER_FACTORIES
     )

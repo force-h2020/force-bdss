@@ -6,8 +6,8 @@ from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_data_source \
     import CSVExtractorDataSource
 from force_bdss.core_plugins.dummy.csv_extractor.csv_extractor_model import \
     CSVExtractorModel
-from force_bdss.data_sources.base_data_source_bundle import \
-    BaseDataSourceBundle
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
 from force_bdss.tests import fixtures
 
 try:
@@ -18,15 +18,15 @@ except ImportError:
 
 class TestCSVExtractorDataSource(unittest.TestCase):
     def setUp(self):
-        self.bundle = mock.Mock(spec=BaseDataSourceBundle)
+        self.factory = mock.Mock(spec=BaseDataSourceFactory)
 
     def test_initialization(self):
-        ds = CSVExtractorDataSource(self.bundle)
-        self.assertEqual(ds.bundle, self.bundle)
+        ds = CSVExtractorDataSource(self.factory)
+        self.assertEqual(ds.factory, self.factory)
 
     def test_run(self):
-        ds = CSVExtractorDataSource(self.bundle)
-        model = CSVExtractorModel(self.bundle)
+        ds = CSVExtractorDataSource(self.factory)
+        model = CSVExtractorModel(self.factory)
         model.filename = fixtures.get("foo.csv")
         model.row = 3
         model.column = 5
@@ -38,8 +38,8 @@ class TestCSVExtractorDataSource(unittest.TestCase):
         self.assertEqual(result[0].value, 42)
 
     def test_run_with_exception(self):
-        ds = CSVExtractorDataSource(self.bundle)
-        model = CSVExtractorModel(self.bundle)
+        ds = CSVExtractorDataSource(self.factory)
+        model = CSVExtractorModel(self.factory)
         model.filename = fixtures.get("foo.csv")
         mock_params = []
         model.row = 30
@@ -53,8 +53,8 @@ class TestCSVExtractorDataSource(unittest.TestCase):
             ds.run(model, mock_params)
 
     def test_slots(self):
-        ds = CSVExtractorDataSource(self.bundle)
-        model = CSVExtractorModel(self.bundle)
+        ds = CSVExtractorDataSource(self.factory)
+        model = CSVExtractorModel(self.factory)
         slots = ds.slots(model)
         self.assertEqual(len(slots), 2)
         self.assertEqual(len(slots[0]), 0)

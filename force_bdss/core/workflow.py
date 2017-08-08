@@ -7,14 +7,14 @@ from force_bdss.mco.base_mco_model import BaseMCOModel
 
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
-    #: Contains the bundle-specific MCO Model object.
+    #: Contains the factory-specific MCO Model object.
     #: Can be None if no MCO has been specified yet.
     mco = Instance(BaseMCOModel, allow_none=True)
 
-    #: Contains the bundle-specific DataSource Model objects.
+    #: Contains the factory-specific DataSource Model objects.
     #: The list can be empty
     data_sources = List(BaseDataSourceModel)
 
-    #: Contains the bundle-specific KPI Calculator Model objects.
+    #: Contains the factory-specific KPI Calculator Model objects.
     #: The list can be empty
     kpi_calculators = List(BaseKPICalculatorModel)

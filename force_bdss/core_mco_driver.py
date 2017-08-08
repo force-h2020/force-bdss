@@ -23,7 +23,7 @@ class CoreMCODriver(BaseCoreDriver):
 
     mco = Instance(BaseMCO, allow_none=True)
 
-    listeners = Instance(BaseNotificationListener)
+    listeners = Instance(BaseNotifier)
 
     @on_trait_change("application:started")
     def application_started(self):
@@ -34,7 +34,6 @@ class CoreMCODriver(BaseCoreDriver):
             sys.exit(1)
 
         mco_model = workflow.mco
-        mco_bundle = mco_model.bundle
-        self.mco = mco_bundle.create_optimizer()
-        self.mco.run(mco_model)
-
+        mco_factory = mco_model.factory
+        mco = mco_factory.create_optimizer()
+        mco.run(mco_model)

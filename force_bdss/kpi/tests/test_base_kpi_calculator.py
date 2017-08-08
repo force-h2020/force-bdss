@@ -5,7 +5,7 @@ except ImportError:
     from unittest import mock
 
 from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
-from force_bdss.kpi.i_kpi_calculator_bundle import IKPICalculatorBundle
+from force_bdss.kpi.i_kpi_calculator_factory import IKPICalculatorFactory
 
 
 class DummyKPICalculator(BaseKPICalculator):
@@ -18,7 +18,7 @@ class DummyKPICalculator(BaseKPICalculator):
 
 class TestBaseKPICalculator(unittest.TestCase):
     def test_initialization(self):
-        bundle = mock.Mock(spec=IKPICalculatorBundle)
-        kpic = DummyKPICalculator(bundle)
+        factory = mock.Mock(spec=IKPICalculatorFactory)
+        kpic = DummyKPICalculator(factory)
 
-        self.assertEqual(kpic.bundle, bundle)
+        self.assertEqual(kpic.factory, factory)

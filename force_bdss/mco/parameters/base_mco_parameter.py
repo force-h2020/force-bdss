@@ -14,10 +14,10 @@ class BaseMCOParameter(HasStrictTraits):
     factory = Instance(BaseMCOParameterFactory, visible=False, transient=True)
 
     #: A user defined name for the parameter
-    name = String()
+    name = String(visible=False)
 
     #: A CUBA key describing the type of the parameter
-    type = String()
+    type = String(visible=False)
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory

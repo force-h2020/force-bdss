@@ -1,13 +1,13 @@
 from traits.api import String
 
-from force_bdss.api import bundle_id, BaseKPICalculatorBundle
+from force_bdss.api import factory_id, BaseKPICalculatorFactory
 
 from .kpi_adder_model import KPIAdderModel
 from .kpi_adder_calculator import KPIAdderCalculator
 
 
-class KPIAdderBundle(BaseKPICalculatorBundle):
-    id = String(bundle_id("enthought", "kpi_adder"))
+class KPIAdderFactory(BaseKPICalculatorFactory):
+    id = String(factory_id("enthought", "kpi_adder"))
 
     name = String("KPI Adder")
 

@@ -1,10 +1,10 @@
-from force_bdss.api import BaseDataSourceBundle, bundle_id
+from force_bdss.api import BaseDataSourceFactory, factory_id
 from .dummy_data_source_model import DummyDataSourceModel
 from .dummy_data_source import DummyDataSource
 
 
-class DummyDataSourceBundle(BaseDataSourceBundle):
-    id = bundle_id("enthought", "dummy_data_source")
+class DummyDataSourceFactory(BaseDataSourceFactory):
+    id = factory_id("enthought", "dummy_data_source")
 
     def create_model(self, model_data=None):
         if model_data is None:

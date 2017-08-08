@@ -12,18 +12,18 @@ force_bdss.mco.tests.test_base_mco module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.mco.tests.test_base_mco_bundle module
-------------------------------------------------
-
-.. automodule:: force_bdss.mco.tests.test_base_mco_bundle
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force_bdss.mco.tests.test_base_mco_communicator module
 ------------------------------------------------------
 
 .. automodule:: force_bdss.mco.tests.test_base_mco_communicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force_bdss.mco.tests.test_base_mco_factory module
+-------------------------------------------------
+
+.. automodule:: force_bdss.mco.tests.test_base_mco_factory
     :members:
     :undoc-members:
     :show-inheritance:

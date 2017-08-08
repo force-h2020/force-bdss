@@ -2,7 +2,7 @@ import json
 import unittest
 from six import StringIO
 
-from force_bdss.bundle_registry_plugin import BundleRegistryPlugin
+from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
     InvalidVersionException, InvalidFileException)
@@ -15,13 +15,13 @@ except ImportError:
 
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
-        self.mock_bundle_registry = mock.Mock(spec=BundleRegistryPlugin)
+        self.mock_factory_registry = mock.Mock(spec=FactoryRegistryPlugin)
 
-        self.wfreader = WorkflowReader(self.mock_bundle_registry)
+        self.wfreader = WorkflowReader(self.mock_factory_registry)
 
     def test_initialization(self):
-        self.assertEqual(self.wfreader.bundle_registry,
-                         self.mock_bundle_registry)
+        self.assertEqual(self.wfreader.factory_registry,
+                         self.mock_factory_registry)
 
     def test_invalid_version(self):
         data = {

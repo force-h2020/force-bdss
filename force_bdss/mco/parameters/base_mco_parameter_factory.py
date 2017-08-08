@@ -1,6 +1,6 @@
 from traits.api import HasStrictTraits, String, Type, Instance
 
-from ..base_mco_bundle import BaseMCOBundle
+from ..base_mco_factory import BaseMCOFactory
 
 
 class BaseMCOParameterFactory(HasStrictTraits):
@@ -12,8 +12,8 @@ class BaseMCOParameterFactory(HasStrictTraits):
     the appropriate class of the parameter.
     """
 
-    #: A reference to the bundle this parameter factory lives in.
-    bundle = Instance(BaseMCOBundle)
+    #: A reference to the MCO factory this parameter factory lives in.
+    mco_factory = Instance(BaseMCOFactory)
 
     #: A unique string identifying the parameter
     id = String()
@@ -27,8 +27,8 @@ class BaseMCOParameterFactory(HasStrictTraits):
     # The model class to instantiate when create_model is called.
     model_class = Type('BaseMCOParameter')
 
-    def __init__(self, bundle):
-        self.bundle = bundle
+    def __init__(self, mco_factory):
+        self.mco_factory = mco_factory
         super(BaseMCOParameterFactory, self).__init__()
 
     def create_model(self, data_values=None):

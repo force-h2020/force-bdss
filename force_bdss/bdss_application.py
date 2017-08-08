@@ -8,7 +8,7 @@ from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 from traits.api import Unicode, Bool
 
-from .bundle_registry_plugin import BundleRegistryPlugin
+from .factory_registry_plugin import FactoryRegistryPlugin
 from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
 
@@ -30,7 +30,7 @@ class BDSSApplication(Application):
         self.evaluate = evaluate
         self.workflow_filepath = workflow_filepath
 
-        plugins = [CorePlugin(), BundleRegistryPlugin()]
+        plugins = [CorePlugin(), FactoryRegistryPlugin()]
 
         if self.evaluate:
             plugins.append(CoreEvaluationDriver())

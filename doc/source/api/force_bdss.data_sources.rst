@@ -19,10 +19,10 @@ force_bdss.data_sources.base_data_source module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.data_sources.base_data_source_bundle module
-------------------------------------------------------
+force_bdss.data_sources.base_data_source_factory module
+-------------------------------------------------------
 
-.. automodule:: force_bdss.data_sources.base_data_source_bundle
+.. automodule:: force_bdss.data_sources.base_data_source_factory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -35,10 +35,10 @@ force_bdss.data_sources.base_data_source_model module
     :undoc-members:
     :show-inheritance:
 
-force_bdss.data_sources.i_data_source_bundle module
----------------------------------------------------
+force_bdss.data_sources.i_data_source_factory module
+----------------------------------------------------
 
-.. automodule:: force_bdss.data_sources.i_data_source_bundle
+.. automodule:: force_bdss.data_sources.i_data_source_factory
     :members:
     :undoc-members:
     :show-inheritance:

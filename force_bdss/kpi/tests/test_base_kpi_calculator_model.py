@@ -1,7 +1,7 @@
 import unittest
 
 from force_bdss.core.input_slot_map import InputSlotMap
-from force_bdss.kpi.base_kpi_calculator_bundle import BaseKPICalculatorBundle
+from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
 from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 
 try:
@@ -17,7 +17,7 @@ class DummyKPICalculatorModel(BaseKPICalculatorModel):
 class TestBaseKPICalculatorModel(unittest.TestCase):
     def test_getstate(self):
         model = DummyKPICalculatorModel(
-            mock.Mock(spec=BaseKPICalculatorBundle))
+            mock.Mock(spec=BaseKPICalculatorFactory))
         self.assertEqual(
             model.__getstate__(),
             {

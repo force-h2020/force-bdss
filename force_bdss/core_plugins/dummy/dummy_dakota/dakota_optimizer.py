@@ -28,7 +28,7 @@ class DummyDakotaOptimizer(BaseMCO):
 
         value_iterator = itertools.product(*values)
 
-        application = self.bundle.plugin.application
+        application = self.factory.plugin.application
 
         for value in value_iterator:
             ps = subprocess.Popen(
