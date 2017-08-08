@@ -36,31 +36,57 @@ class CoreEvaluationDriver(BaseCoreDriver):
         mco_data_values = self._get_data_values_from_mco(mco_model,
                                                          mco_communicator)
 
-        ds_results = self._compute_ds_results(
+        ds_results = self._compute_layer_results(
             mco_data_values,
-            workflow)
+            workflow.data_sources,
+            "create_data_source"
+        )
 
-        kpi_results = self._compute_kpi_results(
+        kpi_results = self._compute_layer_results(
             ds_results + mco_data_values,
-            workflow)
+            workflow.kpi_calculators,
+            "create_kpi_calculator"
+        )
 
         mco_communicator.send_to_mco(mco_model, kpi_results)
 
-    def _compute_ds_results(self, environment_data_values, workflow):
+    def _compute_layer_results(self,
+                               environment_data_values,
+                               evaluator_models,
+                               creator_method_name
+                               ):
         """Helper routine.
-        Performs the evaluation of the DataSources, passing the current
-        environment data values (the MCO data)
-        """
-        ds_results = []
+        Performs the evaluation of a single layer.
+        At the moment we have a single layer of DataSources followed
+        by a single layer of KPI calculators.
 
-        for ds_model in workflow.data_sources:
-            ds_factory = ds_model.factory
-            data_source = ds_factory.create_data_source()
+        Parameters
+        ----------
+        environment_data_values: list
+            A list of data values to submit to the evaluators.
+
+        evaluator_models: list
+            A list of the models for all the evaluators (data source
+            or kpi calculator)
+
+        creator_method_name: str
+            A string of the creator method for the evaluator on the
+            factory (e.g. create_kpi_calculator)
+
+        NOTE: The above parameter is going to go away as soon as we move
+        to unlimited layers and remove the distinction between data sources
+        and KPI calculators.
+        """
+        results = []
+
+        for model in evaluator_models:
+            factory = model.factory
+            evaluator = getattr(factory, creator_method_name)()
 
             # Get the slots for this data source. These must be matched to
             # the appropriate values in the environment data values.
             # Matching is by position.
-            in_slots, out_slots = data_source.slots(ds_model)
+            in_slots, out_slots = evaluator.slots(model)
 
             # Binding performs the extraction of the specified data values
             # satisfying the above input slots from the environment data values
@@ -71,36 +97,36 @@ class CoreEvaluationDriver(BaseCoreDriver):
             # needed by the input slots.
             passed_data_values = self._bind_data_values(
                 environment_data_values,
-                ds_model.input_slot_maps,
+                model.input_slot_maps,
                 in_slots)
 
             # execute data source, passing only relevant data values.
             logging.info("Evaluating for Data Source {}".format(
-                ds_factory.name))
-            res = data_source.run(ds_model, passed_data_values)
+                factory.name))
+            res = evaluator.run(model, passed_data_values)
 
             if len(res) != len(out_slots):
                 error_txt = (
                     "The number of data values ({} values) returned"
-                    " by the DataSource '{}' does not match the number"
+                    " by '{}' does not match the number"
                     " of output slots it specifies ({} values)."
-                    " This is likely a DataSource plugin error.").format(
-                    len(res), ds_factory.name, len(out_slots)
+                    " This is likely a plugin error.").format(
+                    len(res), factory.name, len(out_slots)
                 )
 
                 logging.error(error_txt)
                 raise RuntimeError(error_txt)
 
-            if len(res) != len(ds_model.output_slot_names):
+            if len(res) != len(model.output_slot_names):
                 error_txt = (
                     "The number of data values ({} values) returned"
-                    " by the DataSource '{}' does not match the number"
+                    " by '{}' does not match the number"
                     " of user-defined names specified ({} values)."
-                    " This is either a DataSource plugin error or a file"
+                    " This is either a plugin error or a file"
                     " error.").format(
                     len(res),
-                    ds_factory.name,
-                    len(ds_model.output_slot_names)
+                    factory.name,
+                    len(model.output_slot_names)
                 )
 
                 logging.error(error_txt)
@@ -108,67 +134,14 @@ class CoreEvaluationDriver(BaseCoreDriver):
 
             # At this point, the returned data values are unnamed.
             # Add the names as specified by the user.
-            for dv, output_slot_name in zip(res, ds_model.output_slot_names):
+            for dv, output_slot_name in zip(res, model.output_slot_names):
                 dv.name = output_slot_name
 
-            ds_results.extend(res)
+            results.extend(res)
 
-        # Finally, return all the computed data values from all data sources,
+        # Finally, return all the computed data values from all evaluators,
         # properly named.
-        return ds_results
-
-    def _compute_kpi_results(self, environment_data_values, workflow):
-        """Perform evaluation of all KPI calculators.
-        environment_data_values contains all data values provided from
-        the MCO and data sources.
-        """
-        kpi_results = []
-
-        for kpic_model in workflow.kpi_calculators:
-            kpic_factory = kpic_model.factory
-            kpi_calculator = kpic_factory.create_kpi_calculator()
-
-            in_slots, out_slots = kpi_calculator.slots(kpic_model)
-
-            passed_data_values = self._bind_data_values(
-                environment_data_values,
-                kpic_model.input_slot_maps,
-                in_slots)
-
-            logging.info("Evaluating for KPICalculator {}".format(
-                kpic_factory.name))
-
-            res = kpi_calculator.run(kpic_model, passed_data_values)
-
-            if len(res) != len(out_slots):
-                error_txt = (
-                    "The number of data values ({} values) returned by"
-                    " the KPICalculator '{}' does not match the"
-                    " number of output slots ({} values). This is"
-                    " likely a KPICalculator plugin error."
-                ).format(len(res), kpic_factory.name, len(out_slots))
-                logging.error(error_txt)
-                raise RuntimeError(error_txt)
-
-            if len(res) != len(kpic_model.output_slot_names):
-                error_txt = (
-                    "The number of data values ({} values) returned by"
-                    " the KPICalculator '{}' does not match the"
-                    " number of user-defined names specified ({} values)."
-                    " This is either an input file error or a plugin"
-                    " error."
-                ).format(len(res), kpic_factory.name,
-                         len(kpic_model.output_slot_names))
-                logging.error(error_txt)
-                raise RuntimeError(error_txt)
-
-            for kpi, output_slot_name in zip(
-                    res, kpic_model.output_slot_names):
-                kpi.name = output_slot_name
-
-            kpi_results.extend(res)
-
-        return kpi_results
+        return results
 
     def _get_data_values_from_mco(self, model, communicator):
         """Helper method.
