@@ -1,9 +1,12 @@
 import errno
 import logging
-from traits.api import Any, List
+from traits.api import Any, List, Instance
 
 from force_bdss.api import BaseNotificationListener
 import zmq
+
+from force_bdss.mco.events import BaseMCOEvent, MCOStartEvent, MCOFinishEvent, \
+    MCOProgressEvent
 
 
 class UINotification(BaseNotificationListener):
@@ -20,7 +23,7 @@ class UINotification(BaseNotificationListener):
     #: The cache of messages as they are sent out.
     _msg_cache = List()
 
-    def deliver(self, model, message):
+    def deliver(self, model, event):
         try:
             data = self._rep_socket.recv(flags=zmq.NOBLOCK)
         except zmq.ZMQError as e:
@@ -33,9 +36,10 @@ class UINotification(BaseNotificationListener):
         if data and data[0:4] == "SYNC".encode("utf-8"):
             self._rep_socket.send_multipart(self._msg_cache)
 
-        msg = "ACTION {}".format(message).encode("utf-8")
-        self._msg_cache.append(msg)
-        self._pub_socket.send(msg)
+        msg = self._format_event(event)
+        if msg is not None:
+            self._msg_cache.append(msg)
+            self._pub_socket.send(msg)
 
     def init_persistent_state(self, model):
         self._context = zmq.Context()
@@ -44,3 +48,15 @@ class UINotification(BaseNotificationListener):
 
         self._rep_socket = self._context.socket(zmq.REP)
         self._rep_socket.bind("tcp://*:12346")
+
+    def _format_event(self, event):
+        if isinstance(event, MCOStartEvent):
+            data = "MCO_START"
+        elif isinstance(event, MCOFinishEvent):
+            data = "MCO_FINISH"
+        elif isinstance(event, MCOProgressEvent):
+            data = "MCO_PROGRESS {} {}".format(event.input, event.output)
+        else:
+            return None
+
+        return ("EVENT {}".format(data)).encode("utf-8")

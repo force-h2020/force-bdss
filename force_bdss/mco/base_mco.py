@@ -1,7 +1,8 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance, Event
+from traits.api import ABCHasStrictTraits, Instance, Event, Dict
 
+from force_bdss.mco.events import BaseMCOEvent
 from .i_mco_factory import IMCOFactory
 
 
@@ -13,11 +14,8 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-    started = Event()
-
-    finished = Event()
-
-    progress = Event()
+    #: Must be triggered when an event occurs.
+    event = Event(BaseMCOEvent)
 
     def __init__(self, factory, *args, **kwargs):
         """Initializes the MCO.
@@ -41,3 +39,6 @@ class BaseMCO(ABCHasStrictTraits):
             An instance of the model information, as created from
             create_model()
         """
+
+    def notify_event(self, event):
+        self.event = event

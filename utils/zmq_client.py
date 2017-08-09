@@ -11,10 +11,10 @@ send_socket.connect("tcp://localhost:12346")
 send_socket.send("SYNC".encode("utf-8"))
 data = send_socket.recv_multipart()
 for d in data:
-    topic, messagedata = d.split()
-    print("SYNCED ", topic, messagedata)
+    split_data = d.split()
+    print("SYNCED ", split_data)
 
 while True:
     string = socket.recv()
-    topic, messagedata = string.split()
-    print(topic, messagedata)
+    split_data = string.split()
+    print(split_data)

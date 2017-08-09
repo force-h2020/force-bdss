@@ -42,18 +42,10 @@ class CoreMCODriver(BaseCoreDriver):
         mco_factory = mco_model.factory
         return mco_factory.create_optimizer()
 
-    @on_trait_change("mco:started,mco:finished,mco:progress")
-    def _handle_mco_event(self, object, name, old, new):
-        if name == "started":
-            self._deliver_to_listeners("MCO_STARTED")
-        elif name == "finished":
-            self._deliver_to_listeners("MCO_FINISHED")
-        elif name == "progress":
-            self._deliver_to_listeners("MCO_PROGRESS")
-
-    def _deliver_to_listeners(self, message):
+    @on_trait_change("mco:event")
+    def _handle_mco_event(self, event):
         for listener in self.listeners:
-            listener.deliver(None, message)
+            listener.deliver(None, event)
 
     def _listeners_default(self):
         listeners = []
