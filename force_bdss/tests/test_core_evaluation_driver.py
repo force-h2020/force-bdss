@@ -1,5 +1,8 @@
 import unittest
+
 from traits.api import Float, List
+
+from force_bdss.core.input_slot_map import InputSlotMap
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
@@ -27,7 +30,8 @@ except ImportError:
 
 from envisage.api import Application
 
-from force_bdss.core_evaluation_driver import CoreEvaluationDriver
+from force_bdss.core_evaluation_driver import CoreEvaluationDriver, \
+    _bind_data_values, _compute_layer_results
 
 
 class NullMCOModel(BaseMCOModel):
@@ -159,6 +163,19 @@ class OneValueDataSource(BaseDataSource):
         )
 
 
+class TwoInputsThreeOutputsDataSource(BaseDataSource):
+    """Incorrect data source implementation whose run returns a data value
+    but no slot was specified for it."""
+    def run(self, model, parameters):
+        return [DataValue(value=1), DataValue(value=2), DataValue(value=3)]
+
+    def slots(self, model):
+        return (
+            (Slot(), Slot()),
+            (Slot(), Slot(), Slot())
+        )
+
+
 class NullDataSourceFactory(BaseDataSourceFactory):
     id = factory_id("enthought", "null_ds")
     name = "null_ds"
@@ -276,3 +293,84 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     " returned by 'null_kpic' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
+
+    def test_bind_data_values(self):
+        data_values = [
+            DataValue(name="foo"),
+            DataValue(name="bar"),
+            DataValue(name="baz")
+        ]
+
+        slot_map = (
+            InputSlotMap(name="baz"),
+            InputSlotMap(name="bar")
+        )
+
+        slots = (
+            Slot(),
+            Slot()
+        )
+
+        result = _bind_data_values(data_values, slot_map, slots)
+        self.assertEqual(result[0], data_values[2])
+        self.assertEqual(result[1], data_values[1])
+
+        # Check the errors. Only one slot map for two slots.
+        slot_map = (
+            InputSlotMap(name="baz"),
+        )
+
+        with self.assertRaisesRegexp(
+                RuntimeError,
+                "The length of the slots is not equal to the length of"
+                " the slot map"):
+            _bind_data_values(data_values, slot_map, slots)
+
+        # missing value in the given data values.
+        slot_map = (
+            InputSlotMap(name="blap"),
+            InputSlotMap(name="bar")
+        )
+
+        with self.assertRaisesRegexp(
+                RuntimeError,
+                "Unable to find requested name 'blap' in available"
+                " data values."):
+            _bind_data_values(data_values, slot_map, slots)
+
+    def test_compute_layer_results(self):
+
+        data_values = [
+            DataValue(name="foo"),
+            DataValue(name="bar"),
+            DataValue(name="baz"),
+            DataValue(name="quux")
+        ]
+
+        mock_ds_factory = mock.Mock(spec=BaseDataSourceFactory)
+        mock_ds_factory.name = "mock factory"
+        mock_ds_factory.create_data_source.return_value = \
+            TwoInputsThreeOutputsDataSource(mock_ds_factory)
+        evaluator_model = NullDataSourceModel(factory=mock_ds_factory)
+
+        evaluator_model.input_slot_maps = [
+            InputSlotMap(name="foo"),
+            InputSlotMap(name="quux")
+        ]
+        evaluator_model.output_slot_names = ["one", "", "three"]
+
+        res = _compute_layer_results(
+            data_values,
+            [evaluator_model],
+            "create_data_source"
+        )
+        self.assertEqual(len(res), 2)
+        self.assertEqual(res[0].name, "one")
+        self.assertEqual(res[0].value, 1)
+        self.assertEqual(res[1].name, "three")
+        self.assertEqual(res[1].value, 3)
+
+    def test_empty_slot_name_skips_data_value(self):
+        """Checks if leaving a slot name empty will skip the data value
+        in the final output
+        """
