@@ -41,7 +41,7 @@ class UINotification(BaseNotificationListener):
             self._msg_cache.append(msg)
             self._pub_socket.send(msg)
 
-    def init_persistent_state(self, model):
+    def initialize(self, model):
         self._context = zmq.Context()
         self._pub_socket = self._context.socket(zmq.PUB)
         self._pub_socket.bind("tcp://*:12345")
@@ -62,3 +62,9 @@ class UINotification(BaseNotificationListener):
             return None
 
         return ("EVENT\n{}".format(data)).encode("utf-8")
+
+    def finalize(self, model):
+        self._context.destroy()
+        self._pub_socket = None
+        self._rep_socket = None
+        self._context = None

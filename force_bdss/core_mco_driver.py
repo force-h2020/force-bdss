@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import sys
+import logging
 
 from traits.api import on_trait_change, Instance, List
 
@@ -31,6 +32,17 @@ class CoreMCODriver(BaseCoreDriver):
     def application_started(self):
         self.mco.run(self.workflow.mco)
 
+    @on_trait_change("application:stopping")
+    def application_stopping(self):
+        for listener in self.listeners:
+            try:
+                listener.finalize(None)
+            except Exception as e:
+                logging.error(
+                    "Failed to finalize "
+                    "listener {}: {}".format(
+                        listener.__class__.__name__, str(e)))
+
     def _mco_default(self):
         try:
             workflow = self.workflow
@@ -51,8 +63,15 @@ class CoreMCODriver(BaseCoreDriver):
         listeners = []
 
         for factory in self.factory_registry.notification_listener_factories:
-            listener = factory.create_listener()
-            listener.init_persistent_state(None)
-            listeners.append(listener)
+            try:
+                listener = factory.create_listener()
+                listener.initialize(None)
+            except Exception as e:
+                logging.error(
+                    "Failed to create or initialize "
+                    "listener with id {}: {}".format(
+                        factory.id, str(e)))
+            else:
+                listeners.append(listener)
 
         return listeners

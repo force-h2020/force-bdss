@@ -24,9 +24,33 @@ class BaseNotificationListener(ABCHasStrictTraits):
         self.factory = factory
         super(BaseNotificationListener, self).__init__(*args, **kwargs)
 
-    @abc.abstractmethod
-    def deliver(self, model, message):
-        pass
+    def initialize(self, model):
+        """
+        Method used to initialize persistent state of the listener using
+        information from the model.
 
-    def init_persistent_state(self, model):
-        pass
+        Reimplement it in your Notification Listener to perform special
+        initialization of state that survives across deliver() invocations,
+        such as setting up a connection, or opening a file.
+        """
+
+    def finalize(self, model):
+        """
+        Method used to finalize state of the listener.
+
+        Reimplement it in your Notification Listener to perform special
+        finalization of state that survives across deliver() invocations,
+        such as closing a connection, or closing a file.
+        """
+
+    @abc.abstractmethod
+    def deliver(self, model, event):
+        """Delivers the event to the recipient
+
+        Parameters
+        ----------
+        model:
+            The model
+        event: MCOEvent
+            The event to notify.
+        """
