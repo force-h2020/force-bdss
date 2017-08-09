@@ -80,4 +80,3 @@ def _format_event(event):
         return None
 
     return ("EVENT\n{}".format(data)).encode("utf-8")
-

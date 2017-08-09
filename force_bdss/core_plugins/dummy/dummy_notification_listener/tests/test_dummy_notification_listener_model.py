@@ -1,7 +1,5 @@
 import unittest
 
-from envisage.plugin import Plugin
-
 from force_bdss.core_plugins.dummy.dummy_notification_listener\
     .dummy_notification_listener_factory import \
     DummyNotificationListenerFactory

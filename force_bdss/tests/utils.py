@@ -2,6 +2,7 @@ import sys
 from contextlib import contextmanager
 from six import StringIO
 
+
 @contextmanager
 def captured_output():
     new_out, new_err = StringIO(), StringIO()
