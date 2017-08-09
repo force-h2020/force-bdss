@@ -51,11 +51,13 @@ class UINotification(BaseNotificationListener):
 
     def _format_event(self, event):
         if isinstance(event, MCOStartEvent):
-            data = "MCO_START"
+            data = "MCO_START\n"
         elif isinstance(event, MCOFinishEvent):
-            data = "MCO_FINISH"
+            data = "MCO_FINISH\n"
         elif isinstance(event, MCOProgressEvent):
-            data = "MCO_PROGRESS {} {}".format(event.input, event.output)
+            data = "MCO_PROGRESS\n{}\n{}\n".format(
+                " ".join([str(x) for x in event.input]),
+                " ".join([str(x) for x in event.output]))
         else:
             return None
 
