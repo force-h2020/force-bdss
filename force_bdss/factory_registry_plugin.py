@@ -43,6 +43,8 @@ class FactoryRegistryPlugin(Plugin):
         List(IKPICalculatorFactory),
         id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
 
+    #: Notification listeners are pluggable entities that will listen
+    #: to MCO events and act accordingly.
     notification_listener_factories = ExtensionPoint(
         List(INotificationListenerFactory),
         id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
