@@ -1,9 +1,7 @@
 from traits.api import String
 
-from force_bdss.ids import factory_id
-from force_bdss.notification_listeners.base_notification_listener_factory \
-    import \
-    BaseNotificationListenerFactory
+from force_bdss.api import factory_id, BaseNotificationListenerFactory
+
 from .ui_notification import UINotification
 from .ui_notification_model import UINotificationModel
 

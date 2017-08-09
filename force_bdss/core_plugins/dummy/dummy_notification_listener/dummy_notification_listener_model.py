@@ -1,6 +1,4 @@
-from force_bdss.notification_listeners.base_notification_listener_model \
-    import \
-    BaseNotificationListenerModel
+from force_bdss.api import BaseNotificationListenerModel
 
 
 class DummyNotificationListenerModel(BaseNotificationListenerModel):

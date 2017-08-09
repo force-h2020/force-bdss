@@ -2,14 +2,20 @@ import errno
 import logging
 from traits.api import Any, List
 
-from force_bdss.api import BaseNotificationListener
-import zmq
-
-from force_bdss.mco.events import MCOStartEvent, MCOFinishEvent, \
+from force_bdss.api import (
+    BaseNotificationListener,
+    MCOStartEvent,
+    MCOFinishEvent,
     MCOProgressEvent
+)
+
+import zmq
 
 
 class UINotification(BaseNotificationListener):
+    """
+    Notification engine for the UI. Uses zeromq for the traffic handling.
+    """
     #: The ZMQ context.
     _context = Any()
 
@@ -49,6 +55,15 @@ class UINotification(BaseNotificationListener):
         self._rep_socket = self._context.socket(zmq.REP)
         self._rep_socket.bind("tcp://*:12346")
 
+    def finalize(self, model):
+        self._pub_socket.close()
+        self._rep_socket.close()
+        self._context.term()
+
+        self._pub_socket = None
+        self._rep_socket = None
+        self._context = None
+
     def _format_event(self, event):
         if isinstance(event, MCOStartEvent):
             data = "MCO_START"
@@ -63,8 +78,3 @@ class UINotification(BaseNotificationListener):
 
         return ("EVENT\n{}".format(data)).encode("utf-8")
 
-    def finalize(self, model):
-        self._context.destroy()
-        self._pub_socket = None
-        self._rep_socket = None
-        self._context = None

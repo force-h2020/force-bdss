@@ -1,6 +1,9 @@
-from force_bdss.api import BaseNotificationListener
-from force_bdss.mco.events import (
-    MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
+from force_bdss.api import (
+    BaseNotificationListener,
+    MCOStartEvent,
+    MCOFinishEvent,
+    MCOProgressEvent
+)
 
 
 class DummyNotificationListener(BaseNotificationListener):
