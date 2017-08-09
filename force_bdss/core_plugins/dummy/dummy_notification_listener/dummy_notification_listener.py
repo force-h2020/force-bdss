@@ -12,9 +12,11 @@ class DummyNotificationListener(BaseNotificationListener):
             print(event.__class__.__name__)
         elif isinstance(event, MCOProgressEvent):
             print(event.__class__.__name__, event.input, event.output)
+        else:
+            print(event.__class__.__name__)
 
     def initialize(self, model):
-        print("Initializing persistent state")
+        print("Initializing")
 
     def finalize(self, model):
-        print("Finalizing persistent state")
+        print("Finalizing")

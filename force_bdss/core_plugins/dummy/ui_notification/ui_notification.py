@@ -1,6 +1,6 @@
 import errno
 import logging
-from traits.api import Any, List
+from traits.api import List, Instance
 
 from force_bdss.api import (
     BaseNotificationListener,
@@ -17,14 +17,14 @@ class UINotification(BaseNotificationListener):
     Notification engine for the UI. Uses zeromq for the traffic handling.
     """
     #: The ZMQ context.
-    _context = Any()
+    _context = Instance(zmq.Context)
 
     #: The pubsub socket.
-    _pub_socket = Any()
+    _pub_socket = Instance(zmq.Socket)
 
     #: The synchronization socket to recover already sent information at a
     #: later stage
-    _rep_socket = Any()
+    _rep_socket = Instance(zmq.Socket)
 
     #: The cache of messages as they are sent out.
     _msg_cache = List()
@@ -42,12 +42,13 @@ class UINotification(BaseNotificationListener):
         if data and data[0:4] == "SYNC".encode("utf-8"):
             self._rep_socket.send_multipart(self._msg_cache)
 
-        msg = self._format_event(event)
+        msg = _format_event(event)
         if msg is not None:
             self._msg_cache.append(msg)
             self._pub_socket.send(msg)
 
     def initialize(self, model):
+        print("XX")
         self._context = zmq.Context()
         self._pub_socket = self._context.socket(zmq.PUB)
         self._pub_socket.bind("tcp://*:12345")
@@ -64,17 +65,19 @@ class UINotification(BaseNotificationListener):
         self._rep_socket = None
         self._context = None
 
-    def _format_event(self, event):
-        if isinstance(event, MCOStartEvent):
-            data = "MCO_START"
-        elif isinstance(event, MCOFinishEvent):
-            data = "MCO_FINISH"
-        elif isinstance(event, MCOProgressEvent):
-            data = "MCO_PROGRESS\n{}\n{}".format(
-                " ".join([str(x) for x in event.input]),
-                " ".join([str(x) for x in event.output]))
-        else:
-            return None
 
-        return ("EVENT\n{}".format(data)).encode("utf-8")
+def _format_event(event):
+    """Converts the event into a byte sequence to be transferred via zmq"""
+    if isinstance(event, MCOStartEvent):
+        data = "MCO_START"
+    elif isinstance(event, MCOFinishEvent):
+        data = "MCO_FINISH"
+    elif isinstance(event, MCOProgressEvent):
+        data = "MCO_PROGRESS\n{}\n{}".format(
+            " ".join([str(x) for x in event.input]),
+            " ".join([str(x) for x in event.output]))
+    else:
+        return None
+
+    return ("EVENT\n{}".format(data)).encode("utf-8")
 
