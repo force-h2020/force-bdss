@@ -34,6 +34,3 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
     @abc.abstractmethod
     def create_model(self, model_data=None):
         """"""
-
-    def init_persistent_state(self):
-        pass

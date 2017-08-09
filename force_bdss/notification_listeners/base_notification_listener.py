@@ -27,3 +27,6 @@ class BaseNotificationListener(ABCHasStrictTraits):
     @abc.abstractmethod
     def deliver(self, model, message):
         pass
+
+    def init_persistent_state(self, model):
+        pass

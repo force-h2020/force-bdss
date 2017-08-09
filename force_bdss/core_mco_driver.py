@@ -58,8 +58,9 @@ class CoreMCODriver(BaseCoreDriver):
     def _listeners_default(self):
         listeners = []
 
-        print(self.factory_registry.notification_listener_factories)
         for factory in self.factory_registry.notification_listener_factories:
-            listeners.append(factory.create_listener())
+            listener = factory.create_listener()
+            listener.init_persistent_state(None)
+            listeners.append(listener)
 
         return listeners
