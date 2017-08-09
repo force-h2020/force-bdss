@@ -16,4 +16,3 @@ class MCOFinishEvent(BaseMCOEvent):
 class MCOProgressEvent(BaseMCOEvent):
     input = Tuple()
     output = Tuple()
-

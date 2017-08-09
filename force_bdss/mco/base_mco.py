@@ -1,6 +1,6 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance, Event, Dict
+from traits.api import ABCHasStrictTraits, Instance, Event
 
 from force_bdss.mco.events import BaseMCOEvent
 from .i_mco_factory import IMCOFactory
