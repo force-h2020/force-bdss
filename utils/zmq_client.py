@@ -1,7 +1,5 @@
-import sys
 import zmq
 
-port = "5556"
 # Socket to talk to server
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
