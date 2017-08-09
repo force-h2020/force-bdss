@@ -1,11 +1,11 @@
 import errno
 import logging
-from traits.api import Any, List, Instance
+from traits.api import Any, List
 
 from force_bdss.api import BaseNotificationListener
 import zmq
 
-from force_bdss.mco.events import BaseMCOEvent, MCOStartEvent, MCOFinishEvent, \
+from force_bdss.mco.events import MCOStartEvent, MCOFinishEvent, \
     MCOProgressEvent
 
 
@@ -51,14 +51,14 @@ class UINotification(BaseNotificationListener):
 
     def _format_event(self, event):
         if isinstance(event, MCOStartEvent):
-            data = "MCO_START\n"
+            data = "MCO_START"
         elif isinstance(event, MCOFinishEvent):
-            data = "MCO_FINISH\n"
+            data = "MCO_FINISH"
         elif isinstance(event, MCOProgressEvent):
-            data = "MCO_PROGRESS\n{}\n{}\n".format(
+            data = "MCO_PROGRESS\n{}\n{}".format(
                 " ".join([str(x) for x in event.input]),
                 " ".join([str(x) for x in event.output]))
         else:
             return None
 
-        return ("EVENT {}".format(data)).encode("utf-8")
+        return ("EVENT\n{}".format(data)).encode("utf-8")
