@@ -33,6 +33,7 @@ class UINotification(BaseNotificationListener):
     _proto_version = "1"
 
     def initialize(self, model):
+        self._identifier = model.identifier
         self._context = zmq.Context()
 
         self._pub_socket = self._context.socket(zmq.PUB)
