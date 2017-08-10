@@ -1,5 +1,4 @@
 import unittest
-from xxlimited import Null
 
 from traits.api import Float, List
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
