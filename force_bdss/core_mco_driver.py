@@ -36,13 +36,7 @@ class CoreMCODriver(BaseCoreDriver):
     @on_trait_change("application:stopping")
     def application_stopping(self):
         for listener in self.listeners:
-            try:
-                listener.finalize(None)
-            except Exception as e:
-                log.error(
-                    "Failed to finalize "
-                    "listener {}: {}".format(
-                        listener.__class__.__name__, str(e)))
+            self._finalize_listener(listener)
 
     def _mco_default(self):
         try:
@@ -66,17 +60,7 @@ class CoreMCODriver(BaseCoreDriver):
                         listener.__class__.__name__,
                         str(e)
                     ))
-
-                try:
-                    listener.finalize()
-                except Exception:
-                    log.error(
-                        "Exception while finalizing listener {}: {}".format(
-                            listener.__class__.__name__,
-                            str(e)
-                        ))
-                    pass
-
+                self._finalize_listener(listener)
                 self.listeners.remove(listener)
 
     def _listeners_default(self):
@@ -95,3 +79,17 @@ class CoreMCODriver(BaseCoreDriver):
                 listeners.append(listener)
 
         return listeners
+
+    def _finalize_listener(self, listener):
+        """Helper method. Finalizes a listener and handles possible
+        exceptions. it does _not_ remove the listener from the listener
+        list.
+        """
+        try:
+            listener.finalize()
+        except Exception as e:
+            log.error(
+                "Exception while finalizing listener {}: {}".format(
+                    listener.__class__.__name__,
+                    str(e)
+                ))
