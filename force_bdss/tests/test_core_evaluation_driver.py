@@ -1,4 +1,6 @@
 import unittest
+from xxlimited import Null
+
 from traits.api import Float, List
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.core.data_value import DataValue
@@ -18,6 +20,14 @@ from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
+from force_bdss.notification_listeners.base_notification_listener import \
+    BaseNotificationListener
+from force_bdss.notification_listeners.base_notification_listener_factory \
+    import \
+    BaseNotificationListenerFactory
+from force_bdss.notification_listeners.base_notification_listener_model \
+    import \
+    BaseNotificationListenerModel
 from force_bdss.tests import fixtures
 
 try:
@@ -170,10 +180,37 @@ class NullDataSourceFactory(BaseDataSourceFactory):
         return NullDataSource(self)
 
 
+class NullNotificationListener(BaseNotificationListener):
+    def initialize(self, model):
+        pass
+
+    def deliver(self, event):
+        pass
+
+    def finalize(self):
+        pass
+
+
+class NullNotificationListenerModel(BaseNotificationListenerModel):
+    pass
+
+
+class NullNotificationListenerFactory(BaseNotificationListenerFactory):
+    id = factory_id("enthought", "null_nl")
+    name = "null_nl"
+
+    def create_listener(self):
+        return NullNotificationListener(self)
+
+    def create_model(self, model_data=None):
+        return NullNotificationListenerModel(self)
+
+
 class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
     mco_factories = List()
     kpi_calculator_factories = List()
     data_source_factories = List()
+    notification_listener_factories = List()
 
 
 def mock_factory_registry_plugin():
@@ -184,6 +221,9 @@ def mock_factory_registry_plugin():
         NullKPICalculatorFactory(factory_registry_plugin)]
     factory_registry_plugin.data_source_factories = [
         NullDataSourceFactory(factory_registry_plugin)]
+    factory_registry_plugin.notification_listener_factories = [
+        NullNotificationListenerFactory(factory_registry_plugin)
+    ]
     return factory_registry_plugin
 
 

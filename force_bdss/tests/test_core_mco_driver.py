@@ -1,4 +1,6 @@
 import unittest
+
+from force_bdss.mco.events import MCOStartEvent
 from force_bdss.tests import fixtures
 from force_bdss.tests.test_core_evaluation_driver import \
     mock_factory_registry_plugin
@@ -28,3 +30,15 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         driver.application_started()
+
+    def test_listeners(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        self.assertEqual(len(driver.listeners), 1)
+
+    def test_event_handling(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        driver.mco.event = MCOStartEvent()
