@@ -1,5 +1,5 @@
 import logging
-from traits.api import List, Instance, String
+from traits.api import Instance, String
 
 from force_bdss.api import (
     BaseNotificationListener,

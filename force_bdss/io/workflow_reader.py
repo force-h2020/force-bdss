@@ -224,4 +224,3 @@ class WorkflowReader(HasStrictTraits):
             listeners.append(nl_factory.create_model(model_data))
 
         return listeners
-

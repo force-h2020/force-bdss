@@ -26,6 +26,7 @@ class ZMQSocketURL(BaseStr):
 
         return value
 
+
 #: Identifies a CUBA type with its key. At the moment a String with
 #: no validation, but will come later.
 CUBAType = String()

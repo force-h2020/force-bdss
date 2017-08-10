@@ -45,4 +45,3 @@ class TestLocalTraits(unittest.TestCase):
                        "tcp://1.1.1.1:100000"]:
             with self.assertRaises(TraitError):
                 c.socket_url = broken
-
