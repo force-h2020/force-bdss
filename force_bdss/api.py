@@ -27,3 +27,8 @@ from .notification_listeners.i_notification_listener_factory import INotificatio
 from .notification_listeners.base_notification_listener import BaseNotificationListener  # noqa
 from .notification_listeners.base_notification_listener_factory import BaseNotificationListenerFactory  # noqa
 from .notification_listeners.base_notification_listener_model import BaseNotificationListenerModel  # noqa
+
+from .local_traits import (
+    ZMQSocketURL,
+    Identifier
+)
