@@ -5,6 +5,8 @@ from force_bdss.base_extension_plugin import (
 from force_bdss.ids import factory_id, mco_parameter_id
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
+from force_bdss.notification_listeners.i_notification_listener_factory import \
+    INotificationListenerFactory
 
 try:
     import mock
@@ -61,6 +63,10 @@ class MySuperPlugin(BaseExtensionPlugin):
                 mock.Mock(spec=IKPICalculatorFactory,
                           id=factory_id("enthought", "kpi3"))]
 
+    def _notification_listener_factories_default(self):
+        return [mock.Mock(spec=INotificationListenerFactory,
+                          id=factory_id("enthought", "nl1"))]
+
 
 class TestFactoryRegistryWithContent(unittest.TestCase):
     def setUp(self):
@@ -89,6 +95,12 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
             self.assertEqual(self.plugin.kpi_calculator_factory_by_id(id).id,
                              id)
 
+        for entry in ["nl1"]:
+            id = factory_id("enthought", entry)
+            self.assertEqual(
+                self.plugin.notification_listener_factory_by_id(id).id,
+                id)
+
         with self.assertRaises(KeyError):
             self.plugin.mco_factory_by_id(
                 factory_id("enthought", "foo"))
@@ -111,6 +123,11 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             self.plugin.kpi_calculator_factory_by_id(
+                factory_id("enthought", "foo")
+            )
+
+        with self.assertRaises(KeyError):
+            self.plugin.notification_listener_factory_by_id(
                 factory_id("enthought", "foo")
             )
 
