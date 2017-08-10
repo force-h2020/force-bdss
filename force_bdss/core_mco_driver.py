@@ -53,7 +53,7 @@ class CoreMCODriver(BaseCoreDriver):
     def _handle_mco_event(self, event):
         for listener in self.listeners:
             try:
-                listener.deliver(None, event)
+                listener.deliver(event)
             except Exception as e:
                 log.error(
                     "Exception while delivering to listener {}: {}".format(
@@ -66,10 +66,11 @@ class CoreMCODriver(BaseCoreDriver):
     def _listeners_default(self):
         listeners = []
 
-        for factory in self.factory_registry.notification_listener_factories:
+        for nl_model in self.workflow.notification_listeners:
+            factory = nl_model.factory
             try:
                 listener = factory.create_listener()
-                listener.initialize(None)
+                listener.initialize(nl_model)
             except Exception as e:
                 log.error(
                     "Failed to create or initialize "

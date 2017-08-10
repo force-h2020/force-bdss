@@ -34,7 +34,7 @@ class BaseNotificationListener(ABCHasStrictTraits):
         such as setting up a connection, or opening a file.
         """
 
-    def finalize(self, model):
+    def finalize(self):
         """
         Method used to finalize state of the listener.
 
@@ -44,13 +44,11 @@ class BaseNotificationListener(ABCHasStrictTraits):
         """
 
     @abc.abstractmethod
-    def deliver(self, model, event):
+    def deliver(self, event):
         """Delivers the event to the recipient
 
         Parameters
         ----------
-        model:
-            The model
         event: MCOEvent
             The event to notify.
         """
