@@ -25,11 +25,11 @@ while True:
     if sync_socket in events:
         data = sync_socket.recv_string()
         print("received ", data)
-        if data == "HELLO 1":
-            sync_socket.send_string("HELLO 1")
+        if data.startswith("HELLO\n"):
+            sync_socket.send_string(data)
             state = RECEIVING
-        elif data == "GOODBYE 1":
-            sync_socket.send_string("GOODBYE 1")
+        elif data.startswith("GOODBYE\n"):
+            sync_socket.send_string(data)
             state = WAITING
         else:
             print("unknown request", data)
