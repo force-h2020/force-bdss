@@ -155,7 +155,7 @@ class TestUINotification(unittest.TestCase):
             capture.check(
                 ("force_bdss.core_plugins.dummy.ui_notification.ui_notification",  # noqa
                  "ERROR",
-                 "Unexpected reply in goodbye sync negotiation with UI server. "
+                 "Unexpected reply in goodbye sync negotiation with UI server. "  # noqa
                  "'GOODBYE\nnot_the_right_id\n1'"  # noqa
                  ),
             )
