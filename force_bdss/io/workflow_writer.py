@@ -17,9 +17,7 @@ class WorkflowWriter(HasStrictTraits):
             A file object on which to write the workflow, properly serialized
             into JSON.
         """
-        data = {
-            "version": "1",
-        }
+        data = dict(version=1)
 
         data["workflow"] = self._workflow_data(workflow)
         json.dump(data, f)
@@ -32,7 +30,11 @@ class WorkflowWriter(HasStrictTraits):
                 for kpic in workflow.kpi_calculators],
             "data_sources": [
                 self._model_data(ds)
-                for ds in workflow.data_sources]
+                for ds in workflow.data_sources],
+            "notification_listeners": [
+                self._model_data(nl)
+                for nl in workflow.notification_listeners
+            ]
         }
 
         return workflow_data

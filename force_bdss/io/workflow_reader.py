@@ -89,6 +89,7 @@ class WorkflowReader(HasStrictTraits):
             wf.mco = self._extract_mco(wf_data)
             wf.data_sources[:] = self._extract_data_sources(wf_data)
             wf.kpi_calculators[:] = self._extract_kpi_calculators(wf_data)
+            wf.notification_listeners[:] = self._extract_listeners(wf_data)
         except KeyError as e:
             logging.exception("Could not read file")
             raise InvalidFileException("Could not read file. "
@@ -211,3 +212,15 @@ class WorkflowReader(HasStrictTraits):
 
     def _extract_input_slot_maps(self, maps_data):
         return [InputSlotMap(**d) for d in maps_data]
+
+    def _extract_notification_listeners(self, wf_data):
+        registry = self.factory_registry
+        listeners = []
+        for nl_entry in wf_data["notification_listeners"]:
+            nl_id = nl_entry["id"]
+            nl_factory = registry.notification_listener_factory_by_id(nl_id)
+            model_data = nl_entry["model_data"]
+            listeners.append(nl_factory.create_model(model_data))
+
+        return listeners
+
