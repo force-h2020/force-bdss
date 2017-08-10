@@ -19,5 +19,8 @@ class TestDummyNotificationListenerFactory(unittest.TestCase):
         model = factory.create_model()
         self.assertEqual(model.factory, factory)
 
+        model = factory.create_model({})
+        self.assertEqual(model.factory, factory)
+
         listener = factory.create_listener()
         self.assertEqual(listener.factory, factory)

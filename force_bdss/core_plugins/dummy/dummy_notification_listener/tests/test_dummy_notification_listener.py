@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.api import BaseMCOEvent
+from force_bdss.api import MCOStartEvent, MCOProgressEvent, MCOFinishEvent
 from force_bdss.notification_listeners.base_notification_listener_factory \
     import \
     BaseNotificationListenerFactory
@@ -24,11 +24,14 @@ class TestDummyNotificationListener(unittest.TestCase):
         listener = DummyNotificationListener(
             mock.Mock(spec=BaseNotificationListenerFactory))
         model = mock.Mock(spec=BaseNotificationListenerModel)
-        event = mock.Mock(spec=BaseMCOEvent)
         with captured_output() as (out, err):
             listener.initialize(model)
-            listener.deliver(event)
+            listener.deliver(MCOStartEvent())
+            listener.deliver(MCOProgressEvent())
+            listener.deliver(MCOFinishEvent())
             listener.finalize()
 
-        self.assertEqual(out.getvalue(),
-                         "Initializing\nBaseMCOEvent\nFinalizing\n")
+        self.assertEqual(
+            out.getvalue(),
+            "Initializing\nMCOStartEvent\nMCOProgressEvent () ()\n"
+            "MCOFinishEvent\nFinalizing\n")
