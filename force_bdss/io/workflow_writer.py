@@ -17,7 +17,7 @@ class WorkflowWriter(HasStrictTraits):
             A file object on which to write the workflow, properly serialized
             into JSON.
         """
-        data = dict(version=1)
+        data = dict(version="1")
 
         data["workflow"] = self._workflow_data(workflow)
         json.dump(data, f)
