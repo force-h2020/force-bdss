@@ -8,7 +8,8 @@ from force_bdss.core_plugins.dummy.ui_notification.ui_notification_factory \
 from force_bdss.core_plugins.dummy.ui_notification.ui_notification_model \
     import \
     UINotificationModel
-from force_bdss.mco.events import MCOStartEvent
+from force_bdss.mco.events import MCOStartEvent, MCOProgressEvent, \
+    MCOFinishEvent
 
 try:
     import mock
@@ -20,46 +21,63 @@ import zmq
 
 class TestUINotification(unittest.TestCase):
     def setUp(self):
-        self.context = mock.Mock(spec=zmq.Context)
-        self.rep_socket = mock.Mock(spec=zmq.Socket)
-        self.pub_socket = mock.Mock(spec=zmq.Socket)
+        factory = mock.Mock(spec=UINotificationFactory)
+        self.model = UINotificationModel(factory)
+        self.model.identifier = "an_id"
 
-        listener = UINotification(
-            mock.Mock(spec=UINotificationFactory)
-        )
-        listener._context = self.context
-        listener._rep_socket = self.rep_socket
-        listener._pub_socket = self.pub_socket
-        listener._rep_socket.recv.return_value = "SYNC".encode("utf-8")
+        listener = UINotification(factory)
+        self.sync_socket = mock.Mock(spec=zmq.Socket)
+        self.sync_socket.recv_string = mock.Mock()
+        self.sync_socket.recv_string.side_effect = [
+            "HELLO\nan_id\n1",
+            "GOODBYE\nan_id\n1"
+        ]
+
+        self.pub_socket = mock.Mock(spec=zmq.Socket)
+        self.context = mock.Mock(spec=zmq.Context)
+        self.context.socket.side_effect = [self.pub_socket,
+                                           self.sync_socket]
+        listener.__class__._create_context = mock.Mock(
+            return_value=self.context)
+
         self.listener = listener
 
     def test_deliver(self):
         listener = self.listener
-        listener.deliver(mock.Mock(spec=UINotificationModel), MCOStartEvent())
+        listener.initialize(self.model)
         self.assertEqual(
-            listener._rep_socket.send_multipart.call_args[0][0],
-            ['EVENT\nMCO_START'.encode('utf-8')])
+            self.sync_socket.send_string.call_args[0][0],
+            'HELLO\nan_id\n1')
+
+        listener.deliver(MCOStartEvent())
         self.assertEqual(
-            listener._pub_socket.send.call_args[0][0],
-            'EVENT\nMCO_START'.encode('utf-8'))
+            self.pub_socket.send_string.call_args[0][0],
+            'EVENT\nan_id\nMCO_START')
+
+        listener.deliver(MCOProgressEvent(input=(1, 2, 3), output=(4, 5)))
+        self.assertEqual(
+            self.pub_socket.send_string.call_args[0][0],
+            'EVENT\nan_id\nMCO_PROGRESS\n1 2 3\n4 5')
+
+        listener.deliver(MCOFinishEvent())
+        self.assertEqual(
+            self.pub_socket.send_string.call_args[0][0],
+            'EVENT\nan_id\nMCO_FINISH')
 
     def test_finalize(self):
         listener = self.listener
-        listener.finalize(mock.Mock())
+        listener.initialize(self.model)
+        listener.finalize()
         self.assertTrue(self.context.term.called)
-        self.assertTrue(self.rep_socket.close.called)
+        self.assertTrue(self.sync_socket.close.called)
         self.assertTrue(self.pub_socket.close.called)
         self.assertIsNone(listener._context)
-        self.assertIsNone(listener._rep_socket)
+        self.assertIsNone(listener._sync_socket)
         self.assertIsNone(listener._pub_socket)
 
     def test_initialize(self):
-        with mock.patch('force_bdss.core_plugins.dummy.ui_notification.'
-                        'ui_notification.zmq') as mock_zmq:
-            mock_zmq.Context.return_value = self.context
-            self.context.socket.return_value = self.rep_socket
-            listener = UINotification(
-                mock.Mock(spec=UINotificationFactory)
-            )
-            listener.initialize(mock.Mock())
-            self.assertTrue(listener._pub_socket.bind.called)
+        listener = self.listener
+        listener.initialize(self.model)
+        self.assertEqual(
+            self.sync_socket.send_string.call_args[0][0],
+            'HELLO\nan_id\n1')

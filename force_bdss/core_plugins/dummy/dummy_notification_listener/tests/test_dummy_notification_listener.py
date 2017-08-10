@@ -27,8 +27,8 @@ class TestDummyNotificationListener(unittest.TestCase):
         event = mock.Mock(spec=BaseMCOEvent)
         with captured_output() as (out, err):
             listener.initialize(model)
-            listener.deliver(model, event)
-            listener.finalize(model)
+            listener.deliver(event)
+            listener.finalize()
 
         self.assertEqual(out.getvalue(),
                          "Initializing\nBaseMCOEvent\nFinalizing\n")

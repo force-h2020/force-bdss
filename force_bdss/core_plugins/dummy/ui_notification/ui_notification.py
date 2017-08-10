@@ -34,7 +34,7 @@ class UINotification(BaseNotificationListener):
 
     def initialize(self, model):
         self._identifier = model.identifier
-        self._context = zmq.Context()
+        self._context = self._create_context()
 
         self._pub_socket = self._context.socket(zmq.PUB)
         self._pub_socket.setsockopt(zmq.LINGER, 0)
@@ -105,6 +105,9 @@ class UINotification(BaseNotificationListener):
         self._sync_socket = None
         self._context = None
 
+    def _create_context(self):
+        return zmq.Context()
+
 
 def _format_event(event, identifier):
     """Converts the event into a byte sequence to be transferred via zmq"""
@@ -114,7 +117,6 @@ def _format_event(event, identifier):
         data = "MCO_FINISH"
     elif isinstance(event, MCOProgressEvent):
         data = "MCO_PROGRESS\n{}\n{}".format(
-            identifier,
             " ".join([str(x) for x in event.input]),
             " ".join([str(x) for x in event.output]))
     else:
