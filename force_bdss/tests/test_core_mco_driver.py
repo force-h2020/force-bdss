@@ -79,6 +79,8 @@ class TestCoreMCODriver(unittest.TestCase):
                  "Failed to create or initialize listener with id "
                  "force.bdss.enthought.factory.null_nl: "))
 
+            self.assertEqual(len(listeners), 0)
+
     def test_listener_delivery_exception(self):
         driver = CoreMCODriver(
             application=self.mock_application,
