@@ -15,6 +15,7 @@ from .io.workflow_reader import (
     InvalidFileException
 )
 
+log = logging.getLogger(__name__)
 CORE_MCO_DRIVER_ID = plugin_id("core", "CoreMCODriver")
 
 
@@ -38,7 +39,7 @@ class CoreMCODriver(BaseCoreDriver):
             try:
                 listener.finalize(None)
             except Exception as e:
-                logging.error(
+                log.error(
                     "Failed to finalize "
                     "listener {}: {}".format(
                         listener.__class__.__name__, str(e)))
@@ -57,7 +58,26 @@ class CoreMCODriver(BaseCoreDriver):
     @on_trait_change("mco:event")
     def _handle_mco_event(self, event):
         for listener in self.listeners:
-            listener.deliver(None, event)
+            try:
+                listener.deliver(None, event)
+            except Exception as e:
+                log.error(
+                    "Exception while delivering to listener {}: {}".format(
+                        listener.__class__.__name__,
+                        str(e)
+                    ))
+
+                try:
+                    listener.finalize()
+                except Exception:
+                    log.error(
+                        "Exception while finalizing listener {}: {}".format(
+                            listener.__class__.__name__,
+                            str(e)
+                        ))
+                    pass
+
+                self.listeners.remove(listener)
 
     def _listeners_default(self):
         listeners = []
@@ -67,7 +87,7 @@ class CoreMCODriver(BaseCoreDriver):
                 listener = factory.create_listener()
                 listener.initialize(None)
             except Exception as e:
-                logging.error(
+                log.error(
                     "Failed to create or initialize "
                     "listener with id {}: {}".format(
                         factory.id, str(e)))
