@@ -89,7 +89,8 @@ class WorkflowReader(HasStrictTraits):
             wf.mco = self._extract_mco(wf_data)
             wf.data_sources[:] = self._extract_data_sources(wf_data)
             wf.kpi_calculators[:] = self._extract_kpi_calculators(wf_data)
-            wf.notification_listeners[:] = self._extract_listeners(wf_data)
+            wf.notification_listeners[:] = \
+                self._extract_notification_listeners(wf_data)
         except KeyError as e:
             logging.exception("Could not read file")
             raise InvalidFileException("Could not read file. "
