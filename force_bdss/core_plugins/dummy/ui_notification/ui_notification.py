@@ -68,7 +68,8 @@ class UINotification(BaseNotificationListener):
             return
 
         msg = _format_event(event, self._identifier)
-        self._pub_socket.send_string(msg)
+        if msg is not None:
+            self._pub_socket.send_string(msg)
 
     def finalize(self):
         if not self._context:
