@@ -1,4 +1,5 @@
 import unittest
+from testfixtures import LogCapture
 
 from force_bdss.core_plugins.dummy.ui_notification.ui_notification import \
     UINotification
@@ -81,3 +82,82 @@ class TestUINotification(unittest.TestCase):
         self.assertEqual(
             self.sync_socket.send_string.call_args[0][0],
             'HELLO\nan_id\n1')
+
+    def test_polling(self):
+        self.sync_socket.poll.return_value = 0
+        listener = self.listener
+        with LogCapture() as capture:
+            listener.initialize(self.model)
+            capture.check(
+                ("force_bdss.core_plugins.dummy.ui_notification.ui_notification",  # noqa
+                 "INFO",
+                 "Could not connect to UI server after 1000 ms. Continuing without UI notification."  # noqa
+                 ),
+            )
+
+        self.assertIsNone(listener._context)
+
+    def test_wrong_init_recv_string(self):
+        listener = self.listener
+
+        self.sync_socket.recv_string.side_effect = [
+            "HELLO\nnot_the_right_id\n1",
+            "GOODBYE\nan_id\n1"
+        ]
+
+        with LogCapture() as capture:
+            listener.initialize(self.model)
+            capture.check(
+                ("force_bdss.core_plugins.dummy.ui_notification.ui_notification",  # noqa
+                 "ERROR",
+                 "Unexpected reply in sync negotiation with UI server. "
+                 "'HELLO\nnot_the_right_id\n1'"  # noqa
+                 ),
+            )
+
+        self.assertIsNone(listener._context)
+
+    def test_deliver_without_context(self):
+        self.listener.deliver(MCOStartEvent())
+        self.assertFalse(self.pub_socket.send_string.called)
+
+    def test_finalize_without_context(self):
+        self.listener.finalize()
+        self.assertFalse(self.sync_socket.send_string.called)
+
+    def test_finalize_no_response(self):
+        self.sync_socket.poll.side_effect = [1, 0]
+        listener = self.listener
+        listener.initialize(self.model)
+        with LogCapture() as capture:
+            listener.finalize()
+            capture.check(
+                ("force_bdss.core_plugins.dummy.ui_notification.ui_notification",  # noqa
+                 "INFO",
+                 "Could not close connection to UI server after 1000 ms."  # noqa
+                 ),
+            )
+
+        self.assertIsNone(listener._context)
+
+    def test_wrong_finalize_recv_string(self):
+        listener = self.listener
+        self.sync_socket.poll.side_effect = [1, 1]
+        self.sync_socket.recv_string.side_effect = [
+            "HELLO\nan_id\n1",
+            "GOODBYE\nnot_the_right_id\n1"
+        ]
+
+        listener.initialize(self.model)
+
+        with LogCapture() as capture:
+            listener.finalize()
+            capture.check(
+                ("force_bdss.core_plugins.dummy.ui_notification.ui_notification",  # noqa
+                 "ERROR",
+                 "Unexpected reply in goodbye sync negotiation with UI server. "
+                 "'GOODBYE\nnot_the_right_id\n1'"  # noqa
+                 ),
+            )
+
+        self.assertIsNone(listener._context)

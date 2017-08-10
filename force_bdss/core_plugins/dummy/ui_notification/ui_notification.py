@@ -47,6 +47,7 @@ class UINotification(BaseNotificationListener):
         msg = "HELLO\n{}\n{}".format(self._identifier, self._proto_version)
         self._sync_socket.send_string(msg)
         events = self._sync_socket.poll(1000, zmq.POLLIN)
+
         if events == 0:
             log.info("Could not connect to UI server after 1000 ms. "
                      "Continuing without UI notification.")
@@ -58,7 +59,7 @@ class UINotification(BaseNotificationListener):
         if recv != msg:
             log.error(
                 ("Unexpected reply in sync"
-                 " negotiation with UI server. {}".format(recv)))
+                 " negotiation with UI server. '{}'".format(recv)))
             self._close_and_clear_sockets()
             return
 
@@ -87,7 +88,7 @@ class UINotification(BaseNotificationListener):
         if recv != msg:
             log.error(
                 ("Unexpected reply in goodbye sync"
-                 " negotiation with UI server. {}".format(recv)))
+                 " negotiation with UI server. '{}'".format(recv)))
 
         self._close_and_clear_sockets()
 
