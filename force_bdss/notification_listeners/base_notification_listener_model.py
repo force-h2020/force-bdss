@@ -5,7 +5,7 @@ from force_bdss.notification_listeners.i_notification_listener_factory import \
 
 
 class BaseNotificationListenerModel(ABCHasStrictTraits):
-    """Base class for the specific MCO models.
+    """Base class for the specific Notification Listener models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
 

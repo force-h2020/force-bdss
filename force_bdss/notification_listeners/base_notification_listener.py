@@ -8,18 +8,18 @@ from .i_notification_listener_factory import INotificationListenerFactory
 class BaseNotificationListener(ABCHasStrictTraits):
     """Base class for the Notification Listener.
 
-    Inherit this class for your MCO implementation
+    Inherit this class for your listener implementation
     """
     #: A reference to the factory
     factory = Instance(INotificationListenerFactory)
 
     def __init__(self, factory, *args, **kwargs):
-        """Initializes the MCO.
+        """Initializes the notification listener.
 
         Parameters
         ----------
-        factory: BaseMCOFactory
-            The factory this BaseMCO belongs to
+        factory: BaseNotificationListener
+            The factory this Notification Listener belongs to
         """
         self.factory = factory
         super(BaseNotificationListener, self).__init__(*args, **kwargs)
