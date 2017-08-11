@@ -70,6 +70,16 @@
           ]
         }
       }
+    ],
+    "notification_listeners": [
+      {  
+        "id": "force.bdss.enthought.factory.ui_notification",
+        "model_data": {
+            "sync_url": "tcp://127.0.0.1:12346",
+            "pub_url": "tcp://127.0.0.1:12345",
+            "identifier": "vfdjlkadfkljfsd"
+        }
+      }
     ]
   }
 }

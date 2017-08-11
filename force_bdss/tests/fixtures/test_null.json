@@ -29,6 +29,13 @@
           ]
         }
       }
+    ],
+    "notification_listeners": [
+      {
+        "id": "force.bdss.enthought.factory.null_nl",
+        "model_data": {
+        }
+      }
     ]
   }
 }

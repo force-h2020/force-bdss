@@ -20,6 +20,7 @@ class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
     mco_factories = List()
     kpi_calculator_factories = List()
     data_source_factories = List()
+    notification_listener_factories = List()
 
 
 def mock_factory_registry_plugin():
@@ -30,6 +31,8 @@ def mock_factory_registry_plugin():
         plugin.kpi_calculator_factories
     factory_registry_plugin.data_source_factories = \
         plugin.data_source_factories
+    factory_registry_plugin.notification_listener_factories = \
+        plugin.notification_listener_factories
     return factory_registry_plugin
 
 

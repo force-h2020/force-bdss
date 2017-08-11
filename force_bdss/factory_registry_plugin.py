@@ -3,12 +3,12 @@ from envisage.plugin import Plugin
 from traits.api import List
 
 from force_bdss.ids import ExtensionPointID
+from force_bdss.notification_listeners.i_notification_listener_factory import \
+    INotificationListenerFactory
 from .data_sources.i_data_source_factory import (
     IDataSourceFactory)
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
-from .mco.i_mco_factory import (
-    IMCOFactory
-)
+from .mco.i_mco_factory import IMCOFactory
 
 
 FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
@@ -43,6 +43,13 @@ class FactoryRegistryPlugin(Plugin):
         List(IKPICalculatorFactory),
         id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
 
+    #: Notification listeners are pluggable entities that will listen
+    #: to MCO events and act accordingly.
+    notification_listener_factories = ExtensionPoint(
+        List(INotificationListenerFactory),
+        id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
+    )
+
     def data_source_factory_by_id(self, id):
         """Finds a given data source factory by means of its id.
         The ID is as obtained by the function factory_id() in the
@@ -61,9 +68,7 @@ class FactoryRegistryPlugin(Plugin):
             if ds.id == id:
                 return ds
 
-        raise KeyError(
-            "Requested data source {} but don't know how "
-            "to find it.".format(id))
+        raise KeyError(id)
 
     def kpi_calculator_factory_by_id(self, id):
         """Finds a given kpi factory by means of its id.
@@ -83,9 +88,7 @@ class FactoryRegistryPlugin(Plugin):
             if kpic.id == id:
                 return kpic
 
-        raise KeyError(
-            "Requested kpi calculator {} but don't know how "
-            "to find it.".format(id))
+        raise KeyError(id)
 
     def mco_factory_by_id(self, id):
         """Finds a given Multi Criteria Optimizer (MCO) factory by means of
@@ -105,8 +108,7 @@ class FactoryRegistryPlugin(Plugin):
             if mco.id == id:
                 return mco
 
-        raise KeyError("Requested MCO {} but don't know how "
-                       "to find it.".format(id))
+        raise KeyError(id)
 
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
         """Retrieves the MCO parameter factory for a given MCO id and
@@ -134,5 +136,24 @@ class FactoryRegistryPlugin(Plugin):
             if factory.id == parameter_id:
                 return factory
 
-        raise KeyError("Requested MCO parameter {}:{} but don't know"
-                       " how to find it.".format(mco_id, parameter_id))
+        raise KeyError(parameter_id)
+
+    def notification_listener_factory_by_id(self, id):
+        """Finds a given notification listener by means of its id.
+        The ID is as obtained by the function bundle_id() in the
+        plugin api.
+
+        Parameters
+        ----------
+        id: str
+            The identifier returned by the bundle_id() function.
+
+        Raises
+        ------
+        KeyError: if the entry is not found.
+        """
+        for nl in self.notification_listener_factories:
+            if nl.id == id:
+                return nl
+
+        raise KeyError(id)

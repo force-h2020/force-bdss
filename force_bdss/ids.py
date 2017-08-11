@@ -2,7 +2,7 @@ import six
 
 
 class ExtensionPointID:
-    """The envisage extension points ids for the factorys ExtensionPoints.
+    """The envisage extension points ids for the factories ExtensionPoints.
     These are populated by the envisage plugins.
 
     The plugin developer generally does not have to handle these identifiers,
@@ -12,6 +12,8 @@ class ExtensionPointID:
     MCO_FACTORIES = 'force.bdss.mco.factories'
     DATA_SOURCE_FACTORIES = 'force.bdss.data_source.factories'
     KPI_CALCULATOR_FACTORIES = 'force.bdss.kpi_calculator.factories'
+    NOTIFICATION_LISTENER_FACTORIES = \
+        'force.bdss.notification_listener.factories'
 
 
 def factory_id(producer, identifier):

@@ -1,6 +1,8 @@
 from envisage.plugin import Plugin
 from traits.trait_types import List
 
+from .notification_listeners.i_notification_listener_factory import \
+    INotificationListenerFactory
 from .ids import ExtensionPointID
 from .data_sources.i_data_source_factory import IDataSourceFactory
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
@@ -38,4 +40,9 @@ class BaseExtensionPlugin(Plugin):
     kpi_calculator_factories = List(
         IKPICalculatorFactory,
         contributes_to=ExtensionPointID.KPI_CALCULATOR_FACTORIES
+    )
+
+    notification_listener_factories = List(
+        INotificationListenerFactory,
+        contributes_to=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
     )

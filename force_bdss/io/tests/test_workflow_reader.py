@@ -39,6 +39,15 @@ class TestWorkflowReader(unittest.TestCase):
         with self.assertRaises(InvalidFileException):
             self.wfreader.read(self._as_json_stringio(data))
 
+    def test_missing_key(self):
+        data = {
+            "version": "1",
+            "workflow": {}
+        }
+
+        with self.assertRaises(InvalidFileException):
+            self.wfreader.read(self._as_json_stringio(data))
+
     def _as_json_stringio(self, data):
         fp = StringIO()
         json.dump(data, fp)
