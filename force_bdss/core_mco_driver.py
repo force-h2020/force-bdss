@@ -37,6 +37,7 @@ class CoreMCODriver(BaseCoreDriver):
     def application_stopping(self):
         for listener in self.listeners:
             self._finalize_listener(listener)
+        self.listeners[:] = []
 
     def _mco_default(self):
         try:
@@ -51,7 +52,7 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("mco:event")
     def _handle_mco_event(self, event):
-        for listener in self.listeners:
+        for listener in self.listeners[:]:
             try:
                 listener.deliver(event)
             except Exception as e:
