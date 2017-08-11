@@ -13,7 +13,6 @@ before_install:
     - export PATH=${HOME}/edm/bin:${PATH}
     - edm environments create --version ${PYTHON_VERSION} force 
     - . $HOME/.edm/envs/force/bin/activate 
-    - cat requirements/edm_requirements.txt | grep -v "^#" | while read line; do edm install -y `echo $line | awk '{print $1"=="$2}'`; done 
 install:
     - pip install -r requirements/requirements.txt
     - pip install -e .
