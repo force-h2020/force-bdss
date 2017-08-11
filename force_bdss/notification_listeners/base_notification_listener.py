@@ -6,7 +6,7 @@ from .i_notification_listener_factory import INotificationListenerFactory
 
 
 class BaseNotificationListener(ABCHasStrictTraits):
-    """Base class for the Multi Criteria Optimizer.
+    """Base class for the Notification Listener.
 
     Inherit this class for your MCO implementation
     """
