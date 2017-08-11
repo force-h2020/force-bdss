@@ -1,10 +1,10 @@
-from traits.api import Int, String, on_trait_change
+from traits.api import Int, String, on_trait_change, File
 
 from force_bdss.api import BaseDataSourceModel
 
 
 class CSVExtractorModel(BaseDataSourceModel):
-    filename = String()
+    filename = File()
     row = Int()
     column = Int()
     cuba_type = String()
