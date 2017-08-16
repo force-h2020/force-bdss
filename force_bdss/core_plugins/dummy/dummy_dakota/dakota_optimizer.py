@@ -30,6 +30,7 @@ class DummyDakotaOptimizer(BaseMCO):
 
         application = self.factory.plugin.application
 
+        self.started = True
         for value in value_iterator:
             ps = subprocess.Popen(
                 [sys.argv[0],
@@ -45,3 +46,5 @@ class DummyDakotaOptimizer(BaseMCO):
                 'input': tuple(value),
                 'output': tuple(out_data)
             }
+
+        self.finished = True

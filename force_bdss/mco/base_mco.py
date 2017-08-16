@@ -1,8 +1,7 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance, Event
+from traits.api import ABCHasStrictTraits, Instance, Event, Dict, Str, Tuple
 
-from force_bdss.mco.events import BaseMCOEvent
 from .i_mco_factory import IMCOFactory
 
 
@@ -15,10 +14,12 @@ class BaseMCO(ABCHasStrictTraits):
     factory = Instance(IMCOFactory)
 
     #: Triggered when an event occurs.
-    event = Event(BaseMCOEvent)
+    started = Event()
+
+    finished = Event()
 
     # Event triggered when the mco wants to send new data to listeners
-    new_data = Event()
+    new_data = Event(Dict(Str(), Tuple()))
 
     def __init__(self, factory, *args, **kwargs):
         """Initializes the MCO.
