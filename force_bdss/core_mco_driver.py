@@ -32,9 +32,7 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
-        self._deliver_start_event()
         self.mco.run(self.workflow.mco)
-        self._deliver_event(MCOFinishEvent())
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
@@ -53,6 +51,7 @@ class CoreMCODriver(BaseCoreDriver):
         mco_factory = mco_model.factory
         return mco_factory.create_optimizer()
 
+    @on_trait_change("mco:started")
     def _deliver_start_event(self):
         output_names = []
         for kpi in self.workflow.kpi_calculators:
@@ -63,12 +62,13 @@ class CoreMCODriver(BaseCoreDriver):
             output_names=output_names
         ))
 
+    @on_trait_change("mco:finished")
+    def _deliver_finished_event(self):
+        self._deliver_event(MCOFinishEvent())
+
     @on_trait_change("mco:new_data")
-    def _deliver_progress_event(self, event):
-        self._deliver_event(MCOProgressEvent(
-            input=event['input'],
-            output=event['output']
-        ))
+    def _deliver_mco_progress_event(self, data):
+        self._deliver_event(MCOProgressEvent(**data))
 
     def _deliver_event(self, event):
         """ Delivers an event to the listeners """
