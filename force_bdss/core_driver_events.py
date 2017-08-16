@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Tuple, Str
+from traits.api import HasStrictTraits, Tuple
 
 
 class BaseDriverEvent(HasStrictTraits):
@@ -7,8 +7,8 @@ class BaseDriverEvent(HasStrictTraits):
 
 class MCOStartEvent(BaseDriverEvent):
     """MCO should emit this event when the evaluation starts."""
-    input_names = Tuple(Str())
-    output_names = Tuple(Str())
+    input_names = Tuple()
+    output_names = Tuple()
 
 
 class MCOFinishEvent(BaseDriverEvent):
