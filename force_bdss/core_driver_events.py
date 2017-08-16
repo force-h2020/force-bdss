@@ -7,8 +7,8 @@ class BaseDriverEvent(HasStrictTraits):
 
 class MCOStartEvent(BaseDriverEvent):
     """MCO should emit this event when the evaluation starts."""
-    input_names = Str()
-    output_names = Str()
+    input_names = Tuple(Str())
+    output_names = Tuple(Str())
 
 
 class MCOFinishEvent(BaseDriverEvent):
