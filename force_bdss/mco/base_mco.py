@@ -17,6 +17,9 @@ class BaseMCO(ABCHasStrictTraits):
     #: Triggered when an event occurs.
     event = Event(BaseMCOEvent)
 
+    # Event triggered when the mco wants to send new data to listeners
+    new_data = Event()
+
     def __init__(self, factory, *args, **kwargs):
         """Initializes the MCO.
 
@@ -39,18 +42,3 @@ class BaseMCO(ABCHasStrictTraits):
             An instance of the model information, as created from
             create_model()
         """
-
-    def notify_event(self, event):
-        """Method based interface to deliver an event, instead of
-        assignment to traits.
-
-        Sends the event, synchronously. When the routine returns,
-        listeners have been fully informed (they might, however, handle
-        the event asynchronously at their convenience)
-
-        Parameters
-        ----------
-        event: BaseMCOEvent
-            The event to deliver.
-        """
-        self.event = event

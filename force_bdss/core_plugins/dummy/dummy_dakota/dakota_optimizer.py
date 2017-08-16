@@ -4,8 +4,6 @@ import itertools
 import collections
 
 from force_bdss.api import BaseMCO
-from force_bdss.mco.events import MCOStartEvent, MCOFinishEvent, \
-    MCOProgressEvent
 
 
 def rotated_range(start, stop, starting_value):
@@ -18,8 +16,6 @@ def rotated_range(start, stop, starting_value):
 
 class DummyDakotaOptimizer(BaseMCO):
     def run(self, model):
-        self.notify_event(MCOStartEvent())
-
         parameters = model.parameters
 
         values = []
@@ -45,9 +41,7 @@ class DummyDakotaOptimizer(BaseMCO):
             out = ps.communicate(
                 " ".join([str(v) for v in value]).encode("utf-8"))
             out_data = out[0].decode("utf-8").split()
-            self.notify_event(MCOProgressEvent(
-                input=tuple(value),
-                output=tuple(out_data),
-            ))
-
-        self.notify_event(MCOFinishEvent())
+            self.new_data = {
+                'input': tuple(value),
+                'output': tuple(out_data)
+            }

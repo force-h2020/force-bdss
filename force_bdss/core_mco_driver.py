@@ -14,6 +14,7 @@ from .io.workflow_reader import (
     InvalidVersionException,
     InvalidFileException
 )
+from .core_driver_events import MCOStartEvent, MCOFinishEvent, MCOProgressEvent
 
 log = logging.getLogger(__name__)
 CORE_MCO_DRIVER_ID = plugin_id("core", "CoreMCODriver")
@@ -31,7 +32,9 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
+        self._deliver_start_event()
         self.mco.run(self.workflow.mco)
+        self._deliver_event(MCOFinishEvent())
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
@@ -50,8 +53,25 @@ class CoreMCODriver(BaseCoreDriver):
         mco_factory = mco_model.factory
         return mco_factory.create_optimizer()
 
-    @on_trait_change("mco:event")
-    def _handle_mco_event(self, event):
+    def _deliver_start_event(self):
+        output_names = []
+        for kpi in self.workflow.kpi_calculators:
+            output_names.extend(kpi.output_slot_names)
+
+        self._deliver_event(MCOStartEvent(
+            input_names=[p.name for p in self.workflow.mco.parameters],
+            output_names=output_names
+        ))
+
+    @on_trait_change("mco:new_data")
+    def _deliver_progress_event(self, event):
+        self._deliver_event(MCOProgressEvent(
+            input=event['input'],
+            output=event['output']
+        ))
+
+    def _deliver_event(self, event):
+        """ Delivers an event to the listeners """
         for listener in self.listeners[:]:
             try:
                 listener.deliver(event)

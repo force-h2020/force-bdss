@@ -1,19 +1,21 @@
-from traits.api import HasStrictTraits, Tuple
+from traits.api import HasStrictTraits, Tuple, Str
 
 
-class BaseMCOEvent(HasStrictTraits):
-    """Base event for the MCO"""
+class BaseDriverEvent(HasStrictTraits):
+    """Base event for the Driver"""
 
 
-class MCOStartEvent(BaseMCOEvent):
+class MCOStartEvent(BaseDriverEvent):
     """MCO should emit this event when the evaluation starts."""
+    input_names = Str()
+    output_names = Str()
 
 
-class MCOFinishEvent(BaseMCOEvent):
+class MCOFinishEvent(BaseDriverEvent):
     """MCO should emit this event when the evaluation ends."""
 
 
-class MCOProgressEvent(BaseMCOEvent):
+class MCOProgressEvent(BaseDriverEvent):
     """MCO should emit this event for every new evaluation that has been
     completed. It carries data about the evaluation, specifically the
     input data (MCO parameter values) and the resulting output (KPIs)."""
