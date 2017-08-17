@@ -6,7 +6,6 @@ from force_bdss.core_plugins.dummy.power_evaluator.power_evaluator_data_source i
 from force_bdss.core_plugins.dummy.power_evaluator.power_evaluator_model import PowerEvaluatorModel  # noqa
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
-from force_bdss.tests import fixtures
 
 try:
     import mock
