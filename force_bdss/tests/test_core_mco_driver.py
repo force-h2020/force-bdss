@@ -1,7 +1,8 @@
 import unittest
 from testfixtures import LogCapture
 
-from force_bdss.mco.events import MCOStartEvent
+from force_bdss.core_driver_events import (
+    MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from force_bdss.tests import fixtures
@@ -47,16 +48,37 @@ class TestCoreMCODriver(unittest.TestCase):
         )
         self.assertEqual(len(driver.listeners), 1)
 
-    def test_event_handling(self):
+    def test_start_event_handling(self):
         driver = CoreMCODriver(
             application=self.mock_application,
         )
         listener = driver.listeners[0]
         mock_deliver = mock.Mock()
         listener.__dict__["deliver"] = mock_deliver
-        event = MCOStartEvent()
-        driver.mco.event = event
-        self.assertTrue(mock_deliver.call_args[0][0], event)
+        driver.mco.started = True
+        self.assertIsInstance(mock_deliver.call_args[0][0], MCOStartEvent)
+
+    def test_finished_event_handling(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        listener = driver.listeners[0]
+        mock_deliver = mock.Mock()
+        listener.__dict__["deliver"] = mock_deliver
+        driver.mco.finished = True
+        self.assertIsInstance(mock_deliver.call_args[0][0], MCOFinishEvent)
+
+    def test_progress_event_handling(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        listener = driver.listeners[0]
+        mock_deliver = mock.Mock()
+        listener.__dict__["deliver"] = mock_deliver
+        driver.mco.new_data = {'input': (1, 2), 'output': (3, 4)}
+        self.assertIsInstance(mock_deliver.call_args[0][0], MCOProgressEvent)
+        self.assertEqual(mock_deliver.call_args[0][0].input, (1, 2))
+        self.assertEqual(mock_deliver.call_args[0][0].output, (3, 4))
 
     def test_listener_init_exception(self):
         driver = CoreMCODriver(
@@ -90,7 +112,7 @@ class TestCoreMCODriver(unittest.TestCase):
         listener.__dict__["deliver"] = mock_deliver
         mock_deliver.side_effect = Exception()
         with LogCapture() as capture:
-            driver.mco.event = MCOStartEvent()
+            driver.mco.started = True
             self.assertTrue(mock_deliver.called)
 
             capture.check(
