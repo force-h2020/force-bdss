@@ -49,3 +49,9 @@ class TestPowerEvaluatorDataSource(unittest.TestCase):
         self.assertEqual(len(slots[1]), 1)
         self.assertIsInstance(slots[0][0], Slot)
         self.assertIsInstance(slots[1][0], Slot)
+
+        model.cuba_type_in = 'METER'
+        model.cuba_type_out = 'METER'
+        slots = ds.slots(model)
+        self.assertEqual(slots[0][0].type, 'METER')
+        self.assertEqual(slots[1][0].type, 'METER')
