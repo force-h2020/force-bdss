@@ -13,9 +13,10 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-    #: Triggered when an event occurs.
+    #: Triggered when the evaluation started.
     started = Event()
 
+    #: Triggered when the evaluation finished
     finished = Event()
 
     # Event triggered when the mco wants to send new data to listeners
