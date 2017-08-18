@@ -2,6 +2,7 @@ from traits.api import HasStrictTraits, String, Instance
 
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
+from force_bdss.local_traits import Identifier
 
 
 class BaseMCOParameter(HasStrictTraits):
@@ -14,7 +15,7 @@ class BaseMCOParameter(HasStrictTraits):
     factory = Instance(BaseMCOParameterFactory, visible=False, transient=True)
 
     #: A user defined name for the parameter
-    name = String(visible=False)
+    name = Identifier(visible=False)
 
     #: A CUBA key describing the type of the parameter
     type = String(visible=False)
