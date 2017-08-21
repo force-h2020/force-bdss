@@ -4,7 +4,8 @@ from force_bdss.core.slot import Slot
 
 class CodeEditorDataSource(BaseDataSource):
     def run(self, model, parameters):
-        outputs = [DataValue(type="PRESSURE", value=0)]
+        outputs = [DataValue(type="PRESSURE", value=0)
+                   for _ in range(model.nb_outputs)]
         exec(
             model.code,
             {'inputs': parameters, 'outputs': outputs}
@@ -13,10 +14,6 @@ class CodeEditorDataSource(BaseDataSource):
 
     def slots(self, model):
         return (
-            (
-                Slot(type="PRESSURE"),
-            ),
-            (
-                Slot(type="PRESSURE"),
-            )
+            tuple(Slot(type="PRESSURE") for _ in range(model.nb_inputs)),
+            tuple(Slot(type="PRESSURE") for _ in range(model.nb_outputs))
         )
