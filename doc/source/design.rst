@@ -21,7 +21,7 @@ There are a few core assumptions about each of these entities:
   the invoker MCO.
 - The Notification Listener listens to the state of the MCO (Started/New step
   of the computation/Finished). It can be a remote database which is filled
-  with the MCO results during the computation (e.g. the GUI `force_wfmanager`
+  with the MCO results during the computation (e.g. the GUI ``force_wfmanager``
   has a notification listener in order to fill the result table).
 
 
