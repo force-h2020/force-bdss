@@ -11,8 +11,10 @@ functionality. All functionality comes from external plugins, extending the
 API to provide new entities, specifically:
 
 - Multi Criteria Optimizer (MCO)
-- DataSources
+- DataSources, which can be a simulator or just a database
 - Key Performance Indicator (KPI) Calculators
+- Notification Listeners, like a remote database which retrieve data during the
+  computation
 
 Plugin support requires compliancy to the Force BDSS api for plugins.
 Extensions are registered via setuptools entry points.
@@ -20,4 +22,3 @@ Extensions are registered via setuptools entry points.
 Execution of the force bdss executable is simple. Invoke with::
 
     force_bdss workflow.json
-

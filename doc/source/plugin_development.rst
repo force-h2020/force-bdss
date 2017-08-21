@@ -2,10 +2,10 @@ Plugin Development
 ------------------
 
 A single Plugin can provide one or more of the pluggable entities
-described elsewhere (MCO/KPICalculators/DataSources). Multiple plugins can
-be installed to provide a broad range of functionalities.
+described elsewhere (MCO/KPICalculators/DataSources/NotificationListeners).
+Multiple plugins can be installed to provide a broad range of functionalities.
 
-Plugins must return Factories. Each Factory provides factory methods for 
+Plugins must return Factories. Each Factory provides factory methods for
 one of the above pluggable entities and its associated classes.
 
 To implement a new plugin, you must
@@ -37,5 +37,3 @@ To implement a new plugin, you must
   reimplementing its initialization defaults methods to return your factory.
 - add the plugin class in the setup.py entry_point, under the namespace
   ``force.bdss.extensions``
-
-
