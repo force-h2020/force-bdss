@@ -4,7 +4,7 @@ from force_bdss.api import BaseDataSourceModel
 
 
 class PowerEvaluatorModel(BaseDataSourceModel):
-    power = Float()
+    power = Float(1.0)
     cuba_type_in = String()
     cuba_type_out = String()
 
