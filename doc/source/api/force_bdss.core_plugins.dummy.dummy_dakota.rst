@@ -1,5 +1,5 @@
-force_bdss.core_plugins.dummy.dummy_dakota package
-==================================================
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota package
+========================================================
 
 Subpackages
 -----------
@@ -11,40 +11,40 @@ Subpackages
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator module
----------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_communicator module
+-----------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_communicator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.dakota_factory module
-----------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_factory module
+------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_factory
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.dakota_model module
---------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_model module
+----------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_model
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer module
-------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.dakota\_optimizer module
+--------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.dakota_optimizer
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.parameters module
-------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.parameters module
+-------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.parameters
     :members:

@@ -1,19 +1,19 @@
-force_bdss.core_plugins.dummy.dummy_data_source.tests package
-=============================================================
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.tests package
+=====================================================================
 
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source module
------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.tests\.test\_dummy\_data\_source module
+-----------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_factory module
--------------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_data\_source\.tests\.test\_dummy\_data\_source\_factory module
+--------------------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_data_source.tests.test_dummy_data_source_factory
     :members:
