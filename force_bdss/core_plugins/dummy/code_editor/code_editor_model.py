@@ -1,4 +1,4 @@
-from traits.api import Code, Int, on_trait_change, List, Str
+from traits.api import Code, Int, on_trait_change, List, Str, Button
 
 from force_bdss.api import BaseDataSourceModel
 
@@ -12,6 +12,8 @@ class CodeEditorModel(BaseDataSourceModel):
     input_types = List(Str)
     output_types = List(Str)
 
+    load_button = Button('Load python script')
+
     @on_trait_change('nb_inputs,nb_outputs', post_init=True)
     def update_slot_sizes(self):
         self.input_types = ['' for _ in range(self.nb_inputs)]
@@ -22,8 +24,25 @@ class CodeEditorModel(BaseDataSourceModel):
     def update_slot_types(self):
         self.changes_slots = True
 
+    @on_trait_change('load_button')
+    def load_python_script(self):
+        from pyface.api import FileDialog, OK
+
+        dialog = FileDialog(
+            action="open",
+            wildcard='Python files (*.py)|*.py|'
+        )
+
+        result = dialog.open()
+
+        if result is not OK:
+            return
+
+        with open(dialog.path, 'r') as fobj:
+            self.code = fobj.read()
+
     def default_traits_view(self):
-        from traitsui.api import View, Item, HGroup
+        from traitsui.api import View, Item, UItem, HGroup
 
         return View(
             HGroup(
@@ -38,6 +57,7 @@ class CodeEditorModel(BaseDataSourceModel):
                 label='Outputs',
                 show_border=True,
             ),
+            UItem('load_button'),
             Item('code'),
             buttons=['OK', 'Cancel'],
         )
