@@ -12,7 +12,7 @@ class CodeEditorModel(BaseDataSourceModel):
     input_types = List(Str)
     output_types = List(Str)
 
-    @on_trait_change('nb_inputs,nb_outputs')
+    @on_trait_change('nb_inputs,nb_outputs', post_init=True)
     def update_slot_sizes(self):
         self.input_types = ['' for _ in range(self.nb_inputs)]
         self.output_types = ['' for _ in range(self.nb_outputs)]
