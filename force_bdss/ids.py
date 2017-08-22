@@ -14,6 +14,7 @@ class ExtensionPointID:
     KPI_CALCULATOR_FACTORIES = 'force.bdss.kpi_calculator.factories'
     NOTIFICATION_LISTENER_FACTORIES = \
         'force.bdss.notification_listener.factories'
+    UI_HOOKS_FACTORIES = 'force.bdss.ui_hooks.factories'
 
 
 def factory_id(producer, identifier):

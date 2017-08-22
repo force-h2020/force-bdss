@@ -9,6 +9,7 @@ from .data_sources.i_data_source_factory import (
     IDataSourceFactory)
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
 from .mco.i_mco_factory import IMCOFactory
+from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
 FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
@@ -48,6 +49,14 @@ class FactoryRegistryPlugin(Plugin):
     notification_listener_factories = ExtensionPoint(
         List(INotificationListenerFactory),
         id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
+    )
+
+    #: UI Hooks are pluggable entities holding methods that are called
+    #: at specific moments in the UI application lifetime. They can be used
+    #: to inject special behaviors at those moments.
+    ui_hooks_factories = ExtensionPoint(
+        List(IUIHooksFactory),
+        id=ExtensionPointID.UI_HOOKS_FACTORIES
     )
 
     def data_source_factory_by_id(self, id):
@@ -140,13 +149,13 @@ class FactoryRegistryPlugin(Plugin):
 
     def notification_listener_factory_by_id(self, id):
         """Finds a given notification listener by means of its id.
-        The ID is as obtained by the function bundle_id() in the
+        The ID is as obtained by the function factory_id() in the
         plugin api.
 
         Parameters
         ----------
         id: str
-            The identifier returned by the bundle_id() function.
+            The identifier returned by the factory_id() function.
 
         Raises
         ------

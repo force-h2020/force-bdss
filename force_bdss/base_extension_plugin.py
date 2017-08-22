@@ -7,6 +7,7 @@ from .ids import ExtensionPointID
 from .data_sources.i_data_source_factory import IDataSourceFactory
 from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
 from .mco.i_mco_factory import IMCOFactory
+from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
 class BaseExtensionPlugin(Plugin):
@@ -45,4 +46,9 @@ class BaseExtensionPlugin(Plugin):
     notification_listener_factories = List(
         INotificationListenerFactory,
         contributes_to=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
+    )
+
+    ui_hooks_factories = List(
+        IUIHooksFactory,
+        contributes_to=ExtensionPointID.UI_HOOKS_FACTORIES
     )
