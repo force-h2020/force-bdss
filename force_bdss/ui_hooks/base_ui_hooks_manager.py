@@ -1,10 +1,9 @@
-import abc
-from traits.api import ABCHasStrictTraits, Instance
+from traits.api import HasStrictTraits, Instance
 
 from .i_ui_hooks_factory import IUIHooksFactory
 
 
-class BaseUIHooksManager(ABCHasStrictTraits):
+class BaseUIHooksManager(HasStrictTraits):
     #: A reference to the factory
     factory = Instance(IUIHooksFactory)
 

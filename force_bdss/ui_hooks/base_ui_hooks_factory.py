@@ -8,9 +8,9 @@ from .i_ui_hooks_factory import IUIHooksFactory
 
 @provides(IUIHooksFactory)
 class BaseUIHooksFactory(ABCHasStrictTraits):
-    """Base class for notification listeners.
-    Notification listeners are extensions that receive event notifications
-    from the MCO and perform an associated action.
+    """Base class for UIHooksFactory.
+    UI Hooks are extensions that perform actions associated to specific
+    moments of the UI lifetime.
     """
     #: identifier of the factory
     id = String()
@@ -33,12 +33,12 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
         super(BaseUIHooksFactory, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def create_ui_hook_manager(self):
-        """Creates an instance of the hook manager
-        The hook manager contains a set of methods that are applicable in
+    def create_ui_hooks_manager(self):
+        """Creates an instance of the hook manager.
+        The hooks manager contains a set of methods that are applicable in
         various moments of the UI application lifetime.
 
         Returns
         -------
-        BaseUIHookManager
+        BaseUIHooksManager
         """
