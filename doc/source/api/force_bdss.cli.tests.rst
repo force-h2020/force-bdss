@@ -1,11 +1,11 @@
-force_bdss.cli.tests package
-============================
+force\_bdss\.cli\.tests package
+===============================
 
 Submodules
 ----------
 
-force_bdss.cli.tests.test_execution module
-------------------------------------------
+force\_bdss\.cli\.tests\.test\_execution module
+-----------------------------------------------
 
 .. automodule:: force_bdss.cli.tests.test_execution
     :members:

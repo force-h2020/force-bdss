@@ -1,5 +1,5 @@
-force_bdss.core package
-=======================
+force\_bdss\.core package
+=========================
 
 Subpackages
 -----------
@@ -11,32 +11,32 @@ Subpackages
 Submodules
 ----------
 
-force_bdss.core.data_value module
----------------------------------
+force\_bdss\.core\.data\_value module
+-------------------------------------
 
 .. automodule:: force_bdss.core.data_value
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core.input_slot_map module
--------------------------------------
+force\_bdss\.core\.input\_slot\_map module
+------------------------------------------
 
 .. automodule:: force_bdss.core.input_slot_map
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core.slot module
----------------------------
+force\_bdss\.core\.slot module
+------------------------------
 
 .. automodule:: force_bdss.core.slot
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core.workflow module
--------------------------------
+force\_bdss\.core\.workflow module
+----------------------------------
 
 .. automodule:: force_bdss.core.workflow
     :members:

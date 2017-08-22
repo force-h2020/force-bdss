@@ -1,19 +1,19 @@
-force_bdss.core_plugins.dummy.dummy_kpi_calculator.tests package
-================================================================
+force\_bdss\.core\_plugins\.dummy\.dummy\_kpi\_calculator\.tests package
+========================================================================
 
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_kpi_calculator.tests.test_dummy_kpi_calculator module
------------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_kpi\_calculator\.tests\.test\_dummy\_kpi\_calculator module
+-----------------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_kpi_calculator.tests.test_dummy_kpi_calculator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_kpi_calculator.tests.test_dummy_kpi_calculator_factory module
--------------------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_kpi\_calculator\.tests\.test\_dummy\_kpi\_calculator\_factory module
+--------------------------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_kpi_calculator.tests.test_dummy_kpi_calculator_factory
     :members:

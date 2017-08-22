@@ -1,27 +1,27 @@
-force_bdss.core_plugins.dummy.dummy_dakota.tests package
-========================================================
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.tests package
+===============================================================
 
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_communicator module
---------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.tests\.test\_dakota\_communicator module
+------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_communicator
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_factory module
----------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.tests\.test\_dakota\_factory module
+-------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_factory
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_optimizer module
------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.dummy\_dakota\.tests\.test\_dakota\_optimizer module
+---------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.dummy_dakota.tests.test_dakota_optimizer
     :members:
