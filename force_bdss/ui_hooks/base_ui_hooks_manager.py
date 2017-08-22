@@ -29,6 +29,16 @@ class BaseUIHooksManager(HasStrictTraits):
             The pyface envisage task.
         """
 
+    def after_execution(self, task):
+        """Hook that is called after execution of a given evaluation.
+        Gives a chance to perform operations after the calculation finished.
+
+        Parameters
+        ----------
+        task:
+            The pyface envisage task.
+        """
+
     def before_save(self, task):
         """Hook that is called just before saving a given model to disk
         in response to a user action. This does not apply to saving of
