@@ -48,3 +48,10 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         model_data: dict
             Data to use to fill the model.
         """
+
+    @abc.abstractmethod
+    def create_ui_hook_manager(self):
+        """Creates an instance of the hook manager
+        The hook manager contains a set of methods that are applicable in
+        various moments of the UI application lifetime.
+        """
