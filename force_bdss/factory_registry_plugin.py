@@ -56,7 +56,7 @@ class FactoryRegistryPlugin(Plugin):
     #: to inject special behaviors at those moments.
     ui_hooks_factories = ExtensionPoint(
         List(IUIHooksFactory),
-        id=ExtensionPointID.UI_HOOK_FACTORIES
+        id=ExtensionPointID.UI_HOOKS_FACTORIES
     )
 
     def data_source_factory_by_id(self, id):

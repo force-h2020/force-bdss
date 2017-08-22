@@ -8,7 +8,7 @@ except ImportError:
     from unittest import mock
 
 
-class TestBaseUIHookManager(unittest.TestCase):
+class TestBaseUIHooksManager(unittest.TestCase):
     def test_initialization(self):
         mock_factory = mock.Mock(spec=BaseUIHooksFactory)
         mgr = BaseUIHooksManager(mock_factory)
