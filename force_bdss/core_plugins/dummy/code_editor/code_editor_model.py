@@ -21,3 +21,22 @@ class CodeEditorModel(BaseDataSourceModel):
     @on_trait_change('input_types[],output_types[]')
     def update_slot_types(self):
         self.changes_slots = True
+
+    def default_traits_view(self):
+        from traitsui.api import View, Item, HGroup
+
+        return View(
+            HGroup(
+                Item('nb_inputs', label='Number'),
+                Item('input_types', label='Types'),
+                label='Inputs',
+                show_border=True,
+            ),
+            HGroup(
+                Item('nb_outputs', label='Number'),
+                Item('output_types', label='Types'),
+                label='Outputs',
+                show_border=True,
+            ),
+            Item('code'),
+        )
