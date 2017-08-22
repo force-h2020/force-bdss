@@ -51,6 +51,9 @@ class FactoryRegistryPlugin(Plugin):
         id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
     )
 
+    #: UI Hooks are pluggable entities holding methods that are called
+    #: at specific moments in the UI application lifetime. They can be used
+    #: to inject special behaviors at those moments.
     ui_hooks_factories = ExtensionPoint(
         List(IUIHooksFactory),
         id=ExtensionPointID.UI_HOOK_FACTORIES
@@ -163,24 +166,3 @@ class FactoryRegistryPlugin(Plugin):
                 return nl
 
         raise KeyError(id)
-
-    def ui_hook_factory_by_id(self, id):
-        """Finds a given UI Hook factory by means of its id.
-        The ID is as obtained by the function factory_id() in the
-        plugin api.
-
-        Parameters
-        ----------
-        id: str
-            The identifier returned by the factory_id() function.
-
-        Raises
-        ------
-        KeyError: if the entry is not found.
-        """
-        for hook in self.ui_hooks_factories:
-            if hook.id == id:
-                return hook
-
-        raise KeyError(id)
-
