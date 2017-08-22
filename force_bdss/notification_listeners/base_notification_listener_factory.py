@@ -48,12 +48,3 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         model_data: dict
             Data to use to fill the model.
         """
-
-    def create_ui_hook_manager(self):
-        """Creates an instance of the hook manager
-        The hook manager contains a set of methods that are applicable in
-        various moments of the UI application lifetime.
-        By default, it returns None, meaning that no hook managers are
-        installed, and no action will take place.
-        """
-        return None
