@@ -39,4 +39,23 @@ class CodeEditorModel(BaseDataSourceModel):
                 show_border=True,
             ),
             Item('code'),
+            buttons=['OK', 'Cancel'],
+        )
+
+    def _code_default(self):
+        return (
+            "# You can import any module you want which is installed in\n "
+            "# your environment:\n"
+            "#\n"
+            "import math\n"
+            "#\n"
+            "# You have access to the input parameters you defined in the\n"
+            "# tree editor of the Workflow (e.g. if you set \"p1\" as an \n"
+            "# input for this data source, you have access to \"p1\" value\n"
+            "# in the scope of this code)\n"
+            "#\n"
+            "# You must set all the values you defined as ouput of this data\n"
+            "# source inside this code (e.g. if you set \"p_out\" as an\n"
+            "# output of this data source, you must set a value for\n"
+            "# \"p_out\" inside of this code\n"
         )
