@@ -4,7 +4,7 @@ from traits.api import ABCHasStrictTraits, Instance
 from .i_ui_hooks_factory import IUIHooksFactory
 
 
-class BaseUIHookManager(ABCHasStrictTraits):
+class BaseUIHooksManager(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IUIHooksFactory)
 
@@ -17,9 +17,8 @@ class BaseUIHookManager(ABCHasStrictTraits):
             The factory this Notification Listener belongs to
         """
         self.factory = factory
-        super(BaseUIHookManager, self).__init__(*args, **kwargs)
+        super(BaseUIHooksManager, self).__init__(*args, **kwargs)
 
-    @abc.abstractmethod
     def before_execution(self, task):
         """Hook that is called before execution of a given evaluation.
         Gives a chance to perform operations before the temporary file is
@@ -31,7 +30,6 @@ class BaseUIHookManager(ABCHasStrictTraits):
             The pyface envisage task.
         """
 
-    @abc.abstractmethod
     def before_save(self, task):
         """Hook that is called just before saving a given model to disk
         in response to a user action. This does not apply to saving of
