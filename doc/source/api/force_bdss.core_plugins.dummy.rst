@@ -12,6 +12,7 @@ Subpackages
     force_bdss.core_plugins.dummy.dummy_kpi_calculator
     force_bdss.core_plugins.dummy.dummy_notification_listener
     force_bdss.core_plugins.dummy.kpi_adder
+    force_bdss.core_plugins.dummy.power_evaluator
     force_bdss.core_plugins.dummy.tests
 
 Submodules

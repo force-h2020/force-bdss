@@ -15,6 +15,7 @@ Subpackages
     force_bdss.mco
     force_bdss.notification_listeners
     force_bdss.tests
+    force_bdss.ui_hooks
 
 Submodules
 ----------
