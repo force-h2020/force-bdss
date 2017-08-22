@@ -1,12 +1,13 @@
 Design
 ------
 
-The application is based on four entities, as written in the introduction:
+The application is based on five entities, as written in the introduction:
 
 - Multi Criteria Optimizer (MCO)
 - DataSources
 - Key Performance Indicator (KPI) Calculators
 - Notification Listeners
+- UI Hooks
 
 There are a few core assumptions about each of these entities:
 
@@ -23,6 +24,10 @@ There are a few core assumptions about each of these entities:
   of the computation/Finished). It can be a remote database which is filled
   with the MCO results during the computation (e.g. the GUI ``force_wfmanager``
   has a notification listener in order to fill the result table).
+- UI Hooks permit to define additional operations which will be executed
+  at specific moments in the UI lifetime (before and after exectution of the
+  bdss, before saving the workflow). Those operations won't be executed by the
+  command line interface of the bdss.
 
 
 The result can be represented with the following data flow

@@ -1,8 +1,8 @@
 Plugin Development
 ------------------
 
-A single Plugin can provide one or more of the pluggable entities
-described elsewhere (MCO/KPICalculators/DataSources/NotificationListeners).
+A single Plugin can provide one or more of the pluggable entities described
+elsewhere (MCO/KPICalculators/DataSources/NotificationListeners/UIHooks).
 Multiple plugins can be installed to provide a broad range of functionalities.
 
 Plugins must return Factories. Each Factory provides factory methods for
