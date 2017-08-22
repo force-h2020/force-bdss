@@ -8,12 +8,12 @@ class BaseUIHooksManager(HasStrictTraits):
     factory = Instance(IUIHooksFactory)
 
     def __init__(self, factory, *args, **kwargs):
-        """Initializes the notification listener.
+        """Initializes the UI Hooks manager.
 
         Parameters
         ----------
-        factory: BaseNotificationListener
-            The factory this Notification Listener belongs to
+        factory: BaseUIHooksFactory
+            The factory this UI Hooks manager belongs to
         """
         self.factory = factory
         super(BaseUIHooksManager, self).__init__(*args, **kwargs)
