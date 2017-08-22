@@ -3,11 +3,11 @@ import abc
 from traits.api import ABCHasStrictTraits, Instance, String, provides
 from envisage.plugin import Plugin
 
-from .i_notification_listener_factory import INotificationListenerFactory
+from .i_ui_hooks_factory import IUIHooksFactory
 
 
-@provides(INotificationListenerFactory)
-class BaseNotificationListenerFactory(ABCHasStrictTraits):
+@provides(IUIHooksFactory)
+class BaseUIHooksFactory(ABCHasStrictTraits):
     """Base class for notification listeners.
     Notification listeners are extensions that receive event notifications
     from the MCO and perform an associated action.
@@ -30,30 +30,15 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
             The plugin that holds this factory.
         """
         self.plugin = plugin
-        super(BaseNotificationListenerFactory, self).__init__(*args, **kwargs)
+        super(BaseUIHooksFactory, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
-    def create_listener(self):
-        """
-        Creates an instance of the listener.
-        """
-
-    @abc.abstractmethod
-    def create_model(self, model_data=None):
-        """
-        Creates an instance of the model.
-
-        Parameters
-        ----------
-        model_data: dict
-            Data to use to fill the model.
-        """
-
     def create_ui_hook_manager(self):
         """Creates an instance of the hook manager
         The hook manager contains a set of methods that are applicable in
         various moments of the UI application lifetime.
-        By default, it returns None, meaning that no hook managers are
-        installed, and no action will take place.
+
+        Returns
+        -------
+        BaseUIHookManager
         """
-        return None
