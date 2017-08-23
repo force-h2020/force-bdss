@@ -1,19 +1,19 @@
-force_bdss.core_plugins.dummy.csv_extractor.tests package
-=========================================================
+force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.tests package
+================================================================
 
 Submodules
 ----------
 
-force_bdss.core_plugins.dummy.csv_extractor.tests.test_csv_extractor_data_source module
----------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.tests\.test\_csv\_extractor\_data\_source module
+---------------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.csv_extractor.tests.test_csv_extractor_data_source
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.core_plugins.dummy.csv_extractor.tests.test_csv_extractor_factory module
------------------------------------------------------------------------------------
+force\_bdss\.core\_plugins\.dummy\.csv\_extractor\.tests\.test\_csv\_extractor\_factory module
+----------------------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.core_plugins.dummy.csv_extractor.tests.test_csv_extractor_factory
     :members:
