@@ -26,7 +26,7 @@ class CodeEditorModel(BaseDataSourceModel):
 
     @on_trait_change('load_button')
     def load_python_script(self):
-        from pyface.api import FileDialog, OK
+        from pyface.api import FileDialog, OK, error
 
         dialog = FileDialog(
             action="open",
@@ -38,8 +38,17 @@ class CodeEditorModel(BaseDataSourceModel):
         if result is not OK:
             return
 
-        with open(dialog.path, 'r') as fobj:
-            self.code = fobj.read()
+        try:
+            with open(dialog.path, 'r') as fobj:
+                self.code = fobj.read()
+        except IOError as e:
+            error(
+                None,
+                "Oups ! Something went wrong when "
+                "opening the file {}: \n{}".format(
+                    dialog.path, str(e)
+                )
+            )
 
     def default_traits_view(self):
         from traitsui.api import View, Item, UItem, HGroup
