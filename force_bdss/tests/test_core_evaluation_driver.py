@@ -2,10 +2,8 @@ import unittest
 
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
-from force_bdss.tests.probe_classes.mco import (
-    ProbeMCOCommunicator, ProbeMCOFactory)
-from force_bdss.tests.probe_classes.data_source import (
-    ProbeDataSourceFactory)
+from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
+from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.tests.probe_classes.kpi_calculator import (
     ProbeKPICalculatorFactory)
 
@@ -24,12 +22,6 @@ from envisage.api import Application
 
 from force_bdss.core_evaluation_driver import CoreEvaluationDriver, \
     _bind_data_values, _compute_layer_results
-
-
-class OneValueMCOCommunicator(ProbeMCOCommunicator):
-    """A communicator that returns one single datavalue, for testing purposes.
-    """
-    nb_output_data_values = 1
 
 
 class TestCoreEvaluationDriver(unittest.TestCase):
@@ -52,7 +44,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         mco_factories = self.factory_registry_plugin.mco_factories
         mco_factories[0] = ProbeMCOFactory(
             None,
-            communicator_class=OneValueMCOCommunicator)
+            nb_output_data_values=1)
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with self.assertRaisesRegexp(

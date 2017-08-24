@@ -62,6 +62,8 @@ class ProbeMCOFactory(BaseMCOFactory):
 
     mco_class = Type(ProbeMCO)
 
+    nb_output_data_values = Int(0)
+
     def create_model(self, model_data=None):
         if model_data is None:
             model_data = {}
@@ -71,7 +73,9 @@ class ProbeMCOFactory(BaseMCOFactory):
         )
 
     def create_communicator(self):
-        return self.communicator_class(self)
+        return self.communicator_class(
+            self,
+            nb_output_data_values=self.nb_output_data_values)
 
     def create_optimizer(self):
         return self.mco_class(self)
