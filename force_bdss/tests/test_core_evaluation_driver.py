@@ -1,9 +1,11 @@
 import unittest
 
-from traits.api import Float, List
+from traits.api import Float
+
+from force_bdss.tests.probe_classes.factory_registry_plugin import \
+    ProbeFactoryRegistryPlugin
 
 from force_bdss.core.input_slot_map import InputSlotMap
-from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source import BaseDataSource
@@ -83,7 +85,7 @@ class OneDataValueMCOCommunicator(BaseMCOCommunicator):
 
 
 class NullMCOFactory(BaseMCOFactory):
-    id = factory_id("enthought", "null_mco")
+    id = factory_id("enthought", "test_mco")
 
     def create_model(self, model_data=None):
         return NullMCOModel(self, **model_data)
@@ -221,33 +223,12 @@ class NullNotificationListenerFactory(BaseNotificationListenerFactory):
         return NullNotificationListenerModel(self)
 
 
-class DummyFactoryRegistryPlugin(FactoryRegistryPlugin):
-    mco_factories = List()
-    kpi_calculator_factories = List()
-    data_source_factories = List()
-    notification_listener_factories = List()
-
-
-def mock_factory_registry_plugin():
-    factory_registry_plugin = DummyFactoryRegistryPlugin()
-    factory_registry_plugin.mco_factories = [
-        NullMCOFactory(factory_registry_plugin)]
-    factory_registry_plugin.kpi_calculator_factories = [
-        NullKPICalculatorFactory(factory_registry_plugin)]
-    factory_registry_plugin.data_source_factories = [
-        NullDataSourceFactory(factory_registry_plugin)]
-    factory_registry_plugin.notification_listener_factories = [
-        NullNotificationListenerFactory(factory_registry_plugin)
-    ]
-    return factory_registry_plugin
-
-
 class TestCoreEvaluationDriver(unittest.TestCase):
     def setUp(self):
-        self.mock_factory_registry_plugin = mock_factory_registry_plugin()
+        self.factory_registry_plugin = ProbeFactoryRegistryPlugin()
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
-            return_value=self.mock_factory_registry_plugin
+            return_value=self.factory_registry_plugin
         )
         application.workflow_filepath = fixtures.get("test_null.json")
         self.mock_application = application
@@ -259,7 +240,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver.application_started()
 
     def test_error_for_non_matching_mco_parameters(self):
-        factory = self.mock_factory_registry_plugin.mco_factories[0]
+        factory = self.factory_registry_plugin.mco_factories[0]
         with mock.patch.object(factory.__class__,
                                "create_communicator") as create_comm:
             create_comm.return_value = OneDataValueMCOCommunicator(
@@ -273,7 +254,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_incorrect_output_slots(self):
-        factory = self.mock_factory_registry_plugin.data_source_factories[0]
+        factory = self.factory_registry_plugin.data_source_factories[0]
         with mock.patch.object(factory.__class__,
                                "create_data_source") as create_ds:
             create_ds.return_value = BrokenOneValueDataSource(factory)
@@ -288,7 +269,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):
-        factory = self.mock_factory_registry_plugin.data_source_factories[0]
+        factory = self.factory_registry_plugin.data_source_factories[0]
         with mock.patch.object(factory.__class__,
                                "create_data_source") as create_ds:
             create_ds.return_value = OneValueDataSource(factory)
@@ -303,7 +284,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_incorrect_kpic_output_slots(self):
-        factory = self.mock_factory_registry_plugin.kpi_calculator_factories[0]
+        factory = self.factory_registry_plugin.kpi_calculator_factories[0]
         with mock.patch.object(factory.__class__,
                                "create_kpi_calculator") as create_kpic:
             create_kpic.return_value = BrokenOneValueKPICalculator(factory)
@@ -318,7 +299,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_missing_kpic_output_names(self):
-        factory = self.mock_factory_registry_plugin.kpi_calculator_factories[0]
+        factory = self.factory_registry_plugin.kpi_calculator_factories[0]
         with mock.patch.object(factory.__class__,
                                "create_kpi_calculator") as create_kpic:
             create_kpic.return_value = OneValueKPICalculator(factory)

@@ -1,5 +1,6 @@
 from traits.api import Bool, Function, Str, Int, on_trait_change, Type
 
+from force_bdss.ids import factory_id
 from force_bdss.api import (
     BaseKPICalculatorFactory, BaseKPICalculatorModel, BaseKPICalculator,
     Slot
@@ -8,11 +9,21 @@ from force_bdss.api import (
 from .evaluator_factory import ProbeEvaluatorFactory
 
 
-class ProbeEvaluator(BaseKPICalculator):
-    run_function = Function
+def run_func(*args, **kwargs):
+    return []
+
+
+class ProbeKPICalculator(BaseKPICalculator):
+    run_function = Function()
 
     run_called = Bool(False)
     slots_called = Bool(False)
+
+    def __init__(self, factory, run_function=None, *args, **kwargs):
+        if run_function is None:
+            self.run_function = run_func
+        super(ProbeKPICalculator, self).__init__(
+            self, factory, *args, **kwargs)
 
     def run(self, model, parameters):
         self.run_called = True
@@ -27,6 +38,11 @@ class ProbeEvaluator(BaseKPICalculator):
             tuple(Slot(type=model.output_slots_type)
                   for _ in range(model.output_slots_size))
         )
+
+    def _run_function_default(self):
+        def run_func(*args, **kwargs):
+            pass
+        return run_func
 
 
 class ProbeKPICalculatorModel(BaseKPICalculatorModel):
@@ -44,12 +60,14 @@ class ProbeKPICalculatorModel(BaseKPICalculatorModel):
 
 class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
                                 ProbeEvaluatorFactory):
-    id = Str('enthought.test.kpi_calculator')
+    id = Str(factory_id("enthought", "test_kpic"))
     name = Str('test_kpi_calculator')
 
     model_class = Type(ProbeKPICalculatorModel)
 
     def create_model(self, model_data=None):
+        if model_data is None:
+            model_data = {}
         return self.model_class(
             factory=self,
             input_slots_type=self.input_slots_type,
@@ -60,7 +78,7 @@ class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
         )
 
     def create_kpi_calculator(self):
-        return ProbeEvaluator(
+        return ProbeKPICalculator(
             factory=self,
             run_function=self.run_function,
         )

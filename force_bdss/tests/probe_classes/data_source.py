@@ -1,5 +1,6 @@
 from traits.api import Bool, Function, Str, Int, on_trait_change, Type
 
+from force_bdss.ids import factory_id
 from force_bdss.api import (
     BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
     Slot
@@ -8,11 +9,20 @@ from force_bdss.api import (
 from .evaluator_factory import ProbeEvaluatorFactory
 
 
+def run_func(*args, **kwargs):
+    return []
+
+
 class ProbeDataSource(BaseDataSource):
-    run_function = Function
+    run_function = Function(default_value=run_func)
 
     run_called = Bool(False)
     slots_called = Bool(False)
+
+    def __init__(self, factory, run_function=None, *args, **kwargs):
+        if run_function is None:
+            self.run_function = run_func
+        super(ProbeDataSource, self).__init__(self, factory, *args, **kwargs)
 
     def run(self, model, parameters):
         self.run_called = True
@@ -44,12 +54,14 @@ class ProbeDataSourceModel(BaseDataSourceModel):
 
 class ProbeDataSourceFactory(BaseDataSourceFactory,
                              ProbeEvaluatorFactory):
-    id = Str('enthought.test.data_source')
+    id = Str(factory_id("enthought", "test_ds"))
     name = Str('test_data_source')
 
     model_class = Type(ProbeDataSourceModel)
 
     def create_model(self, model_data=None):
+        if model_data is None:
+            model_data = {}
         return self.model_class(
             factory=self,
             input_slots_type=self.input_slots_type,

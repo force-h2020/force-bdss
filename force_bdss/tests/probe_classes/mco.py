@@ -1,5 +1,6 @@
-from traits.api import Str, Type, Bool, Int
+from traits.api import Str, Type, Bool, Int, Function
 
+from force_bdss.ids import mco_parameter_id, factory_id
 from force_bdss.core.data_value import DataValue
 from force_bdss.api import (
     BaseMCOModel, BaseMCO, BaseMCOFactory,
@@ -12,11 +13,27 @@ class ProbeMCOModel(BaseMCOModel):
     pass
 
 
+def run_func(*args, **kwargs):
+    return []
+
+
 class ProbeMCO(BaseMCO):
+    run_function = Function()
+
     run_called = Bool(False)
+
+    def __init__(self, factory, run_function=None, *args, **kwargs):
+        if run_function is None:
+            self.run_function = run_func
+        super(ProbeMCO, self).__init__(self, factory, *args, **kwargs)
 
     def run(self, model):
         self.run_called = True
+
+    def _run_function_default(self):
+        def run_func(*args, **kwargs):
+            pass
+        return run_func
 
 
 class ProbeParameter(BaseMCOParameter):
@@ -24,7 +41,7 @@ class ProbeParameter(BaseMCOParameter):
 
 
 class RangedParameterFactory(BaseMCOParameterFactory):
-    id = Str("enthought.test.mco_parameter")
+    id = Str(mco_parameter_id("enthought", "test_mco", "test"))
 
     model_class = Type(ProbeParameter)
 
@@ -46,7 +63,7 @@ class ProbeMCOCommunicator(BaseMCOCommunicator):
 
 
 class ProbeMCOFactory(BaseMCOFactory):
-    id = Str("enthought.test.mco")
+    id = Str(factory_id("enthought", "test_mco"))
 
     model_class = Type(ProbeMCOModel)
 
@@ -55,6 +72,8 @@ class ProbeMCOFactory(BaseMCOFactory):
     mco_class = Type(ProbeMCO)
 
     def create_model(self, model_data=None):
+        if model_data is None:
+            model_data = {}
         return self.model_class(
             self,
             **model_data
