@@ -14,11 +14,13 @@ class CodeEditorModel(BaseDataSourceModel):
 
     load_button = Button('Load python script')
 
-    @on_trait_change('nb_inputs,nb_outputs', post_init=True)
-    def update_slot_sizes(self):
+    @on_trait_change('nb_inputs', post_init=True)
+    def update_input_slot_sizes(self):
         self.input_types = ['' for _ in range(self.nb_inputs)]
+
+    @on_trait_change('nb_outputs', post_init=True)
+    def update_output_slot_sizes(self):
         self.output_types = ['' for _ in range(self.nb_outputs)]
-        self.changes_slots = True
 
     @on_trait_change('input_types[],output_types[]')
     def update_slot_types(self):
