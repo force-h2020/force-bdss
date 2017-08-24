@@ -5,6 +5,7 @@ from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from .mco import ProbeMCOFactory
 from .kpi_calculator import ProbeKPICalculatorFactory
 from .data_source import ProbeDataSourceFactory
+from .notification_listener import ProbeNotificationListenerFactory
 
 
 class ProbeFactoryRegistryPlugin(FactoryRegistryPlugin):
@@ -21,3 +22,6 @@ class ProbeFactoryRegistryPlugin(FactoryRegistryPlugin):
 
     def _data_source_factories_default(self):
         return [ProbeDataSourceFactory(self)]
+
+    def _notification_listener_factories_default(self):
+        return [ProbeNotificationListenerFactory(self)]
