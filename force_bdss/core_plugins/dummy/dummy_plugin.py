@@ -4,6 +4,7 @@ from .dummy_notification_listener.dummy_notification_listener_factory import (
 )
 from .csv_extractor.csv_extractor_factory import CSVExtractorFactory
 from .power_evaluator.power_evaluator_factory import PowerEvaluatorFactory
+from .code_editor.code_editor_factory import CodeEditorFactory
 from .kpi_adder.kpi_adder_factory import KPIAdderFactory
 from .dummy_dakota.dakota_factory import DummyDakotaFactory
 from .dummy_data_source.dummy_data_source_factory import DummyDataSourceFactory
@@ -18,7 +19,8 @@ class DummyPlugin(BaseExtensionPlugin):
     def _data_source_factories_default(self):
         return [DummyDataSourceFactory(self),
                 CSVExtractorFactory(self),
-                PowerEvaluatorFactory(self)]
+                PowerEvaluatorFactory(self),
+                CodeEditorFactory(self)]
 
     def _mco_factories_default(self):
         return [DummyDakotaFactory(self)]
