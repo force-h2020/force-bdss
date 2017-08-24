@@ -1,6 +1,9 @@
 from .base_extension_plugin import BaseExtensionPlugin  # noqa
 from .ids import factory_id, plugin_id, mco_parameter_id  # noqa
+
 from .core.data_value import DataValue  # noqa
+from .core.workflow import Workflow  # noqa
+from .core.slot import Slot  # noqa
 
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa

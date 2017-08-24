@@ -1,19 +1,19 @@
-force_bdss.mco.parameters.tests package
-=======================================
+force\_bdss\.mco\.parameters\.tests package
+===========================================
 
 Submodules
 ----------
 
-force_bdss.mco.parameters.tests.test_base_mco_parameter module
---------------------------------------------------------------
+force\_bdss\.mco\.parameters\.tests\.test\_base\_mco\_parameter module
+----------------------------------------------------------------------
 
 .. automodule:: force_bdss.mco.parameters.tests.test_base_mco_parameter
     :members:
     :undoc-members:
     :show-inheritance:
 
-force_bdss.mco.parameters.tests.test_base_mco_parameter_factory module
-----------------------------------------------------------------------
+force\_bdss\.mco\.parameters\.tests\.test\_base\_mco\_parameter\_factory module
+-------------------------------------------------------------------------------
 
 .. automodule:: force_bdss.mco.parameters.tests.test_base_mco_parameter_factory
     :members:
