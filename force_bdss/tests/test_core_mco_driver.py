@@ -1,13 +1,13 @@
 import unittest
 from testfixtures import LogCapture
 
+from force_bdss.tests.probe_classes.factory_registry_plugin import \
+    ProbeFactoryRegistryPlugin
 from force_bdss.core_driver_events import (
     MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from force_bdss.tests import fixtures
-from force_bdss.tests.test_core_evaluation_driver import \
-    mock_factory_registry_plugin
 
 try:
     import mock
@@ -21,10 +21,10 @@ from force_bdss.core_mco_driver import CoreMCODriver
 
 class TestCoreMCODriver(unittest.TestCase):
     def setUp(self):
-        self.mock_factory_registry_plugin = mock_factory_registry_plugin()
+        self.factory_registry_plugin = ProbeFactoryRegistryPlugin()
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
-            return_value=self.mock_factory_registry_plugin
+            return_value=self.factory_registry_plugin
         )
         application.workflow_filepath = fixtures.get("test_null.json")
         self.mock_application = application
@@ -84,7 +84,7 @@ class TestCoreMCODriver(unittest.TestCase):
         driver = CoreMCODriver(
             application=self.mock_application,
         )
-        registry = self.mock_factory_registry_plugin
+        registry = self.factory_registry_plugin
         factory = registry.notification_listener_factories[0]
         mock_create_listener = mock.Mock()
         mock_listener = mock.Mock(spec=BaseNotificationListener)
@@ -99,7 +99,7 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Failed to create or initialize listener with id "
-                 "force.bdss.enthought.factory.null_nl: "))
+                 "force.bdss.enthought.factory.test_nl: "))
 
             self.assertEqual(len(listeners), 0)
 
@@ -119,7 +119,7 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Exception while delivering to listener "
-                 "NullNotificationListener: "))
+                 "ProbeNotificationListener: "))
 
     def test_finalize_error(self):
         driver = CoreMCODriver(
@@ -138,4 +138,4 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Exception while finalizing listener "
-                 "NullNotificationListener: "))
+                 "ProbeNotificationListener: "))
