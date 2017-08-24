@@ -41,6 +41,13 @@ class ProbeEvaluator(HasStrictTraits):
 
 
 class ProbeEvaluatorFactory(HasStrictTraits):
+    def __init__(self, plugin=None, *args, **kwargs):
+        if plugin is None:
+            plugin = mock.Mock(Plugin)
+
+        super(ProbeEvaluatorFactory, self).__init__(
+            plugin=plugin, *args, **kwargs)
+
     run_function = Function
 
     input_slots_type = Str('PRESSURE')
@@ -69,13 +76,6 @@ class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
                                 ProbeEvaluatorFactory):
     id = Str('enthought.test.datasource')
     name = Str('test_datasource')
-
-    def __init__(self, plugin=None, *args, **kwargs):
-        if plugin is None:
-            plugin = mock.Mock(Plugin)
-
-        super(ProbeKPICalculatorFactory, self).__init__(
-            plugin=plugin, *args, **kwargs)
 
     def create_model(self, model_data=None):
         return ProbeKPICalculatorModel(self, self.model_data)
