@@ -1,4 +1,4 @@
-from traits.api import Str, Type, Bool, Int, Function
+from traits.api import Str, Type, Bool, Int, Function, List
 
 from force_bdss.ids import mco_parameter_id, factory_id
 from force_bdss.core.data_value import DataValue
@@ -31,7 +31,7 @@ class ProbeParameter(BaseMCOParameter):
     pass
 
 
-class RangedParameterFactory(BaseMCOParameterFactory):
+class ProbeParameterFactory(BaseMCOParameterFactory):
     id = Str(mco_parameter_id("enthought", "test_mco", "test"))
 
     model_class = Type(ProbeParameter)
@@ -61,6 +61,8 @@ class ProbeMCOFactory(BaseMCOFactory):
     communicator_class = Type(ProbeMCOCommunicator)
 
     mco_class = Type(ProbeMCO)
+
+    probe_parameter_factories = List(Type(ProbeParameterFactory))
 
     nb_output_data_values = Int(0)
 
