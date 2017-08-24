@@ -21,6 +21,7 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
+        super(BaseMCOCommunicator, self).__init__(*args, **kwargs)
 
         super(BaseMCOCommunicator, self).__init__(*args, **kwargs)
 
