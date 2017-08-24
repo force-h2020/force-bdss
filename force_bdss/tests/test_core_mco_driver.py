@@ -5,8 +5,6 @@ from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.core_driver_events import (
     MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
-from force_bdss.notification_listeners.base_notification_listener import \
-    BaseNotificationListener
 from force_bdss.tests import fixtures
 
 try:
@@ -17,6 +15,10 @@ except ImportError:
 from envisage.api import Application
 
 from force_bdss.core_mco_driver import CoreMCODriver
+
+
+def raise_exception(*args, **kwargs):
+    raise Exception()
 
 
 class TestCoreMCODriver(unittest.TestCase):
@@ -53,32 +55,28 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        mock_deliver = mock.Mock()
-        listener.__dict__["deliver"] = mock_deliver
         driver.mco.started = True
-        self.assertIsInstance(mock_deliver.call_args[0][0], MCOStartEvent)
+        self.assertIsInstance(listener.deliver_call_args[0][0], MCOStartEvent)
 
     def test_finished_event_handling(self):
         driver = CoreMCODriver(
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        mock_deliver = mock.Mock()
-        listener.__dict__["deliver"] = mock_deliver
         driver.mco.finished = True
-        self.assertIsInstance(mock_deliver.call_args[0][0], MCOFinishEvent)
+        self.assertIsInstance(listener.deliver_call_args[0][0], MCOFinishEvent)
 
     def test_progress_event_handling(self):
         driver = CoreMCODriver(
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        mock_deliver = mock.Mock()
-        listener.__dict__["deliver"] = mock_deliver
         driver.mco.new_data = {'input': (1, 2), 'output': (3, 4)}
-        self.assertIsInstance(mock_deliver.call_args[0][0], MCOProgressEvent)
-        self.assertEqual(mock_deliver.call_args[0][0].input, (1, 2))
-        self.assertEqual(mock_deliver.call_args[0][0].output, (3, 4))
+        self.assertIsInstance(
+            listener.deliver_call_args[0][0],
+            MCOProgressEvent)
+        self.assertEqual(listener.deliver_call_args[0][0].input, (1, 2))
+        self.assertEqual(listener.deliver_call_args[0][0].output, (3, 4))
 
     def test_listener_init_exception(self):
         driver = CoreMCODriver(
@@ -86,12 +84,7 @@ class TestCoreMCODriver(unittest.TestCase):
         )
         registry = self.factory_registry_plugin
         factory = registry.notification_listener_factories[0]
-        mock_create_listener = mock.Mock()
-        mock_listener = mock.Mock(spec=BaseNotificationListener)
-        mock_create_listener.return_value = mock_listener
-        mock_listener.initialize = mock.Mock()
-        mock_listener.initialize.side_effect = Exception()
-        factory.__dict__["create_listener"] = mock_create_listener
+        factory.initialize_function = raise_exception
         with LogCapture() as capture:
             listeners = driver.listeners
 
@@ -108,12 +101,10 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        mock_deliver = mock.Mock()
-        listener.__dict__["deliver"] = mock_deliver
-        mock_deliver.side_effect = Exception()
+        listener.deliver_function = raise_exception
         with LogCapture() as capture:
             driver.mco.started = True
-            self.assertTrue(mock_deliver.called)
+            self.assertTrue(listener.deliver_called)
 
             capture.check(
                 ("force_bdss.core_mco_driver",
@@ -128,10 +119,7 @@ class TestCoreMCODriver(unittest.TestCase):
         driver.application_started()
 
         listener = driver.listeners[0]
-        mock_finalize = mock.Mock()
-        listener.__dict__["finalize"] = mock_finalize
-        mock_finalize.side_effect = Exception()
-
+        listener.finalize_function = raise_exception
         with LogCapture() as capture:
             driver.application_stopping()
             capture.check(
