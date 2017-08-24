@@ -23,8 +23,6 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
         self.factory = factory
         super(BaseMCOCommunicator, self).__init__(*args, **kwargs)
 
-        super(BaseMCOCommunicator, self).__init__(*args, **kwargs)
-
     @abc.abstractmethod
     def receive_from_mco(self, model):
         """
