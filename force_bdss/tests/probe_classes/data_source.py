@@ -1,4 +1,4 @@
-from traits.api import Bool, Function, Str, Int, on_trait_change
+from traits.api import Bool, Function, Str, Int, on_trait_change, Type
 
 from force_bdss.api import (
     BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
@@ -47,7 +47,7 @@ class ProbeDataSourceFactory(BaseDataSourceFactory,
     id = Str('enthought.test.data_source')
     name = Str('test_data_source')
 
-    model_class = ProbeDataSourceModel
+    model_class = Type(ProbeDataSourceModel)
 
     def create_model(self, model_data=None):
         return self.model_class(

@@ -1,4 +1,4 @@
-from traits.api import Bool, Function, Str, Int, on_trait_change
+from traits.api import Bool, Function, Str, Int, on_trait_change, Type
 
 from force_bdss.api import (
     BaseKPICalculatorFactory, BaseKPICalculatorModel, BaseKPICalculator,
@@ -47,7 +47,7 @@ class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
     id = Str('enthought.test.kpi_calculator')
     name = Str('test_kpi_calculator')
 
-    model_class = ProbeKPICalculatorModel
+    model_class = Type(ProbeKPICalculatorModel)
 
     def create_model(self, model_data=None):
         return self.model_class(
