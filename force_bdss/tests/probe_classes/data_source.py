@@ -1,14 +1,14 @@
 from traits.api import Bool, Function, Str, Int, on_trait_change
 
 from force_bdss.api import (
-    BaseKPICalculatorFactory, BaseKPICalculatorModel, BaseKPICalculator,
+    BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
     Slot
 )
 
 from .evaluator_factory import ProbeEvaluatorFactory
 
 
-class ProbeEvaluator(BaseKPICalculator):
+class ProbeDataSource(BaseDataSource):
     run_function = Function
 
     run_called = Bool(False)
@@ -29,7 +29,7 @@ class ProbeEvaluator(BaseKPICalculator):
         )
 
 
-class ProbeKPICalculatorModel(BaseKPICalculatorModel):
+class ProbeDataSourceModel(BaseDataSourceModel):
     input_slots_type = Str('PRESSURE')
     output_slots_type = Str('PRESSURE')
 
@@ -42,12 +42,12 @@ class ProbeKPICalculatorModel(BaseKPICalculatorModel):
         self.changes_slots = True
 
 
-class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
-                                ProbeEvaluatorFactory):
-    id = Str('enthought.test.kpi_calculator')
-    name = Str('test_kpi_calculator')
+class ProbeDataSourceFactory(BaseDataSourceFactory,
+                             ProbeEvaluatorFactory):
+    id = Str('enthought.test.data_source')
+    name = Str('test_data_source')
 
-    model_class = ProbeKPICalculatorModel
+    model_class = ProbeDataSourceModel
 
     def create_model(self, model_data=None):
         return self.model_class(
@@ -59,8 +59,8 @@ class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
             **model_data
         )
 
-    def create_kpi_calculator(self):
-        return ProbeEvaluator(
+    def create_data_source(self):
+        return ProbeDataSource(
             factory=self,
             run_function=self.run_function,
         )
