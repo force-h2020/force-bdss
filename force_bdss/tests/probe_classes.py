@@ -74,8 +74,8 @@ class ProbeKPICalculatorModel(BaseKPICalculatorModel):
 
 class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
                                 ProbeEvaluatorFactory):
-    id = Str('enthought.test.datasource')
-    name = Str('test_datasource')
+    id = Str('enthought.test.kpi_calculator')
+    name = Str('test_kpi_calculator')
 
     def create_model(self, model_data=None):
         return ProbeKPICalculatorModel(self, self.model_data)
