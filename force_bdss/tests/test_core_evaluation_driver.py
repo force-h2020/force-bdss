@@ -129,8 +129,8 @@ class OneValueKPICalculator(BaseKPICalculator):
 
 
 class NullKPICalculatorFactory(BaseKPICalculatorFactory):
-    id = factory_id("enthought", "null_kpic")
-    name = "null_kpic"
+    id = factory_id("enthought", "test_kpi_calculator")
+    name = "test_kpi_calculator"
 
     def create_model(self, model_data=None):
         return NullKPICalculatorModel(self)
@@ -187,8 +187,8 @@ class TwoInputsThreeOutputsDataSource(BaseDataSource):
 
 
 class NullDataSourceFactory(BaseDataSourceFactory):
-    id = factory_id("enthought", "null_ds")
-    name = "null_ds"
+    id = factory_id("enthought", "test_data_source")
+    name = "test_data_source"
 
     def create_model(self, model_data=None):
         return NullDataSourceModel(self)
@@ -264,7 +264,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by 'null_ds' does not match"
+                    " returned by 'test_data_source' does not match"
                     " the number of output slots"):
                 driver.application_started()
 
@@ -279,7 +279,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by 'null_ds' does not match"
+                    " returned by 'test_data_source' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
 
@@ -294,7 +294,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by 'null_kpic' does not match"
+                    " returned by 'test_kpi_calculator' does not match"
                     " the number of output slots"):
                 driver.application_started()
 
@@ -309,7 +309,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaisesRegexp(
                     RuntimeError,
                     "The number of data values \(1 values\)"
-                    " returned by 'null_kpic' does not match"
+                    " returned by 'test_kpi_calculator' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
 
