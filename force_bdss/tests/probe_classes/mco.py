@@ -18,22 +18,13 @@ def run_func(*args, **kwargs):
 
 
 class ProbeMCO(BaseMCO):
-    run_function = Function()
+    run_function = Function(default_value=run_func)
 
     run_called = Bool(False)
 
-    def __init__(self, factory, run_function=None, *args, **kwargs):
-        if run_function is None:
-            self.run_function = run_func
-        super(ProbeMCO, self).__init__(self, factory, *args, **kwargs)
-
     def run(self, model):
         self.run_called = True
-
-    def _run_function_default(self):
-        def run_func(*args, **kwargs):
-            pass
-        return run_func
+        return self.run_function(model)
 
 
 class ProbeParameter(BaseMCOParameter):

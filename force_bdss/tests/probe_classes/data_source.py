@@ -19,14 +19,9 @@ class ProbeDataSource(BaseDataSource):
     run_called = Bool(False)
     slots_called = Bool(False)
 
-    def __init__(self, factory, run_function=None, *args, **kwargs):
-        if run_function is None:
-            self.run_function = run_func
-        super(ProbeDataSource, self).__init__(self, factory, *args, **kwargs)
-
     def run(self, model, parameters):
         self.run_called = True
-        self.run_function(model, parameters)
+        return self.run_function(model, parameters)
 
     def slots(self, model):
         self.slots_called = True

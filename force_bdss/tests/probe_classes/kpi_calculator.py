@@ -14,20 +14,14 @@ def run_func(*args, **kwargs):
 
 
 class ProbeKPICalculator(BaseKPICalculator):
-    run_function = Function()
+    run_function = Function(default_value=run_func)
 
     run_called = Bool(False)
     slots_called = Bool(False)
 
-    def __init__(self, factory, run_function=None, *args, **kwargs):
-        if run_function is None:
-            self.run_function = run_func
-        super(ProbeKPICalculator, self).__init__(
-            self, factory, *args, **kwargs)
-
     def run(self, model, parameters):
         self.run_called = True
-        self.run_function(model, parameters)
+        return self.run_function(model, parameters)
 
     def slots(self, model):
         self.slots_called = True
@@ -38,11 +32,6 @@ class ProbeKPICalculator(BaseKPICalculator):
             tuple(Slot(type=model.output_slots_type)
                   for _ in range(model.output_slots_size))
         )
-
-    def _run_function_default(self):
-        def run_func(*args, **kwargs):
-            pass
-        return run_func
 
 
 class ProbeKPICalculatorModel(BaseKPICalculatorModel):
