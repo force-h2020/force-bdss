@@ -5,7 +5,7 @@ except ImportError:
 
 from envisage.plugin import Plugin
 
-from traits.api import (HasStrictTraits, Bool, Function, Str, Int, Dict,
+from traits.api import (HasStrictTraits, Bool, Function, Str, Int,
                         on_trait_change)
 
 from force_bdss.api import (
@@ -51,8 +51,6 @@ class ProbeEvaluatorFactory(HasStrictTraits):
     input_slots_size = Int(0)
     output_slots_size = Int(0)
 
-    model_data = Dict()
-
 
 class ProbeKPICalculatorModel(BaseKPICalculatorModel):
     input_slots_type = Str('PRESSURE')
@@ -80,7 +78,8 @@ class ProbeKPICalculatorFactory(BaseKPICalculatorFactory,
             input_slots_type=self.input_slots_type,
             output_slots_type=self.output_slots_type,
             input_slots_size=self.input_slots_size,
-            output_slots_size=self.output_slots_size
+            output_slots_size=self.output_slots_size,
+            **model_data
         )
 
     def create_kpi_calculator(self):
