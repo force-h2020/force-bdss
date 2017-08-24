@@ -27,9 +27,9 @@ class BaseMCOParameterFactory(HasStrictTraits):
     # The model class to instantiate when create_model is called.
     model_class = Type('BaseMCOParameter')
 
-    def __init__(self, mco_factory):
+    def __init__(self, mco_factory, *args, **kwargs):
         self.mco_factory = mco_factory
-        super(BaseMCOParameterFactory, self).__init__()
+        super(BaseMCOParameterFactory, self).__init__(*args, **kwargs)
 
     def create_model(self, data_values=None):
         """Creates the instance of the model class and returns it.
