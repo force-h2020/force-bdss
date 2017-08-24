@@ -1,4 +1,4 @@
-from traits.api import Code, Int, on_trait_change, List, Str, Button
+from traits.api import Code, Range, on_trait_change, List, Str, Button
 
 from force_bdss.api import BaseDataSourceModel
 
@@ -6,8 +6,8 @@ from force_bdss.api import BaseDataSourceModel
 class CodeEditorModel(BaseDataSourceModel):
     code = Code()
 
-    nb_inputs = Int()
-    nb_outputs = Int()
+    nb_inputs = Range(value=0, low=0, high=15)
+    nb_outputs = Range(value=0, low=0, high=15)
 
     input_types = List(Str)
     output_types = List(Str)
@@ -57,13 +57,13 @@ class CodeEditorModel(BaseDataSourceModel):
 
         return View(
             HGroup(
-                Item('nb_inputs', label='Number'),
+                Item('nb_inputs', label='Number', style='text'),
                 Item('input_types', label='Types'),
                 label='Inputs',
                 show_border=True,
             ),
             HGroup(
-                Item('nb_outputs', label='Number'),
+                Item('nb_outputs', label='Number', style='text'),
                 Item('output_types', label='Types'),
                 label='Outputs',
                 show_border=True,
