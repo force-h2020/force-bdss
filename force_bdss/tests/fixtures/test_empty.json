@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "workflow": {
+    "mco": null,
+    "data_sources": [
+    ],
+    "kpi_calculators": [
+    ],
+    "notification_listeners": [
+    ]
+  }
+}
