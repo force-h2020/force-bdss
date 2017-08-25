@@ -5,6 +5,10 @@ A single Plugin can provide one or more of the pluggable entities described
 elsewhere (MCO/KPICalculators/DataSources/NotificationListeners/UIHooks).
 Multiple plugins can be installed to provide a broad range of functionalities.
 
+An example plugin implementation is available at:
+
+https://github.com/force-h2020/force-bdss-plugin-enthought-example
+
 Plugins must return Factories. Each Factory provides factory methods for
 one of the above pluggable entities and its associated classes.
 
