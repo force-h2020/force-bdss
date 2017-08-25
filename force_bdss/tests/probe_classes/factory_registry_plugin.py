@@ -68,4 +68,3 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
                 return nl
 
         raise KeyError(id)
-
