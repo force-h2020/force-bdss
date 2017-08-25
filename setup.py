@@ -28,9 +28,6 @@ setup(
         'console_scripts': [
             'force_bdss = force_bdss.cli.force_bdss:run',
         ],
-        "force.bdss.extensions": [
-            "dummy = force_bdss.core_plugins.dummy.dummy_plugin:DummyPlugin",
-        ]
     },
     packages=find_packages(),
     install_requires=[

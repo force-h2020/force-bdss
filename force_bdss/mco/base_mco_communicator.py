@@ -19,8 +19,9 @@ class BaseMCOCommunicator(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-    def __init__(self, factory):
+    def __init__(self, factory, *args, **kwargs):
         self.factory = factory
+        super(BaseMCOCommunicator, self).__init__(*args, **kwargs)
 
     @abc.abstractmethod
     def receive_from_mco(self, model):

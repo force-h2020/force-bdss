@@ -2,7 +2,7 @@
   "version": "1",
   "workflow": {
     "mco": {
-      "id": "force.bdss.enthought.factory.null_mco",
+      "id": "force.bdss.enthought.factory.test_mco",
       "model_data": {
         "parameters" : [
         ]
@@ -10,7 +10,7 @@
     },
     "data_sources": [
       {
-        "id": "force.bdss.enthought.factory.null_ds",
+        "id": "force.bdss.enthought.factory.test_ds",
         "model_data": {
           "input_slot_maps": [
           ],
@@ -21,7 +21,7 @@
     ],
     "kpi_calculators": [
       {
-        "id": "force.bdss.enthought.factory.null_kpic",
+        "id": "force.bdss.enthought.factory.test_kpic",
         "model_data": {
           "input_slot_maps": [
           ],
@@ -32,7 +32,7 @@
     ],
     "notification_listeners": [
       {
-        "id": "force.bdss.enthought.factory.null_nl",
+        "id": "force.bdss.enthought.factory.test_nl",
         "model_data": {
         }
       }

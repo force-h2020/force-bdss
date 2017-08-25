@@ -30,6 +30,10 @@ class CoreEvaluationDriver(BaseCoreDriver):
             sys.exit(1)
 
         mco_model = workflow.mco
+        if mco_model is None:
+            print("No MCO defined. Nothing to do. Exiting.")
+            sys.exit(0)
+
         mco_factory = mco_model.factory
         mco_communicator = mco_factory.create_communicator()
 

@@ -25,13 +25,13 @@ def fixture_dir():
 class TestExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
         with cd(fixtures.dirpath()):
-            out = subprocess.check_call(["force_bdss", "test_csv.json"])
+            out = subprocess.check_call(["force_bdss", "test_empty.json"])
             self.assertEqual(out, 0)
 
     def test_plain_invocation_evaluate(self):
         with cd(fixtures.dirpath()):
             proc = subprocess.Popen([
-                "force_bdss", "--evaluate", "test_csv.json"],
+                "force_bdss", "--evaluate", "test_empty.json"],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE)
             proc.communicate(b"1")
