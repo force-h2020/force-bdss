@@ -5,7 +5,7 @@ from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.input_slot_map import InputSlotMap
 from force_bdss.core.workflow import Workflow
-from ..factory_registry_plugin import FactoryRegistryPlugin
+from ..factory_registry_plugin import IFactoryRegistryPlugin
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 
@@ -25,7 +25,7 @@ class WorkflowReader(HasStrictTraits):
     """
     #: The Factory registry. The reader needs it to create the
     #: specific model objects.
-    factory_registry = Instance(FactoryRegistryPlugin)
+    factory_registry = Instance(IFactoryRegistryPlugin)
 
     def __init__(self,
                  factory_registry,
