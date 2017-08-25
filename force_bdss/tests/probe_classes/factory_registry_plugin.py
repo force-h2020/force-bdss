@@ -6,6 +6,7 @@ from .mco import ProbeMCOFactory
 from .kpi_calculator import ProbeKPICalculatorFactory
 from .data_source import ProbeDataSourceFactory
 from .notification_listener import ProbeNotificationListenerFactory
+from .ui_hooks import ProbeUIHooksFactory
 
 
 @provides(IFactoryRegistryPlugin)
@@ -14,6 +15,7 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
     kpi_calculator_factories = List()
     data_source_factories = List()
     notification_listener_factories = List()
+    ui_hooks_factories = List()
 
     def _mco_factories_default(self):
         return [ProbeMCOFactory(None)]
@@ -26,6 +28,9 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
 
     def _notification_listener_factories_default(self):
         return [ProbeNotificationListenerFactory(None)]
+
+    def _ui_hooks_factories_default(self):
+        return [ProbeUIHooksFactory(None)]
 
     def data_source_factory_by_id(self, id):
         for ds in self.data_source_factories:
@@ -63,3 +68,4 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
                 return nl
 
         raise KeyError(id)
+
