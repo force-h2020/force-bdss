@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     force_bdss.tests.fixtures
+    force_bdss.tests.probe_classes
 
 Submodules
 ----------
