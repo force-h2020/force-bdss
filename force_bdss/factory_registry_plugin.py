@@ -1,6 +1,6 @@
 from envisage.extension_point import ExtensionPoint
 from envisage.plugin import Plugin
-from traits.api import List
+from traits.api import List, Interface, provides
 
 from force_bdss.ids import ExtensionPointID
 from force_bdss.notification_listeners.i_notification_listener_factory import \
@@ -15,6 +15,24 @@ from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
 
 
+class IFactoryRegistryPlugin(Interface):
+    def data_source_factory_by_id(self, id):
+        pass
+
+    def kpi_calculator_factory_by_id(self, id):
+        pass
+
+    def mco_factory_by_id(self, id):
+        pass
+
+    def mco_parameter_factory_by_id(self, mco_id, parameter_id):
+        pass
+
+    def notification_listener_factory_by_id(self, id):
+        pass
+
+
+@provides(IFactoryRegistryPlugin)
 class FactoryRegistryPlugin(Plugin):
     """Main plugin that handles the execution of the MCO
     or the evaluation.

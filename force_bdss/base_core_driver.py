@@ -3,7 +3,7 @@ from traits.trait_types import Instance
 
 from .core.workflow import Workflow
 from .factory_registry_plugin import (
-    FactoryRegistryPlugin,
+    IFactoryRegistryPlugin,
     FACTORY_REGISTRY_PLUGIN_ID
 )
 from .io.workflow_reader import WorkflowReader
@@ -15,7 +15,7 @@ class BaseCoreDriver(Plugin):
     """
 
     #: The registry of the factories
-    factory_registry = Instance(FactoryRegistryPlugin)
+    factory_registry = Instance(IFactoryRegistryPlugin)
 
     #: Deserialized content of the workflow file.
     workflow = Instance(Workflow)
