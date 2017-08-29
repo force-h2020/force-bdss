@@ -39,7 +39,7 @@ the workflow manager::
 
 and (optional, but recommended), the example plugins::
 
-    pushd force-wfmanager
+    pushd force-bdss-plugin-enthought-example
     pip install -r requirements/requirements.txt
     pip install -e .
     popd
