@@ -10,6 +10,7 @@ User Manual
    :maxdepth: 1
 
    Introduction <introduction>
+   Installation instructions <installation>
    Design <design>
    Plugin development <plugin_development>
 
