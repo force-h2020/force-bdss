@@ -1,5 +1,7 @@
 import unittest
 
+import testfixtures
+
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
@@ -46,10 +48,11 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             nb_output_data_values=1)
         driver = CoreEvaluationDriver(
             application=self.mock_application)
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The number of data values returned by the MCO"):
-            driver.application_started()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The number of data values returned by the MCO"):
+                driver.application_started()
 
     def test_error_for_incorrect_output_slots(self):
         data_source_factories = \
@@ -62,12 +65,13 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             run_function=run)
         driver = CoreEvaluationDriver(
             application=self.mock_application)
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The number of data values \(1 values\)"
-                " returned by 'test_data_source' does not match"
-                " the number of output slots"):
-            driver.application_started()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by 'test_data_source' does not match"
+                    " the number of output slots"):
+                driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):
         data_source_factories = \
@@ -82,12 +86,13 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application,
         )
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The number of data values \(1 values\)"
-                " returned by 'test_data_source' does not match"
-                " the number of user-defined names"):
-            driver.application_started()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by 'test_data_source' does not match"
+                    " the number of user-defined names"):
+                driver.application_started()
 
     def test_error_for_incorrect_kpic_output_slots(self):
         kpi_calculator_factories = \
@@ -101,12 +106,14 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application,
         )
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The number of data values \(1 values\)"
-                " returned by 'test_kpi_calculator' does not match"
-                " the number of output slots"):
-            driver.application_started()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by 'test_kpi_calculator' does not match"
+                    " the number of output slots"):
+
+                driver.application_started()
 
     def test_error_for_missing_kpic_output_names(self):
         kpi_calculator_factories = \
@@ -121,12 +128,14 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application,
         )
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The number of data values \(1 values\)"
-                " returned by 'test_kpi_calculator' does not match"
-                " the number of user-defined names"):
-            driver.application_started()
+
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The number of data values \(1 values\)"
+                    " returned by 'test_kpi_calculator' does not match"
+                    " the number of user-defined names"):
+                driver.application_started()
 
     def test_bind_data_values(self):
         data_values = [
@@ -154,11 +163,12 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotMap(name="baz"),
         )
 
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "The length of the slots is not equal to the length of"
-                " the slot map"):
-            _bind_data_values(data_values, slot_map, slots)
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The length of the slots is not equal to the length of"
+                    " the slot map"):
+                _bind_data_values(data_values, slot_map, slots)
 
         # missing value in the given data values.
         slot_map = (
@@ -166,11 +176,12 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotMap(name="bar")
         )
 
-        with self.assertRaisesRegexp(
-                RuntimeError,
-                "Unable to find requested name 'blap' in available"
-                " data values."):
-            _bind_data_values(data_values, slot_map, slots)
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Unable to find requested name 'blap' in available"
+                    " data values."):
+                _bind_data_values(data_values, slot_map, slots)
 
     def test_compute_layer_results(self):
         data_values = [

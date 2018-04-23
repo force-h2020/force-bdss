@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 from force_bdss.base_extension_plugin import (
     BaseExtensionPlugin)
@@ -70,10 +71,12 @@ class MySuperPlugin(BaseExtensionPlugin):
 
 class TestFactoryRegistryWithContent(unittest.TestCase):
     def setUp(self):
-        self.plugin = FactoryRegistryPlugin()
-        self.app = Application([self.plugin, MySuperPlugin()])
-        self.app.start()
-        self.app.stop()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.plugin = FactoryRegistryPlugin()
+            self.app = Application([self.plugin, MySuperPlugin()])
+            self.app.start()
+            self.app.stop()
 
     def test_initialization(self):
         self.assertEqual(len(self.plugin.mco_factories), 1)

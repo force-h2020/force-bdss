@@ -2,6 +2,8 @@ import json
 import unittest
 from six import StringIO
 
+import testfixtures
+
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
@@ -29,15 +31,17 @@ class TestWorkflowReader(unittest.TestCase):
             "workflow": {}
         }
 
-        with self.assertRaises(InvalidVersionException):
-            self.wfreader.read(self._as_json_stringio(data))
+        with testfixtures.LogCapture():
+            with self.assertRaises(InvalidVersionException):
+                self.wfreader.read(self._as_json_stringio(data))
 
     def test_absent_version(self):
         data = {
         }
 
-        with self.assertRaises(InvalidFileException):
-            self.wfreader.read(self._as_json_stringio(data))
+        with testfixtures.LogCapture():
+            with self.assertRaises(InvalidFileException):
+                self.wfreader.read(self._as_json_stringio(data))
 
     def test_missing_key(self):
         data = {
@@ -45,8 +49,9 @@ class TestWorkflowReader(unittest.TestCase):
             "workflow": {}
         }
 
-        with self.assertRaises(InvalidFileException):
-            self.wfreader.read(self._as_json_stringio(data))
+        with testfixtures.LogCapture():
+            with self.assertRaises(InvalidFileException):
+                self.wfreader.read(self._as_json_stringio(data))
 
     def _as_json_stringio(self, data):
         fp = StringIO()

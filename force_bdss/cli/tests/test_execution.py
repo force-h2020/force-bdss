@@ -41,13 +41,18 @@ class TestExecution(unittest.TestCase):
     def test_unsupported_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
-                subprocess.check_call(["force_bdss", "test_csv_v2.json"])
+                subprocess.check_call(
+                    ["force_bdss", "test_csv_v2.json"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL)
 
     def test_corrupted_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
-                subprocess.check_call(["force_bdss",
-                                       "test_csv_corrupted.json"])
+                subprocess.check_call(
+                    ["force_bdss", "test_csv_corrupted.json"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,6 @@
 import unittest
+import warnings
+
 import testfixtures
 
 from force_bdss.bdss_application import (
@@ -15,7 +17,9 @@ except ImportError:
 
 class TestBDSSApplication(unittest.TestCase):
     def test_initialization(self):
-        app = BDSSApplication(False, "foo/bar")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            app = BDSSApplication(False, "foo/bar")
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
 
@@ -28,8 +32,11 @@ class TestBDSSApplication(unittest.TestCase):
                                    Exception("hello"))
 
         log.check(
-            ('root', 'ERROR', "Unable to load plugin foo. Exception: "
-                              "Exception. Message: hello")
+            ('force_bdss.bdss_application',
+             'ERROR',
+             "Unable to load plugin foo. Exception: "
+             "Exception. Message: hello"),
+            ('force_bdss.bdss_application', 'ERROR', 'hello')
         )
         self.assertEqual(plugins, [])
 
