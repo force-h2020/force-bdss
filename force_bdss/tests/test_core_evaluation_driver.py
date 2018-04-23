@@ -1,6 +1,7 @@
 import unittest
 
 import testfixtures
+import six
 
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
@@ -49,7 +50,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The number of data values returned by the MCO"):
                 driver.application_started()
@@ -66,7 +68,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The number of data values \(1 values\)"
                     " returned by 'test_data_source' does not match"
@@ -87,7 +90,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application,
         )
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The number of data values \(1 values\)"
                     " returned by 'test_data_source' does not match"
@@ -107,7 +111,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application,
         )
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The number of data values \(1 values\)"
                     " returned by 'test_kpi_calculator' does not match"
@@ -130,7 +135,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The number of data values \(1 values\)"
                     " returned by 'test_kpi_calculator' does not match"
@@ -164,7 +170,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "The length of the slots is not equal to the length of"
                     " the slot map"):
@@ -177,7 +184,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with six.assertRaisesRegex(
+                    self,
                     RuntimeError,
                     "Unable to find requested name 'blap' in available"
                     " data values."):

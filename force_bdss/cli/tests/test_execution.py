@@ -3,6 +3,8 @@ import subprocess
 import os
 from contextlib import contextmanager
 
+import six
+
 from force_bdss.tests import fixtures
 
 
@@ -43,16 +45,16 @@ class TestExecution(unittest.TestCase):
             with self.assertRaises(subprocess.CalledProcessError):
                 subprocess.check_call(
                     ["force_bdss", "test_csv_v2.json"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL)
+                    stdout=os.devnull,
+                    stderr=os.devnull)
 
     def test_corrupted_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
                 subprocess.check_call(
                     ["force_bdss", "test_csv_corrupted.json"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL)
+                    stdout=os.devnull,
+                    stderr=os.devnull)
 
 
 if __name__ == '__main__':
