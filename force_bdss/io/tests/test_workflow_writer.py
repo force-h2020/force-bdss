@@ -53,7 +53,6 @@ class TestWorkflowWriter(unittest.TestCase):
         fp = StringIO()
         wf = self._create_mock_workflow()
         wfwriter.write(wf, fp)
-        print(fp.getvalue())
         fp.seek(0)
         wfreader = WorkflowReader(self.mock_registry)
         wf_result = wfreader.read(fp)

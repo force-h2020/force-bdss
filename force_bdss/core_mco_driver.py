@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import sys
 import logging
 
@@ -44,12 +42,12 @@ class CoreMCODriver(BaseCoreDriver):
         try:
             workflow = self.workflow
         except (InvalidVersionException, InvalidFileException) as e:
-            print(str(e), file=sys.stderr)
+            log.exception(e)
             sys.exit(1)
 
         mco_model = workflow.mco
         if mco_model is None:
-            print("No MCO defined. Nothing to do. Exiting.")
+            log.info("No MCO defined. Nothing to do. Exiting.")
             sys.exit(0)
 
         mco_factory = mco_model.factory

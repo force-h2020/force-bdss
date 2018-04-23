@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import sys
 import logging
 
@@ -14,6 +12,8 @@ from .io.workflow_reader import (
 
 CORE_EVALUATION_DRIVER_ID = plugin_id("core", "CoreEvaluationDriver")
 
+log = logging.getLogger(__name__)
+
 
 class CoreEvaluationDriver(BaseCoreDriver):
     """Main plugin that handles the execution of the MCO
@@ -26,12 +26,12 @@ class CoreEvaluationDriver(BaseCoreDriver):
         try:
             workflow = self.workflow
         except (InvalidVersionException, InvalidFileException) as e:
-            print(str(e), file=sys.stderr)
+            log.exception(e)
             sys.exit(1)
 
         mco_model = workflow.mco
         if mco_model is None:
-            print("No MCO defined. Nothing to do. Exiting.")
+            log.info("No MCO defined. Nothing to do. Exiting.")
             sys.exit(0)
 
         mco_factory = mco_model.factory
@@ -105,7 +105,7 @@ def _compute_layer_results(environment_data_values,
             in_slots)
 
         # execute data source, passing only relevant data values.
-        logging.info("Evaluating for Data Source {}".format(
+        log.info("Evaluating for Data Source {}".format(
             factory.name))
         res = evaluator.run(model, passed_data_values)
 
@@ -118,7 +118,7 @@ def _compute_layer_results(environment_data_values,
                 len(res), factory.name, len(out_slots)
             )
 
-            logging.error(error_txt)
+            log.error(error_txt)
             raise RuntimeError(error_txt)
 
         if len(res) != len(model.output_slot_names):
@@ -133,7 +133,7 @@ def _compute_layer_results(environment_data_values,
                 len(model.output_slot_names)
             )
 
-            logging.error(error_txt)
+            log.error(error_txt)
             raise RuntimeError(error_txt)
 
         # At this point, the returned data values are unnamed.
@@ -173,7 +173,7 @@ def _get_data_values_from_mco(model, communicator):
                      " file is corrupted.").format(
             len(mco_data_values), len(model.parameters)
         )
-        logging.error(error_txt)
+        log.error(error_txt)
         raise RuntimeError(error_txt)
 
     # The data values obtained by the communicator are unnamed.

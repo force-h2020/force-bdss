@@ -7,6 +7,8 @@ from force_bdss.core.input_slot_map import InputSlotMap
 from force_bdss.core.workflow import Workflow
 from ..factory_registry_plugin import IFactoryRegistryPlugin
 
+log = logging.getLogger(__name__)
+
 SUPPORTED_FILE_VERSIONS = ["1"]
 
 
@@ -69,12 +71,12 @@ class WorkflowReader(HasStrictTraits):
         try:
             version = json_data["version"]
         except KeyError:
-            logging.error("File missing version information")
+            log.error("File missing version information")
             raise InvalidFileException("Corrupted input file, no version"
                                        " specified")
 
         if version not in SUPPORTED_FILE_VERSIONS:
-            logging.error(
+            log.error(
                 "File contains version {} that is not in the "
                 "list of supported versions {}".format(
                     version, SUPPORTED_FILE_VERSIONS)
@@ -92,7 +94,7 @@ class WorkflowReader(HasStrictTraits):
             wf.notification_listeners[:] = \
                 self._extract_notification_listeners(wf_data)
         except KeyError as e:
-            logging.exception("Could not read file {}".format(file))
+            log.exception("Could not read file {}".format(file))
             raise InvalidFileException("Could not read file {}. "
                                        "Unable to find key {}".format(file, e))
         return wf
