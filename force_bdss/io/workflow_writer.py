@@ -49,10 +49,16 @@ class WorkflowWriter(HasStrictTraits):
 
         parameters_data = []
         for param in data["model_data"]["parameters"]:
+            state = param.__getstate__()
+            try:
+                state.pop("__traits_version__")
+            except KeyError:
+                pass
+
             parameters_data.append(
                 {
                     "id": param.factory.id,
-                    "model_data": param.__getstate__()
+                    "model_data": state
                 }
             )
 
@@ -63,6 +69,12 @@ class WorkflowWriter(HasStrictTraits):
         """
         Extracts the data from an external model and returns its dictionary
         """
+        state = model.__getstate__()
+        try:
+            state.pop("__traits_version__")
+        except KeyError:
+            pass
+
         return {
             "id": model.factory.id,
             "model_data": model.__getstate__()
