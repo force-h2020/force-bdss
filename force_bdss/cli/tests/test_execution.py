@@ -25,8 +25,10 @@ def fixture_dir():
 class TestExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
         with cd(fixtures.dirpath()):
-            out = subprocess.check_call(["force_bdss", "test_empty.json"])
-            self.assertEqual(out, 0)
+            try:
+                subprocess.check_output(["force_bdss", "test_empty.json"])
+            except subprocess.CalledProcessError:
+                self.fail("force_bdss returned error at plain invocation.")
 
     def test_plain_invocation_evaluate(self):
         with cd(fixtures.dirpath()):
@@ -41,13 +43,16 @@ class TestExecution(unittest.TestCase):
     def test_unsupported_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
-                subprocess.check_call(["force_bdss", "test_csv_v2.json"])
+                subprocess.check_output(
+                    ["force_bdss", "test_csv_v2.json"],
+                    stderr=subprocess.STDOUT)
 
     def test_corrupted_file_input(self):
         with cd(fixtures.dirpath()):
             with self.assertRaises(subprocess.CalledProcessError):
-                subprocess.check_call(["force_bdss",
-                                       "test_csv_corrupted.json"])
+                subprocess.check_output(
+                    ["force_bdss", "test_csv_corrupted.json"],
+                    stderr=subprocess.STDOUT)
 
 
 if __name__ == '__main__':

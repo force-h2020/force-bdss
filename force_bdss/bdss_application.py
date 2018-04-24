@@ -12,6 +12,8 @@ from .factory_registry_plugin import FactoryRegistryPlugin
 from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
 
+log = logging.getLogger(__name__)
+
 
 class BDSSApplication(Application):
     """Main application for the BDSS.
@@ -47,7 +49,7 @@ class BDSSApplication(Application):
         try:
             mgr.map(functools.partial(_import_extensions, plugins))
         except NoMatches:
-            logging.info("No extensions found")
+            log.info("No extensions found")
 
         super(BDSSApplication, self).__init__(plugins=plugins)
 
@@ -56,7 +58,7 @@ def _import_extensions(plugins, ext):
     """Service routine extracted for testing.
     Imports the extension in the plugins argument.
     """
-    logging.info("Found extension {}".format(ext.obj))
+    log.info("Found extension {}".format(ext.obj))
     plugins.append(ext.obj)
 
 
@@ -65,7 +67,8 @@ def _load_failure_callback(plugins, manager, entry_point, exception):
     Reports failure to load a module through stevedore, using the
     on_load_failure_callback option.
     """
-    logging.error(
+    log.error(
         "Unable to load plugin {}. Exception: {}. Message: {}".format(
-            entry_point, exception.__class__.__name__, exception)
+            entry_point, exception.__class__.__name__, exception),
+        exc_info=True,
     )
