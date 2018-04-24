@@ -20,7 +20,7 @@ class WorkflowWriter(HasStrictTraits):
         data = dict(version="1")
 
         data["workflow"] = self._workflow_data(workflow)
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
     def _workflow_data(self, workflow):
         workflow_data = {
