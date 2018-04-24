@@ -94,7 +94,7 @@ class WorkflowReader(HasStrictTraits):
             wf.notification_listeners[:] = \
                 self._extract_notification_listeners(wf_data)
         except KeyError as e:
-            log.exception("Could not read file {}".format(file))
+            log.error("Could not read file {}".format(file), exc_info=True)
             raise InvalidFileException("Could not read file {}. "
                                        "Unable to find key {}".format(file, e))
         return wf

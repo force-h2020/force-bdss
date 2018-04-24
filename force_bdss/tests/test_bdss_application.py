@@ -36,7 +36,6 @@ class TestBDSSApplication(unittest.TestCase):
              'ERROR',
              "Unable to load plugin foo. Exception: "
              "Exception. Message: hello"),
-            ('force_bdss.bdss_application', 'ERROR', 'hello')
         )
         self.assertEqual(plugins, [])
 

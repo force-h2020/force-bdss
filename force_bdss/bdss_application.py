@@ -69,6 +69,6 @@ def _load_failure_callback(plugins, manager, entry_point, exception):
     """
     log.error(
         "Unable to load plugin {}. Exception: {}. Message: {}".format(
-            entry_point, exception.__class__.__name__, exception)
+            entry_point, exception.__class__.__name__, exception),
+        exc_info=True,
     )
-    log.exception(exception)
