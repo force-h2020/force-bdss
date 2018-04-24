@@ -77,5 +77,5 @@ class WorkflowWriter(HasStrictTraits):
 
         return {
             "id": model.factory.id,
-            "model_data": model.__getstate__()
+            "model_data": state
         }
