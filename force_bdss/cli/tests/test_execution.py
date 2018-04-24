@@ -26,16 +26,19 @@ class TestExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
         with cd(fixtures.dirpath()):
             try:
-                subprocess.check_output(["force_bdss", "test_empty.json"])
+                subprocess.check_output(["force_bdss", "test_empty.json"],
+                                        stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError:
                 self.fail("force_bdss returned error at plain invocation.")
 
     def test_plain_invocation_evaluate(self):
-        with cd(fixtures.dirpath()):
+        with cd(fixtures.dirpath()), \
+                open(os.devnull, "wb") as devnull:
             proc = subprocess.Popen([
                 "force_bdss", "--evaluate", "test_empty.json"],
                 stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE)
+                stdout=subprocess.PIPE,
+                stderr=devnull)
             proc.communicate(b"1")
             retcode = proc.wait()
             self.assertEqual(retcode, 0)

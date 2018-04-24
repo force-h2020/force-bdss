@@ -14,6 +14,7 @@ CORE_EVALUATION_DRIVER_ID = plugin_id("core", "CoreEvaluationDriver")
 
 log = logging.getLogger(__name__)
 
+
 class CoreEvaluationDriver(BaseCoreDriver):
     """Main plugin that handles the execution of the MCO
     or the evaluation.
