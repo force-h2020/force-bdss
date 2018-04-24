@@ -19,6 +19,8 @@ push_exception_handler(reraise_exceptions=True)
 def run(evaluate, logfile, workflow_filepath):
 
     logging_config = {}
+    logging_config["level"] = logging.INFO
+
     if logfile is not None:
         logging_config["filename"] = logfile
 

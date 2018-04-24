@@ -14,7 +14,6 @@ CORE_EVALUATION_DRIVER_ID = plugin_id("core", "CoreEvaluationDriver")
 
 log = logging.getLogger(__name__)
 
-
 class CoreEvaluationDriver(BaseCoreDriver):
     """Main plugin that handles the execution of the MCO
     or the evaluation.
@@ -35,17 +34,20 @@ class CoreEvaluationDriver(BaseCoreDriver):
             sys.exit(0)
 
         mco_factory = mco_model.factory
+        log.info("Creating communicator")
         mco_communicator = mco_factory.create_communicator()
 
         mco_data_values = _get_data_values_from_mco(
             mco_model, mco_communicator)
 
+        log.info("Computing data layer 1")
         ds_results = _compute_layer_results(
             mco_data_values,
             workflow.data_sources,
             "create_data_source"
         )
 
+        log.info("Computing data layer 2")
         kpi_results = _compute_layer_results(
             ds_results + mco_data_values,
             workflow.kpi_calculators,
@@ -107,7 +109,13 @@ def _compute_layer_results(environment_data_values,
         # execute data source, passing only relevant data values.
         log.info("Evaluating for Data Source {}".format(
             factory.name))
-        res = evaluator.run(model, passed_data_values)
+
+        try:
+            res = evaluator.run(model, passed_data_values)
+        except Exception:
+            log.error("Evaluation could not be performed. Run method raised"
+                      "exception", exc_info=True)
+            raise
 
         if len(res) != len(out_slots):
             error_txt = (
@@ -164,6 +172,9 @@ def _get_data_values_from_mco(model, communicator):
         from the MCO.
     """
     mco_data_values = communicator.receive_from_mco(model)
+
+    log.info("Received data from MCO: \n{}".format(
+             "\n".join([str(x) for x in mco_data_values])))
 
     if len(mco_data_values) != len(model.parameters):
         error_txt = ("The number of data values returned by"
