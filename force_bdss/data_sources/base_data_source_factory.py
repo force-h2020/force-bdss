@@ -79,8 +79,8 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
 
         if self.model_class is None:
             msg = ("model_class cannot be None in {}. Either define "
-                      "model_class or reimplement create_model on your "
-                      "factory class.".format(self.__class__.__name__))
+                   "model_class or reimplement create_model on your "
+                   "factory class.".format(self.__class__.__name__))
             log.error(msg)
             raise RuntimeError(msg)
 
