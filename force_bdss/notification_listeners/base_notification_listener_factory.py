@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, Instance, String, provides
+from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
 from envisage.plugin import Plugin
 
 from force_bdss.notification_listeners.base_notification_listener import \
@@ -26,11 +26,11 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
 
     #: The listener class that must be instantiated. Define this to your
     #: listener class.
-    listener_class = Instance(BaseNotificationListener)
+    listener_class = Type(BaseNotificationListener)
 
     #: The associated model to the listener. Define this to your
     #: listener model class.
-    model_class = Instance(BaseNotificationListenerModel)
+    model_class = Type(BaseNotificationListenerModel)
 
     #: A reference to the containing plugin
     plugin = Instance(Plugin)

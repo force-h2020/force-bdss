@@ -1,4 +1,4 @@
-from traits.api import Interface, String, Instance
+from traits.api import Interface, String, Instance, Type
 from envisage.plugin import Plugin
 
 from force_bdss.mco.base_mco import BaseMCO
@@ -16,11 +16,11 @@ class IMCOFactory(Interface):
 
     name = String()
 
-    optimizer_class = Instance(BaseMCO)
+    optimizer_class = Type(BaseMCO)
 
-    model_class = Instance(BaseMCOModel)
+    model_class = Type(BaseMCOModel)
 
-    communicator_class = Instance(BaseMCOCommunicator)
+    communicator_class = Type(BaseMCOCommunicator)
 
     plugin = Instance(Plugin)
 

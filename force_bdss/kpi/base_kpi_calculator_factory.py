@@ -1,6 +1,6 @@
 import logging
 from envisage.plugin import Plugin
-from traits.api import ABCHasStrictTraits, provides, String, Instance
+from traits.api import ABCHasStrictTraits, provides, String, Instance, Type
 
 from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
 from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
@@ -26,11 +26,11 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
     name = String()
 
     #: The KPI calculator to be instantiated. Define this to your KPICalculator
-    kpi_calculator_class = Instance(BaseKPICalculator)
+    kpi_calculator_class = Type(BaseKPICalculator)
 
     #: The model associated to the KPI calculator.
     #: Define this to your KPICalculatorModel
-    model_class = Instance(BaseKPICalculatorModel)
+    model_class = Type(BaseKPICalculatorModel)
 
     #: A reference to the plugin that holds this factory.
     plugin = Instance(Plugin)

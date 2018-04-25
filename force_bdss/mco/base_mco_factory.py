@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, String, provides, Instance
+from traits.api import ABCHasStrictTraits, String, provides, Instance, Type
 from envisage.plugin import Plugin
 
 from force_bdss.mco.base_mco import BaseMCO
@@ -24,13 +24,13 @@ class BaseMCOFactory(ABCHasStrictTraits):
     name = String()
 
     #: The optimizer class to instantiate. Define this to your MCO class.
-    optimizer_class = Instance(BaseMCO)
+    optimizer_class = Type(BaseMCO)
 
     #: The model associated to the MCO. Define this to your MCO model class.
-    model_class = Instance(BaseMCOModel)
+    model_class = Type(BaseMCOModel)
 
     #: The communicator associated to the MCO. Define this to your MCO comm.
-    communicator_class = Instance(BaseMCOCommunicator)
+    communicator_class = Type(BaseMCOCommunicator)
 
     #: A reference to the Plugin that holds this factory.
     plugin = Instance(Plugin)

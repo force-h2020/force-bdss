@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, Instance, String, provides
+from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
 from envisage.plugin import Plugin
 
 from force_bdss.ui_hooks.base_ui_hooks_manager import BaseUIHooksManager
@@ -22,7 +22,7 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
 
     #: The UI Hooks manager class to instantiate. Define this to your
     #: base hook managers.
-    ui_hooks_manager_class = Instance(BaseUIHooksManager)
+    ui_hooks_manager_class = Type(BaseUIHooksManager)
 
     #: A reference to the containing plugin
     plugin = Instance(Plugin)

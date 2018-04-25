@@ -1,10 +1,10 @@
 import logging
-from traits.api import ABCHasStrictTraits, provides, String, Instance
+from traits.api import ABCHasStrictTraits, provides, String, Instance, Type
 from envisage.plugin import Plugin
 
 from force_bdss.data_sources.base_data_source import BaseDataSource
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-from .i_data_source_factory import IDataSourceFactory
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
 log = logging.getLogger(__name__)
 
@@ -24,12 +24,11 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
     name = String()
 
     #: The data source to be instantiated. Define this to your DataSource
-    data_source_class = Instance(BaseDataSource)
+    data_source_class = Type(BaseDataSource)
 
     #: The model associated to the data source.
     #: Define this to your DataSourceModel
-    model_class = Instance(BaseDataSourceModel)
-
+    model_class = Type(BaseDataSourceModel)
 
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
