@@ -1,9 +1,6 @@
 from envisage.api import Plugin
 from traits.api import Interface, String, Instance, Type
 
-from force_bdss.data_sources.base_data_source import BaseDataSource
-from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-
 
 class IDataSourceFactory(Interface):
     """Envisage required interface for the BaseDataSourceFactory.
@@ -15,9 +12,13 @@ class IDataSourceFactory(Interface):
 
     name = String()
 
-    data_source_class = Type(BaseDataSource)
+    data_source_class = Type(
+        "force_bdss.data_sources.base_data_source.BaseDataSource"
+    )
 
-    model_class = Type(BaseDataSourceModel)
+    model_class = Type(
+        "force_bdss.data_sources.base_data_source_model.BaseDataSourceModel"
+    )
 
     plugin = Instance(Plugin)
 

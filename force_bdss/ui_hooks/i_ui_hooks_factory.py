@@ -1,7 +1,5 @@
-from traits.api import Interface, String, Instance
+from traits.api import Interface, String, Instance, Type
 from envisage.plugin import Plugin
-
-from force_bdss.ui_hooks.base_ui_hooks_manager import BaseUIHooksManager
 
 
 class IUIHooksFactory(Interface):
@@ -14,7 +12,9 @@ class IUIHooksFactory(Interface):
 
     name = String()
 
-    ui_hooks_manager_class = Instance(BaseUIHooksManager)
+    ui_hooks_manager_class = Type(
+        "force_bdss.ui_hooks.base_ui_hooks_manager.BaseUIHooksManager"
+    )
 
     plugin = Instance(Plugin)
 

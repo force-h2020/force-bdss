@@ -1,5 +1,7 @@
 import unittest
 
+from envisage.plugin import Plugin
+
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 try:
@@ -25,9 +27,14 @@ class DummyMCOParameterFactory(BaseMCOParameterFactory):
     model_class = DummyMCOParameter
 
 
+class DummyMCOFactory(BaseMCOFactory):
+    pass
+
+
 class TestBaseMCOParameterFactory(unittest.TestCase):
     def test_initialization(self):
-        factory = DummyMCOParameterFactory(mock.Mock(spec=BaseMCOFactory))
+        factory = DummyMCOParameterFactory(
+            mco_factory=BaseMCOFactory(plugin=mock.Mock(spec=Plugin)))
         model = factory.create_model({"x": 42})
         self.assertIsInstance(model, DummyMCOParameter)
         self.assertEqual(model.x, 42)
