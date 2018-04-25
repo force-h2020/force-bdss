@@ -1,6 +1,9 @@
 from traits.api import Interface, String, Instance
 from envisage.plugin import Plugin
 
+from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
+from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
+
 
 class IKPICalculatorFactory(Interface):
     """Envisage required interface for the BaseKPICalculatorFactory.
@@ -11,6 +14,10 @@ class IKPICalculatorFactory(Interface):
     id = String()
 
     name = String()
+
+    kpi_calculator_class = Instance(BaseKPICalculator)
+
+    model_class = Instance(BaseKPICalculatorModel)
 
     plugin = Instance(Plugin)
 

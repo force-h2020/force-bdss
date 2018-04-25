@@ -1,8 +1,12 @@
-import abc
+import logging
 from traits.api import ABCHasStrictTraits, provides, String, Instance
 from envisage.plugin import Plugin
 
+from force_bdss.data_sources.base_data_source import BaseDataSource
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from .i_data_source_factory import IDataSourceFactory
+
+log = logging.getLogger(__name__)
 
 
 @provides(IDataSourceFactory)
@@ -19,14 +23,23 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
     #: A human readable name of the factory. Spaces allowed
     name = String()
 
+    #: The data source to be instantiated. Define this to your DataSource
+    data_source_class = Instance(BaseDataSource)
+
+    #: The model associated to the data source.
+    #: Define this to your DataSourceModel
+    model_class = Instance(BaseDataSourceModel)
+
+
     #: Reference to the plugin that carries this factory
+    #: This is automatically set by the system. you should not define it
+    #: in your subclass.
     plugin = Instance(Plugin)
 
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
         super(BaseDataSourceFactory, self).__init__(*args, **kwargs)
 
-    @abc.abstractmethod
     def create_data_source(self):
         """Factory method.
         Must return the factory-specific BaseDataSource instance.
@@ -36,8 +49,15 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         BaseDataSource
             The specific instance of the generated DataSource
         """
+        if self.data_source_class is None:
+            msg = ("data_source_class cannot be None in {}. Either define "
+                   "data_source_class or reimplement create_data_source on "
+                   "your factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
 
-    @abc.abstractmethod
+        return self.data_source_class(self)
+
     def create_model(self, model_data=None):
         """Factory method.
         Creates the model object (or network of model objects) of the KPI
@@ -55,3 +75,14 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         BaseDataSourceModel
             The model
         """
+        if model_data is None:
+            model_data = {}
+
+        if self.model_class is None:
+            msg = ("model_class cannot be None in {}. Either define "
+                      "model_class or reimplement create_model on your "
+                      "factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
+
+        return self.model_class(self, **model_data)
