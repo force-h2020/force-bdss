@@ -1,8 +1,10 @@
 import unittest
+import testfixtures
 from envisage.plugin import Plugin
 
-from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
-from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
+from force_bdss.kpi.tests.test_base_kpi_calculator import DummyKPICalculator
+from force_bdss.kpi.tests.test_base_kpi_calculator_model import \
+    DummyKPICalculatorModel
 
 try:
     import mock
@@ -11,9 +13,6 @@ except ImportError:
 
 from force_bdss.kpi.base_kpi_calculator_factory import \
     BaseKPICalculatorFactory
-
-kpi_calculator = mock.Mock(spec=BaseKPICalculator)
-kpi_calculator_model = mock.Mock(spec=BaseKPICalculatorModel)
 
 
 class DummyKPICalculatorFactory(BaseKPICalculatorFactory):
@@ -28,14 +27,14 @@ class DummyKPICalculatorFactory(BaseKPICalculatorFactory):
         pass
 
 
-class DummyKPICalculatorFactory2(BaseKPICalculatorFactory):
+class DummyKPICalculatorFactoryFast(BaseKPICalculatorFactory):
     id = "foo"
 
     name = "bar"
 
-    kpi_calculator_class = kpi_calculator
+    kpi_calculator_class = DummyKPICalculator
 
-    model_class = kpi_calculator_model
+    model_class = DummyKPICalculatorModel
 
 
 class TestBaseKPICalculatorFactory(unittest.TestCase):
@@ -45,4 +44,21 @@ class TestBaseKPICalculatorFactory(unittest.TestCase):
         self.assertEqual(factory.name, 'bar')
 
     def test_fast_definition(self):
-        factory = DummyKPICalculatorFactory2(mock.Mock(spec=Plugin))
+        factory = DummyKPICalculatorFactoryFast(mock.Mock(spec=Plugin))
+        self.assertIsInstance(factory.create_kpi_calculator(),
+                              DummyKPICalculator)
+
+        self.assertIsInstance(factory.create_model(),
+                              DummyKPICalculatorModel)
+
+    def test_fast_definition_errors(self):
+        factory = DummyKPICalculatorFactoryFast(mock.Mock(spec=Plugin))
+        factory.kpi_calculator_class = None
+        factory.model_class = None
+
+        with testfixtures.LogCapture():
+            with self.assertRaises(RuntimeError):
+                factory.create_kpi_calculator()
+
+            with self.assertRaises(RuntimeError):
+                factory.create_model()

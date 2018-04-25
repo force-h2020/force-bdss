@@ -63,7 +63,7 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
             log.error(msg)
             raise RuntimeError(msg)
 
-        return self.data_source_class(self)
+        return self.kpi_calculator_class(self)
 
     def create_model(self, model_data=None):
         """Factory method.
