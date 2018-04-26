@@ -3,6 +3,10 @@ import unittest
 
 from six import StringIO
 
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
@@ -36,6 +40,13 @@ class TestWorkflowWriter(unittest.TestCase):
         self.mock_registry.mco_factory_by_id = mock.Mock(
             return_value=mock_mco_factory)
 
+        datasource_factory = BaseDataSourceFactory(
+            id=factory_id("enthought", "mock2"), plugin=None)
+
+        self.mock_registry.data_source_factory_by_id = mock.Mock(
+            return_value=datasource_factory
+        )
+
     def test_write(self):
         wfwriter = WorkflowWriter()
         fp = StringIO()
@@ -58,6 +69,9 @@ class TestWorkflowWriter(unittest.TestCase):
         wf_result = wfreader.read(fp)
         self.assertEqual(wf_result.mco.factory.id,
                          wf.mco.factory.id)
+        self.assertEqual(len(wf_result.execution_layers), 2)
+        self.assertEqual(len(wf_result.execution_layers[0]), 2)
+        self.assertEqual(len(wf_result.execution_layers[1]), 1)
 
     def _create_mock_workflow(self):
         wf = Workflow()
@@ -72,6 +86,18 @@ class TestWorkflowWriter(unittest.TestCase):
                     id=mco_parameter_id("enthought", "mock", "mock")
                 )
             )
+        ]
+        wf.execution_layers = [
+            [
+                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
+                                    id=factory_id("enthought", "mock2"))),
+                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
+                                    id=factory_id("enthought", "mock2"))),
+            ],
+            [
+                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
+                                    id=factory_id("enthought", "mock2")))
+            ]
         ]
         return wf
 
