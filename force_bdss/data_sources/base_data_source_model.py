@@ -1,8 +1,8 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
 from force_bdss.core.input_slot_map import InputSlotInfo
-from force_bdss.local_traits import Identifier
-from .i_data_source_factory import IDataSourceFactory
+from force_bdss.core.output_slot_info import OutputSlotInfo
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
 
 class BaseDataSourceModel(ABCHasStrictTraits):
@@ -22,12 +22,13 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     #: slots.
     input_slot_info = List(Instance(InputSlotInfo), visible=False)
 
-    #: Allows to assign names to the output slots, so that they can be
-    #: referenced somewhere else (e.g. the KPICalculators).
+    #: Allows to assign names and KPI status to the output slots, so that
+    #: they can be referenced somewhere else (e.g. another layer's
+    #: DataSources).
     #: If the name is the empty string, it means that the user is not
     #: interested in preserving the information, and should therefore be
     #: discarded and not propagated further.
-    output_slot_names = List(Identifier(), visible=False)
+    output_slot_info = List(Instance(OutputSlotInfo), visible=False)
 
     #: This event claims that a change in the model influences the slots
     #: (either input or output). It must be triggered every time a specific
@@ -43,5 +44,8 @@ class BaseDataSourceModel(ABCHasStrictTraits):
         state = super(BaseDataSourceModel, self).__getstate__()
         state["input_slot_info"] = [
             x.__getstate__() for x in self.input_slot_info
+        ]
+        state["output_slot_info"] = [
+            x.__getstate__() for x in self.output_slot_info
         ]
         return state
