@@ -2,7 +2,7 @@
   "version": "1",
   "workflow": {
     "mco": null,
-    "data_sources": [
+    "execution_layers": [
     ],
     "kpi_calculators": [
     ],

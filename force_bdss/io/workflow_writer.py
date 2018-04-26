@@ -28,9 +28,9 @@ class WorkflowWriter(HasStrictTraits):
             "kpi_calculators": [
                 self._model_data(kpic)
                 for kpic in workflow.kpi_calculators],
-            "data_sources": [
-                self._model_data(ds)
-                for ds in workflow.data_sources],
+            "execution_layers": [
+                self._execution_layer_data(el)
+                for el in workflow.execution_layers],
             "notification_listeners": [
                 self._model_data(nl)
                 for nl in workflow.notification_listeners
@@ -63,6 +63,15 @@ class WorkflowWriter(HasStrictTraits):
             )
 
         data["model_data"]["parameters"] = parameters_data
+        return data
+
+    def _execution_layer_data(self, layer):
+        """Extracts the execution layer list of DataSource models"""
+        data = []
+
+        for ds in layer:
+            data.append(self._model_data(ds))
+
         return data
 
     def _model_data(self, model):
