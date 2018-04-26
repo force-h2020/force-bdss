@@ -3,6 +3,7 @@ import unittest
 import testfixtures
 import six
 
+from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
@@ -22,8 +23,12 @@ except ImportError:
 
 from envisage.api import Application
 
-from force_bdss.core_evaluation_driver import CoreEvaluationDriver, \
-    _bind_data_values, _compute_layer_results
+from force_bdss.core_evaluation_driver import (
+    CoreEvaluationDriver,
+    execute_workflow,
+    _bind_data_values,
+    _compute_layer_results)
+
 
 
 class TestCoreEvaluationDriver(unittest.TestCase):
@@ -224,6 +229,110 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         self.assertEqual(res[0].value, 1)
         self.assertEqual(res[1].name, "three")
         self.assertEqual(res[1].value, 3)
+
+    def test_multilayer_execution(self):
+        # The multilayer peforms the following execution
+        # layer 0: in1 + in2   | in3 + in4
+        #             res1          res2
+        # layer 1:        res1 + res2
+        #                    res3
+        # layer 2:        res3 * res1
+        #                     res4
+        # kpi layer:      res4 * res2
+        #
+        # Final result should be
+        # ((in1 + in2 + in3 + in4) * (in1 + in2) * (in3 + in4)
+
+        data_values = [
+            DataValue(value=10, name="in1"),
+            DataValue(value=15, name="in2"),
+            DataValue(value=3, name="in3"),
+            DataValue(value=7, name="in4")
+        ]
+
+        def adder(model, parameters):
+
+            first = parameters[0].value
+            second = parameters[1].value
+            return [DataValue(value=(first+second))]
+
+        adder_factory = ProbeDataSourceFactory(
+            None,
+            input_slots_size=2,
+            output_slots_size=1,
+            run_function=adder)
+
+        def multiplier(model, parameters):
+            first = parameters[0].value
+            second = parameters[1].value
+            return [DataValue(value=(first*second))]
+
+        multiplier_factory = ProbeDataSourceFactory(
+            None,
+            input_slots_size=2,
+            output_slots_size=1,
+            run_function=multiplier)
+
+        multiplier_kpi_factory = ProbeKPICalculatorFactory(
+            None,
+            input_slots_size=2,
+            output_slots_size=1,
+            run_function=multiplier)
+
+        wf = Workflow(
+            execution_layers=[
+                [],
+                [],
+                []
+            ]
+        )
+        # Layer 0
+        model = adder_factory.create_model()
+        model.input_slot_maps = [
+            InputSlotMap(name="in1"),
+            InputSlotMap(name="in2")
+        ]
+        model.output_slot_names = ["res1"]
+        wf.execution_layers[0].append(model)
+
+        model = adder_factory.create_model()
+        model.input_slot_maps = [
+            InputSlotMap(name="in3"),
+            InputSlotMap(name="in4")
+        ]
+        model.output_slot_names = ["res2"]
+        wf.execution_layers[0].append(model)
+
+        # layer 1
+        model = adder_factory.create_model()
+        model.input_slot_maps = [
+            InputSlotMap(name="res1"),
+            InputSlotMap(name="res2")
+        ]
+        model.output_slot_names = ["res3"]
+        wf.execution_layers[1].append(model)
+
+        # layer 2
+        model = multiplier_factory.create_model()
+        model.input_slot_maps = [
+            InputSlotMap(name="res3"),
+            InputSlotMap(name="res1")
+        ]
+        model.output_slot_names = ["res4"]
+        wf.execution_layers[2].append(model)
+
+        # KPI layer
+        model = multiplier_kpi_factory.create_model()
+        model.input_slot_maps = [
+            InputSlotMap(name="res4"),
+            InputSlotMap(name="res2")
+        ]
+        model.output_slot_names = ["out1"]
+        wf.kpi_calculators.append(model)
+
+        kpi_results = execute_workflow(wf, data_values)
+        self.assertEqual(len(kpi_results), 1)
+        self.assertEqual(kpi_results[0].value, 8750)
 
     def test_empty_slot_name_skips_data_value(self):
         """Checks if leaving a slot name empty will skip the data value
