@@ -13,7 +13,7 @@ force\_bdss\.core\.tests\.test\_data\_value module
     :show-inheritance:
 
 force\_bdss\.core\.tests\.test\_input\_slot\_info module
--------------------------------------------------------
+--------------------------------------------------------
 
 .. automodule:: force_bdss.core.tests.test_input_slot_info
     :members:
