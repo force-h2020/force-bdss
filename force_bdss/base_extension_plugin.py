@@ -5,7 +5,6 @@ from .notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
 from .ids import ExtensionPointID
 from .data_sources.i_data_source_factory import IDataSourceFactory
-from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
 from .mco.i_mco_factory import IMCOFactory
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
@@ -35,12 +34,6 @@ class BaseExtensionPlugin(Plugin):
     data_source_factories = List(
         IDataSourceFactory,
         contributes_to=ExtensionPointID.DATA_SOURCE_FACTORIES
-    )
-
-    #: A list of the available KPI calculators this plugin exports.
-    kpi_calculator_factories = List(
-        IKPICalculatorFactory,
-        contributes_to=ExtensionPointID.KPI_CALCULATOR_FACTORIES
     )
 
     notification_listener_factories = List(

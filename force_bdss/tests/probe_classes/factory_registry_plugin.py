@@ -3,7 +3,6 @@ from traits.api import List, HasStrictTraits, provides
 from force_bdss.factory_registry_plugin import IFactoryRegistryPlugin
 
 from .mco import ProbeMCOFactory
-from .kpi_calculator import ProbeKPICalculatorFactory
 from .data_source import ProbeDataSourceFactory
 from .notification_listener import ProbeNotificationListenerFactory
 from .ui_hooks import ProbeUIHooksFactory
@@ -19,9 +18,6 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
 
     def _mco_factories_default(self):
         return [ProbeMCOFactory(None)]
-
-    def _kpi_calculator_factories_default(self):
-        return [ProbeKPICalculatorFactory(None)]
 
     def _data_source_factories_default(self):
         return [ProbeDataSourceFactory(None)]
