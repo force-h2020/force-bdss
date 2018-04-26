@@ -19,7 +19,7 @@ force\_bdss\.core\.data\_value module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\.input\_slot\_map module
+force\_bdss\.core\.input\_slot\_info module
 ------------------------------------------
 
 .. automodule:: force_bdss.core.input_slot_info
