@@ -11,7 +11,6 @@ Subpackages
     force_bdss.core_plugins
     force_bdss.data_sources
     force_bdss.io
-    force_bdss.kpi
     force_bdss.mco
     force_bdss.notification_listeners
     force_bdss.tests
