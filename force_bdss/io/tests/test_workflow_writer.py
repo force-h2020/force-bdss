@@ -57,7 +57,6 @@ class TestWorkflowWriter(unittest.TestCase):
         self.assertIn("workflow", result)
         self.assertIn("mco", result["workflow"])
         self.assertIn("execution_layers", result["workflow"])
-        self.assertIn("kpi_calculators", result["workflow"])
 
     def test_write_and_read(self):
         wfwriter = WorkflowWriter()

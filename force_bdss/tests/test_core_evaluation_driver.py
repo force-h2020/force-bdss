@@ -180,7 +180,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         res = _compute_layer_results(
             data_values,
             [evaluator_model],
-            "create_data_source"
         )
         self.assertEqual(len(res), 2)
         self.assertEqual(res[0].name, "one")
@@ -289,7 +288,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="res2")
         ]
         model.output_slot_info = [
-            OutputSlotInfo(name="out1")
+            OutputSlotInfo(name="out1", is_kpi=True)
         ]
         wf.execution_layers[3].append(model)
 

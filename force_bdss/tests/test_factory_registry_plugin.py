@@ -31,7 +31,6 @@ class TestFactoryRegistry(unittest.TestCase):
     def test_initialization(self):
         self.assertEqual(self.plugin.mco_factories, [])
         self.assertEqual(self.plugin.data_source_factories, [])
-        self.assertEqual(self.plugin.kpi_calculator_factories, [])
 
 
 class MySuperPlugin(BaseExtensionPlugin):
