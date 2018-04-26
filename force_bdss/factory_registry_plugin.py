@@ -56,12 +56,6 @@ class FactoryRegistryPlugin(Plugin):
         List(IDataSourceFactory),
         id=ExtensionPointID.DATA_SOURCE_FACTORIES)
 
-    #: A list of the available Key Performance Indicator calculators.
-    #: It will be populated by plugins.
-    kpi_calculator_factories = ExtensionPoint(
-        List(IKPICalculatorFactory),
-        id=ExtensionPointID.KPI_CALCULATOR_FACTORIES)
-
     #: Notification listeners are pluggable entities that will listen
     #: to MCO events and act accordingly.
     notification_listener_factories = ExtensionPoint(
@@ -94,26 +88,6 @@ class FactoryRegistryPlugin(Plugin):
         for ds in self.data_source_factories:
             if ds.id == id:
                 return ds
-
-        raise KeyError(id)
-
-    def kpi_calculator_factory_by_id(self, id):
-        """Finds a given kpi factory by means of its id.
-        The ID is as obtained by the function factory_id() in the
-        plugin api.
-
-        Parameters
-        ----------
-        id: str
-            The identifier returned by the factory_id() function.
-
-        Raises
-        ------
-        KeyError: if the entry is not found.
-        """
-        for kpic in self.kpi_calculator_factories:
-            if kpic.id == id:
-                return kpic
 
         raise KeyError(id)
 
