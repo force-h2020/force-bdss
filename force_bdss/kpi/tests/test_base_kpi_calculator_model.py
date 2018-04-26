@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
 from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel

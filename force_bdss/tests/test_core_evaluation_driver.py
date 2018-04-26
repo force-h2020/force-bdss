@@ -12,7 +12,7 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.tests.probe_classes.kpi_calculator import (
     ProbeKPICalculatorFactory)
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.tests import fixtures

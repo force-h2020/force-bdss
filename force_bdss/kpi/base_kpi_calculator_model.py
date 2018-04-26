@@ -1,7 +1,7 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from ..core.input_slot_map import InputSlotInfo
+from ..core.input_slot_info import InputSlotInfo
 from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
