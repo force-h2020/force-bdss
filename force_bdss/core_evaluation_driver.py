@@ -57,23 +57,17 @@ def execute_workflow(workflow, data_values):
         ds_results = _compute_layer_results(
             available_data_values,
             layer,
-            "create_data_source"
         )
         available_data_values += ds_results
 
     log.info("Computing KPI layer")
-    kpi_results = _compute_layer_results(
-        available_data_values,
-        workflow.kpi_calculators,
-        "create_kpi_calculator"
-    )
+    kpi_results = [dv for dv in available_data_values if dv.is_kpi]
 
     return kpi_results
 
 
 def _compute_layer_results(environment_data_values,
                            evaluator_models,
-                           creator_method_name
                            ):
     """Helper routine.
     Performs the evaluation of a single layer.
@@ -86,12 +80,7 @@ def _compute_layer_results(environment_data_values,
         A list of data values to submit to the evaluators.
 
     evaluator_models: list
-        A list of the models for all the evaluators (data source
-        or kpi calculator)
-
-    creator_method_name: str
-        A string of the creator method for the evaluator on the
-        factory (e.g. create_kpi_calculator)
+        A list of the models for all the data sources
 
     NOTE: The above parameter is going to go away as soon as we move
     to unlimited layers and remove the distinction between data sources
@@ -101,12 +90,12 @@ def _compute_layer_results(environment_data_values,
 
     for model in evaluator_models:
         factory = model.factory
-        evaluator = getattr(factory, creator_method_name)()
+        data_source = factory.create_data_source()
 
         # Get the slots for this data source. These must be matched to
         # the appropriate values in the environment data values.
         # Matching is by position.
-        in_slots, out_slots = evaluator.slots(model)
+        in_slots, out_slots = data_source.slots(model)
 
         # Binding performs the extraction of the specified data values
         # satisfying the above input slots from the environment data values
@@ -125,7 +114,7 @@ def _compute_layer_results(environment_data_values,
             factory.name))
 
         try:
-            res = evaluator.run(model, passed_data_values)
+            res = data_source.run(model, passed_data_values)
         except Exception:
             log.error("Evaluation could not be performed. Run method raised"
                       "exception", exc_info=True)
@@ -162,6 +151,7 @@ def _compute_layer_results(environment_data_values,
         # Add the names as specified by the user.
         for dv, output_slot_info in zip(res, model.output_slot_info):
             dv.name = output_slot_info.name
+            dv.is_kpi = output_slot_info.is_kpi
 
         # If the name was not specified, simply discard the value,
         # because apparently the user is not interested in it.
