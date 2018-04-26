@@ -13,7 +13,7 @@
         {
           "id": "force.bdss.enthought.factory.test_ds",
           "model_data": {
-            "input_slot_maps": [
+            "input_slot_info": [
             ],
             "output_slot_names": [
             ]
@@ -25,7 +25,7 @@
       {
         "id": "force.bdss.enthought.factory.test_kpic",
         "model_data": {
-          "input_slot_maps": [
+          "input_slot_info": [
           ],
           "output_slot_names": [
           ]
