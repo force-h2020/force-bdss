@@ -8,16 +8,18 @@
         ]
       }
     },
-    "data_sources": [
-      {
-        "id": "force.bdss.enthought.factory.test_ds",
-        "model_data": {
-          "input_slot_maps": [
-          ],
-          "output_slot_names": [
-          ]
+    "execution_layers": [
+      [
+        {
+          "id": "force.bdss.enthought.factory.test_ds",
+          "model_data": {
+            "input_slot_maps": [
+            ],
+            "output_slot_names": [
+            ]
+          }
         }
-      }
+      ]
     ],
     "kpi_calculators": [
       {

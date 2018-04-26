@@ -9,7 +9,7 @@ from ..factory_registry_plugin import IFactoryRegistryPlugin
 
 log = logging.getLogger(__name__)
 
-SUPPORTED_FILE_VERSIONS = ["1", "2"]
+SUPPORTED_FILE_VERSIONS = ["1"]
 
 
 class InvalidFileException(Exception):
