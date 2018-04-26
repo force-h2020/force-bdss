@@ -1,6 +1,7 @@
 import unittest
 
 from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.output_slot_info import OutputSlotInfo
 
 try:
     import mock
@@ -24,7 +25,7 @@ class TestBaseDataSourceModel(unittest.TestCase):
             {
                 "__traits_version__": "4.6.0",
                 "input_slot_info": [],
-                "output_slot_names": []
+                "output_slot_info": []
             })
 
         model.input_slot_info = [
@@ -35,7 +36,10 @@ class TestBaseDataSourceModel(unittest.TestCase):
                 name="bar"
             )
         ]
-        model.output_slot_names = ["baz", "quux"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="baz"),
+            OutputSlotInfo(name="quux")
+        ]
 
         self.assertEqual(
             model.__getstate__(),
@@ -53,5 +57,16 @@ class TestBaseDataSourceModel(unittest.TestCase):
                         "name": "bar"
                     }
                 ],
-                "output_slot_names": ["baz", "quux"]
+                "output_slot_info": [
+                    {
+                        "__traits_version__": "4.6.0",
+                        "name": "baz",
+                        "kpi": False
+                    },
+                    {
+                        "__traits_version__": "4.6.0",
+                        "name": "quux",
+                        "kpi": False
+                    }
+                ]
             })

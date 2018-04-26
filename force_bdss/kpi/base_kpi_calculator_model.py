@@ -1,6 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
-from force_bdss.local_traits import Identifier
+from force_bdss.core.output_slot_info import OutputSlotInfo
 from ..core.input_slot_map import InputSlotInfo
 from .i_kpi_calculator_factory import IKPICalculatorFactory
 
@@ -27,7 +27,7 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
     #: If the name is the empty string, it means that the user is not
     #: interested in preserving the information, and should therefore be
     #: discarded and not propagated further.
-    output_slot_names = List(Identifier(), visible=False)
+    output_slot_info = List(Instance(OutputSlotInfo), visible=False)
 
     #: This event claims that a change in the model influences the slots
     #: (either input or output). It must be triggered every time a specific
@@ -44,4 +44,7 @@ class BaseKPICalculatorModel(ABCHasStrictTraits):
         state["input_slot_info"] = [
             x.__getstate__() for x in self.input_slot_info
             ]
+        state["output_slot_info"] = [
+            x.__getstate__() for x in self.output_slot_info
+        ]
         return state

@@ -4,6 +4,7 @@ import logging
 from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from ..factory_registry_plugin import IFactoryRegistryPlugin
 
@@ -157,6 +158,10 @@ class WorkflowReader(HasStrictTraits):
                 model_data["input_slot_info"] = self._extract_input_slot_info(
                     model_data["input_slot_info"]
                 )
+                model_data["output_slot_info"] = \
+                    self._extract_output_slot_info(
+                        model_data["output_slot_info"]
+                    )
                 layer.append(ds_factory.create_model(model_data))
             layers.append(layer)
 
@@ -219,6 +224,9 @@ class WorkflowReader(HasStrictTraits):
 
     def _extract_input_slot_info(self, info):
         return [InputSlotInfo(**d) for d in info]
+
+    def _extract_output_slot_info(self, info):
+        return [OutputSlotInfo(**d) for d in info]
 
     def _extract_notification_listeners(self, wf_data):
         registry = self.factory_registry

@@ -143,7 +143,7 @@ def _compute_layer_results(environment_data_values,
             log.error(error_txt)
             raise RuntimeError(error_txt)
 
-        if len(res) != len(model.output_slot_names):
+        if len(res) != len(model.output_slot_info):
             error_txt = (
                 "The number of data values ({} values) returned"
                 " by '{}' does not match the number"
@@ -152,7 +152,7 @@ def _compute_layer_results(environment_data_values,
                 " error.").format(
                 len(res),
                 factory.name,
-                len(model.output_slot_names)
+                len(model.output_slot_info)
             )
 
             log.error(error_txt)
@@ -160,8 +160,8 @@ def _compute_layer_results(environment_data_values,
 
         # At this point, the returned data values are unnamed.
         # Add the names as specified by the user.
-        for dv, output_slot_name in zip(res, model.output_slot_names):
-            dv.name = output_slot_name
+        for dv, output_slot_info in zip(res, model.output_slot_info):
+            dv.name = output_slot_info.name
 
         # If the name was not specified, simply discard the value,
         # because apparently the user is not interested in it.

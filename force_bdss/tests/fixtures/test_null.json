@@ -15,7 +15,7 @@
           "model_data": {
             "input_slot_info": [
             ],
-            "output_slot_names": [
+            "output_slot_info": [
             ]
           }
         }
@@ -27,7 +27,7 @@
         "model_data": {
           "input_slot_info": [
           ],
-          "output_slot_names": [
+          "output_slot_info": [
           ]
         }
       }

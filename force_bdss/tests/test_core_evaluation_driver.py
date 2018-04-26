@@ -3,6 +3,7 @@ import unittest
 import testfixtures
 import six
 
+from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
@@ -217,7 +218,11 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="foo"),
             InputSlotInfo(name="quux")
         ]
-        evaluator_model.output_slot_names = ["one", "", "three"]
+        evaluator_model.output_slot_info = [
+            OutputSlotInfo(name="one"),
+            OutputSlotInfo(name=""),
+            OutputSlotInfo(name="three")
+        ]
 
         res = _compute_layer_results(
             data_values,
@@ -292,7 +297,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="in1"),
             InputSlotInfo(name="in2")
         ]
-        model.output_slot_names = ["res1"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="res1")
+        ]
         wf.execution_layers[0].append(model)
 
         model = adder_factory.create_model()
@@ -300,7 +307,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="in3"),
             InputSlotInfo(name="in4")
         ]
-        model.output_slot_names = ["res2"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="res2")
+        ]
         wf.execution_layers[0].append(model)
 
         # layer 1
@@ -309,7 +318,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="res1"),
             InputSlotInfo(name="res2")
         ]
-        model.output_slot_names = ["res3"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="res3")
+        ]
         wf.execution_layers[1].append(model)
 
         # layer 2
@@ -318,7 +329,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="res3"),
             InputSlotInfo(name="res1")
         ]
-        model.output_slot_names = ["res4"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="res4")
+        ]
         wf.execution_layers[2].append(model)
 
         # KPI layer
@@ -327,7 +340,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="res4"),
             InputSlotInfo(name="res2")
         ]
-        model.output_slot_names = ["out1"]
+        model.output_slot_info = [
+            OutputSlotInfo(name="out1")
+        ]
         wf.kpi_calculators.append(model)
 
         kpi_results = execute_workflow(wf, data_values)
