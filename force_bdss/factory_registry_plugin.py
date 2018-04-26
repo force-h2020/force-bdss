@@ -7,7 +7,6 @@ from force_bdss.notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
 from .data_sources.i_data_source_factory import (
     IDataSourceFactory)
-from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory
 from .mco.i_mco_factory import IMCOFactory
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 

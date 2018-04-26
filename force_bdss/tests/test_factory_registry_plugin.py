@@ -18,9 +18,7 @@ from envisage.application import Application
 
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.kpi.i_kpi_calculator_factory import IKPICalculatorFactory
-from force_bdss.mco.i_mco_factory import \
-    IMCOFactory
+from force_bdss.mco.i_mco_factory import IMCOFactory
 
 
 class TestFactoryRegistry(unittest.TestCase):
@@ -56,14 +54,6 @@ class MySuperPlugin(BaseExtensionPlugin):
                 mock.Mock(spec=IDataSourceFactory,
                           id=factory_id("enthought", "ds2"))]
 
-    def _kpi_calculator_factories_default(self):
-        return [mock.Mock(spec=IKPICalculatorFactory,
-                          id=factory_id("enthought", "kpi1")),
-                mock.Mock(spec=IKPICalculatorFactory,
-                          id=factory_id("enthought", "kpi2")),
-                mock.Mock(spec=IKPICalculatorFactory,
-                          id=factory_id("enthought", "kpi3"))]
-
     def _notification_listener_factories_default(self):
         return [mock.Mock(spec=INotificationListenerFactory,
                           id=factory_id("enthought", "nl1"))]
@@ -81,7 +71,6 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
     def test_initialization(self):
         self.assertEqual(len(self.plugin.mco_factories), 1)
         self.assertEqual(len(self.plugin.data_source_factories), 2)
-        self.assertEqual(len(self.plugin.kpi_calculator_factories), 3)
 
     def test_lookup(self):
         mco_id = factory_id("enthought", "mco1")
@@ -92,11 +81,6 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
         for entry in ["ds1", "ds2"]:
             id = factory_id("enthought", entry)
             self.assertEqual(self.plugin.data_source_factory_by_id(id).id, id)
-
-        for entry in ["kpi1", "kpi2", "kpi3"]:
-            id = factory_id("enthought", entry)
-            self.assertEqual(self.plugin.kpi_calculator_factory_by_id(id).id,
-                             id)
 
         for entry in ["nl1"]:
             id = factory_id("enthought", entry)
@@ -121,11 +105,6 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             self.plugin.data_source_factory_by_id(
-                factory_id("enthought", "foo")
-            )
-
-        with self.assertRaises(KeyError):
-            self.plugin.kpi_calculator_factory_by_id(
                 factory_id("enthought", "foo")
             )
 

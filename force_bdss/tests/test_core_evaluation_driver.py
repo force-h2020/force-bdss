@@ -9,8 +9,6 @@ from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
-from force_bdss.tests.probe_classes.kpi_calculator import (
-    ProbeKPICalculatorFactory)
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
@@ -101,51 +99,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     RuntimeError,
                     "The number of data values \(1 values\)"
                     " returned by 'test_data_source' does not match"
-                    " the number of user-defined names"):
-                driver.application_started()
-
-    def test_error_for_incorrect_kpic_output_slots(self):
-        kpi_calculator_factories = \
-            self.factory_registry_plugin.kpi_calculator_factories
-
-        def run(self, *args, **kwargs):
-            return [DataValue()]
-        kpi_calculator_factories[0] = ProbeKPICalculatorFactory(
-            None,
-            run_function=run)
-        driver = CoreEvaluationDriver(
-            application=self.mock_application,
-        )
-        with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
-                    RuntimeError,
-                    "The number of data values \(1 values\)"
-                    " returned by 'test_kpi_calculator' does not match"
-                    " the number of output slots"):
-
-                driver.application_started()
-
-    def test_error_for_missing_kpic_output_names(self):
-        kpi_calculator_factories = \
-            self.factory_registry_plugin.kpi_calculator_factories
-
-        def run(self, *args, **kwargs):
-            return [DataValue()]
-        kpi_calculator_factories[0] = ProbeKPICalculatorFactory(
-            None,
-            run_function=run,
-            output_slots_size=1)
-        driver = CoreEvaluationDriver(
-            application=self.mock_application,
-        )
-
-        with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
-                    RuntimeError,
-                    "The number of data values \(1 values\)"
-                    " returned by 'test_kpi_calculator' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
 
@@ -243,10 +196,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         #                    res3
         # layer 2:        res3 * res1
         #                     res4
-        # kpi layer:      res4 * res2
-        #
+        # layer 3:        res4 * res2
+        #                     out1
         # Final result should be
-        # ((in1 + in2 + in3 + in4) * (in1 + in2) * (in3 + in4)
+        # out1 = ((in1 + in2 + in3 + in4) * (in1 + in2) * (in3 + in4)
 
         data_values = [
             DataValue(value=10, name="in1"),
@@ -278,14 +231,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             output_slots_size=1,
             run_function=multiplier)
 
-        multiplier_kpi_factory = ProbeKPICalculatorFactory(
-            None,
-            input_slots_size=2,
-            output_slots_size=1,
-            run_function=multiplier)
-
         wf = Workflow(
             execution_layers=[
+                [],
                 [],
                 [],
                 []
@@ -334,8 +282,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ]
         wf.execution_layers[2].append(model)
 
-        # KPI layer
-        model = multiplier_kpi_factory.create_model()
+        # layer 3
+        model = multiplier_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="res4"),
             InputSlotInfo(name="res2")
@@ -343,7 +291,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="out1")
         ]
-        wf.kpi_calculators.append(model)
+        wf.execution_layers[3].append(model)
 
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
