@@ -10,11 +10,6 @@ from .data_sources.base_data_source import BaseDataSource  # noqa
 from .data_sources.base_data_source_factory import BaseDataSourceFactory  # noqa
 from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
 
-from .kpi.base_kpi_calculator import BaseKPICalculator  # noqa
-from .kpi.base_kpi_calculator_model import BaseKPICalculatorModel  # noqa
-from .kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory  # noqa
-from .kpi.i_kpi_calculator_factory import IKPICalculatorFactory  # noqa
-
 from .mco.base_mco_model import BaseMCOModel  # noqa
 from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
 from .mco.base_mco import BaseMCO  # noqa
