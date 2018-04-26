@@ -16,4 +16,4 @@ class OutputSlotInfo(HasStrictTraits):
 
     #: True if the value associated to this output slot must be exported as
     #: a KPI.
-    kpi = Bool(False)
+    is_kpi = Bool(False)
