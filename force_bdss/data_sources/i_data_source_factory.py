@@ -1,5 +1,5 @@
 from envisage.api import Plugin
-from traits.api import Interface, String, Instance
+from traits.api import Interface, String, Instance, Type
 
 
 class IDataSourceFactory(Interface):
@@ -11,6 +11,14 @@ class IDataSourceFactory(Interface):
     id = String()
 
     name = String()
+
+    data_source_class = Type(
+        "force_bdss.data_sources.base_data_source.BaseDataSource"
+    )
+
+    model_class = Type(
+        "force_bdss.data_sources.base_data_source_model.BaseDataSourceModel"
+    )
 
     plugin = Instance(Plugin)
 

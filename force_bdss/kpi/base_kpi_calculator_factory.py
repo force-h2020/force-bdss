@@ -1,8 +1,13 @@
-import abc
+import logging
 from envisage.plugin import Plugin
-from traits.api import ABCHasStrictTraits, provides, String, Instance
+from traits.api import ABCHasStrictTraits, provides, String, Instance, Type
 
+from force_bdss.kpi.base_kpi_calculator import BaseKPICalculator
+from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 from .i_kpi_calculator_factory import IKPICalculatorFactory
+
+
+log = logging.getLogger(__name__)
 
 
 @provides(IKPICalculatorFactory)
@@ -20,6 +25,13 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
     #: A UI friendly name for the factory. Can contain spaces.
     name = String()
 
+    #: The KPI calculator to be instantiated. Define this to your KPICalculator
+    kpi_calculator_class = Type(BaseKPICalculator)
+
+    #: The model associated to the KPI calculator.
+    #: Define this to your KPICalculatorModel
+    model_class = Type(BaseKPICalculatorModel)
+
     #: A reference to the plugin that holds this factory.
     plugin = Instance(Plugin)
 
@@ -34,7 +46,6 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
         self.plugin = plugin
         super(BaseKPICalculatorFactory, self).__init__(*args, **kwargs)
 
-    @abc.abstractmethod
     def create_kpi_calculator(self):
         """Factory method.
         Creates and returns an instance of a KPI Calculator, associated
@@ -45,8 +56,15 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
         BaseKPICalculator
             The specific instance of the generated KPICalculator
         """
+        if self.kpi_calculator_class is None:
+            msg = ("kpi_calculator_class cannot be None in {}. Either define "
+                   "kpi_calculator_class or reimplement create_kpi_calculator "
+                   "on your factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
 
-    @abc.abstractmethod
+        return self.kpi_calculator_class(self)
+
     def create_model(self, model_data=None):
         """Factory method.
         Creates the model object (or network of model objects) of the KPI
@@ -64,3 +82,14 @@ class BaseKPICalculatorFactory(ABCHasStrictTraits):
         BaseKPICalculatorModel
             The model
         """
+        if model_data is None:
+            model_data = {}
+
+        if self.model_class is None:
+            msg = ("model_class cannot be None in {}. Either define "
+                   "model_class or reimplement create_model on your "
+                   "factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
+
+        return self.model_class(self, **model_data)

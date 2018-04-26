@@ -1,9 +1,15 @@
-import abc
-
-from traits.api import ABCHasStrictTraits, Instance, String, provides
+import logging
+from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
 from envisage.plugin import Plugin
 
+from force_bdss.notification_listeners.base_notification_listener import \
+    BaseNotificationListener
+from force_bdss.notification_listeners.base_notification_listener_model \
+    import \
+    BaseNotificationListenerModel
 from .i_notification_listener_factory import INotificationListenerFactory
+
+log = logging.getLogger(__name__)
 
 
 @provides(INotificationListenerFactory)
@@ -17,6 +23,14 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
 
     #: Name of the factory. User friendly for UI
     name = String()
+
+    #: The listener class that must be instantiated. Define this to your
+    #: listener class.
+    listener_class = Type(BaseNotificationListener)
+
+    #: The associated model to the listener. Define this to your
+    #: listener model class.
+    model_class = Type(BaseNotificationListenerModel)
 
     #: A reference to the containing plugin
     plugin = Instance(Plugin)
@@ -32,13 +46,19 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         self.plugin = plugin
         super(BaseNotificationListenerFactory, self).__init__(*args, **kwargs)
 
-    @abc.abstractmethod
     def create_listener(self):
         """
         Creates an instance of the listener.
         """
+        if self.listener_class is None:
+            msg = ("listener_class cannot be None in {}. Either define "
+                   "listener_class or reimplement create_listener on "
+                   "your factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
 
-    @abc.abstractmethod
+        return self.listener_class(self)
+
     def create_model(self, model_data=None):
         """
         Creates an instance of the model.
@@ -48,3 +68,14 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         model_data: dict
             Data to use to fill the model.
         """
+        if model_data is None:
+            model_data = {}
+
+        if self.model_class is None:
+            msg = ("model_class cannot be None in {}. Either define "
+                   "model_class or reimplement create_model on your "
+                   "factory class.".format(self.__class__.__name__))
+            log.error(msg)
+            raise RuntimeError(msg)
+
+        return self.model_class(self, **model_data)

@@ -1,7 +1,5 @@
 from traits.api import HasStrictTraits, String, Type, Instance
 
-from ..base_mco_factory import BaseMCOFactory
-
 
 class BaseMCOParameterFactory(HasStrictTraits):
     """Factory that produces the model instance of a given BASEMCOParameter
@@ -13,7 +11,7 @@ class BaseMCOParameterFactory(HasStrictTraits):
     """
 
     #: A reference to the MCO factory this parameter factory lives in.
-    mco_factory = Instance(BaseMCOFactory)
+    mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory')
 
     #: A unique string identifying the parameter
     id = String()
@@ -25,7 +23,9 @@ class BaseMCOParameterFactory(HasStrictTraits):
     description = String("Undefined parameter")
 
     # The model class to instantiate when create_model is called.
-    model_class = Type('BaseMCOParameter')
+    model_class = Type(
+        "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter"
+    )
 
     def __init__(self, mco_factory, *args, **kwargs):
         self.mco_factory = mco_factory
