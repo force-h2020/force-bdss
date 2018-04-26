@@ -25,9 +25,6 @@ class WorkflowWriter(HasStrictTraits):
     def _workflow_data(self, workflow):
         workflow_data = {
             "mco": self._mco_data(workflow.mco),
-            "kpi_calculators": [
-                self._model_data(kpic)
-                for kpic in workflow.kpi_calculators],
             "execution_layers": [
                 self._execution_layer_data(el)
                 for el in workflow.execution_layers],

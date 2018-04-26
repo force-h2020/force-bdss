@@ -91,7 +91,6 @@ class WorkflowReader(HasStrictTraits):
             wf_data = json_data["workflow"]
             wf.mco = self._extract_mco(wf_data)
             wf.execution_layers[:] = self._extract_execution_layers(wf_data)
-            wf.kpi_calculators[:] = self._extract_kpi_calculators(wf_data)
             wf.notification_listeners[:] = \
                 self._extract_notification_listeners(wf_data)
         except KeyError as e:
@@ -166,37 +165,6 @@ class WorkflowReader(HasStrictTraits):
             layers.append(layer)
 
         return layers
-
-    def _extract_kpi_calculators(self, wf_data):
-        """Extracts the KPI calculators from the workflow dictionary data.
-
-        Parameters
-        ----------
-        wf_data: dict
-            the content of the workflow key in the top level dictionary data.
-
-        Returns
-        -------
-        list of BaseKPICalculatorModel instances. Each BaseKPICalculatorModel
-        is an instance of the specific model class. The list can be
-        empty.
-        """
-        registry = self.factory_registry
-
-        kpi_calculators = []
-        for kpic_entry in wf_data["kpi_calculators"]:
-            kpic_id = kpic_entry["id"]
-            kpic_factory = registry.kpi_calculator_factory_by_id(kpic_id)
-            model_data = kpic_entry["model_data"]
-            model_data["input_slot_info"] = self._extract_input_slot_info(
-                model_data["input_slot_info"]
-            )
-
-            kpi_calculators.append(
-                kpic_factory.create_model(model_data)
-            )
-
-        return kpi_calculators
 
     def _extract_mco_parameters(self, mco_id, parameters_data):
         """Extracts the MCO parameters from the data as dictionary.
