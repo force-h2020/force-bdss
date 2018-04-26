@@ -56,12 +56,12 @@ class TestBaseKPICalculatorModel(unittest.TestCase):
                     {
                         "__traits_version__": "4.6.0",
                         "name": "baz",
-                        "kpi": False,
+                        "is_kpi": False,
                     },
                     {
                         "__traits_version__": "4.6.0",
                         "name": "quux",
-                        "kpi": False,
+                        "is_kpi": False,
                     }
                 ]
             })
