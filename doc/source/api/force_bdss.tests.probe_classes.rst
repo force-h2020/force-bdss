@@ -28,14 +28,6 @@ force\_bdss\.tests\.probe\_classes\.factory\_registry\_plugin module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.probe\_classes\.kpi\_calculator module
-----------------------------------------------------------
-
-.. automodule:: force_bdss.tests.probe_classes.kpi_calculator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force\_bdss\.tests\.probe\_classes\.mco module
 ----------------------------------------------
 
