@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 
 try:

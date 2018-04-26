@@ -1,6 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
