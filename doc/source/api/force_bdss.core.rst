@@ -22,7 +22,7 @@ force\_bdss\.core\.data\_value module
 force\_bdss\.core\.input\_slot\_map module
 ------------------------------------------
 
-.. automodule:: force_bdss.core.input_slot_map
+.. automodule:: force_bdss.core.input_slot_info
     :members:
     :undoc-members:
     :show-inheritance:
