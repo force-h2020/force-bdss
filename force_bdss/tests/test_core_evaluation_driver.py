@@ -27,8 +27,8 @@ from force_bdss.core_evaluation_driver import (
     CoreEvaluationDriver,
     execute_workflow,
     _bind_data_values,
-    _compute_layer_results)
-
+    _compute_layer_results
+)
 
 
 class TestCoreEvaluationDriver(unittest.TestCase):
