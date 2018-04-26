@@ -1,12 +1,12 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
-from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from ..core.input_slot_info import InputSlotInfo
+from .i_kpi_calculator_factory import IKPICalculatorFactory
 
 
-class BaseDataSourceModel(ABCHasStrictTraits):
-    """Base class for the factory specific DataSource models.
+class BaseKPICalculatorModel(ABCHasStrictTraits):
+    """Base class for the factory specific KPI calculator models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
 
@@ -15,16 +15,15 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     """
     #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
-    factory = Instance(IDataSourceFactory, visible=False, transient=True)
+    factory = Instance(IKPICalculatorFactory, visible=False, transient=True)
 
     #: Specifies binding between input slots and source for that value.
     #: Each InputSlotMap instance specifies this information for each of the
     #: slots.
     input_slot_info = List(Instance(InputSlotInfo), visible=False)
 
-    #: Allows to assign names and KPI status to the output slots, so that
-    #: they can be referenced somewhere else (e.g. another layer's
-    #: DataSources).
+    #: Allows to assign names to the output slots, so that they can be
+    #: referenced somewhere else (e.g. the KPICalculators).
     #: If the name is the empty string, it means that the user is not
     #: interested in preserving the information, and should therefore be
     #: discarded and not propagated further.
@@ -38,13 +37,13 @@ class BaseDataSourceModel(ABCHasStrictTraits):
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
-        super(BaseDataSourceModel, self).__init__(*args, **kwargs)
+        super(BaseKPICalculatorModel, self).__init__(*args, **kwargs)
 
     def __getstate__(self):
-        state = super(BaseDataSourceModel, self).__getstate__()
+        state = super(BaseKPICalculatorModel, self).__getstate__()
         state["input_slot_info"] = [
             x.__getstate__() for x in self.input_slot_info
-        ]
+            ]
         state["output_slot_info"] = [
             x.__getstate__() for x in self.output_slot_info
         ]

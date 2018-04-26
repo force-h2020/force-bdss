@@ -3,7 +3,7 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from ..factory_registry_plugin import IFactoryRegistryPlugin

@@ -12,10 +12,10 @@ force\_bdss\.core\.tests\.test\_data\_value module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\.tests\.test\_input\_slot\_map module
--------------------------------------------------------
+force\_bdss\.core\.tests\.test\_input\_slot\_info module
+--------------------------------------------------------
 
-.. automodule:: force_bdss.core.tests.test_input_slot_map
+.. automodule:: force_bdss.core.tests.test_input_slot_info
     :members:
     :undoc-members:
     :show-inheritance:

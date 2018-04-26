@@ -2,24 +2,23 @@ import unittest
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
+from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
+from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 
 try:
     import mock
 except ImportError:
     from unittest import mock
 
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
-from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 
-
-class DummyDataSourceModel(BaseDataSourceModel):
+class DummyKPICalculatorModel(BaseKPICalculatorModel):
     pass
 
 
-class TestBaseDataSourceModel(unittest.TestCase):
+class TestBaseKPICalculatorModel(unittest.TestCase):
     def test_getstate(self):
-        model = DummyDataSourceModel(mock.Mock(spec=BaseDataSourceFactory))
+        model = DummyKPICalculatorModel(
+            mock.Mock(spec=BaseKPICalculatorFactory))
         self.assertEqual(
             model.__getstate__(),
             {
@@ -29,12 +28,8 @@ class TestBaseDataSourceModel(unittest.TestCase):
             })
 
         model.input_slot_info = [
-            InputSlotInfo(
-                name="foo"
-            ),
-            InputSlotInfo(
-                name="bar"
-            )
+            InputSlotInfo(name="foo"),
+            InputSlotInfo(name="bar")
         ]
         model.output_slot_info = [
             OutputSlotInfo(name="baz"),
@@ -61,12 +56,12 @@ class TestBaseDataSourceModel(unittest.TestCase):
                     {
                         "__traits_version__": "4.6.0",
                         "name": "baz",
-                        "kpi": False
+                        "kpi": False,
                     },
                     {
                         "__traits_version__": "4.6.0",
                         "name": "quux",
-                        "kpi": False
+                        "kpi": False,
                     }
                 ]
             })

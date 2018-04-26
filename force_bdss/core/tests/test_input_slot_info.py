@@ -1,7 +1,7 @@
 import unittest
 from traits.api import TraitError
 
-from force_bdss.core.input_slot_map import InputSlotInfo
+from force_bdss.core.input_slot_info import InputSlotInfo
 
 
 class TestDataValue(unittest.TestCase):
