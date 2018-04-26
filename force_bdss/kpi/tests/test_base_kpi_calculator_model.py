@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.input_slot_map import InputSlotInfo
 from force_bdss.kpi.base_kpi_calculator_factory import BaseKPICalculatorFactory
 from force_bdss.kpi.base_kpi_calculator_model import BaseKPICalculatorModel
 
@@ -27,10 +27,10 @@ class TestBaseKPICalculatorModel(unittest.TestCase):
             })
 
         model.input_slot_maps = [
-            InputSlotMap(
+            InputSlotInfo(
                 name="foo"
             ),
-            InputSlotMap(
+            InputSlotInfo(
                 name="bar"
             )
         ]

@@ -11,7 +11,7 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.tests.probe_classes.kpi_calculator import (
     ProbeKPICalculatorFactory)
 
-from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.input_slot_map import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.tests import fixtures
@@ -156,8 +156,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ]
 
         slot_map = (
-            InputSlotMap(name="baz"),
-            InputSlotMap(name="bar")
+            InputSlotInfo(name="baz"),
+            InputSlotInfo(name="bar")
         )
 
         slots = (
@@ -171,7 +171,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         # Check the errors. Only one slot map for two slots.
         slot_map = (
-            InputSlotMap(name="baz"),
+            InputSlotInfo(name="baz"),
         )
 
         with testfixtures.LogCapture():
@@ -184,8 +184,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         # missing value in the given data values.
         slot_map = (
-            InputSlotMap(name="blap"),
-            InputSlotMap(name="bar")
+            InputSlotInfo(name="blap"),
+            InputSlotInfo(name="bar")
         )
 
         with testfixtures.LogCapture():
@@ -214,8 +214,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         evaluator_model = ds_factory.create_model()
 
         evaluator_model.input_slot_maps = [
-            InputSlotMap(name="foo"),
-            InputSlotMap(name="quux")
+            InputSlotInfo(name="foo"),
+            InputSlotInfo(name="quux")
         ]
         evaluator_model.output_slot_names = ["one", "", "three"]
 
@@ -289,16 +289,16 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         # Layer 0
         model = adder_factory.create_model()
         model.input_slot_maps = [
-            InputSlotMap(name="in1"),
-            InputSlotMap(name="in2")
+            InputSlotInfo(name="in1"),
+            InputSlotInfo(name="in2")
         ]
         model.output_slot_names = ["res1"]
         wf.execution_layers[0].append(model)
 
         model = adder_factory.create_model()
         model.input_slot_maps = [
-            InputSlotMap(name="in3"),
-            InputSlotMap(name="in4")
+            InputSlotInfo(name="in3"),
+            InputSlotInfo(name="in4")
         ]
         model.output_slot_names = ["res2"]
         wf.execution_layers[0].append(model)
@@ -306,8 +306,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         # layer 1
         model = adder_factory.create_model()
         model.input_slot_maps = [
-            InputSlotMap(name="res1"),
-            InputSlotMap(name="res2")
+            InputSlotInfo(name="res1"),
+            InputSlotInfo(name="res2")
         ]
         model.output_slot_names = ["res3"]
         wf.execution_layers[1].append(model)
@@ -315,8 +315,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         # layer 2
         model = multiplier_factory.create_model()
         model.input_slot_maps = [
-            InputSlotMap(name="res3"),
-            InputSlotMap(name="res1")
+            InputSlotInfo(name="res3"),
+            InputSlotInfo(name="res1")
         ]
         model.output_slot_names = ["res4"]
         wf.execution_layers[2].append(model)
@@ -324,8 +324,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         # KPI layer
         model = multiplier_kpi_factory.create_model()
         model.input_slot_maps = [
-            InputSlotMap(name="res4"),
-            InputSlotMap(name="res2")
+            InputSlotInfo(name="res4"),
+            InputSlotInfo(name="res2")
         ]
         model.output_slot_names = ["out1"]
         wf.kpi_calculators.append(model)

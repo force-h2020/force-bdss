@@ -1,6 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance, List, Event
 
-from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.input_slot_map import InputSlotInfo
 from force_bdss.local_traits import Identifier
 from .i_data_source_factory import IDataSourceFactory
 
@@ -20,7 +20,7 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     #: Specifies binding between input slots and source for that value.
     #: Each InputSlotMap instance specifies this information for each of the
     #: slots.
-    input_slot_maps = List(Instance(InputSlotMap), visible=False)
+    input_slot_maps = List(Instance(InputSlotInfo), visible=False)
 
     #: Allows to assign names to the output slots, so that they can be
     #: referenced somewhere else (e.g. the KPICalculators).

@@ -1,6 +1,6 @@
 import unittest
 
-from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.input_slot_map import InputSlotInfo
 
 try:
     import mock
@@ -28,10 +28,10 @@ class TestBaseDataSourceModel(unittest.TestCase):
             })
 
         model.input_slot_maps = [
-            InputSlotMap(
+            InputSlotInfo(
                 name="foo"
             ),
-            InputSlotMap(
+            InputSlotInfo(
                 name="bar"
             )
         ]

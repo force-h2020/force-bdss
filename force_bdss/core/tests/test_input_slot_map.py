@@ -1,12 +1,12 @@
 import unittest
 from traits.api import TraitError
 
-from force_bdss.core.input_slot_map import InputSlotMap
+from force_bdss.core.input_slot_map import InputSlotInfo
 
 
 class TestDataValue(unittest.TestCase):
     def test_initialization(self):
-        slotmap = InputSlotMap()
+        slotmap = InputSlotInfo()
 
         self.assertEqual(slotmap.source, "Environment")
         self.assertEqual(slotmap.name, "")

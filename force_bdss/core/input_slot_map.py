@@ -3,7 +3,7 @@ from traits.api import HasStrictTraits, Enum
 from ..local_traits import Identifier
 
 
-class InputSlotMap(HasStrictTraits):
+class InputSlotInfo(HasStrictTraits):
     """
     Class that specifies the origin of data for the slots of a data source
     or KPI calculator.
