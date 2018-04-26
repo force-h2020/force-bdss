@@ -41,16 +41,19 @@ class CoreEvaluationDriver(BaseCoreDriver):
         mco_data_values = _get_data_values_from_mco(
             mco_model, mco_communicator)
 
-        log.info("Computing data layer 1")
-        ds_results = _compute_layer_results(
-            mco_data_values,
-            workflow.data_sources,
-            "create_data_source"
-        )
+        available_data_values = mco_data_values[:]
+        for index, layer in enumerate(workflow.execution_layers):
+            log.info("Computing data layer {}".format(index))
+            ds_results = _compute_layer_results(
+                available_data_values,
+                layer,
+                "create_data_source"
+            )
+            available_data_values += ds_results
 
         log.info("Computing data layer 2")
         kpi_results = _compute_layer_results(
-            ds_results + mco_data_values,
+            available_data_values,
             workflow.kpi_calculators,
             "create_kpi_calculator"
         )

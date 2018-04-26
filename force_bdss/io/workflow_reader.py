@@ -9,7 +9,7 @@ from ..factory_registry_plugin import IFactoryRegistryPlugin
 
 log = logging.getLogger(__name__)
 
-SUPPORTED_FILE_VERSIONS = ["1"]
+SUPPORTED_FILE_VERSIONS = ["1", "2"]
 
 
 class InvalidFileException(Exception):
@@ -89,7 +89,7 @@ class WorkflowReader(HasStrictTraits):
         try:
             wf_data = json_data["workflow"]
             wf.mco = self._extract_mco(wf_data)
-            wf.data_sources[:] = self._extract_data_sources(wf_data)
+            wf.execution_layers[:] = self._extract_execution_layers(wf_data)
             wf.kpi_calculators[:] = self._extract_kpi_calculators(wf_data)
             wf.notification_listeners[:] = \
                 self._extract_notification_listeners(wf_data)
@@ -131,7 +131,7 @@ class WorkflowReader(HasStrictTraits):
             wf_data["mco"]["model_data"])
         return model
 
-    def _extract_data_sources(self, wf_data):
+    def _extract_execution_layers(self, wf_data):
         """Extracts the data sources from the workflow dictionary data.
 
         Parameters
@@ -146,17 +146,21 @@ class WorkflowReader(HasStrictTraits):
         """
         registry = self.factory_registry
 
-        data_sources = []
-        for ds_entry in wf_data["data_sources"]:
-            ds_id = ds_entry["id"]
-            ds_factory = registry.data_source_factory_by_id(ds_id)
-            model_data = ds_entry["model_data"]
-            model_data["input_slot_maps"] = self._extract_input_slot_maps(
-                model_data["input_slot_maps"]
-            )
-            data_sources.append(ds_factory.create_model(model_data))
+        layers = []
+        for el_entry in wf_data["execution_layers"]:
+            layer = []
 
-        return data_sources
+            for ds_entry in el_entry:
+                ds_id = ds_entry["id"]
+                ds_factory = registry.data_source_factory_by_id(ds_id)
+                model_data = ds_entry["model_data"]
+                model_data["input_slot_maps"] = self._extract_input_slot_maps(
+                    model_data["input_slot_maps"]
+                )
+                layer.append(ds_factory.create_model(model_data))
+            layers.append(layer)
+
+        return layers
 
     def _extract_kpi_calculators(self, wf_data):
         """Extracts the KPI calculators from the workflow dictionary data.
