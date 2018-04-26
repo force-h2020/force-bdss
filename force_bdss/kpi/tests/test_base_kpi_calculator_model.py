@@ -22,11 +22,11 @@ class TestBaseKPICalculatorModel(unittest.TestCase):
             model.__getstate__(),
             {
                 "__traits_version__": "4.6.0",
-                "input_slot_maps": [],
+                "input_slot_info": [],
                 "output_slot_names": []
             })
 
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(
                 name="foo"
             ),
@@ -40,7 +40,7 @@ class TestBaseKPICalculatorModel(unittest.TestCase):
             model.__getstate__(),
             {
                 "__traits_version__": "4.6.0",
-                "input_slot_maps": [
+                "input_slot_info": [
                     {
                         "__traits_version__": "4.6.0",
                         "source": "Environment",

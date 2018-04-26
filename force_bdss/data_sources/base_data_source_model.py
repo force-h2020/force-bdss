@@ -20,7 +20,7 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     #: Specifies binding between input slots and source for that value.
     #: Each InputSlotMap instance specifies this information for each of the
     #: slots.
-    input_slot_maps = List(Instance(InputSlotInfo), visible=False)
+    input_slot_info = List(Instance(InputSlotInfo), visible=False)
 
     #: Allows to assign names to the output slots, so that they can be
     #: referenced somewhere else (e.g. the KPICalculators).
@@ -41,7 +41,7 @@ class BaseDataSourceModel(ABCHasStrictTraits):
 
     def __getstate__(self):
         state = super(BaseDataSourceModel, self).__getstate__()
-        state["input_slot_maps"] = [
-            x.__getstate__() for x in self.input_slot_maps
+        state["input_slot_info"] = [
+            x.__getstate__() for x in self.input_slot_info
         ]
         return state

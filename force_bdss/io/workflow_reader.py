@@ -154,8 +154,8 @@ class WorkflowReader(HasStrictTraits):
                 ds_id = ds_entry["id"]
                 ds_factory = registry.data_source_factory_by_id(ds_id)
                 model_data = ds_entry["model_data"]
-                model_data["input_slot_maps"] = self._extract_input_slot_maps(
-                    model_data["input_slot_maps"]
+                model_data["input_slot_info"] = self._extract_input_slot_info(
+                    model_data["input_slot_info"]
                 )
                 layer.append(ds_factory.create_model(model_data))
             layers.append(layer)
@@ -183,8 +183,8 @@ class WorkflowReader(HasStrictTraits):
             kpic_id = kpic_entry["id"]
             kpic_factory = registry.kpi_calculator_factory_by_id(kpic_id)
             model_data = kpic_entry["model_data"]
-            model_data["input_slot_maps"] = self._extract_input_slot_maps(
-                model_data["input_slot_maps"]
+            model_data["input_slot_info"] = self._extract_input_slot_info(
+                model_data["input_slot_info"]
             )
 
             kpi_calculators.append(
@@ -217,8 +217,8 @@ class WorkflowReader(HasStrictTraits):
 
         return parameters
 
-    def _extract_input_slot_maps(self, maps_data):
-        return [InputSlotInfo(**d) for d in maps_data]
+    def _extract_input_slot_info(self, info):
+        return [InputSlotInfo(**d) for d in info]
 
     def _extract_notification_listeners(self, wf_data):
         registry = self.factory_registry

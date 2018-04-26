@@ -213,7 +213,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             run_function=run)
         evaluator_model = ds_factory.create_model()
 
-        evaluator_model.input_slot_maps = [
+        evaluator_model.input_slot_info = [
             InputSlotInfo(name="foo"),
             InputSlotInfo(name="quux")
         ]
@@ -288,7 +288,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
         # Layer 0
         model = adder_factory.create_model()
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(name="in1"),
             InputSlotInfo(name="in2")
         ]
@@ -296,7 +296,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         wf.execution_layers[0].append(model)
 
         model = adder_factory.create_model()
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(name="in3"),
             InputSlotInfo(name="in4")
         ]
@@ -305,7 +305,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         # layer 1
         model = adder_factory.create_model()
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(name="res1"),
             InputSlotInfo(name="res2")
         ]
@@ -314,7 +314,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         # layer 2
         model = multiplier_factory.create_model()
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(name="res3"),
             InputSlotInfo(name="res1")
         ]
@@ -323,7 +323,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         # KPI layer
         model = multiplier_kpi_factory.create_model()
-        model.input_slot_maps = [
+        model.input_slot_info = [
             InputSlotInfo(name="res4"),
             InputSlotInfo(name="res2")
         ]

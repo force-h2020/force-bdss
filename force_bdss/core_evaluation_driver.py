@@ -111,13 +111,13 @@ def _compute_layer_results(environment_data_values,
         # Binding performs the extraction of the specified data values
         # satisfying the above input slots from the environment data values
         # considering what the user specified in terms of names (which is
-        # in the model input slot maps.
+        # in the model input slot info
         # The resulting data are the ones picked by name from the
         # environment data values, and in the appropriate ordering as
         # needed by the input slots.
         passed_data_values = _bind_data_values(
             environment_data_values,
-            model.input_slot_maps,
+            model.input_slot_info,
             in_slots)
 
         # execute data source, passing only relevant data values.
