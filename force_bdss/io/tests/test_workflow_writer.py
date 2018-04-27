@@ -3,6 +3,7 @@ import unittest
 
 from six import StringIO
 
+from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
@@ -69,8 +70,10 @@ class TestWorkflowWriter(unittest.TestCase):
         self.assertEqual(wf_result.mco.factory.id,
                          wf.mco.factory.id)
         self.assertEqual(len(wf_result.execution_layers), 2)
-        self.assertEqual(len(wf_result.execution_layers[0]), 2)
-        self.assertEqual(len(wf_result.execution_layers[1]), 1)
+        self.assertEqual(
+            len(wf_result.execution_layers[0].data_source_models), 2)
+        self.assertEqual(
+            len(wf_result.execution_layers[1].data_source_models), 1)
 
     def _create_mock_workflow(self):
         wf = Workflow()
@@ -87,16 +90,19 @@ class TestWorkflowWriter(unittest.TestCase):
             )
         ]
         wf.execution_layers = [
-            [
-                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
-                                    id=factory_id("enthought", "mock2"))),
-                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
-                                    id=factory_id("enthought", "mock2"))),
-            ],
-            [
-                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
-                                    id=factory_id("enthought", "mock2")))
-            ]
+            ExecutionLayer(data_source_models=[
+                BaseDataSourceModel(
+                    mock.Mock(spec=IDataSourceFactory,
+                              id=factory_id("enthought", "mock2"))),
+                BaseDataSourceModel(
+                    mock.Mock(spec=IDataSourceFactory,
+                              id=factory_id("enthought", "mock2"))),
+            ]),
+            ExecutionLayer(data_source_models=[
+                BaseDataSourceModel(
+                    mock.Mock(spec=IDataSourceFactory,
+                              id=factory_id("enthought", "mock2")))
+            ])
         ]
         return wf
 
