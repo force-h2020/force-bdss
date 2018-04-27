@@ -180,7 +180,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         res = _compute_layer_results(
             data_values,
-            ExecutionLayer(data_source_models=[evaluator_model]),
+            ExecutionLayer(data_sources=[evaluator_model]),
         )
         self.assertEqual(len(res), 2)
         self.assertEqual(res[0].name, "one")
@@ -248,7 +248,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res1")
         ]
-        wf.execution_layers[0].data_source_models.append(model)
+        wf.execution_layers[0].data_sources.append(model)
 
         model = adder_factory.create_model()
         model.input_slot_info = [
@@ -258,7 +258,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res2")
         ]
-        wf.execution_layers[0].data_source_models.append(model)
+        wf.execution_layers[0].data_sources.append(model)
 
         # layer 1
         model = adder_factory.create_model()
@@ -269,7 +269,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res3")
         ]
-        wf.execution_layers[1].data_source_models.append(model)
+        wf.execution_layers[1].data_sources.append(model)
 
         # layer 2
         model = multiplier_factory.create_model()
@@ -280,7 +280,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res4")
         ]
-        wf.execution_layers[2].data_source_models.append(model)
+        wf.execution_layers[2].data_sources.append(model)
 
         # layer 3
         model = multiplier_factory.create_model()
@@ -291,7 +291,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="out1", is_kpi=True)
         ]
-        wf.execution_layers[3].data_source_models.append(model)
+        wf.execution_layers[3].data_sources.append(model)
 
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)

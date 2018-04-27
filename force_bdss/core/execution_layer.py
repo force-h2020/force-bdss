@@ -7,4 +7,4 @@ class ExecutionLayer(HasStrictTraits):
     """Represents a single layer in the execution stack.
     It contains a list of the data source models that must be executed.
     """
-    data_source_models = List(BaseDataSourceModel)
+    data_sources = List(BaseDataSourceModel)

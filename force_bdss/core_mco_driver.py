@@ -57,7 +57,7 @@ class CoreMCODriver(BaseCoreDriver):
     def _deliver_start_event(self):
         output_names = []
         for layer in self.workflow.execution_layers:
-            for data_source in layer.data_source_models:
+            for data_source in layer.data_sources:
                 output_names.extend(info.name
                                     for info in data_source.output_slot_info
                                     if info.is_kpi

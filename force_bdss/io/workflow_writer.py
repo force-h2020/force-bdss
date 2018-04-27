@@ -66,7 +66,7 @@ class WorkflowWriter(HasStrictTraits):
         """Extracts the execution layer list of DataSource models"""
         data = []
 
-        for ds in layer.data_source_models:
+        for ds in layer.data_sources:
             data.append(self._model_data(ds))
 
         return data
