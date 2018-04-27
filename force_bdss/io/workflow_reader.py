@@ -3,6 +3,7 @@ import logging
 
 from traits.api import HasStrictTraits, Instance
 
+from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
@@ -148,7 +149,7 @@ class WorkflowReader(HasStrictTraits):
 
         layers = []
         for el_entry in wf_data["execution_layers"]:
-            layer = []
+            layer = ExecutionLayer()
 
             for ds_entry in el_entry:
                 ds_id = ds_entry["id"]
@@ -161,7 +162,8 @@ class WorkflowReader(HasStrictTraits):
                     self._extract_output_slot_info(
                         model_data["output_slot_info"]
                     )
-                layer.append(ds_factory.create_model(model_data))
+                layer.data_source_models.append(
+                    ds_factory.create_model(model_data))
             layers.append(layer)
 
         return layers

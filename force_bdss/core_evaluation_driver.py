@@ -60,14 +60,14 @@ def execute_workflow(workflow, data_values):
         )
         available_data_values += ds_results
 
-    log.info("Computing KPI layer")
+    log.info("Aggregating KPI data")
     kpi_results = [dv for dv in available_data_values if dv.is_kpi]
 
     return kpi_results
 
 
 def _compute_layer_results(environment_data_values,
-                           evaluator_models,
+                           layer,
                            ):
     """Helper routine.
     Performs the evaluation of a single layer.
@@ -79,7 +79,7 @@ def _compute_layer_results(environment_data_values,
     environment_data_values: list
         A list of data values to submit to the evaluators.
 
-    evaluator_models: list
+    layer: ExecutionLayer
         A list of the models for all the data sources
 
     NOTE: The above parameter is going to go away as soon as we move
@@ -88,7 +88,7 @@ def _compute_layer_results(environment_data_values,
     """
     results = []
 
-    for model in evaluator_models:
+    for model in layer.data_source_models:
         factory = model.factory
         data_source = factory.create_data_source()
 

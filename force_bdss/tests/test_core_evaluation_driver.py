@@ -3,6 +3,7 @@ import unittest
 import testfixtures
 import six
 
+from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
@@ -179,7 +180,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         res = _compute_layer_results(
             data_values,
-            [evaluator_model],
+            ExecutionLayer(data_source_models=[evaluator_model]),
         )
         self.assertEqual(len(res), 2)
         self.assertEqual(res[0].name, "one")
@@ -232,10 +233,10 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         wf = Workflow(
             execution_layers=[
-                [],
-                [],
-                [],
-                []
+                ExecutionLayer(),
+                ExecutionLayer(),
+                ExecutionLayer(),
+                ExecutionLayer()
             ]
         )
         # Layer 0
@@ -247,7 +248,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res1")
         ]
-        wf.execution_layers[0].append(model)
+        wf.execution_layers[0].data_source_models.append(model)
 
         model = adder_factory.create_model()
         model.input_slot_info = [
@@ -257,7 +258,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res2")
         ]
-        wf.execution_layers[0].append(model)
+        wf.execution_layers[0].data_source_models.append(model)
 
         # layer 1
         model = adder_factory.create_model()
@@ -268,7 +269,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res3")
         ]
-        wf.execution_layers[1].append(model)
+        wf.execution_layers[1].data_source_models.append(model)
 
         # layer 2
         model = multiplier_factory.create_model()
@@ -279,7 +280,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="res4")
         ]
-        wf.execution_layers[2].append(model)
+        wf.execution_layers[2].data_source_models.append(model)
 
         # layer 3
         model = multiplier_factory.create_model()
@@ -290,7 +291,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         model.output_slot_info = [
             OutputSlotInfo(name="out1", is_kpi=True)
         ]
-        wf.execution_layers[3].append(model)
+        wf.execution_layers[3].data_source_models.append(model)
 
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
