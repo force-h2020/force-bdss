@@ -71,9 +71,9 @@ class TestWorkflowWriter(unittest.TestCase):
                          wf.mco.factory.id)
         self.assertEqual(len(wf_result.execution_layers), 2)
         self.assertEqual(
-            len(wf_result.execution_layers[0].data_source_models), 2)
+            len(wf_result.execution_layers[0].data_sources), 2)
         self.assertEqual(
-            len(wf_result.execution_layers[1].data_source_models), 1)
+            len(wf_result.execution_layers[1].data_sources), 1)
 
     def _create_mock_workflow(self):
         wf = Workflow()
@@ -90,7 +90,7 @@ class TestWorkflowWriter(unittest.TestCase):
             )
         ]
         wf.execution_layers = [
-            ExecutionLayer(data_source_models=[
+            ExecutionLayer(data_sources=[
                 BaseDataSourceModel(
                     mock.Mock(spec=IDataSourceFactory,
                               id=factory_id("enthought", "mock2"))),
@@ -98,7 +98,7 @@ class TestWorkflowWriter(unittest.TestCase):
                     mock.Mock(spec=IDataSourceFactory,
                               id=factory_id("enthought", "mock2"))),
             ]),
-            ExecutionLayer(data_source_models=[
+            ExecutionLayer(data_sources=[
                 BaseDataSourceModel(
                     mock.Mock(spec=IDataSourceFactory,
                               id=factory_id("enthought", "mock2")))

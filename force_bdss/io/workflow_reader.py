@@ -162,7 +162,7 @@ class WorkflowReader(HasStrictTraits):
                     self._extract_output_slot_info(
                         model_data["output_slot_info"]
                     )
-                layer.data_source_models.append(
+                layer.data_sources.append(
                     ds_factory.create_model(model_data))
             layers.append(layer)
 

@@ -88,7 +88,7 @@ def _compute_layer_results(environment_data_values,
     """
     results = []
 
-    for model in layer.data_source_models:
+    for model in layer.data_sources:
         factory = model.factory
         data_source = factory.create_data_source()
 
