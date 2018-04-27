@@ -93,14 +93,15 @@ class TestWorkflowWriter(unittest.TestCase):
             ExecutionLayer(data_source_models=[
                 BaseDataSourceModel(
                     mock.Mock(spec=IDataSourceFactory,
-                    id=factory_id("enthought", "mock2"))),
+                              id=factory_id("enthought", "mock2"))),
                 BaseDataSourceModel(
                     mock.Mock(spec=IDataSourceFactory,
-                    id=factory_id("enthought", "mock2"))),
+                              id=factory_id("enthought", "mock2"))),
             ]),
             ExecutionLayer(data_source_models=[
-                BaseDataSourceModel(mock.Mock(spec=IDataSourceFactory,
-                                    id=factory_id("enthought", "mock2")))
+                BaseDataSourceModel(
+                    mock.Mock(spec=IDataSourceFactory,
+                              id=factory_id("enthought", "mock2")))
             ])
         ]
         return wf
