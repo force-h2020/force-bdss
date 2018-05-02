@@ -1,4 +1,4 @@
-from traits.api import Str, Type, Bool, Int, Function, List
+from traits.api import Str, Type, Bool, Int, Function
 
 from force_bdss.ids import mco_parameter_id, factory_id
 from force_bdss.core.data_value import DataValue
