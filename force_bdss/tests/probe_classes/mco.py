@@ -10,7 +10,11 @@ from force_bdss.api import (
 
 
 class ProbeMCOModel(BaseMCOModel):
-    pass
+    #: Counts how many times the edit_traits method has been called
+    edit_traits_call_count = Int(0)
+
+    def edit_traits(self, *args, **kwargs):
+        self.edit_traits_call_count += 1
 
 
 def run_func(*args, **kwargs):
@@ -62,8 +66,6 @@ class ProbeMCOFactory(BaseMCOFactory):
 
     mco_class = Type(ProbeMCO)
 
-    probe_parameter_factories = List(Type(ProbeParameterFactory))
-
     nb_output_data_values = Int(0)
 
     def create_model(self, model_data=None):
@@ -83,4 +85,4 @@ class ProbeMCOFactory(BaseMCOFactory):
         return self.mco_class(self)
 
     def parameter_factories(self):
-        return []
+        return [ProbeParameterFactory(mco_factory=self)]
