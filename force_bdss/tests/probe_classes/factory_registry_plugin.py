@@ -11,7 +11,6 @@ from .ui_hooks import ProbeUIHooksFactory
 @provides(IFactoryRegistryPlugin)
 class ProbeFactoryRegistryPlugin(HasStrictTraits):
     mco_factories = List()
-    kpi_calculator_factories = List()
     data_source_factories = List()
     notification_listener_factories = List()
     ui_hooks_factories = List()
@@ -32,13 +31,6 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
         for ds in self.data_source_factories:
             if ds.id == id:
                 return ds
-
-        raise KeyError(id)
-
-    def kpi_calculator_factory_by_id(self, id):
-        for kpic in self.kpi_calculator_factories:
-            if kpic.id == id:
-                return kpic
 
         raise KeyError(id)
 
