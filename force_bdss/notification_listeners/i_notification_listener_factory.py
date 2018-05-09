@@ -1,4 +1,4 @@
-from traits.api import Interface, String, Instance, Type
+from traits.api import Interface, String, Instance, Type, Bool
 from envisage.plugin import Plugin
 
 
@@ -11,6 +11,8 @@ class INotificationListenerFactory(Interface):
     id = String()
 
     name = String()
+
+    ui_visible = Bool()
 
     listener_class = Type(
         "force_bdss.notification_listeners"
