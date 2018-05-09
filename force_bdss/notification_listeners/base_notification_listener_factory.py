@@ -1,5 +1,7 @@
 import logging
-from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
+from traits.api import (
+    ABCHasStrictTraits, Instance, String, provides, Type, Bool
+)
 from envisage.plugin import Plugin
 
 from force_bdss.notification_listeners.base_notification_listener import \
@@ -23,6 +25,11 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
 
     #: Name of the factory. User friendly for UI
     name = String()
+
+    #: If the factor should be visible in the UI. Set to false to make it
+    #: invisible. This is normally useful for notification systems that are
+    #: not supposed to be configured by the user.
+    ui_visible = Bool(True)
 
     #: The listener class that must be instantiated. Define this to your
     #: listener class.
