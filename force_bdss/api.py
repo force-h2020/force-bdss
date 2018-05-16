@@ -1,5 +1,5 @@
 from .base_extension_plugin import BaseExtensionPlugin  # noqa
-from .ids import factory_id, plugin_id, mco_parameter_id  # noqa
+from .ids import factory_id, mco_parameter_id  # noqa
 
 from .core.data_value import DataValue  # noqa
 from .core.workflow import Workflow  # noqa

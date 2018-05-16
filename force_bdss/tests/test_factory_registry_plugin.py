@@ -3,11 +3,15 @@ import warnings
 
 from force_bdss.base_extension_plugin import (
     BaseExtensionPlugin)
+from force_bdss.data_sources.base_data_source_factory import \
+    BaseDataSourceFactory
 from force_bdss.ids import factory_id, mco_parameter_id
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
-from force_bdss.notification_listeners.i_notification_listener_factory import \
-    INotificationListenerFactory
+from force_bdss.notification_listeners.base_notification_listener_factory \
+    import \
+    BaseNotificationListenerFactory
 
 try:
     import mock
@@ -17,8 +21,6 @@ except ImportError:
 from envisage.application import Application
 
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
-from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.mco.i_mco_factory import IMCOFactory
 
 
 class TestFactoryRegistry(unittest.TestCase):
@@ -33,29 +35,44 @@ class TestFactoryRegistry(unittest.TestCase):
         self.assertEqual(self.plugin.data_source_factories, [])
 
 
-class MySuperPlugin(BaseExtensionPlugin):
-    def _mco_factories_default(self):
+class MCOFactory(BaseMCOFactory):
+    id = factory_id("enthought", "mco1")
+
+    def parameter_factories(self):
         return [
             mock.Mock(
-                spec=IMCOFactory,
-                id=factory_id("enthought", "mco1"),
-                parameter_factories=mock.Mock(return_value=[
-                    mock.Mock(
-                        spec=BaseMCOParameterFactory,
-                        id=mco_parameter_id("enthought", "mco1", "ranged")
-                    )
-                ]),
-            )]
+                spec=BaseMCOParameterFactory,
+                id=mco_parameter_id("enthought", "mco1", "ranged")
+            )
+        ]
 
-    def _data_source_factories_default(self):
-        return [mock.Mock(spec=IDataSourceFactory,
-                          id=factory_id("enthought", "ds1")),
-                mock.Mock(spec=IDataSourceFactory,
-                          id=factory_id("enthought", "ds2"))]
 
-    def _notification_listener_factories_default(self):
-        return [mock.Mock(spec=INotificationListenerFactory,
-                          id=factory_id("enthought", "nl1"))]
+class DataSourceFactory1(BaseDataSourceFactory):
+    id = factory_id("enthought", "ds1")
+
+
+class DataSourceFactory2(BaseDataSourceFactory):
+    id = factory_id("enthought", "ds2")
+
+
+class NotificationListenerFactory(BaseNotificationListenerFactory):
+    id = factory_id("enthought", "nl1")
+
+
+class MySuperPlugin(BaseExtensionPlugin):
+    def get_producer(self):
+        return "enthought"
+
+    def get_identifier(self):
+        return "test"
+
+    def get_factory_classes(self):
+        return [
+            MCOFactory,
+            DataSourceFactory1,
+            DataSourceFactory2,
+            NotificationListenerFactory
+        ]
 
 
 class TestFactoryRegistryWithContent(unittest.TestCase):
