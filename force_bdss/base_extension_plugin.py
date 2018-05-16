@@ -13,7 +13,7 @@ from force_bdss.notification_listeners.base_notification_listener_factory \
 from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
 from .notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
-from .ids import ExtensionPointID
+from .ids import ExtensionPointID, plugin_id
 from .data_sources.i_data_source_factory import IDataSourceFactory
 from .mco.i_mco_factory import IMCOFactory
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
@@ -28,15 +28,20 @@ class BaseExtensionPlugin(Plugin):
 
     It provides a set of slots to be populated that end up contributing
     to the application extension points. To use the class, simply inherit it
-    in your plugin, and then fill the factory_classes trait with the classes
-    you want to export. For example::
+    in your plugin, and reimplement the methods as from example::
 
         class MyPlugin(BaseExtensionPlugin):
-            id = plugin_id("enthought", "myplugin")
+            def get_producer(self):
+                return "enthought"
 
-            factory_classes = [
-                MyDataSourceFactory1,
-                MyDataSourceFactory2
+            def get_identifier(self):
+                return "myplugin"
+
+            def get_factory_classes(self):
+                return [
+                    MyDataSourceFactory1,
+                    MyDataSourceFactory2,
+                    MyMCOFactory
                 ]
     """
     #: Reports if the plugin loaded its factories successfully or not.
@@ -78,34 +83,62 @@ class BaseExtensionPlugin(Plugin):
         contributes_to=ExtensionPointID.UI_HOOKS_FACTORIES
     )
 
-    def _data_source_factories_default(self):
-        return self._instantiate_factories(BaseDataSourceFactory)
-
-    def _mco_factories_default(self):
-        return self._instantiate_factories(BaseMCOFactory)
-
-    def _notification_listener_factories_default(self):
-        return self._instantiate_factories(BaseNotificationListenerFactory)
-
-    def _ui_hooks_factories_default(self):
-        return self._instantiate_factories(BaseUIHooksFactory)
-
-    def _instantiate_factories(self, type_):
-        if self.broken:
-            logger.error(
-                "Skipping instantiation of {} due to previous errors.".format(
-                    type_.__name__))
-            return []
+    def __init__(self, *args, **kwargs):
+        super(BaseExtensionPlugin, self).__init__(*args, **kwargs)
 
         try:
-            return [
-                factory(self)
-                for factory in self._factory_by_type(type_)
+            self.id = plugin_id(self.get_producer(), self.get_identifier())
+            self.factory_classes = self.get_factory_classes()
+            self.mco_factories[:] = [
+                cls(self)
+                for cls in self._factory_by_type(BaseMCOFactory)]
+            self.data_source_factories[:] = [
+                cls(self)
+                for cls in self._factory_by_type(BaseDataSourceFactory)]
+            self.notification_listener_factories[:] = [
+                cls(self)
+                for cls in self._factory_by_type(
+                    BaseNotificationListenerFactory)
+            ]
+            self.ui_hooks_factories[:] = [
+                cls(self)
+                for cls in self._factory_by_type(
+                    BaseUIHooksFactory)
             ]
         except Exception as e:
-            self.broken = True
             self.error = traceback.format_exc()
             logger.exception(e)
+            self.broken = True
+            self.mco_factories[:] = []
+            self.data_source_factories[:] = []
+            self.notification_listener_factories[:] = []
+            self.ui_hooks_factories[:] = []
+
+    def get_producer(self):
+        """Must be reimplemented to return a string with the name of the
+        company producing this plugin. Examples are "enthought", "itwm" etc.
+        """
+
+        raise NotImplementedError(
+            "get_producer was not implemented in plugin {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        """Must return a string with the name of the plugin the producer
+        is releasing. The name must be unique and is responsibility of
+        the producer to guarantee this name is not conflicting with
+        another already existing plugin
+        """
+        raise NotImplementedError(
+            "get_identifier was not implemented in plugin {}".format(
+                self.__class__))
+
+    def get_factory_classes(self):
+        """Must return a list of factory classes that this plugin exports.
+        """
+        raise NotImplementedError(
+            "get_factory_classes was not implemented in plugin {}".format(
+                self.__class__))
 
     def _factory_by_type(self, type_):
         return [cls for cls in self.factory_classes if issubclass(cls, type_)]
