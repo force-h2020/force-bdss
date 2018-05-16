@@ -12,8 +12,6 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
 from force_bdss.notification_listeners.base_notification_listener_factory \
     import \
     BaseNotificationListenerFactory
-from force_bdss.notification_listeners.i_notification_listener_factory import \
-    INotificationListenerFactory
 
 try:
     import mock
@@ -23,8 +21,6 @@ except ImportError:
 from envisage.application import Application
 
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
-from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.mco.i_mco_factory import IMCOFactory
 
 
 class TestFactoryRegistry(unittest.TestCase):

@@ -3,11 +3,6 @@ import unittest
 from force_bdss.tests.probe_classes.probe_extension_plugin import \
     ProbeExtensionPlugin
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
 
 class TestBaseExtensionPlugin(unittest.TestCase):
     def test_basic_init(self):

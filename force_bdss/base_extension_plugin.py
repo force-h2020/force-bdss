@@ -55,8 +55,7 @@ class BaseExtensionPlugin(Plugin):
         Either(Type(BaseDataSourceFactory),
                Type(BaseMCOFactory),
                Type(BaseNotificationListenerFactory),
-               Type(BaseUIHooksFactory)
-        )
+               Type(BaseUIHooksFactory))
     )
 
     #: A list of available Multi Criteria Optimizers this plugin exports.
