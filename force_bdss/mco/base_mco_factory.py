@@ -25,16 +25,16 @@ class BaseMCOFactory(ABCHasStrictTraits):
     name = Str()
 
     #: The optimizer class to instantiate. Define this to your MCO class.
-    optimizer_class = Type(BaseMCO)
+    optimizer_class = Type(BaseMCO, allow_none=False)
 
     #: The model associated to the MCO. Define this to your MCO model class.
-    model_class = Type(BaseMCOModel)
+    model_class = Type(BaseMCOModel, allow_none=False)
 
     #: The communicator associated to the MCO. Define this to your MCO comm.
-    communicator_class = Type(BaseMCOCommunicator)
+    communicator_class = Type(BaseMCOCommunicator, allow_none=False)
 
     #: A reference to the Plugin that holds this factory.
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
@@ -45,7 +45,17 @@ class BaseMCOFactory(ABCHasStrictTraits):
         self.model_class = self.get_model_class()
         self.communicator_class = self.get_communicator_class()
         identifier = self.get_identifier()
-        self.id = factory_id(self.plugin.id, identifier)
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+        self.id = id
 
     def get_optimizer_class(self):
         raise NotImplementedError(

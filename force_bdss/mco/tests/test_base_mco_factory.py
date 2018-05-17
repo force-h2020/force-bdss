@@ -1,6 +1,6 @@
 import unittest
 
-import testfixtures
+from traits.trait_errors import TraitError
 
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.tests.test_base_mco import DummyMCO
@@ -18,18 +18,20 @@ from force_bdss.mco.base_mco_factory import BaseMCOFactory
 
 
 class DummyMCOFactory(BaseMCOFactory):
-    id = "foo"
+    def get_identifier(self):
+        return "foo"
 
-    name = "bar"
+    def get_name(self):
+        return "bar"
 
-    def create_optimizer(self):
-        pass
+    def get_model_class(self):
+        return DummyMCOModel
 
-    def create_model(self, model_data=None):
-        pass
+    def get_communicator_class(self):
+        return DummyMCOCommunicator
 
-    def create_communicator(self):
-        pass
+    def get_optimizer_class(self):
+        return DummyMCO
 
     def parameter_factories(self):
         return []
@@ -39,26 +41,14 @@ class DummyMCOModel(BaseMCOModel):
     pass
 
 
-class DummyMCOFactoryFast(BaseMCOFactory):
-    id = "foo"
-
-    name = "bar"
-
-    optimizer_class = DummyMCO
-
-    model_class = DummyMCOModel
-
-    communicator_class = DummyMCOCommunicator
-
-
 class TestBaseMCOFactory(unittest.TestCase):
-    def test_initialization(self):
-        factory = DummyMCOFactory(mock.Mock(spec=Plugin))
-        self.assertEqual(factory.id, 'foo')
-        self.assertEqual(factory.name, 'bar')
+    def setUp(self):
+        self.plugin = mock.Mock(spec=Plugin, id="pid")
 
-    def test_fast_definition(self):
-        factory = DummyMCOFactoryFast(mock.Mock(spec=Plugin))
+    def test_initialization(self):
+        factory = DummyMCOFactory(self.plugin)
+        self.assertEqual(factory.id, 'pid.factory.foo')
+        self.assertEqual(factory.name, 'bar')
         self.assertIsInstance(factory.create_optimizer(),
                               DummyMCO)
         self.assertIsInstance(factory.create_communicator(),
@@ -66,18 +56,42 @@ class TestBaseMCOFactory(unittest.TestCase):
         self.assertIsInstance(factory.create_model(),
                               DummyMCOModel)
 
-    def test_fast_definition_errors(self):
-        factory = DummyMCOFactoryFast(mock.Mock(spec=Plugin))
-        factory.optimizer_class = None
-        factory.model_class = None
-        factory.communicator_class = None
+    def test_broken_get_identifier(self):
+        class Broken(DummyMCOFactory):
+            def get_identifier(self):
+                return None
 
-        with testfixtures.LogCapture():
-            with self.assertRaises(RuntimeError):
-                factory.create_optimizer()
+        with self.assertRaises(ValueError):
+            Broken(self.plugin)
 
-            with self.assertRaises(RuntimeError):
-                factory.create_communicator()
+    def test_broken_get_name(self):
+        class Broken(DummyMCOFactory):
+            def get_name(self):
+                return None
 
-            with self.assertRaises(RuntimeError):
-                factory.create_model()
+        with self.assertRaises(TraitError):
+            Broken(self.plugin)
+
+    def test_broken_get_model_class(self):
+        class Broken(DummyMCOFactory):
+            def get_model_class(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            Broken(self.plugin)
+
+    def test_broken_get_optimiser_class(self):
+        class Broken(DummyMCOFactory):
+            def get_optimizer_class(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            Broken(self.plugin)
+
+    def test_broken_get_communicator_class(self):
+        class Broken(DummyMCOFactory):
+            def get_communicator_class(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            Broken(self.plugin)
