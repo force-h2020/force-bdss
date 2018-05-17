@@ -40,11 +40,11 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
     name = Str()
 
     #: The data source to be instantiated. Define this to your DataSource
-    data_source_class = Type(BaseDataSource)
+    data_source_class = Type(BaseDataSource, allow_none=False)
 
     #: The model associated to the data source.
     #: Define this to your DataSourceModel
-    model_class = Type(BaseDataSourceModel)
+    model_class = Type(BaseDataSourceModel, allow_none=False)
 
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
@@ -59,7 +59,17 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         self.model_class = self.get_model_class()
         self.name = self.get_name()
         identifier = self.get_identifier()
-        self.id = factory_id(self.plugin.id, identifier)
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+        self.id = id
 
     def get_data_source_class(self):
         """Must be reimplemented to return the DataSource class.
@@ -89,7 +99,7 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         to be unique across the plugin data sources.
         """
         raise NotImplementedError(
-            "get_name was not implemented in factory {}".format(
+            "get_identifier was not implemented in factory {}".format(
                 self.__class__))
 
     def create_data_source(self):
@@ -101,13 +111,6 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         BaseDataSource
             The specific instance of the generated DataSource
         """
-        if self.data_source_class is None:
-            msg = ("data_source_class cannot be None in {}. Either define "
-                   "data_source_class or reimplement create_data_source on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.data_source_class(self)
 
     def create_model(self, model_data=None):
@@ -129,12 +132,5 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
         """
         if model_data is None:
             model_data = {}
-
-        if self.model_class is None:
-            msg = ("model_class cannot be None in {}. Either define "
-                   "model_class or reimplement create_model on your "
-                   "factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
 
         return self.model_class(self, **model_data)
