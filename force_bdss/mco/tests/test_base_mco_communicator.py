@@ -1,20 +1,12 @@
 import unittest
 
-from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.i_mco_factory import IMCOFactory
+from force_bdss.tests.dummy_classes.mco import DummyMCOCommunicator
 
 try:
     import mock
 except ImportError:
     from unittest import mock
-
-
-class DummyMCOCommunicator(BaseMCOCommunicator):
-    def receive_from_mco(self, model):
-        pass
-
-    def send_to_mco(self, model, kpi_results):
-        pass
 
 
 class TestBaseMCOCommunicator(unittest.TestCase):

@@ -2,10 +2,10 @@ import unittest
 
 from traits.trait_errors import TraitError
 
-from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.tests.test_base_mco import DummyMCO
 from force_bdss.mco.tests.test_base_mco_communicator import \
     DummyMCOCommunicator
+from force_bdss.tests.dummy_classes.mco import DummyMCOFactory, DummyMCOModel
 
 try:
     import mock
@@ -13,32 +13,6 @@ except ImportError:
     from unittest import mock
 
 from envisage.plugin import Plugin
-
-from force_bdss.mco.base_mco_factory import BaseMCOFactory
-
-
-class DummyMCOFactory(BaseMCOFactory):
-    def get_identifier(self):
-        return "foo"
-
-    def get_name(self):
-        return "bar"
-
-    def get_model_class(self):
-        return DummyMCOModel
-
-    def get_communicator_class(self):
-        return DummyMCOCommunicator
-
-    def get_optimizer_class(self):
-        return DummyMCO
-
-    def parameter_factories(self):
-        return []
-
-
-class DummyMCOModel(BaseMCOModel):
-    pass
 
 
 class TestBaseMCOFactory(unittest.TestCase):
