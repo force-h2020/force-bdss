@@ -34,11 +34,11 @@ class BaseNotificationListenerFactory(HasStrictTraits):
 
     #: The listener class that must be instantiated. Define this to your
     #: listener class.
-    listener_class = Type(BaseNotificationListener)
+    listener_class = Type(BaseNotificationListener, allow_none=False)
 
     #: The associated model to the listener. Define this to your
     #: listener model class.
-    model_class = Type(BaseNotificationListenerModel)
+    model_class = Type(BaseNotificationListenerModel, allow_none=False)
 
     #: A reference to the containing plugin
     plugin = Instance(Plugin)
@@ -58,7 +58,18 @@ class BaseNotificationListenerFactory(HasStrictTraits):
         self.model_class = self.get_model_class()
         self.name = self.get_name()
         identifier = self.get_identifier()
-        self.id = factory_id(self.plugin.id, identifier)
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+
+        self.id = id
 
     def get_listener_class(self):
         raise NotImplementedError(
@@ -84,13 +95,6 @@ class BaseNotificationListenerFactory(HasStrictTraits):
         """
         Creates an instance of the listener.
         """
-        if self.listener_class is None:
-            msg = ("listener_class cannot be None in {}. Either define "
-                   "listener_class or reimplement create_listener on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.listener_class(self)
 
     def create_model(self, model_data=None):
@@ -104,12 +108,5 @@ class BaseNotificationListenerFactory(HasStrictTraits):
         """
         if model_data is None:
             model_data = {}
-
-        if self.model_class is None:
-            msg = ("model_class cannot be None in {}. Either define "
-                   "model_class or reimplement create_model on your "
-                   "factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
 
         return self.model_class(self, **model_data)

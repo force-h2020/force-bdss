@@ -2,6 +2,7 @@ import unittest
 
 import testfixtures
 from envisage.plugin import Plugin
+from traits.trait_errors import TraitError
 
 try:
     import mock
@@ -28,50 +29,63 @@ class DummyNotificationListenerModel(BaseNotificationListenerModel):
 
 
 class DummyNotificationListenerFactory(BaseNotificationListenerFactory):
-    id = "foo"
+    def get_name(self):
+        return "bar"
 
-    name = "bar"
+    def get_identifier(self):
+        return "foo"
 
-    def create_listener(self):
-        return DummyNotificationListener(self)
+    def get_listener_class(self):
+        return DummyNotificationListener
 
-    def create_model(self, model_data=None):
-        return DummyNotificationListenerModel(self)
-
-
-class DummyNotificationListenerFactoryFast(BaseNotificationListenerFactory):
-    id = "foo"
-
-    name = "bar"
-
-    listener_class = DummyNotificationListener
-
-    model_class = DummyNotificationListenerModel
+    def get_model_class(self):
+        return DummyNotificationListenerModel
 
 
 class TestBaseNotificationListenerFactory(unittest.TestCase):
+    def setUp(self):
+        self.plugin = mock.Mock(spec=Plugin, id="pid")
+
     def test_initialization(self):
-        factory = DummyNotificationListenerFactory(mock.Mock(spec=Plugin))
-        self.assertEqual(factory.id, 'foo')
+        factory = DummyNotificationListenerFactory(self.plugin)
+        self.assertEqual(factory.id, 'pid.factory.foo')
         self.assertEqual(factory.name, 'bar')
-
-    def test_fast_definition(self):
-        factory = DummyNotificationListenerFactoryFast(mock.Mock(spec=Plugin))
-
-        self.assertIsInstance(factory.create_listener(),
-                              DummyNotificationListener)
+        self.assertEqual(factory.model_class, DummyNotificationListenerModel)
+        self.assertEqual(factory.listener_class, DummyNotificationListener)
 
         self.assertIsInstance(factory.create_model(),
                               DummyNotificationListenerModel)
+        self.assertIsInstance(factory.create_listener(),
+                              DummyNotificationListener)
 
-    def test_fast_definition_errors(self):
-        factory = DummyNotificationListenerFactoryFast(mock.Mock(spec=Plugin))
-        factory.listener_class = None
-        factory.model_class = None
+    def test_broken_get_identifier(self):
+        class Broken(DummyNotificationListenerFactory):
+            def get_identifier(self):
+                return None
 
-        with testfixtures.LogCapture():
-            with self.assertRaises(RuntimeError):
-                factory.create_model()
+        with self.assertRaises(ValueError):
+            factory = Broken(self.plugin)
 
-            with self.assertRaises(RuntimeError):
-                factory.create_listener()
+    def test_broken_get_name(self):
+        class Broken(DummyNotificationListenerFactory):
+            def get_name(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            factory = Broken(self.plugin)
+
+    def test_broken_get_model_class(self):
+        class Broken(DummyNotificationListenerFactory):
+            def get_model_class(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            factory = Broken(self.plugin)
+
+    def test_broken_get_listener_class(self):
+        class Broken(DummyNotificationListenerFactory):
+            def get_listener_class(self):
+                return None
+
+        with self.assertRaises(TraitError):
+            factory = Broken(self.plugin)
