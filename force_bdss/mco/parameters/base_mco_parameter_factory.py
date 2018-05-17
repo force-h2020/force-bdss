@@ -13,20 +13,22 @@ class BaseMCOParameterFactory(HasStrictTraits):
     """
 
     #: A reference to the MCO factory this parameter factory lives in.
-    mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory')
+    mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory',
+                           allow_none=False)
 
     #: A unique string identifying the parameter
     id = Str()
 
     #: A user friendly name (for the UI)
-    name = Str("Undefined parameter")
+    name = Str()
 
     #: A long description of the parameter
-    description = Str("Undefined parameter")
+    description = Str()
 
     # The model class to instantiate when create_model is called.
     model_class = Type(
-        "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter"
+        "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter",
+        allow_none=False
     )
 
     def get_identifier(self):
@@ -57,7 +59,17 @@ class BaseMCOParameterFactory(HasStrictTraits):
         self.description = self.get_description()
         self.model_class = self.get_model_class()
         identifier = self.get_identifier()
-        self.id = mco_parameter_id(self.mco_factory.id, identifier)
+        try:
+            id = mco_parameter_id(self.mco_factory.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+        self.id = id
 
     def create_model(self, data_values=None):
         """Creates the instance of the model class and returns it.
