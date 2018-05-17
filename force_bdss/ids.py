@@ -11,7 +11,6 @@ class ExtensionPointID:
     """
     MCO_FACTORIES = 'force.bdss.mco.factories'
     DATA_SOURCE_FACTORIES = 'force.bdss.data_source.factories'
-    KPI_CALCULATOR_FACTORIES = 'force.bdss.kpi_calculator.factories'
     NOTIFICATION_LISTENER_FACTORIES = \
         'force.bdss.notification_listener.factories'
     UI_HOOKS_FACTORIES = 'force.bdss.ui_hooks.factories'
