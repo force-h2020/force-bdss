@@ -1,6 +1,8 @@
-from traits.api import List, HasStrictTraits, provides
+from traits.api import List, HasStrictTraits, provides, Any
 
 from force_bdss.factory_registry_plugin import IFactoryRegistryPlugin
+from force_bdss.tests.probe_classes.probe_extension_plugin import \
+    ProbeExtensionPlugin
 
 from .mco import ProbeMCOFactory
 from .data_source import ProbeDataSourceFactory
@@ -15,17 +17,22 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
     notification_listener_factories = List()
     ui_hooks_factories = List()
 
+    plugin = Any()
+
+    def _plugin_default(self):
+        return ProbeExtensionPlugin()
+
     def _mco_factories_default(self):
-        return [ProbeMCOFactory(None)]
+        return [ProbeMCOFactory(self.plugin)]
 
     def _data_source_factories_default(self):
-        return [ProbeDataSourceFactory(None)]
+        return [ProbeDataSourceFactory(self.plugin)]
 
     def _notification_listener_factories_default(self):
-        return [ProbeNotificationListenerFactory(None)]
+        return [ProbeNotificationListenerFactory(self.plugin)]
 
     def _ui_hooks_factories_default(self):
-        return [ProbeUIHooksFactory(None)]
+        return [ProbeUIHooksFactory(self.plugin)]
 
     def data_source_factory_by_id(self, id):
         for ds in self.data_source_factories:
