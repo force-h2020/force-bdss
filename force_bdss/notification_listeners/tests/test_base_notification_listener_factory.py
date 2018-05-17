@@ -1,45 +1,16 @@
 import unittest
 
-import testfixtures
 from envisage.plugin import Plugin
 from traits.trait_errors import TraitError
+
+from force_bdss.tests.dummy_classes.notification_listener import \
+    DummyNotificationListenerFactory, DummyNotificationListenerModel, \
+    DummyNotificationListener
 
 try:
     import mock
 except ImportError:
     from unittest import mock
-
-from force_bdss.notification_listeners.base_notification_listener import \
-    BaseNotificationListener
-from force_bdss.notification_listeners.base_notification_listener_factory \
-    import \
-    BaseNotificationListenerFactory
-from force_bdss.notification_listeners.base_notification_listener_model \
-    import \
-    BaseNotificationListenerModel
-
-
-class DummyNotificationListener(BaseNotificationListener):
-    def deliver(self, event):
-        pass
-
-
-class DummyNotificationListenerModel(BaseNotificationListenerModel):
-    pass
-
-
-class DummyNotificationListenerFactory(BaseNotificationListenerFactory):
-    def get_name(self):
-        return "bar"
-
-    def get_identifier(self):
-        return "foo"
-
-    def get_listener_class(self):
-        return DummyNotificationListener
-
-    def get_model_class(self):
-        return DummyNotificationListenerModel
 
 
 class TestBaseNotificationListenerFactory(unittest.TestCase):
@@ -64,7 +35,7 @@ class TestBaseNotificationListenerFactory(unittest.TestCase):
                 return None
 
         with self.assertRaises(ValueError):
-            factory = Broken(self.plugin)
+            Broken(self.plugin)
 
     def test_broken_get_name(self):
         class Broken(DummyNotificationListenerFactory):
@@ -72,7 +43,7 @@ class TestBaseNotificationListenerFactory(unittest.TestCase):
                 return None
 
         with self.assertRaises(TraitError):
-            factory = Broken(self.plugin)
+            Broken(self.plugin)
 
     def test_broken_get_model_class(self):
         class Broken(DummyNotificationListenerFactory):
@@ -80,7 +51,7 @@ class TestBaseNotificationListenerFactory(unittest.TestCase):
                 return None
 
         with self.assertRaises(TraitError):
-            factory = Broken(self.plugin)
+            Broken(self.plugin)
 
     def test_broken_get_listener_class(self):
         class Broken(DummyNotificationListenerFactory):
@@ -88,4 +59,4 @@ class TestBaseNotificationListenerFactory(unittest.TestCase):
                 return None
 
         with self.assertRaises(TraitError):
-            factory = Broken(self.plugin)
+            Broken(self.plugin)
