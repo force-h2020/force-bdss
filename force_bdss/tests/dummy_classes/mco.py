@@ -1,7 +1,11 @@
+from traits.api import Int
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.base_mco_model import BaseMCOModel
+from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
+    BaseMCOParameterFactory
 
 
 class DummyMCO(BaseMCO):
@@ -21,6 +25,24 @@ class DummyMCOModel(BaseMCOModel):
     pass
 
 
+class DummyMCOParameter(BaseMCOParameter):
+    x = Int()
+
+
+class DummyMCOParameterFactory(BaseMCOParameterFactory):
+    def get_identifier(self):
+        return "dummy_mco_parameter"
+
+    def get_name(self):
+        return "Dummy MCO parameter"
+
+    def get_description(self):
+        return "description"
+
+    def get_model_class(self):
+        return DummyMCOParameter
+
+
 class DummyMCOFactory(BaseMCOFactory):
     def get_identifier(self):
         return "dummy_mco"
@@ -38,4 +60,4 @@ class DummyMCOFactory(BaseMCOFactory):
         return DummyMCO
 
     def parameter_factories(self):
-        return []
+        return [DummyMCOParameterFactory(mco_factory=self)]
