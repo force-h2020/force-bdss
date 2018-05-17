@@ -19,7 +19,6 @@ from .mco.i_mco_factory import IMCOFactory
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
-
 class BaseExtensionPlugin(Plugin):
     """Base class for extension plugins, that is, plugins that are
     provided by external contributors.
