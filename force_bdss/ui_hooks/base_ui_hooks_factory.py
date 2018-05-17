@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
+from traits.api import ABCHasStrictTraits, Instance, Str, provides, Type
 from envisage.plugin import Plugin
 
 from force_bdss.ids import factory_id
@@ -16,14 +16,14 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
     moments of the UI lifetime.
     """
     #: identifier of the factory
-    id = String()
+    id = Str()
 
     #: Name of the factory. User friendly for UI
-    name = String()
+    name = Str()
 
     #: The UI Hooks manager class to instantiate. Define this to your
     #: base hook managers.
-    ui_hooks_manager_class = Type(BaseUIHooksManager)
+    ui_hooks_manager_class = Type(BaseUIHooksManager, allow_none=False)
 
     #: A reference to the containing plugin
     plugin = Instance(Plugin)
@@ -42,7 +42,17 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
         self.ui_hooks_manager_class = self.get_ui_hooks_manager_class()
         self.name = self.get_name()
         identifier = self.get_identifier()
-        self.id = factory_id(self.plugin.id, identifier)
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+        self.id = id
 
     def get_ui_hooks_manager_class(self):
         raise NotImplementedError(

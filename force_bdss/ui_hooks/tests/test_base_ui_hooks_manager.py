@@ -1,7 +1,8 @@
 import unittest
 
-from ..base_ui_hooks_manager import BaseUIHooksManager
-from ..base_ui_hooks_factory import BaseUIHooksFactory
+from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
+from force_bdss.ui_hooks.base_ui_hooks_manager import BaseUIHooksManager
+
 try:
     import mock
 except ImportError:
