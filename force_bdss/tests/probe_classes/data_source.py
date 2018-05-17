@@ -49,10 +49,17 @@ class ProbeDataSourceModel(BaseDataSourceModel):
 
 class ProbeDataSourceFactory(BaseDataSourceFactory,
                              ProbeEvaluatorFactory):
-    id = Str(factory_id("enthought", "test_ds"))
-    name = Str('test_data_source')
+    def get_identifier(self):
+        return "test_ds"
 
-    model_class = Type(ProbeDataSourceModel)
+    def get_name(self):
+        return "test_data_source"
+
+    def get_model_class(self):
+        return ProbeDataSourceModel
+
+    def get_data_source_class(self):
+        return ProbeDataSource
 
     def create_model(self, model_data=None):
         if model_data is None:
@@ -67,7 +74,7 @@ class ProbeDataSourceFactory(BaseDataSourceFactory,
         )
 
     def create_data_source(self):
-        return ProbeDataSource(
+        return self.data_source_class(
             factory=self,
             run_function=self.run_function,
         )
