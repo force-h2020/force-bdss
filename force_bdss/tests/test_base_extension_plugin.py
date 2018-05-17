@@ -12,4 +12,5 @@ class TestBaseExtensionPlugin(unittest.TestCase):
         self.assertEqual(len(plugin.mco_factories), 1)
         self.assertEqual(len(plugin.ui_hooks_factories), 1)
         self.assertFalse(plugin.broken)
-        self.assertEqual(plugin.error, "")
+        self.assertEqual(plugin.error_msg, "")
+        self.assertEqual(plugin.error_tb, "")
