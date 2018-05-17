@@ -96,8 +96,12 @@ class WorkflowReader(HasStrictTraits):
                 self._extract_notification_listeners(wf_data)
         except KeyError as e:
             log.error("Could not read file {}".format(file), exc_info=True)
-            raise InvalidFileException("Could not read file {}. "
-                                       "Unable to find key {}".format(file, e))
+            raise InvalidFileException(
+                "Could not read file {}. "
+                "Unable to find key {}."
+                "The plugin responsible for the missing "
+                "key may be missing or broken.".format(file, e)
+            )
         return wf
 
     def _extract_mco(self, wf_data):
