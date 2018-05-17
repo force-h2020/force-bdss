@@ -19,8 +19,8 @@ class TestBaseNotificationListenerFactory(unittest.TestCase):
 
     def test_initialization(self):
         factory = DummyNotificationListenerFactory(self.plugin)
-        self.assertEqual(factory.id, 'pid.factory.foo')
-        self.assertEqual(factory.name, 'bar')
+        self.assertEqual(factory.id, 'pid.factory.dummy_notification_listener')
+        self.assertEqual(factory.name, 'Dummy notification listener')
         self.assertEqual(factory.model_class, DummyNotificationListenerModel)
         self.assertEqual(factory.listener_class, DummyNotificationListener)
 

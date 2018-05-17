@@ -23,8 +23,8 @@ class TestBaseDataSourceFactory(unittest.TestCase):
 
     def test_initialization(self):
         factory = DummyDataSourceFactory(self.plugin)
-        self.assertEqual(factory.id, 'pid.factory.foo')
-        self.assertEqual(factory.name, 'bar')
+        self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
+        self.assertEqual(factory.name, 'Dummy data source')
         self.assertEqual(factory.model_class, DummyDataSourceModel)
         self.assertEqual(factory.data_source_class, DummyDataSource)
         self.assertIsInstance(factory.create_data_source(), DummyDataSource)
