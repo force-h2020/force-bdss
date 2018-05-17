@@ -21,8 +21,8 @@ class TestBaseMCOFactory(unittest.TestCase):
 
     def test_initialization(self):
         factory = DummyMCOFactory(self.plugin)
-        self.assertEqual(factory.id, 'pid.factory.foo')
-        self.assertEqual(factory.name, 'bar')
+        self.assertEqual(factory.id, 'pid.factory.dummy_mco')
+        self.assertEqual(factory.name, 'Dummy MCO')
         self.assertIsInstance(factory.create_optimizer(),
                               DummyMCO)
         self.assertIsInstance(factory.create_communicator(),
