@@ -28,11 +28,7 @@ class BaseExtensionPlugin(Plugin):
     in your plugin, and reimplement the methods as from example::
 
         class MyPlugin(BaseExtensionPlugin):
-            def get_producer(self):
-                return "enthought"
-
-            def get_identifier(self):
-                return "myplugin"
+            id = plugin_id("enthought", "plugin_name", 0)
 
             def get_factory_classes(self):
                 return [
@@ -86,25 +82,7 @@ class BaseExtensionPlugin(Plugin):
     _logger = Instance(logging.Logger)
 
     def __init__(self, *args, **kwargs):
-        broken = False
-        error = ""
-
-        if "id" not in kwargs:
-            try:
-                id_ = plugin_id(self.get_producer(), self.get_identifier())
-            except Exception as e:
-                self._logger.exception(e)
-                error = traceback.format_exc()
-                broken = True
-            else:
-                kwargs["id"] = id_
-
         super(BaseExtensionPlugin, self).__init__(*args, **kwargs)
-
-        if broken:
-            self.broken = True
-            self.error = error
-            return
 
         try:
             self.factory_classes = self.get_factory_classes()
@@ -132,25 +110,6 @@ class BaseExtensionPlugin(Plugin):
             self.data_source_factories[:] = []
             self.notification_listener_factories[:] = []
             self.ui_hooks_factories[:] = []
-
-    def get_producer(self):
-        """Must be reimplemented to return a string with the name of the
-        company producing this plugin. Examples are "enthought", "itwm" etc.
-        """
-
-        raise NotImplementedError(
-            "get_producer was not implemented in plugin {}".format(
-                self.__class__))
-
-    def get_identifier(self):
-        """Must return a string with the name of the plugin the producer
-        is releasing. The name must be unique and is responsibility of
-        the producer to guarantee this name is not conflicting with
-        another already existing plugin
-        """
-        raise NotImplementedError(
-            "get_identifier was not implemented in plugin {}".format(
-                self.__class__))
 
     def get_factory_classes(self):
         """Must return a list of factory classes that this plugin exports.

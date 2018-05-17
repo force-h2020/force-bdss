@@ -1,7 +1,8 @@
 import logging
-from traits.api import ABCHasStrictTraits, String, provides, Instance, Type
+from traits.api import ABCHasStrictTraits, Str, provides, Instance, Type
 from envisage.plugin import Plugin
 
+from force_bdss.ids import factory_id
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
@@ -18,10 +19,10 @@ class BaseMCOFactory(ABCHasStrictTraits):
     # in the IMultiCriteriaOptimizerFactory interface class.
 
     #: A unique ID produced with the factory_id() routine.
-    id = String()
+    id = Str()
 
     #: A user friendly name of the factory. Spaces allowed.
-    name = String()
+    name = Str()
 
     #: The optimizer class to instantiate. Define this to your MCO class.
     optimizer_class = Type(BaseMCO)
@@ -38,6 +39,38 @@ class BaseMCOFactory(ABCHasStrictTraits):
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
         super(BaseMCOFactory, self).__init__(*args, **kwargs)
+
+        self.name = self.get_name()
+        self.optimizer_class = self.get_optimizer_class()
+        self.model_class = self.get_model_class()
+        self.communicator_class = self.get_communicator_class()
+        identifier = self.get_identifier()
+        self.id = factory_id(self.plugin.id, identifier)
+
+    def get_optimizer_class(self):
+        raise NotImplementedError(
+            "get_optimizer_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_model_class(self):
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_communicator_class(self):
+        raise NotImplementedError(
+            "get_communicator_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        raise NotImplementedError(
+            "get_identifier was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
 
     def create_optimizer(self):
         """Factory method.

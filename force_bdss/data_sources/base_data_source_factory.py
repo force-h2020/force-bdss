@@ -1,10 +1,11 @@
 import logging
-from traits.api import ABCHasStrictTraits, provides, String, Instance, Type
+from traits.api import ABCHasStrictTraits, provides, Str, Instance, Type
 from envisage.plugin import Plugin
 
 from force_bdss.data_sources.base_data_source import BaseDataSource
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.ids import factory_id
 
 log = logging.getLogger(__name__)
 
@@ -13,15 +14,30 @@ log = logging.getLogger(__name__)
 class BaseDataSourceFactory(ABCHasStrictTraits):
     """Base class for DataSource factories. Reimplement this class to
     create your own DataSource.
+
+    You must reimplement the following methods as from example::
+
+        class MyDataSourceFactory(BaseDataSourceFactory)
+            def get_data_source_class(self):
+                return MyDataSource
+
+            def get_data_source_model(self):
+                return MyDataSourceModel
+
+            def get_name(self):
+                return "My data source"
+
+            def get_identifier(self):
+                return "my_data_source"
     """
     # NOTE: changes to this class must be ported also to the IDataSourceFactory
 
     #: Unique identifier that identifies the factory uniquely in the
     #: universe of factories. Create one with the function factory_id()
-    id = String()
+    id = Str()
 
     #: A human readable name of the factory. Spaces allowed
-    name = String()
+    name = Str()
 
     #: The data source to be instantiated. Define this to your DataSource
     data_source_class = Type(BaseDataSource)
@@ -38,6 +54,43 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
         super(BaseDataSourceFactory, self).__init__(*args, **kwargs)
+
+        self.data_source_class = self.get_data_source_class()
+        self.model_class = self.get_model_class()
+        self.name = self.get_name()
+        identifier = self.get_identifier()
+        self.id = factory_id(self.plugin.id, identifier)
+
+    def get_data_source_class(self):
+        """Must be reimplemented to return the DataSource class.
+        """
+        raise NotImplementedError(
+            "get_data_source_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_model_class(self):
+        """Must be reimplemented to return the DataSourceModel class.
+        """
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        """Must be reimplemented to return a user-visible name of the
+        data source.
+        """
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        """Must be reimplemented to return a unique string identifying
+        the factory. The provider is responsible to guarantee this identifier
+        to be unique across the plugin data sources.
+        """
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
 
     def create_data_source(self):
         """Factory method.

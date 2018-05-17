@@ -1,4 +1,6 @@
-from traits.api import HasStrictTraits, String, Type, Instance
+from traits.api import HasStrictTraits, Str, Type, Instance
+
+from force_bdss.ids import mco_parameter_id
 
 
 class BaseMCOParameterFactory(HasStrictTraits):
@@ -14,22 +16,48 @@ class BaseMCOParameterFactory(HasStrictTraits):
     mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory')
 
     #: A unique string identifying the parameter
-    id = String()
+    id = Str()
 
     #: A user friendly name (for the UI)
-    name = String("Undefined parameter")
+    name = Str("Undefined parameter")
 
     #: A long description of the parameter
-    description = String("Undefined parameter")
+    description = Str("Undefined parameter")
 
     # The model class to instantiate when create_model is called.
     model_class = Type(
         "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter"
     )
 
+    def get_identifier(self):
+        raise NotImplementedError(
+            "get_identifier was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_description(self):
+        raise NotImplementedError(
+            "get_description was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_model_class(self):
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
+
     def __init__(self, mco_factory, *args, **kwargs):
         self.mco_factory = mco_factory
         super(BaseMCOParameterFactory, self).__init__(*args, **kwargs)
+
+        self.name = self.get_name()
+        self.description = self.get_description()
+        self.model_class = self.get_model_class()
+        identifier = self.get_identifier()
+        self.id = mco_parameter_id(self.mco_factory.id, identifier)
 
     def create_model(self, data_values=None):
         """Creates the instance of the model class and returns it.

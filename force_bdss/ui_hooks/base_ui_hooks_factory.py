@@ -2,6 +2,7 @@ import logging
 from traits.api import ABCHasStrictTraits, Instance, String, provides, Type
 from envisage.plugin import Plugin
 
+from force_bdss.ids import factory_id
 from force_bdss.ui_hooks.base_ui_hooks_manager import BaseUIHooksManager
 from .i_ui_hooks_factory import IUIHooksFactory
 
@@ -37,6 +38,27 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
         """
         self.plugin = plugin
         super(BaseUIHooksFactory, self).__init__(*args, **kwargs)
+
+        self.ui_hooks_manager_class = self.get_ui_hooks_manager_class()
+        self.name = self.get_name()
+        identifier = self.get_identifier()
+        self.id = factory_id(self.plugin.id, identifier)
+
+    def get_ui_hooks_manager_class(self):
+        raise NotImplementedError(
+            "get_ui_hooks_manager_class was not implemented "
+            "in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        raise NotImplementedError(
+            "get_identifier was not implemented in factory {}".format(
+                self.__class__))
 
     def create_ui_hooks_manager(self):
         """Creates an instance of the hook manager.
