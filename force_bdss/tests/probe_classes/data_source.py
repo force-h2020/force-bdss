@@ -6,8 +6,6 @@ from force_bdss.api import (
     Slot
 )
 
-from .evaluator_factory import ProbeEvaluatorFactory
-
 
 def run_func(*args, **kwargs):
     return []
@@ -47,8 +45,16 @@ class ProbeDataSourceModel(BaseDataSourceModel):
         self.changes_slots = True
 
 
-class ProbeDataSourceFactory(BaseDataSourceFactory,
-                             ProbeEvaluatorFactory):
+class ProbeDataSourceFactory(BaseDataSourceFactory):
+
+    run_function = Function(default_value=run_func)
+
+    input_slots_type = Str('PRESSURE')
+    output_slots_type = Str('PRESSURE')
+
+    input_slots_size = Int(0)
+    output_slots_size = Int(0)
+
     def get_identifier(self):
         return "test_ds"
 
