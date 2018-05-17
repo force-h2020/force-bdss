@@ -17,6 +17,11 @@ class ExtensionPointID:
     UI_HOOKS_FACTORIES = 'force.bdss.ui_hooks.factories'
 
 
+class InternalPluginID:
+    CORE_MCO_DRIVER_ID = "force.bdss.core.CoreMCODriver"
+    CORE_EVALUATION_DRIVER_ID = "force.bdss.core.CoreEvaluationDriver"
+
+
 def factory_id(plugin_id, identifier):
     """Creates an id for the factory.
 

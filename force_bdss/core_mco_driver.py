@@ -3,10 +3,10 @@ import logging
 
 from traits.api import on_trait_change, Instance, List
 
+from force_bdss.ids import InternalPluginID
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
-from .ids import plugin_id
 from .base_core_driver import BaseCoreDriver
 from .io.workflow_reader import (
     InvalidVersionException,
@@ -15,14 +15,13 @@ from .io.workflow_reader import (
 from .core_driver_events import MCOStartEvent, MCOFinishEvent, MCOProgressEvent
 
 log = logging.getLogger(__name__)
-CORE_MCO_DRIVER_ID = plugin_id("core", "CoreMCODriver")
 
 
 class CoreMCODriver(BaseCoreDriver):
     """Main plugin that handles the execution of the MCO
     or the evaluation.
     """
-    id = CORE_MCO_DRIVER_ID
+    id = InternalPluginID.CORE_MCO_DRIVER_ID
 
     mco = Instance(BaseMCO, allow_none=True)
 
