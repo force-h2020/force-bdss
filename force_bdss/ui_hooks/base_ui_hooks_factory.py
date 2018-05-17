@@ -26,7 +26,7 @@ class BaseUIHooksFactory(ABCHasStrictTraits):
     ui_hooks_manager_class = Type(BaseUIHooksManager, allow_none=False)
 
     #: A reference to the containing plugin
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         """Initializes the instance.

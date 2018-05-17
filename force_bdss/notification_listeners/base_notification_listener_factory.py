@@ -41,7 +41,7 @@ class BaseNotificationListenerFactory(HasStrictTraits):
     model_class = Type(BaseNotificationListenerModel, allow_none=False)
 
     #: A reference to the containing plugin
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         """Initializes the instance.
