@@ -18,10 +18,10 @@ class DummyDataSourceModel(BaseDataSourceModel):
 
 class DummyDataSourceFactory(BaseDataSourceFactory):
     def get_identifier(self):
-        return "foo"
+        return "dummy_data_source"
 
     def get_name(self):
-        return "bar"
+        return "Dummy data source"
 
     def get_model_class(self):
         return DummyDataSourceModel

@@ -23,10 +23,10 @@ class DummyMCOModel(BaseMCOModel):
 
 class DummyMCOFactory(BaseMCOFactory):
     def get_identifier(self):
-        return "foo"
+        return "dummy_mco"
 
     def get_name(self):
-        return "bar"
+        return "Dummy MCO"
 
     def get_model_class(self):
         return DummyMCOModel

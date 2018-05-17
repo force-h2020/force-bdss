@@ -19,10 +19,10 @@ class DummyNotificationListenerModel(BaseNotificationListenerModel):
 
 class DummyNotificationListenerFactory(BaseNotificationListenerFactory):
     def get_name(self):
-        return "bar"
+        return "dummy_notification_listener"
 
     def get_identifier(self):
-        return "foo"
+        return "Dummy notification listener"
 
     def get_listener_class(self):
         return DummyNotificationListener
