@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, provides, Str, Instance, Type
+from traits.api import provides, Str, Instance, Type, HasStrictTraits
 from envisage.plugin import Plugin
 
 from force_bdss.data_sources.base_data_source import BaseDataSource
@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 @provides(IDataSourceFactory)
-class BaseDataSourceFactory(ABCHasStrictTraits):
+class BaseDataSourceFactory(HasStrictTraits):
     """Base class for DataSource factories. Reimplement this class to
     create your own DataSource.
 

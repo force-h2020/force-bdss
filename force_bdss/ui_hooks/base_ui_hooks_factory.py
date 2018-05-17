@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, Instance, Str, provides, Type
+from traits.api import HasStrictTraits, Instance, Str, provides, Type
 from envisage.plugin import Plugin
 
 from force_bdss.ids import factory_id
@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 @provides(IUIHooksFactory)
-class BaseUIHooksFactory(ABCHasStrictTraits):
+class BaseUIHooksFactory(HasStrictTraits):
     """Base class for UIHooksFactory.
     UI Hooks are extensions that perform actions associated to specific
     moments of the UI lifetime.

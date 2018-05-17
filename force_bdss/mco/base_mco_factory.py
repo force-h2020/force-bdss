@@ -1,5 +1,5 @@
 import logging
-from traits.api import ABCHasStrictTraits, Str, provides, Instance, Type
+from traits.api import HasStrictTraits, Str, provides, Instance, Type
 from envisage.plugin import Plugin
 
 from force_bdss.ids import factory_id
@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 
 @provides(IMCOFactory)
-class BaseMCOFactory(ABCHasStrictTraits):
+class BaseMCOFactory(HasStrictTraits):
     """Base class for the MultiCriteria Optimizer factory.
     """
     # NOTE: any changes to the interface of this class must be replicated
