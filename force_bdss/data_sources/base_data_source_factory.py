@@ -49,7 +49,7 @@ class BaseDataSourceFactory(ABCHasStrictTraits):
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
     #: in your subclass.
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
