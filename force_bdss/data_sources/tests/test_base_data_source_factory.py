@@ -5,6 +5,7 @@ from traits.trait_errors import TraitError
 from force_bdss.data_sources.tests.test_base_data_source import DummyDataSource
 from force_bdss.data_sources.tests.test_base_data_source_model import \
     DummyDataSourceModel
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
 try:
     import mock
@@ -14,22 +15,6 @@ except ImportError:
 import testfixtures
 
 from envisage.plugin import Plugin
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
-
-
-class DummyDataSourceFactory(BaseDataSourceFactory):
-    def get_identifier(self):
-        return "foo"
-
-    def get_name(self):
-        return "bar"
-
-    def get_model_class(self):
-        return DummyDataSourceModel
-
-    def get_data_source_class(self):
-        return DummyDataSource
 
 
 class TestBaseDataSourceFactory(unittest.TestCase):
