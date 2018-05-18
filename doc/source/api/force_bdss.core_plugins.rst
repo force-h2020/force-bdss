@@ -1,5 +1,5 @@
-force\_bdss\.core\_plugins package
-==================================
+force\_bdss.core\_plugins package
+=================================
 
 Module contents
 ---------------

@@ -2,7 +2,7 @@ Plugin Development
 ------------------
 
 A single Plugin can provide one or more of the pluggable entities described
-elsewhere (MCO/KPICalculators/DataSources/NotificationListeners/UIHooks).
+elsewhere (MCO/DataSources/NotificationListeners/UIHooks).
 Multiple plugins can be installed to provide a broad range of functionalities.
 
 An example plugin implementation is available at:
@@ -36,7 +36,7 @@ To implement a new plugin, you must
   recomputed and presented to the user. Failing to do so will have unexpected
   consequences.
 - Define the Factory, by reimplementing BaseDataSourceFactory and reimplementing
-  its ``create_*`` methods to return the above entities.
+  its ``get_*`` methods to return the above entities.
 - Define a ``Plugin`` by reimplementing ``BaseExtensionPlugin`` and
   reimplementing its initialization defaults methods to return your factory.
 - add the plugin class in the setup.py entry_point, under the namespace
