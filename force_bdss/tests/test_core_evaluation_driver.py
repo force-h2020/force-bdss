@@ -8,7 +8,6 @@ from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
-from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 
 from force_bdss.core.input_slot_info import InputSlotInfo
@@ -50,7 +49,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
     def test_error_for_non_matching_mco_parameters(self):
         mco_factory = self.registry.mco_factories[0]
-        mco_factory.nb_output_data_values=1
+        mco_factory.nb_output_data_values = 1
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
@@ -289,4 +288,3 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
         self.assertEqual(kpi_results[0].value, 8750)
-

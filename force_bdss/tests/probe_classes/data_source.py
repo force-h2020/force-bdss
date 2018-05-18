@@ -1,6 +1,5 @@
-from traits.api import Bool, Function, Str, Int, on_trait_change, Type
+from traits.api import Bool, Function, Str, Int, on_trait_change
 
-from force_bdss.ids import factory_id
 from force_bdss.api import (
     BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
     Slot

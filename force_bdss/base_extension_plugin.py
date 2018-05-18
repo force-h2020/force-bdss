@@ -6,6 +6,7 @@ from traits.api import List, Unicode, Bool, Type, Either, Instance
 
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
+from force_bdss.ids import ExtensionPointID
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.notification_listeners.base_notification_listener_factory \
     import \
@@ -13,7 +14,6 @@ from force_bdss.notification_listeners.base_notification_listener_factory \
 from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
 from .notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
-from .ids import ExtensionPointID, plugin_id
 from .data_sources.i_data_source_factory import IDataSourceFactory
 from .mco.i_mco_factory import IMCOFactory
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory

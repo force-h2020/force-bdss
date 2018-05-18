@@ -29,5 +29,3 @@ class DummyNotificationListenerFactory(BaseNotificationListenerFactory):
 
     def get_model_class(self):
         return DummyNotificationListenerModel
-
-

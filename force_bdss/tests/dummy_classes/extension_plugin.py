@@ -15,4 +15,3 @@ class DummyExtensionPlugin(BaseExtensionPlugin):
             DummyDataSourceFactory,
             DummyNotificationListenerFactory
         ]
-

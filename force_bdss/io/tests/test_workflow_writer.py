@@ -8,11 +8,6 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
 from force_bdss.io.workflow_writer import WorkflowWriter
 from force_bdss.core.workflow import Workflow
 

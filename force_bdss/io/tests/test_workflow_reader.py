@@ -10,11 +10,6 @@ from force_bdss.io.workflow_reader import (
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
 
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):

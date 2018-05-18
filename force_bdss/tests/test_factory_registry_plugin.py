@@ -5,11 +5,6 @@ from force_bdss.ids import factory_id, mco_parameter_id
 from force_bdss.tests.dummy_classes.extension_plugin import \
     DummyExtensionPlugin
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
 from envisage.application import Application
 
 from force_bdss.factory_registry_plugin import FactoryRegistryPlugin

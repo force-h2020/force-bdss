@@ -28,5 +28,3 @@ class DummyDataSourceFactory(BaseDataSourceFactory):
 
     def get_data_source_class(self):
         return DummyDataSource
-
-

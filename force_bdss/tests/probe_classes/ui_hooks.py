@@ -1,10 +1,3 @@
-try:
-    import mock
-except ImportError:
-    from unittest import mock
-
-from envisage.api import Plugin
-
 from traits.api import Bool
 from force_bdss.api import BaseUIHooksFactory, BaseUIHooksManager
 
