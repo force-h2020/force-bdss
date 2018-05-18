@@ -35,8 +35,14 @@ class ProbeParameter(BaseMCOParameter):
 
 
 class ProbeParameterFactory(BaseMCOParameterFactory):
+    def get_name(self):
+        return "Probe parameter"
+
     def get_identifier(self):
-        return "test"
+        return "probe_parameter"
+
+    def get_description(self):
+        return "Probe parameter"
 
     def get_model_class(self):
         return ProbeParameter
