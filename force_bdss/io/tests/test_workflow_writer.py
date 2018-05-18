@@ -4,54 +4,30 @@ import unittest
 from six import StringIO
 
 from force_bdss.core.execution_layer import ExecutionLayer
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
-from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import WorkflowReader
-from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
-from force_bdss.mco.parameters.base_mco_parameter_factory import \
-    BaseMCOParameterFactory
+from force_bdss.tests.dummy_classes.factory_registry_plugin import \
+    DummyFactoryRegistryPlugin
 
 try:
     import mock
 except ImportError:
     from unittest import mock
 
-from force_bdss.ids import factory_id, mco_parameter_id
 from force_bdss.io.workflow_writer import WorkflowWriter
-from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.i_mco_factory import IMCOFactory
 from force_bdss.core.workflow import Workflow
 
 
 class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
-        self.mock_registry = mock.Mock(spec=FactoryRegistryPlugin)
-        mock_mco_factory = mock.Mock(spec=IMCOFactory,
-                                     id=factory_id("enthought", "mock"))
-        mock_mco_model = mock.Mock(
-            spec=BaseMCOModel,
-            factory=mock_mco_factory
-        )
-        mock_mco_factory.create_model = mock.Mock(
-            return_value=mock_mco_model
-        )
-        self.mock_registry.mco_factory_by_id = mock.Mock(
-            return_value=mock_mco_factory)
-
-        datasource_factory = BaseDataSourceFactory(
-            id=factory_id("enthought", "mock2"), plugin=None)
-
-        self.mock_registry.data_source_factory_by_id = mock.Mock(
-            return_value=datasource_factory
-        )
+        self.registry = DummyFactoryRegistryPlugin()
+        self.mco_factory = self.registry.mco_factories[0]
+        self.mco_parameter_factory = self.mco_factory.parameter_factories()[0]
+        self.data_source_factory = self.registry.data_source_factories[0]
 
     def test_write(self):
         wfwriter = WorkflowWriter()
         fp = StringIO()
-        wf = self._create_mock_workflow()
+        wf = self._create_workflow()
         wfwriter.write(wf, fp)
         result = json.loads(fp.getvalue())
         self.assertIn("version", result)
@@ -62,10 +38,10 @@ class TestWorkflowWriter(unittest.TestCase):
     def test_write_and_read(self):
         wfwriter = WorkflowWriter()
         fp = StringIO()
-        wf = self._create_mock_workflow()
+        wf = self._create_workflow()
         wfwriter.write(wf, fp)
         fp.seek(0)
-        wfreader = WorkflowReader(self.mock_registry)
+        wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(fp)
         self.assertEqual(wf_result.mco.factory.id,
                          wf.mco.factory.id)
@@ -75,33 +51,20 @@ class TestWorkflowWriter(unittest.TestCase):
         self.assertEqual(
             len(wf_result.execution_layers[1].data_sources), 1)
 
-    def _create_mock_workflow(self):
+    def _create_workflow(self):
         wf = Workflow()
-        wf.mco = BaseMCOModel(
-            mock.Mock(
-                spec=IMCOFactory,
-                id=factory_id("enthought", "mock")))
+
+        wf.mco = self.mco_factory.create_model()
         wf.mco.parameters = [
-            BaseMCOParameter(
-                factory=mock.Mock(
-                    spec=BaseMCOParameterFactory,
-                    id=mco_parameter_id("enthought", "mock", "mock")
-                )
-            )
+            self.mco_parameter_factory.create_model()
         ]
         wf.execution_layers = [
             ExecutionLayer(data_sources=[
-                BaseDataSourceModel(
-                    mock.Mock(spec=IDataSourceFactory,
-                              id=factory_id("enthought", "mock2"))),
-                BaseDataSourceModel(
-                    mock.Mock(spec=IDataSourceFactory,
-                              id=factory_id("enthought", "mock2"))),
+                self.data_source_factory.create_model(),
+                self.data_source_factory.create_model(),
             ]),
             ExecutionLayer(data_sources=[
-                BaseDataSourceModel(
-                    mock.Mock(spec=IDataSourceFactory,
-                              id=factory_id("enthought", "mock2")))
+                self.data_source_factory.create_model(),
             ])
         ]
         return wf
@@ -112,6 +75,6 @@ class TestWorkflowWriter(unittest.TestCase):
         fp = StringIO()
         wfwriter.write(wf, fp)
         fp.seek(0)
-        wfreader = WorkflowReader(self.mock_registry)
+        wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(fp)
         self.assertIsNone(wf_result.mco)
