@@ -38,15 +38,17 @@ class ProbeUIHooksManager(BaseUIHooksManager):
 class ProbeUIHooksFactory(BaseUIHooksFactory):
     create_ui_hooks_manager_raises = Bool()
 
-    def __init__(self, plugin=None, *args, **kwargs):
-        if plugin is None:
-            plugin = mock.Mock(Plugin)
+    def get_identifier(self):
+        return "probe_ui_hooks"
 
-        super(ProbeUIHooksFactory, self).__init__(
-            plugin=plugin, *args, **kwargs)
+    def get_name(self):
+        return "Probe UI Hooks"
+
+    def get_ui_hooks_manager_class(self):
+        return ProbeUIHooksManager
 
     def create_ui_hooks_manager(self):
         if self.create_ui_hooks_manager_raises:
             raise Exception("Boom")
 
-        return ProbeUIHooksManager(self)
+        return self.ui_hooks_manager_class(self)
