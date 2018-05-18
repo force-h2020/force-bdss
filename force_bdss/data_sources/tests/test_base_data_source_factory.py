@@ -1,8 +1,11 @@
 import unittest
 
+from traits.trait_errors import TraitError
+
 from force_bdss.data_sources.tests.test_base_data_source import DummyDataSource
 from force_bdss.data_sources.tests.test_base_data_source_model import \
     DummyDataSourceModel
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
 try:
     import mock
@@ -12,51 +15,53 @@ except ImportError:
 import testfixtures
 
 from envisage.plugin import Plugin
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
-
-
-class DummyDataSourceFactory(BaseDataSourceFactory):
-    id = "foo"
-
-    name = "bar"
-
-    def create_data_source(self):
-        pass
-
-    def create_model(self, model_data=None):
-        pass
-
-
-class DummyDataSourceFactoryFast(BaseDataSourceFactory):
-    id = "foo"
-
-    name = "bar"
-
-    model_class = DummyDataSourceModel
-
-    data_source_class = DummyDataSource
 
 
 class TestBaseDataSourceFactory(unittest.TestCase):
-    def test_initialization(self):
-        factory = DummyDataSourceFactory(mock.Mock(spec=Plugin))
-        self.assertEqual(factory.id, 'foo')
-        self.assertEqual(factory.name, 'bar')
+    def setUp(self):
+        self.plugin = mock.Mock(spec=Plugin, id="pid")
 
-    def test_fast_specification(self):
-        factory = DummyDataSourceFactoryFast(mock.Mock(spec=Plugin))
+    def test_initialization(self):
+        factory = DummyDataSourceFactory(self.plugin)
+        self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
+        self.assertEqual(factory.name, 'Dummy data source')
+        self.assertEqual(factory.model_class, DummyDataSourceModel)
+        self.assertEqual(factory.data_source_class, DummyDataSource)
         self.assertIsInstance(factory.create_data_source(), DummyDataSource)
         self.assertIsInstance(factory.create_model(), DummyDataSourceModel)
 
-    def test_fast_specification_errors(self):
-        factory = DummyDataSourceFactoryFast(mock.Mock(spec=Plugin))
-        factory.model_class = None
-        factory.data_source_class = None
+    def test_initialization_errors_invalid_identifier(self):
+        class Broken(DummyDataSourceFactory):
+            def get_identifier(self):
+                return None
 
         with testfixtures.LogCapture():
-            with self.assertRaises(RuntimeError):
-                factory.create_data_source()
+            with self.assertRaises(ValueError):
+                Broken(self.plugin)
 
-            with self.assertRaises(RuntimeError):
-                factory.create_model()
+    def test_initialization_errors_invalid_name(self):
+        class Broken(DummyDataSourceFactory):
+            def get_name(self):
+                return None
+
+        with testfixtures.LogCapture():
+            with self.assertRaises(TraitError):
+                Broken(self.plugin)
+
+    def test_initialization_errors_invalid_model_class(self):
+        class Broken(DummyDataSourceFactory):
+            def get_model_class(self):
+                return None
+
+        with testfixtures.LogCapture():
+            with self.assertRaises(TraitError):
+                Broken(self.plugin)
+
+    def test_initialization_errors_invalid_data_source_class(self):
+        class Broken(DummyDataSourceFactory):
+            def get_data_source_class(self):
+                return None
+
+        with testfixtures.LogCapture():
+            with self.assertRaises(TraitError):
+                Broken(self.plugin)

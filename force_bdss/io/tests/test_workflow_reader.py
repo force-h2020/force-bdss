@@ -4,26 +4,22 @@ from six import StringIO
 
 import testfixtures
 
-from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
     InvalidVersionException, InvalidFileException)
-
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from force_bdss.tests.dummy_classes.factory_registry_plugin import \
+    DummyFactoryRegistryPlugin
 
 
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
-        self.mock_factory_registry = mock.Mock(spec=FactoryRegistryPlugin)
+        self.registry = DummyFactoryRegistryPlugin()
 
-        self.wfreader = WorkflowReader(self.mock_factory_registry)
+        self.wfreader = WorkflowReader(self.registry)
 
     def test_initialization(self):
         self.assertEqual(self.wfreader.factory_registry,
-                         self.mock_factory_registry)
+                         self.registry)
 
     def test_invalid_version(self):
         data = {

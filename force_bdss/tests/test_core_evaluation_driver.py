@@ -8,7 +8,6 @@ from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
-from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 
 from force_bdss.core.input_slot_info import InputSlotInfo
@@ -33,10 +32,11 @@ from force_bdss.core_evaluation_driver import (
 
 class TestCoreEvaluationDriver(unittest.TestCase):
     def setUp(self):
-        self.factory_registry_plugin = ProbeFactoryRegistryPlugin()
+        self.registry = ProbeFactoryRegistryPlugin()
+        self.plugin = self.registry.plugin
         application = mock.Mock(spec=Application)
         application.get_plugin = mock.Mock(
-            return_value=self.factory_registry_plugin
+            return_value=self.registry
         )
         application.workflow_filepath = fixtures.get("test_null.json")
         self.mock_application = application
@@ -48,10 +48,8 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver.application_started()
 
     def test_error_for_non_matching_mco_parameters(self):
-        mco_factories = self.factory_registry_plugin.mco_factories
-        mco_factories[0] = ProbeMCOFactory(
-            None,
-            nb_output_data_values=1)
+        mco_factory = self.registry.mco_factories[0]
+        mco_factory.nb_output_data_values = 1
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
@@ -62,16 +60,12 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_incorrect_output_slots(self):
-        data_source_factories = \
-            self.factory_registry_plugin.data_source_factories
 
         def run(self, *args, **kwargs):
             return [DataValue()]
-        data_source_factories[0] = ProbeDataSourceFactory(
-            None,
-            run_function=run)
-        driver = CoreEvaluationDriver(
-            application=self.mock_application)
+        ds_factory = self.registry.data_source_factories[0]
+        ds_factory.run_function = run
+        driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
             with six.assertRaisesRegex(
                     self,
@@ -82,15 +76,13 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):
-        data_source_factories = \
-            self.factory_registry_plugin.data_source_factories
 
         def run(self, *args, **kwargs):
             return [DataValue()]
-        data_source_factories[0] = ProbeDataSourceFactory(
-            None,
-            run_function=run,
-            output_slots_size=1)
+
+        ds_factory = self.registry.data_source_factories[0]
+        ds_factory.run_function = run
+        ds_factory.output_slots_size = 1
         driver = CoreEvaluationDriver(
             application=self.mock_application,
         )
@@ -161,11 +153,11 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
         def run(self, *args, **kwargs):
             return [DataValue(value=1), DataValue(value=2), DataValue(value=3)]
-        ds_factory = ProbeDataSourceFactory(
-            None,
-            input_slots_size=2,
-            output_slots_size=3,
-            run_function=run)
+
+        ds_factory = self.registry.data_source_factories[0]
+        ds_factory.input_slots_size = 2
+        ds_factory.output_slots_size = 3
+        ds_factory.run_function = run
         evaluator_model = ds_factory.create_model()
 
         evaluator_model.input_slot_info = [
@@ -215,7 +207,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             return [DataValue(value=(first+second))]
 
         adder_factory = ProbeDataSourceFactory(
-            None,
+            self.plugin,
             input_slots_size=2,
             output_slots_size=1,
             run_function=adder)
@@ -226,7 +218,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             return [DataValue(value=(first*second))]
 
         multiplier_factory = ProbeDataSourceFactory(
-            None,
+            self.plugin,
             input_slots_size=2,
             output_slots_size=1,
             run_function=multiplier)
@@ -296,8 +288,3 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
         self.assertEqual(kpi_results[0].value, 8750)
-
-    def test_empty_slot_name_skips_data_value(self):
-        """Checks if leaving a slot name empty will skip the data value
-        in the final output
-        """

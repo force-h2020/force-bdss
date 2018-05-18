@@ -1,5 +1,5 @@
 from envisage.api import Plugin
-from traits.api import Interface, String, Instance, Type
+from traits.api import Interface, Str, Instance, Type
 
 
 class IDataSourceFactory(Interface):
@@ -8,22 +8,30 @@ class IDataSourceFactory(Interface):
 
     Refer to the BaseDataSourceFactory for documentation.
     """
-    id = String()
+    id = Str()
 
-    name = String()
+    name = Str()
 
     data_source_class = Type(
-        "force_bdss.data_sources.base_data_source.BaseDataSource"
+        "force_bdss.data_sources.base_data_source.BaseDataSource",
+        allow_none=False
     )
 
     model_class = Type(
-        "force_bdss.data_sources.base_data_source_model.BaseDataSourceModel"
+        "force_bdss.data_sources.base_data_source_model.BaseDataSourceModel",
+        allow_none=False
     )
 
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
-    def create_data_source(self):
-        """"""
+    def get_data_source_class(self):
+        pass
 
-    def create_model(self, model_data=None):
-        """"""
+    def get_model_class(self):
+        pass
+
+    def get_name(self):
+        pass
+
+    def get_identifier(self):
+        pass

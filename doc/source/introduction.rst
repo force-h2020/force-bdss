@@ -12,7 +12,6 @@ API to provide new entities, specifically:
 
 - Multi Criteria Optimizer (MCO)
 - DataSources, which can be a simulator or just a database
-- Key Performance Indicator (KPI) Calculators
 - Notification Listeners, like a remote database which retrieve data during the
   computation
 - UI Hooks, which permit to define additional operations which will be executed

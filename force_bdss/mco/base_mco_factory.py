@@ -1,7 +1,8 @@
 import logging
-from traits.api import ABCHasStrictTraits, String, provides, Instance, Type
+from traits.api import HasStrictTraits, Str, provides, Instance, Type
 from envisage.plugin import Plugin
 
+from force_bdss.ids import factory_id
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
@@ -11,33 +12,75 @@ log = logging.getLogger(__name__)
 
 
 @provides(IMCOFactory)
-class BaseMCOFactory(ABCHasStrictTraits):
+class BaseMCOFactory(HasStrictTraits):
     """Base class for the MultiCriteria Optimizer factory.
     """
     # NOTE: any changes to the interface of this class must be replicated
     # in the IMultiCriteriaOptimizerFactory interface class.
 
     #: A unique ID produced with the factory_id() routine.
-    id = String()
+    id = Str()
 
     #: A user friendly name of the factory. Spaces allowed.
-    name = String()
+    name = Str()
 
     #: The optimizer class to instantiate. Define this to your MCO class.
-    optimizer_class = Type(BaseMCO)
+    optimizer_class = Type(BaseMCO, allow_none=False)
 
     #: The model associated to the MCO. Define this to your MCO model class.
-    model_class = Type(BaseMCOModel)
+    model_class = Type(BaseMCOModel, allow_none=False)
 
     #: The communicator associated to the MCO. Define this to your MCO comm.
-    communicator_class = Type(BaseMCOCommunicator)
+    communicator_class = Type(BaseMCOCommunicator, allow_none=False)
 
     #: A reference to the Plugin that holds this factory.
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         self.plugin = plugin
         super(BaseMCOFactory, self).__init__(*args, **kwargs)
+
+        self.name = self.get_name()
+        self.optimizer_class = self.get_optimizer_class()
+        self.model_class = self.get_model_class()
+        self.communicator_class = self.get_communicator_class()
+        identifier = self.get_identifier()
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+        self.id = id
+
+    def get_optimizer_class(self):
+        raise NotImplementedError(
+            "get_optimizer_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_model_class(self):
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_communicator_class(self):
+        raise NotImplementedError(
+            "get_communicator_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        raise NotImplementedError(
+            "get_identifier was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
 
     def create_optimizer(self):
         """Factory method.

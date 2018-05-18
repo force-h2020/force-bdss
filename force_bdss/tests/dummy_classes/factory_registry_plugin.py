@@ -1,17 +1,18 @@
-from traits.api import List, HasStrictTraits, provides, Any
+from traits.api import HasStrictTraits, List, provides, Any
 
 from force_bdss.factory_registry_plugin import IFactoryRegistryPlugin
-from force_bdss.tests.probe_classes.probe_extension_plugin import \
-    ProbeExtensionPlugin
-
-from .mco import ProbeMCOFactory
-from .data_source import ProbeDataSourceFactory
-from .notification_listener import ProbeNotificationListenerFactory
-from .ui_hooks import ProbeUIHooksFactory
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
+from force_bdss.tests.dummy_classes.extension_plugin import \
+    DummyExtensionPlugin
+from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
+from force_bdss.tests.dummy_classes.notification_listener import \
+    DummyNotificationListenerFactory
+from force_bdss.ui_hooks.tests.test_base_ui_hooks_factory import \
+    DummyUIHooksFactory
 
 
 @provides(IFactoryRegistryPlugin)
-class ProbeFactoryRegistryPlugin(HasStrictTraits):
+class DummyFactoryRegistryPlugin(HasStrictTraits):
     mco_factories = List()
     data_source_factories = List()
     notification_listener_factories = List()
@@ -20,19 +21,19 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
     plugin = Any()
 
     def _plugin_default(self):
-        return ProbeExtensionPlugin()
+        return DummyExtensionPlugin()
 
     def _mco_factories_default(self):
-        return [ProbeMCOFactory(self.plugin)]
+        return [DummyMCOFactory(self.plugin)]
 
     def _data_source_factories_default(self):
-        return [ProbeDataSourceFactory(self.plugin)]
+        return [DummyDataSourceFactory(self.plugin)]
 
     def _notification_listener_factories_default(self):
-        return [ProbeNotificationListenerFactory(self.plugin)]
+        return [DummyNotificationListenerFactory(self.plugin)]
 
     def _ui_hooks_factories_default(self):
-        return [ProbeUIHooksFactory(self.plugin)]
+        return [DummyUIHooksFactory(self.plugin)]
 
     def data_source_factory_by_id(self, id):
         for ds in self.data_source_factories:

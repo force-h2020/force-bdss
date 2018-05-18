@@ -1,6 +1,5 @@
-from traits.api import Bool, Str, Type, Function, Any
+from traits.api import Bool, Function, Any
 
-from force_bdss.ids import factory_id
 from force_bdss.api import (
     BaseNotificationListener, BaseNotificationListenerModel,
     BaseNotificationListenerFactory)
@@ -43,16 +42,21 @@ class ProbeNotificationListenerModel(BaseNotificationListenerModel):
 
 
 class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
-    id = Str(factory_id("enthought", "test_nl"))
-    name = "test_notification_listener"
-
-    model_class = Type(ProbeNotificationListenerModel)
-
-    listener_class = Type(ProbeNotificationListener)
-
     initialize_function = Function(default_value=pass_function)
     deliver_function = Function(default_value=pass_function)
     finalize_function = Function(default_value=pass_function)
+
+    def get_name(self):
+        return "test_notification_listener"
+
+    def get_identifier(self):
+        return "test_nl"
+
+    def get_listener_class(self):
+        return ProbeNotificationListener
+
+    def get_model_class(self):
+        return ProbeNotificationListenerModel
 
     def create_listener(self):
         return self.listener_class(
@@ -60,8 +64,3 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
             initialize_function=self.initialize_function,
             deliver_function=self.deliver_function,
             finalize_function=self.finalize_function)
-
-    def create_model(self, model_data=None):
-        if model_data is None:
-            model_data = {}
-        return self.model_class(self, **model_data)

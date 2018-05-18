@@ -16,18 +16,32 @@ class INotificationListenerFactory(Interface):
 
     listener_class = Type(
         "force_bdss.notification_listeners"
-        ".base_notification_listener.BaseNotificationListener"
+        ".base_notification_listener.BaseNotificationListener",
+        allow_none=False,
     )
 
     model_class = Type(
         "force_bdss.notification_listeners"
-        ".base_notification_listener_model.BaseNotificationListenerModel"
+        ".base_notification_listener_model.BaseNotificationListenerModel",
+        allow_none=False
     )
 
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
+
+    def get_name(self):
+        pass
+
+    def get_identifier(self):
+        pass
+
+    def get_model_class(self):
+        pass
+
+    def get_listener_class(self):
+        pass
 
     def create_listener(self):
-        """"""
+        pass
 
-    def create_model(self, model_data=None):
-        """"""
+    def create_model(self):
+        pass

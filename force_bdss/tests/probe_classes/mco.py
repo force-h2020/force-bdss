@@ -1,6 +1,5 @@
-from traits.api import Str, Type, Bool, Int, Function
+from traits.api import Bool, Int, Function
 
-from force_bdss.ids import mco_parameter_id, factory_id
 from force_bdss.core.data_value import DataValue
 from force_bdss.api import (
     BaseMCOModel, BaseMCO, BaseMCOFactory,
@@ -36,9 +35,11 @@ class ProbeParameter(BaseMCOParameter):
 
 
 class ProbeParameterFactory(BaseMCOParameterFactory):
-    id = Str(mco_parameter_id("enthought", "test_mco", "test"))
+    def get_identifier(self):
+        return "test"
 
-    model_class = Type(ProbeParameter)
+    def get_model_class(self):
+        return ProbeParameter
 
 
 class ProbeMCOCommunicator(BaseMCOCommunicator):
@@ -58,31 +59,27 @@ class ProbeMCOCommunicator(BaseMCOCommunicator):
 
 
 class ProbeMCOFactory(BaseMCOFactory):
-    id = Str(factory_id("enthought", "test_mco"))
-
-    model_class = Type(ProbeMCOModel)
-
-    communicator_class = Type(ProbeMCOCommunicator)
-
-    mco_class = Type(ProbeMCO)
-
     nb_output_data_values = Int(0)
 
-    def create_model(self, model_data=None):
-        if model_data is None:
-            model_data = {}
-        return self.model_class(
-            self,
-            **model_data
-        )
+    def get_identifier(self):
+        return "test_mco"
+
+    def get_model_class(self):
+        return ProbeMCOModel
+
+    def get_communicator_class(self):
+        return ProbeMCOCommunicator
+
+    def get_optimizer_class(self):
+        return ProbeMCO
+
+    def get_name(self):
+        return "testmco"
 
     def create_communicator(self):
         return self.communicator_class(
             self,
             nb_output_data_values=self.nb_output_data_values)
-
-    def create_optimizer(self):
-        return self.mco_class(self)
 
     def parameter_factories(self):
         return [ProbeParameterFactory(mco_factory=self)]

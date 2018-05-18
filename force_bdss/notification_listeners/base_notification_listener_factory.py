@@ -1,9 +1,10 @@
 import logging
 from traits.api import (
-    ABCHasStrictTraits, Instance, String, provides, Type, Bool
+    HasStrictTraits, Instance, Str, provides, Type, Bool
 )
 from envisage.plugin import Plugin
 
+from force_bdss.ids import factory_id
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from force_bdss.notification_listeners.base_notification_listener_model \
@@ -15,16 +16,16 @@ log = logging.getLogger(__name__)
 
 
 @provides(INotificationListenerFactory)
-class BaseNotificationListenerFactory(ABCHasStrictTraits):
+class BaseNotificationListenerFactory(HasStrictTraits):
     """Base class for notification listeners.
     Notification listeners are extensions that receive event notifications
     from the MCO and perform an associated action.
     """
     #: identifier of the factory
-    id = String()
+    id = Str()
 
     #: Name of the factory. User friendly for UI
-    name = String()
+    name = Str()
 
     #: If the factor should be visible in the UI. Set to false to make it
     #: invisible. This is normally useful for notification systems that are
@@ -33,14 +34,14 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
 
     #: The listener class that must be instantiated. Define this to your
     #: listener class.
-    listener_class = Type(BaseNotificationListener)
+    listener_class = Type(BaseNotificationListener, allow_none=False)
 
     #: The associated model to the listener. Define this to your
     #: listener model class.
-    model_class = Type(BaseNotificationListenerModel)
+    model_class = Type(BaseNotificationListenerModel, allow_none=False)
 
     #: A reference to the containing plugin
-    plugin = Instance(Plugin)
+    plugin = Instance(Plugin, allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         """Initializes the instance.
@@ -53,17 +54,47 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         self.plugin = plugin
         super(BaseNotificationListenerFactory, self).__init__(*args, **kwargs)
 
+        self.listener_class = self.get_listener_class()
+        self.model_class = self.get_model_class()
+        self.name = self.get_name()
+        identifier = self.get_identifier()
+        try:
+            id = factory_id(self.plugin.id, identifier)
+        except ValueError:
+            raise ValueError(
+                "Invalid identifier {} returned by "
+                "{}.get_identifier()".format(
+                    identifier,
+                    self.__class__.__name__
+                )
+            )
+
+        self.id = id
+
+    def get_listener_class(self):
+        raise NotImplementedError(
+            "get_listener_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_model_class(self):
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_identifier(self):
+        raise NotImplementedError(
+            "get_identifier was not implemented in factory {}".format(
+                self.__class__))
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in factory {}".format(
+                self.__class__))
+
     def create_listener(self):
         """
         Creates an instance of the listener.
         """
-        if self.listener_class is None:
-            msg = ("listener_class cannot be None in {}. Either define "
-                   "listener_class or reimplement create_listener on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.listener_class(self)
 
     def create_model(self, model_data=None):
@@ -77,12 +108,5 @@ class BaseNotificationListenerFactory(ABCHasStrictTraits):
         """
         if model_data is None:
             model_data = {}
-
-        if self.model_class is None:
-            msg = ("model_class cannot be None in {}. Either define "
-                   "model_class or reimplement create_model on your "
-                   "factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
 
         return self.model_class(self, **model_data)

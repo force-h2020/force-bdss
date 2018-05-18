@@ -1,5 +1,5 @@
-force\_bdss\.io package
-=======================
+force\_bdss.io package
+======================
 
 Subpackages
 -----------
@@ -11,16 +11,16 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.io\.workflow\_reader module
-----------------------------------------
+force\_bdss.io.workflow\_reader module
+--------------------------------------
 
 .. automodule:: force_bdss.io.workflow_reader
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.io\.workflow\_writer module
-----------------------------------------
+force\_bdss.io.workflow\_writer module
+--------------------------------------
 
 .. automodule:: force_bdss.io.workflow_writer
     :members:

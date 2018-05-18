@@ -2,6 +2,7 @@ import unittest
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 
 try:
     import mock
@@ -10,11 +11,6 @@ except ImportError:
 
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
-from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-
-
-class DummyDataSourceModel(BaseDataSourceModel):
-    pass
 
 
 class TestBaseDataSourceModel(unittest.TestCase):
