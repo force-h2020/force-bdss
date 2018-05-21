@@ -157,7 +157,8 @@ class WorkflowReader(HasStrictTraits):
         try:
             model = mco_factory.create_model(model_data)
         except Exception as e:
-            logger.exception("Unable to create model for MCO {}".format(mco_id))
+            logger.exception("Unable to create model for MCO {}".format(
+                mco_id))
             raise ModelInstantiationFailedException(
                 "Unable to create model for MCO {}: {}".format(mco_id, e))
         return model
