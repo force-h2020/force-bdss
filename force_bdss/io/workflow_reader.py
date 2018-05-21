@@ -206,7 +206,7 @@ class WorkflowReader(HasStrictTraits):
                 except KeyError:
                     raise MissingPluginException(
                         "Could not read file. "
-                        "The plugin responsible for the missing data source"
+                        "The plugin responsible for the missing data source "
                         "key '{}' may be missing or broken.".format(ds_id)
                     )
 
