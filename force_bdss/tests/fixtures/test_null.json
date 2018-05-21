@@ -2,7 +2,7 @@
   "version": "1",
   "workflow": {
     "mco": {
-      "id": "force.bdss.enthought.plugin.test.v0.factory.test_mco",
+      "id": "force.bdss.enthought.plugin.test.v0.factory.probe_mco",
       "model_data": {
         "parameters" : [
         ]
@@ -11,7 +11,7 @@
     "execution_layers": [
       [
         {
-          "id": "force.bdss.enthought.plugin.test.v0.factory.test_ds",
+          "id": "force.bdss.enthought.plugin.test.v0.factory.probe_data_source",
           "model_data": {
             "input_slot_info": [
             ],
@@ -23,7 +23,7 @@
     ],
     "notification_listeners": [
       {
-        "id": "force.bdss.enthought.plugin.test.v0.factory.test_nl",
+        "id": "force.bdss.enthought.plugin.test.v0.factory.probe_notification_listener",
         "model_data": {
         }
       }
