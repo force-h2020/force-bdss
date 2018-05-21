@@ -116,7 +116,7 @@ class TestCoreMCODriver(unittest.TestCase):
                  "'force.bdss.enthought.plugin.test.v0"
                  ".factory.probe_notification_listener' in plugin "
                  "'force.bdss.enthought.plugin.test.v0'. The listener will "
-                 "be dropped and computation will continue." ))
+                 "be dropped and computation will continue."))
 
     def test_finalize_error(self):
         driver = CoreMCODriver(

@@ -25,7 +25,14 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
-        mco = self.workflow.mco
+        try:
+            mco = self.mco
+        except Exception:
+            log.exception(
+                "Unable to obtain MCO with id '{}' from plugin '{}'."
+            )
+            sys.exit(1)
+
         try:
             mco.run(self.workflow.mco)
         except Exception:
@@ -35,7 +42,7 @@ class CoreMCODriver(BaseCoreDriver):
                 "programming error in the plugin.".format(
                     mco.factory.id,
                     mco.factory.plugin.id))
-            raise
+            sys.exit(1)
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
