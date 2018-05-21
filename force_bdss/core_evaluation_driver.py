@@ -38,8 +38,9 @@ class CoreEvaluationDriver(BaseCoreDriver):
                 "Unable to create communicator from MCO factory '{}' "
                 "in plugin '{}'. This may indicate a programming "
                 "error in the plugin".format(
-                    mco_factory.get_identifier(),
+                    mco_factory.id,
                     mco_factory.plugin.id))
+            raise
 
         mco_data_values = _get_data_values_from_mco(
             mco_model, mco_communicator)
@@ -100,7 +101,7 @@ def _compute_layer_results(environment_data_values,
                 "Unable to create data source from factory '{}' "
                 "in plugin '{}'. This may indicate a programming "
                 "error in the plugin".format(
-                    factory.get_identifier(),
+                    factory.id,
                     factory.plugin.id))
             raise
 

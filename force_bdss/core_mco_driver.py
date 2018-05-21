@@ -25,7 +25,17 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
-        self.mco.run(self.workflow.mco)
+        mco = self.workflow.mco
+        try:
+            mco.run(self.workflow.mco)
+        except Exception:
+            log.exception(
+                "Method run() of MCO with id '{}' from plugin '{}' "
+                "raised exception. This might indicate a "
+                "programming error in the plugin.".format(
+                    mco.factory.id,
+                    mco.factory.plugin.id))
+            raise
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
@@ -38,7 +48,7 @@ class CoreMCODriver(BaseCoreDriver):
             workflow = self.workflow
         except Exception:
             log.exception("Unable to open workflow file.")
-            sys.exit(1)
+            raise
 
         mco_model = workflow.mco
         if mco_model is None:
