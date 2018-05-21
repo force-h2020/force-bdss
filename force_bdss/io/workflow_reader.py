@@ -9,18 +9,32 @@ from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from ..factory_registry_plugin import IFactoryRegistryPlugin
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 SUPPORTED_FILE_VERSIONS = ["1"]
 
 
-class InvalidFileException(Exception):
-    """Raised if the file is invalid for some reason"""
+class BaseWorkflowReaderException(Exception):
+    """Base exception for the reader errors."""
 
 
-class InvalidVersionException(InvalidFileException):
+class InvalidFileException(BaseWorkflowReaderException):
+    """Raised for a generic file being invalid for some
+    reason, e.g. incorrect format or missing keys.
+    """
+
+
+class InvalidVersionException(BaseWorkflowReaderException):
     """Raised if the version tag does not satisfy the currently
     supported list."""
+
+
+class MissingPluginException(BaseWorkflowReaderException):
+    """Raised if the file requires a plugin we cannot find."""
+
+
+class ModelInstantiationFailedException(BaseWorkflowReaderException):
+    """Raised if we can't instantiate the model from a plugin"""
 
 
 class WorkflowReader(HasStrictTraits):
@@ -73,12 +87,12 @@ class WorkflowReader(HasStrictTraits):
         try:
             version = json_data["version"]
         except KeyError:
-            log.error("File missing version information")
+            logger.error("File missing version information")
             raise InvalidFileException("Corrupted input file, no version"
                                        " specified")
 
         if version not in SUPPORTED_FILE_VERSIONS:
-            log.error(
+            logger.error(
                 "File contains version {} that is not in the "
                 "list of supported versions {}".format(
                     version, SUPPORTED_FILE_VERSIONS)
@@ -95,12 +109,12 @@ class WorkflowReader(HasStrictTraits):
             wf.notification_listeners[:] = \
                 self._extract_notification_listeners(wf_data)
         except KeyError as e:
-            log.error("Could not read file {}".format(file), exc_info=True)
+            logger.exception("Could not read file {}".format(file))
             raise InvalidFileException(
-                "Could not read file {}. "
+                "Could not read file. "
                 "Unable to find key {}."
-                "The plugin responsible for the missing "
-                "key may be missing or broken.".format(file, e)
+                "It might be corrupted or unsupported."
+                "key may be missing or broken.".format(e)
             )
         return wf
 
@@ -127,13 +141,25 @@ class WorkflowReader(HasStrictTraits):
             return None
 
         mco_id = mco_data["id"]
-        mco_factory = registry.mco_factory_by_id(mco_id)
+        try:
+            mco_factory = registry.mco_factory_by_id(mco_id)
+        except KeyError:
+            raise MissingPluginException(
+                "Could not read file. "
+                "The plugin responsible for the missing "
+                "key '{}' may be missing or broken.".format(mco_id)
+            )
         model_data = wf_data["mco"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id,
             model_data["parameters"])
-        model = mco_factory.create_model(
-            wf_data["mco"]["model_data"])
+
+        try:
+            model = mco_factory.create_model(model_data)
+        except Exception as e:
+            logger.exception("Unable to create model for MCO {}".format(mco_id))
+            raise ModelInstantiationFailedException(
+                "Unable to create model for MCO {}: {}".format(mco_id, e))
         return model
 
     def _extract_execution_layers(self, wf_data):
