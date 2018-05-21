@@ -46,11 +46,14 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
     deliver_function = Function(default_value=pass_function)
     finalize_function = Function(default_value=pass_function)
 
+    raises_on_create_model = Bool(False)
+    raises_on_create_listener = Bool(False)
+
     def get_name(self):
         return "test_notification_listener"
 
     def get_identifier(self):
-        return "test_nl"
+        return "probe_notification_listener"
 
     def get_listener_class(self):
         return ProbeNotificationListener
@@ -58,7 +61,19 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
     def get_model_class(self):
         return ProbeNotificationListenerModel
 
+    def create_model(self, model_data=None):
+        if self.raises_on_create_model:
+            raise Exception("ProbeNotificationListenerFactory.create_model")
+
+        if model_data is None:
+            model_data = {}
+
+        return self.model_class(self, **model_data)
+
     def create_listener(self):
+        if self.raises_on_create_listener:
+            raise Exception("ProbeNotificationListenerFactory.create_listener")
+
         return self.listener_class(
             self,
             initialize_function=self.initialize_function,

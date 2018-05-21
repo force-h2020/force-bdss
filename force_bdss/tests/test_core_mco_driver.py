@@ -92,7 +92,8 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Failed to create or initialize listener with id "
-                 "force.bdss.enthought.plugin.test.v0.factory.test_nl: "))
+                 "force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_notification_listener: "))
 
             self.assertEqual(len(listeners), 0)
 

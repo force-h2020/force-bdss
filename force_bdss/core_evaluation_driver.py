@@ -5,10 +5,6 @@ from traits.api import on_trait_change
 
 from force_bdss.ids import InternalPluginID
 from .base_core_driver import BaseCoreDriver
-from .io.workflow_reader import (
-    InvalidVersionException,
-    InvalidFileException
-)
 
 
 log = logging.getLogger(__name__)
@@ -24,8 +20,8 @@ class CoreEvaluationDriver(BaseCoreDriver):
     def application_started(self):
         try:
             workflow = self.workflow
-        except (InvalidVersionException, InvalidFileException) as e:
-            log.exception(e)
+        except Exception:
+            log.exception("Unable to open workflow file.")
             sys.exit(1)
 
         mco_model = workflow.mco

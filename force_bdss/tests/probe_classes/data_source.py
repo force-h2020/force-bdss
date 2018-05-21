@@ -54,8 +54,11 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
     input_slots_size = Int(0)
     output_slots_size = Int(0)
 
+    raises_on_create_model = Bool(False)
+    raises_on_create_data_source = Bool(False)
+
     def get_identifier(self):
-        return "test_ds"
+        return "probe_data_source"
 
     def get_name(self):
         return "test_data_source"
@@ -67,6 +70,9 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
         return ProbeDataSource
 
     def create_model(self, model_data=None):
+        if self.raises_on_create_model:
+            raise Exception("ProbeDataSourceFactory.create_model")
+
         if model_data is None:
             model_data = {}
         return self.model_class(
@@ -79,6 +85,9 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
         )
 
     def create_data_source(self):
+        if self.raises_on_create_data_source:
+            raise Exception("ProbeDataSourceFactory.create_data_source")
+
         return self.data_source_class(
             factory=self,
             run_function=self.run_function,
