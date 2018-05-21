@@ -88,8 +88,7 @@ class FactoryRegistryPlugin(Plugin):
             if ds.id == id:
                 return ds
 
-        raise KeyError("Unable to find data source factory with id {} "
-                       "in the registry".format(id))
+        raise KeyError(id)
 
     def mco_factory_by_id(self, id):
         """Finds a given Multi Criteria Optimizer (MCO) factory by means of
@@ -109,8 +108,7 @@ class FactoryRegistryPlugin(Plugin):
             if mco.id == id:
                 return mco
 
-        raise KeyError("Unable to find mco factory "
-                       "with id {} in the registry.".format(id))
+        raise KeyError(id)
 
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
         """Retrieves the MCO parameter factory for a given MCO id and
@@ -138,8 +136,7 @@ class FactoryRegistryPlugin(Plugin):
             if factory.id == parameter_id:
                 return factory
 
-        raise KeyError("Unable to find parameter factory with id {} "
-                       "in the registry.".format(parameter_id))
+        raise KeyError(parameter_id)
 
     def notification_listener_factory_by_id(self, id):
         """Finds a given notification listener by means of its id.
@@ -159,5 +156,4 @@ class FactoryRegistryPlugin(Plugin):
             if nl.id == id:
                 return nl
 
-        raise KeyError("Unable to find notification listener factory "
-                       "with id {} in the registry".format(id))
+        raise KeyError(id)
