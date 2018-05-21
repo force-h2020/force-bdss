@@ -200,10 +200,10 @@ class TestModelCreationFailure(unittest.TestCase):
                     _as_json_stringio(self.working_data)
                 )
 
+
 def _as_json_stringio(data):
     fp = StringIO()
     json.dump(data, fp)
     fp.seek(0)
 
     return fp
-
