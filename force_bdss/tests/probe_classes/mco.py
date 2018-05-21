@@ -39,7 +39,7 @@ class ProbeParameterFactory(BaseMCOParameterFactory):
         return "Probe parameter"
 
     def get_identifier(self):
-        return "probe_parameter"
+        return "probe_mco_parameter"
 
     def get_description(self):
         return "Probe parameter"
@@ -67,8 +67,12 @@ class ProbeMCOCommunicator(BaseMCOCommunicator):
 class ProbeMCOFactory(BaseMCOFactory):
     nb_output_data_values = Int(0)
 
+    raises_on_create_model = Bool(False)
+    raises_on_create_optimizer = Bool(False)
+    raises_on_create_communicator = Bool(False)
+
     def get_identifier(self):
-        return "test_mco"
+        return "probe_mco"
 
     def get_model_class(self):
         return ProbeMCOModel
@@ -83,9 +87,27 @@ class ProbeMCOFactory(BaseMCOFactory):
         return "testmco"
 
     def create_communicator(self):
+        if self.raises_on_create_communicator:
+            raise Exception("ProbeMCOFactory.create_communicator")
+
         return self.communicator_class(
             self,
             nb_output_data_values=self.nb_output_data_values)
+
+    def create_model(self, model_data):
+        if self.raises_on_create_model:
+            raise Exception("ProbeMCOFactory.create_model")
+
+        if model_data is None:
+            model_data = {}
+
+        return self.model_class(self, **model_data)
+
+    def create_optimizer(self):
+        if self.raises_on_create_optimizer:
+            raise Exception("ProbeMCOFactory.create_optimizer")
+
+        return self.optimizer_class(self)
 
     def parameter_factories(self):
         return [ProbeParameterFactory(mco_factory=self)]
