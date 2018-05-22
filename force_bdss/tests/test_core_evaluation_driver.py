@@ -288,3 +288,47 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
         self.assertEqual(kpi_results[0].value, 8750)
+
+    def test_mco_communicator_broken(self):
+        self.registry.mco_factories[0].raises_on_create_communicator = True
+        driver = CoreEvaluationDriver(
+            application=self.mock_application,
+        )
+
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(Exception):
+                driver.application_started()
+            capture.check(
+                ('force_bdss.core_evaluation_driver', 'INFO',
+                 'Creating communicator'),
+                ("force_bdss.core_evaluation_driver",
+                 "ERROR",
+                 'Unable to create communicator from MCO factory '
+                 "'force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_mco' in plugin "
+                 "'force.bdss.enthought.plugin.test.v0'. "
+                 "This may indicate a programming error in the plugin"))
+
+    def test_data_source_broken(self):
+        factory = self.registry.data_source_factories[0]
+        factory.raises_on_create_data_source = True
+        driver = CoreEvaluationDriver(
+            application=self.mock_application,
+        )
+
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(Exception):
+                driver.application_started()
+            capture.check(
+                ('force_bdss.core_evaluation_driver', 'INFO',
+                 'Creating communicator'),
+                ('force_bdss.core_evaluation_driver', 'INFO',
+                 'Received data from MCO: \n'),
+                ('force_bdss.core_evaluation_driver', 'INFO',
+                 'Computing data layer 0'),
+                ('force_bdss.core_evaluation_driver', 'ERROR',
+                 'Unable to create data source from factory '
+                 "'force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_data_source' in plugin "
+                 "'force.bdss.enthought.plugin.test.v0'. "
+                 "This may indicate a programming error in the plugin"))

@@ -31,7 +31,16 @@ class CoreEvaluationDriver(BaseCoreDriver):
 
         mco_factory = mco_model.factory
         log.info("Creating communicator")
-        mco_communicator = mco_factory.create_communicator()
+        try:
+            mco_communicator = mco_factory.create_communicator()
+        except Exception:
+            log.exception(
+                "Unable to create communicator from MCO factory '{}' "
+                "in plugin '{}'. This may indicate a programming "
+                "error in the plugin".format(
+                    mco_factory.id,
+                    mco_factory.plugin.id))
+            raise
 
         mco_data_values = _get_data_values_from_mco(
             mco_model, mco_communicator)
@@ -85,7 +94,16 @@ def _compute_layer_results(environment_data_values,
 
     for model in layer.data_sources:
         factory = model.factory
-        data_source = factory.create_data_source()
+        try:
+            data_source = factory.create_data_source()
+        except Exception:
+            log.exception(
+                "Unable to create data source from factory '{}' "
+                "in plugin '{}'. This may indicate a programming "
+                "error in the plugin".format(
+                    factory.id,
+                    factory.plugin.id))
+            raise
 
         # Get the slots for this data source. These must be matched to
         # the appropriate values in the environment data values.
@@ -111,8 +129,9 @@ def _compute_layer_results(environment_data_values,
         try:
             res = data_source.run(model, passed_data_values)
         except Exception:
-            log.error("Evaluation could not be performed. Run method raised"
-                      "exception", exc_info=True)
+            log.exception(
+                "Evaluation could not be performed. "
+                "Run method raised exception.")
             raise
 
         if len(res) != len(out_slots):

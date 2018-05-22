@@ -91,9 +91,11 @@ class TestCoreMCODriver(unittest.TestCase):
             capture.check(
                 ("force_bdss.core_mco_driver",
                  "ERROR",
-                 "Failed to create or initialize listener with id "
-                 "force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_notification_listener: "))
+                 "Failed to initialize listener with id "
+                 "'force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_notification_listener' in plugin "
+                 "'force.bdss.enthought.plugin.test.v0'. "
+                 "The listener will be dropped."))
 
             self.assertEqual(len(listeners), 0)
 
@@ -111,7 +113,10 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Exception while delivering to listener "
-                 "ProbeNotificationListener: "))
+                 "'force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_notification_listener' in plugin "
+                 "'force.bdss.enthought.plugin.test.v0'. The listener will "
+                 "be dropped and computation will continue."))
 
     def test_finalize_error(self):
         driver = CoreMCODriver(
@@ -127,4 +132,73 @@ class TestCoreMCODriver(unittest.TestCase):
                 ("force_bdss.core_mco_driver",
                  "ERROR",
                  "Exception while finalizing listener "
-                 "ProbeNotificationListener: "))
+                 "'force.bdss.enthought.plugin.test.v0"
+                 ".factory.probe_notification_listener' in plugin "
+                 "'force.bdss.enthought.plugin.test.v0'."))
+
+    def test_listener_creation_error(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        registry = self.factory_registry_plugin
+        nl_factory = registry.notification_listener_factories[0]
+        nl_factory.raises_on_create_listener = True
+
+        with LogCapture() as capture:
+            with self.assertRaises(Exception):
+                driver.listeners
+            capture.check(('force_bdss.core_mco_driver',
+                           'ERROR',
+                           'Failed to create listener with id '
+                           "'force.bdss.enthought.plugin.test.v0"
+                           ".factory.probe_notification_listener' "
+                           "in plugin 'force.bdss.enthought.plugin"
+                           ".test.v0'. This may indicate a "
+                           'programming error in the plugin.'),)
+
+    def test_create_optimizer_error(self):
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        registry = self.factory_registry_plugin
+        mco_factory = registry.mco_factories[0]
+        mco_factory.raises_on_create_optimizer = True
+
+        with LogCapture() as capture:
+            with self.assertRaises(Exception):
+                driver.mco
+            capture.check(('force_bdss.core_mco_driver',
+                           'ERROR',
+                           'Unable to instantiate optimizer for mco '
+                           "'force.bdss.enthought.plugin.test.v0"
+                           ".factory.probe_mco' in plugin "
+                           "'force.bdss.enthought.plugin.test.v0'. "
+                           "An exception was raised. This might "
+                           'indicate a programming error in the plugin.'),)
+
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+
+    def test_mco_run_exception(self):
+        def run_func(*args, **kwargs):
+            raise Exception("run_func")
+
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        registry = self.factory_registry_plugin
+        mco_factory = registry.mco_factories[0]
+        mco_factory.optimizer.run_function = run_func
+
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+            capture.check(('force_bdss.core_mco_driver',
+                           'ERROR',
+                           'Method run() of MCO with id '
+                           "'force.bdss.enthought.plugin.test.v0"
+                           ".factory.probe_mco' from plugin "
+                           "'force.bdss.enthought.plugin.test.v0'"
+                           " raised exception. This might indicate "
+                           'a programming error in the plugin.'),)

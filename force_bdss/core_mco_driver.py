@@ -8,10 +8,6 @@ from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from .base_core_driver import BaseCoreDriver
-from .io.workflow_reader import (
-    InvalidVersionException,
-    InvalidFileException
-)
 from .core_driver_events import MCOStartEvent, MCOFinishEvent, MCOProgressEvent
 
 log = logging.getLogger(__name__)
@@ -29,7 +25,24 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
-        self.mco.run(self.workflow.mco)
+        try:
+            mco = self.mco
+        except Exception:
+            log.exception(
+                "Unable to obtain MCO with id '{}' from plugin '{}'."
+            )
+            sys.exit(1)
+
+        try:
+            mco.run(self.workflow.mco)
+        except Exception:
+            log.exception(
+                "Method run() of MCO with id '{}' from plugin '{}' "
+                "raised exception. This might indicate a "
+                "programming error in the plugin.".format(
+                    mco.factory.id,
+                    mco.factory.plugin.id))
+            sys.exit(1)
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
@@ -40,9 +53,9 @@ class CoreMCODriver(BaseCoreDriver):
     def _mco_default(self):
         try:
             workflow = self.workflow
-        except (InvalidVersionException, InvalidFileException) as e:
-            log.exception(e)
-            sys.exit(1)
+        except Exception:
+            log.exception("Unable to open workflow file.")
+            raise
 
         mco_model = workflow.mco
         if mco_model is None:
@@ -50,7 +63,17 @@ class CoreMCODriver(BaseCoreDriver):
             sys.exit(0)
 
         mco_factory = mco_model.factory
-        return mco_factory.create_optimizer()
+        try:
+            optimizer = mco_factory.create_optimizer()
+        except Exception:
+            log.exception("Unable to instantiate optimizer for mco '{}' in "
+                          "plugin '{}'. An exception was raised. "
+                          "This might indicate a programming error in the "
+                          "plugin.".format(mco_factory.id,
+                                           mco_factory.plugin.id))
+            raise
+
+        return optimizer
 
     @on_trait_change("mco:started")
     def _deliver_start_event(self):
@@ -80,11 +103,13 @@ class CoreMCODriver(BaseCoreDriver):
         for listener in self.listeners[:]:
             try:
                 listener.deliver(event)
-            except Exception as e:
-                log.error(
-                    "Exception while delivering to listener {}: {}".format(
-                        listener.__class__.__name__,
-                        str(e)
+            except Exception:
+                log.exception(
+                    "Exception while delivering to listener "
+                    "'{}' in plugin '{}'. The listener will be dropped and "
+                    "computation will continue.".format(
+                        listener.factory.id,
+                        listener.factory.plugin.id
                     ))
                 self._finalize_listener(listener)
                 self.listeners.remove(listener)
@@ -96,14 +121,30 @@ class CoreMCODriver(BaseCoreDriver):
             factory = nl_model.factory
             try:
                 listener = factory.create_listener()
+            except Exception:
+                log.exception(
+                    "Failed to create listener with id '{}' in plugin '{}'. "
+                    "This may indicate a programming error in the "
+                    "plugin.".format(
+                        factory.id,
+                        factory.plugin.id
+                    )
+                )
+                raise
+
+            try:
                 listener.initialize(nl_model)
-            except Exception as e:
-                log.error(
-                    "Failed to create or initialize "
-                    "listener with id {}: {}".format(
-                        factory.id, str(e)))
-            else:
-                listeners.append(listener)
+            except Exception:
+                log.exception(
+                    "Failed to initialize listener with id '{}' in "
+                    "plugin '{}'. The listener will be dropped.".format(
+                        factory.id,
+                        factory.plugin.id
+                    )
+                )
+                continue
+
+            listeners.append(listener)
 
         return listeners
 
@@ -114,9 +155,10 @@ class CoreMCODriver(BaseCoreDriver):
         """
         try:
             listener.finalize()
-        except Exception as e:
-            log.error(
-                "Exception while finalizing listener {}: {}".format(
-                    listener.__class__.__name__,
-                    str(e)
+        except Exception:
+            log.exception(
+                "Exception while finalizing listener '{}'"
+                " in plugin '{}'.".format(
+                    listener.factory.id,
+                    listener.factory.plugin.id
                 ))

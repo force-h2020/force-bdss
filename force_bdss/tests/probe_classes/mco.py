@@ -1,4 +1,4 @@
-from traits.api import Bool, Int, Function
+from traits.api import Bool, Int, Function, Any
 
 from force_bdss.core.data_value import DataValue
 from force_bdss.api import (
@@ -71,6 +71,12 @@ class ProbeMCOFactory(BaseMCOFactory):
     raises_on_create_optimizer = Bool(False)
     raises_on_create_communicator = Bool(False)
 
+    optimizer = Any()
+
+    def __init__(self, *args, **kwargs):
+        super(ProbeMCOFactory, self).__init__(*args, **kwargs)
+        self.optimizer = self.optimizer_class(self)
+
     def get_identifier(self):
         return "probe_mco"
 
@@ -107,7 +113,7 @@ class ProbeMCOFactory(BaseMCOFactory):
         if self.raises_on_create_optimizer:
             raise Exception("ProbeMCOFactory.create_optimizer")
 
-        return self.optimizer_class(self)
+        return self.optimizer
 
     def parameter_factories(self):
         return [ProbeParameterFactory(mco_factory=self)]
