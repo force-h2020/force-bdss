@@ -66,12 +66,11 @@ class CoreMCODriver(BaseCoreDriver):
         try:
             optimizer = mco_factory.create_optimizer()
         except Exception:
-            factory_id = mco_factory.id,
-            plugin_id = mco_factory.plugin.id
             log.exception("Unable to instantiate optimizer for mco '{}' in "
                           "plugin '{}'. An exception was raised. "
                           "This might indicate a programming error in the "
-                          "plugin.".format(factory_id, plugin_id))
+                          "plugin.".format(mco_factory.id,
+                                           mco_factory.plugin.id))
             raise
 
         return optimizer
