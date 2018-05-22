@@ -52,7 +52,7 @@ class ProbeMCOCommunicator(BaseMCOCommunicator):
     send_called = Bool(False)
     receive_called = Bool(False)
 
-    nb_output_data_values = Int(0)
+    nb_output_data_values = Int(1)
 
     def send_to_mco(self, model, kpi_results):
         self.send_called = True
@@ -60,12 +60,13 @@ class ProbeMCOCommunicator(BaseMCOCommunicator):
     def receive_from_mco(self, model):
         self.receive_called = True
         return [
-            DataValue() for _ in range(self.nb_output_data_values)
+            DataValue(name="whatever", value=1.0)
+            for _ in range(self.nb_output_data_values)
         ]
 
 
 class ProbeMCOFactory(BaseMCOFactory):
-    nb_output_data_values = Int(0)
+    nb_output_data_values = Int(1)
 
     raises_on_create_model = Bool(False)
     raises_on_create_optimizer = Bool(False)

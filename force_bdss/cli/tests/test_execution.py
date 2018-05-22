@@ -26,7 +26,7 @@ class TestExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
         with cd(fixtures.dirpath()):
             try:
-                subprocess.check_output(["force_bdss", "test_empty.json"],
+                subprocess.check_output(["force_bdss", '--help'],
                                         stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError:
                 self.fail("force_bdss returned error at plain invocation.")

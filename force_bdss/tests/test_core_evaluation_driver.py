@@ -38,7 +38,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         application.get_plugin = mock.Mock(
             return_value=self.registry
         )
-        application.workflow_filepath = fixtures.get("test_null.json")
+        application.workflow_filepath = fixtures.get("test_probe.json")
         self.mock_application = application
 
     def test_initialization(self):
@@ -49,7 +49,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
 
     def test_error_for_non_matching_mco_parameters(self):
         mco_factory = self.registry.mco_factories[0]
-        mco_factory.nb_output_data_values = 1
+        mco_factory.nb_output_data_values = 2
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
@@ -62,7 +62,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
     def test_error_for_incorrect_output_slots(self):
 
         def run(self, *args, **kwargs):
-            return [DataValue()]
+            return [DataValue(), DataValue()]
         ds_factory = self.registry.data_source_factories[0]
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
@@ -70,7 +70,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with six.assertRaisesRegex(
                     self,
                     RuntimeError,
-                    "The number of data values \(1 values\)"
+                    "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
                     " the number of output slots"):
                 driver.application_started()
@@ -78,11 +78,11 @@ class TestCoreEvaluationDriver(unittest.TestCase):
     def test_error_for_missing_ds_output_names(self):
 
         def run(self, *args, **kwargs):
-            return [DataValue()]
+            return [DataValue(), DataValue()]
 
         ds_factory = self.registry.data_source_factories[0]
         ds_factory.run_function = run
-        ds_factory.output_slots_size = 1
+        ds_factory.output_slots_size = 2
         driver = CoreEvaluationDriver(
             application=self.mock_application,
         )
@@ -90,7 +90,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with six.assertRaisesRegex(
                     self,
                     RuntimeError,
-                    "The number of data values \(1 values\)"
+                    "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
                     " the number of user-defined names"):
                 driver.application_started()
@@ -323,7 +323,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 ('force_bdss.core_evaluation_driver', 'INFO',
                  'Creating communicator'),
                 ('force_bdss.core_evaluation_driver', 'INFO',
-                 'Received data from MCO: \n'),
+                 'Received data from MCO: \n whatever = 1.0 (AVERAGE)'),
                 ('force_bdss.core_evaluation_driver', 'INFO',
                  'Computing data layer 0'),
                 ('force_bdss.core_evaluation_driver', 'ERROR',

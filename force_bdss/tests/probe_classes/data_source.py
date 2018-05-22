@@ -4,10 +4,11 @@ from force_bdss.api import (
     BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
     Slot
 )
+from force_bdss.core.data_value import DataValue
 
 
-def run_func(*args, **kwargs):
-    return []
+def run_func(model, parameters):
+    return [DataValue() for _ in range(model.output_slots_size)]
 
 
 class ProbeDataSource(BaseDataSource):
@@ -35,8 +36,8 @@ class ProbeDataSourceModel(BaseDataSourceModel):
     input_slots_type = Str('PRESSURE')
     output_slots_type = Str('PRESSURE')
 
-    input_slots_size = Int(0)
-    output_slots_size = Int(0)
+    input_slots_size = Int(1)
+    output_slots_size = Int(1)
 
     @on_trait_change('input_slots_type,output_slots_type,'
                      'input_slots_size,output_slots_size')
@@ -51,8 +52,8 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
     input_slots_type = Str('PRESSURE')
     output_slots_type = Str('PRESSURE')
 
-    input_slots_size = Int(0)
-    output_slots_size = Int(0)
+    input_slots_size = Int(1)
+    output_slots_size = Int(1)
 
     raises_on_create_model = Bool(False)
     raises_on_create_data_source = Bool(False)

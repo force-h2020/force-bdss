@@ -1,0 +1,45 @@
+{
+    "version": "1",
+    "workflow": {
+        "mco": {
+            "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
+            "model_data": {
+                "parameters": [
+                    {
+                        "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                        "model_data": {
+                            "name": "foo",
+                            "type": "PRESSURE"
+                        }
+                    }
+                ]
+            }
+        },
+        "execution_layers": [
+            [
+                {
+                    "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+                    "model_data": {
+                        "power": 1.0,
+                        "cuba_type_in": "PRESSURE",
+                        "cuba_type_out": "PRESSURE",
+                        "input_slot_info": [
+                            {
+                                "source": "Environment",
+                                "name": "foo"
+                            }
+                        ],
+                        "output_slot_info": [
+                            {
+                                "name": "bar",
+                                "is_kpi": true
+                            }
+                        ]
+                    }
+                }
+            ]
+        ],
+        "notification_listeners": [
+        ]
+    }
+}

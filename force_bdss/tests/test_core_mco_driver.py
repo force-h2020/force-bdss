@@ -28,7 +28,7 @@ class TestCoreMCODriver(unittest.TestCase):
         application.get_plugin = mock.Mock(
             return_value=self.factory_registry_plugin
         )
-        application.workflow_filepath = fixtures.get("test_null.json")
+        application.workflow_filepath = fixtures.get("test_probe.json")
         self.mock_application = application
 
     def test_initialization(self):
