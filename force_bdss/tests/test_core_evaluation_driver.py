@@ -321,15 +321,14 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                 driver.application_started()
             capture.check(
                 ('force_bdss.core_evaluation_driver', 'INFO',
-                  'Creating communicator'),
+                 'Creating communicator'),
                 ('force_bdss.core_evaluation_driver', 'INFO',
                  'Received data from MCO: \n'),
                 ('force_bdss.core_evaluation_driver', 'INFO',
                  'Computing data layer 0'),
                 ('force_bdss.core_evaluation_driver', 'ERROR',
                  'Unable to create data source from factory '
-                "'force.bdss.enthought.plugin.test.v0"
+                 "'force.bdss.enthought.plugin.test.v0"
                  ".factory.probe_data_source' in plugin "
-                "'force.bdss.enthought.plugin.test.v0'. "
+                 "'force.bdss.enthought.plugin.test.v0'. "
                  "This may indicate a programming error in the plugin"))
-
