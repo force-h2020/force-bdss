@@ -175,4 +175,3 @@ class TestCoreMCODriver(unittest.TestCase):
                            "'force.bdss.enthought.plugin.test.v0'. "
                            "An exception was raised. This might "
                            'indicate a programming error in the plugin.'),)
-
