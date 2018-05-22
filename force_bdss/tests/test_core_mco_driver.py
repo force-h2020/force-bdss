@@ -175,3 +175,33 @@ class TestCoreMCODriver(unittest.TestCase):
                            "'force.bdss.enthought.plugin.test.v0'. "
                            "An exception was raised. This might "
                            'indicate a programming error in the plugin.'),)
+
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+
+    def test_mco_run_exception(self):
+        def run_func(*args, **kwargs):
+            raise Exception("run_func")
+
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        registry = self.factory_registry_plugin
+        mco_factory = registry.mco_factories[0]
+        mco_factory.optimizer.run_function = run_func
+
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+            capture.check(('force_bdss.core_mco_driver',
+                           'ERROR',
+                           'Method run() of MCO with id '
+                           "'force.bdss.enthought.plugin.test.v0"
+                           ".factory.probe_mco' from plugin "
+                           "'force.bdss.enthought.plugin.test.v0'"
+                           " raised exception. This might indicate "
+                           'a programming error in the plugin.'),)
+
+
+
