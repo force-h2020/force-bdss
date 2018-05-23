@@ -1,0 +1,47 @@
+{
+    "version": "1",
+    "workflow": {
+        "mco": {
+            "id": "force.bdss.enthought.plugin.test.v0.factory.probe_mco",
+            "model_data": {
+                "parameters": [
+                    {
+                        "id": "force.bdss.enthought.plugin.test.v0.factory.probe_mco.parameter.probe_mco_parameter",
+                        "model_data": {
+                            "name": "foo",
+                            "type": "PRESSURE"
+                        }
+                    }
+                ]
+            }
+        },
+        "execution_layers": [
+            [
+                {
+                    "id": "force.bdss.enthought.plugin.test.v0.factory.probe_data_source",
+                    "model_data": {
+                        "input_slot_info": [
+                            {
+                                "source": "Environment",
+                                "name": "foo"
+                            }
+                        ],
+                        "output_slot_info": [
+                            {
+                                "name": "bar",
+                                "is_kpi": true
+                            }
+                        ]
+                    }
+                }
+            ]
+        ],
+        "notification_listeners": [
+            {
+                "id": "force.bdss.enthought.plugin.test.v0.factory.probe_notification_listener",
+                "model_data": {
+                }
+            }
+        ]
+    }
+}

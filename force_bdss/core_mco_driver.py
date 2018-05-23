@@ -3,6 +3,7 @@ import logging
 
 from traits.api import on_trait_change, Instance, List
 
+from force_bdss.core.verifier import verify_workflow
 from force_bdss.ids import InternalPluginID
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import \
@@ -25,6 +26,21 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("application:started")
     def application_started(self):
+        try:
+            workflow = self.workflow
+        except Exception:
+            log.exception("Unable to open workflow file.")
+            sys.exit(1)
+
+        errors = verify_workflow(workflow)
+
+        if len(errors) != 0:
+            log.error("Unable to execute workflow due to verification "
+                      "errors :")
+            for err in errors:
+                log.error(err.error)
+            sys.exit(1)
+
         try:
             mco = self.mco
         except Exception:
@@ -51,13 +67,8 @@ class CoreMCODriver(BaseCoreDriver):
         self.listeners[:] = []
 
     def _mco_default(self):
-        try:
-            workflow = self.workflow
-        except Exception:
-            log.exception("Unable to open workflow file.")
-            raise
 
-        mco_model = workflow.mco
+        mco_model = self.workflow.mco
         if mco_model is None:
             log.info("No MCO defined. Nothing to do. Exiting.")
             sys.exit(0)

@@ -28,7 +28,7 @@ class TestCoreMCODriver(unittest.TestCase):
         application.get_plugin = mock.Mock(
             return_value=self.factory_registry_plugin
         )
-        application.workflow_filepath = fixtures.get("test_null.json")
+        application.workflow_filepath = fixtures.get("test_probe.json")
         self.mock_application = application
 
     def test_initialization(self):
@@ -202,3 +202,37 @@ class TestCoreMCODriver(unittest.TestCase):
                            "'force.bdss.enthought.plugin.test.v0'"
                            " raised exception. This might indicate "
                            'a programming error in the plugin.'),)
+
+    def test_nonexistent_file(self):
+        self.mock_application.workflow_filepath = fixtures.get(
+            "test_nonexistent.json")
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+            capture.check(
+                ('force_bdss.core_mco_driver', 'ERROR',
+                 'Unable to open workflow file.'),
+            )
+
+    def test_non_valid_file(self):
+        self.mock_application.workflow_filepath = fixtures.get(
+            "test_null.json")
+        driver = CoreMCODriver(
+            application=self.mock_application,
+        )
+        with LogCapture() as capture:
+            with self.assertRaises(SystemExit):
+                driver.application_started()
+            capture.check(
+                ('force_bdss.core_mco_driver',
+                 'ERROR',
+                 'Unable to execute workflow due to verification errors :'),
+                ('force_bdss.core_mco_driver', 'ERROR',
+                 'MCO has no defined parameters'),
+                ('force_bdss.core_mco_driver', 'ERROR',
+                 'Missing input slot name assignment'),
+                ('force_bdss.core_mco_driver', 'ERROR',
+                 'Missing output slot name assignment'))

@@ -1,3 +1,4 @@
+from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source import BaseDataSource
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
@@ -9,7 +10,11 @@ class DummyDataSource(BaseDataSource):
         pass
 
     def slots(self, model):
-        return (), ()
+        return (
+            Slot(type="TYPE1"),
+               ), (
+            Slot(type="TYPE2"),
+        )
 
 
 class DummyDataSourceModel(BaseDataSourceModel):
