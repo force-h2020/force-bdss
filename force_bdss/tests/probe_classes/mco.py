@@ -101,7 +101,7 @@ class ProbeMCOFactory(BaseMCOFactory):
             self,
             nb_output_data_values=self.nb_output_data_values)
 
-    def create_model(self, model_data):
+    def create_model(self, model_data=None):
         if self.raises_on_create_model:
             raise Exception("ProbeMCOFactory.create_model")
 
