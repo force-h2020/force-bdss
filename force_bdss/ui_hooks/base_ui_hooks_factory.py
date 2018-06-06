@@ -79,12 +79,4 @@ class BaseUIHooksFactory(HasStrictTraits):
         -------
         BaseUIHooksManager
         """
-        if self.ui_hooks_manager_class is None:
-            msg = ("ui_hooks_manager_class cannot be None in {}. Either "
-                   "define ui_hooks_manager_class or reimplement "
-                   "create_ui_hooks_manager on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.ui_hooks_manager_class(self)
