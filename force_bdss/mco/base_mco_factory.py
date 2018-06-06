@@ -92,13 +92,6 @@ class BaseMCOFactory(HasStrictTraits):
         BaseMCO
             The optimizer
         """
-        if self.optimizer_class is None:
-            msg = ("optimizer_class cannot be None in {}. Either define "
-                   "optimizer_class or reimplement create_optimizer on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.optimizer_class(self)
 
     def create_model(self, model_data=None):
@@ -122,13 +115,6 @@ class BaseMCOFactory(HasStrictTraits):
         if model_data is None:
             model_data = {}
 
-        if self.model_class is None:
-            msg = ("model_class cannot be None in {}. Either define "
-                   "model_class or reimplement create_model on your "
-                   "factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.model_class(self, **model_data)
 
     def create_communicator(self):
@@ -140,13 +126,6 @@ class BaseMCOFactory(HasStrictTraits):
         BaseMCOCommunicator
             An instance of the communicator
         """
-        if self.communicator_class is None:
-            msg = ("communicator_class cannot be None in {}. Either define "
-                   "communicator_class or reimplement create_communicator on "
-                   "your factory class.".format(self.__class__.__name__))
-            log.error(msg)
-            raise RuntimeError(msg)
-
         return self.communicator_class(self)
 
     def parameter_factories(self):
