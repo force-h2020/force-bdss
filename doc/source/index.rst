@@ -11,6 +11,7 @@ User Manual
 
    Introduction <introduction>
    Installation instructions <installation>
+   Installation instructions - dev <installation-dev>
    Design <design>
    Plugin development <plugin_development>
 
