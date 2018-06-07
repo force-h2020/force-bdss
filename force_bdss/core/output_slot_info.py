@@ -13,7 +13,3 @@ class OutputSlotInfo(HasStrictTraits):
     """
     #: The user defined name of the variable containing the value.
     name = Identifier()
-
-    #: True if the value associated to this output slot must be exported as
-    #: a KPI.
-    is_kpi = Bool(False)

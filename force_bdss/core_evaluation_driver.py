@@ -65,7 +65,15 @@ def execute_workflow(workflow, data_values):
         available_data_values += ds_results
 
     log.info("Aggregating KPI data")
-    kpi_results = [dv for dv in available_data_values if dv.is_kpi]
+
+    kpi_results = []
+    kpi_names = [kpi.name for kpi in workflow.mco.kpis]
+
+    kpi_results = [
+        dv
+        for dv in available_data_values
+        if dv.name in kpi_names
+    ]
 
     return kpi_results
 
@@ -165,7 +173,6 @@ def _compute_layer_results(environment_data_values,
         # Add the names as specified by the user.
         for dv, output_slot_info in zip(res, model.output_slot_info):
             dv.name = output_slot_info.name
-            dv.is_kpi = output_slot_info.is_kpi
 
         # If the name was not specified, simply discard the value,
         # because apparently the user is not interested in it.

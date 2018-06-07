@@ -1,5 +1,6 @@
 from traits.api import ABCHasStrictTraits, Instance, List
 
+from force_bdss.core.kpi_specification import KPISpecification
 from .parameters.base_mco_parameter import BaseMCOParameter
 from .i_mco_factory import IMCOFactory
 
@@ -19,6 +20,9 @@ class BaseMCOModel(ABCHasStrictTraits):
 
     # A list of the parameters for the MCO
     parameters = List(BaseMCOParameter, visible=False)
+
+    # A list of KPI specification objects and their objective.
+    kpis = List(KPISpecification, visible=False)
 
     def __init__(self, factory, *args, **kwargs):
         self.factory = factory
