@@ -23,6 +23,14 @@ Install the required packages for the workflow manager::
 
     cat force-wfmanager/requirements/edm_requirements.txt | grep -v "^#" | while read line; do edm install -y `echo $line | awk '{print $1"=="$2}'`; done
 
+Next, install the required dev packages::
+
+   pip install -r force-wfmanager/requirements/dev_requirements.txt
+
+And the required packages for generating documentation::
+
+  pip install -r force-wfmanager/requirements/doc_requirements.txt
+
 Now, install the bdss::
 
     pushd force-bdss
@@ -46,4 +54,3 @@ and (optional, but recommended), the example plugins::
 
 Now you can invoke the workflow manager with force_wfmanager,
 and the bdss with force_bdss.
-
