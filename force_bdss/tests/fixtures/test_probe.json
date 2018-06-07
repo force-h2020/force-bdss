@@ -12,6 +12,12 @@
                             "type": "PRESSURE"
                         }
                     }
+                ],
+                "kpis": [
+                    {
+                        "name": "bar",
+                        "objective": "MINIMISE"
+                    }
                 ]
             }
         },
@@ -28,8 +34,7 @@
                         ],
                         "output_slot_info": [
                             {
-                                "name": "bar",
-                                "is_kpi": true
+                                "name": "bar"
                             }
                         ]
                     }

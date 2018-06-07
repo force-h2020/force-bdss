@@ -5,6 +5,8 @@
       "id": "force.bdss.enthought.plugin.test.v0.factory.probe_mco",
       "model_data": {
         "parameters" : [
+        ],
+        "kpis": [
         ]
       }
     },

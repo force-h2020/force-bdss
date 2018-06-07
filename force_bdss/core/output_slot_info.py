@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Bool
+from traits.api import HasStrictTraits
 
 from ..local_traits import Identifier
 

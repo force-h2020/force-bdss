@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Any, String, Enum, Bool
+from traits.api import HasStrictTraits, Any, String, Enum
 
 
 class DataValue(HasStrictTraits):

@@ -57,12 +57,10 @@ class TestBaseDataSourceModel(unittest.TestCase):
                     {
                         "__traits_version__": "4.6.0",
                         "name": "baz",
-                        "is_kpi": False
                     },
                     {
                         "__traits_version__": "4.6.0",
                         "name": "quux",
-                        "is_kpi": False
                     }
                 ]
             })

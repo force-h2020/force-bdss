@@ -7,4 +7,5 @@ class KPISpecification(HasStrictTraits):
     #: The user defined name of the variable containing the kpi value.
     name = Identifier()
 
-    target = Enum("MINIMISE")
+    #: The expected outcome of the procedure relative to this KPI.
+    objective = Enum("MINIMISE")

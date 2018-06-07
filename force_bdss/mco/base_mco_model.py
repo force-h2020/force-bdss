@@ -18,10 +18,10 @@ class BaseMCOModel(ABCHasStrictTraits):
                        visible=False,
                        transient=True)
 
-    # A list of the parameters for the MCO
+    #: A list of the parameters for the MCO
     parameters = List(BaseMCOParameter, visible=False)
 
-    # A list of KPI specification objects and their objective.
+    #: A list of KPI specification objects and their objective.
     kpis = List(KPISpecification, visible=False)
 
     def __init__(self, factory, *args, **kwargs):

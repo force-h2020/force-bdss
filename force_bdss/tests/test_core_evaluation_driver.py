@@ -4,6 +4,7 @@ import testfixtures
 import six
 
 from force_bdss.core.execution_layer import ExecutionLayer
+from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
@@ -14,6 +15,7 @@ from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.tests import fixtures
+from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
 try:
     import mock
@@ -223,7 +225,14 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             output_slots_size=1,
             run_function=multiplier)
 
+        mco_factory = ProbeMCOFactory(self.plugin)
+        mco_model = mco_factory.create_model()
+        mco_model.kpis = [
+            KPISpecification(name="out1")
+        ]
+
         wf = Workflow(
+            mco=mco_model,
             execution_layers=[
                 ExecutionLayer(),
                 ExecutionLayer(),
@@ -281,7 +290,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             InputSlotInfo(name="res2")
         ]
         model.output_slot_info = [
-            OutputSlotInfo(name="out1", is_kpi=True)
+            OutputSlotInfo(name="out1")
         ]
         wf.execution_layers[3].data_sources.append(model)
 
