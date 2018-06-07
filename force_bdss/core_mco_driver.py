@@ -88,17 +88,10 @@ class CoreMCODriver(BaseCoreDriver):
 
     @on_trait_change("mco:started")
     def _deliver_start_event(self):
-        output_kpis = []
-        for layer in self.workflow.execution_layers:
-            for data_source in layer.data_sources:
-                output_kpis.extend(
-                    info for info in data_source.output_slot_info
-                    if info.is_kpi
-                )
-
+        mco_model = self.workflow.mco
         self._deliver_event(MCOStartEvent(
-            input_names=tuple(p.name for p in self.workflow.mco.parameters),
-            output_names=tuple([on.name for on in output_kpis])
+            input_names=tuple(p.name for p in mco_model.parameters),
+            output_names=tuple([kpi.name for kpi in mco_model.kpis])
         ))
 
     @on_trait_change("mco:finished")

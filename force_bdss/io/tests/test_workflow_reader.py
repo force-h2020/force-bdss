@@ -34,7 +34,8 @@ class TestWorkflowReader(unittest.TestCase):
                                       ".dummy_mco_parameter",
                                 "model_data": {}
                             }
-                        ]
+                        ],
+                        "kpis": []
                     },
                 },
                 "execution_layers": [
@@ -146,6 +147,8 @@ class TestModelCreationFailure(unittest.TestCase):
                                       ".probe_mco_parameter",
                                 "model_data": {}
                             }
+                        ],
+                        "kpis": [
                         ]
                     },
                 },

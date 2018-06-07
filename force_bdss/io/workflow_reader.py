@@ -5,6 +5,7 @@ from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.input_slot_info import InputSlotInfo
+from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
 from ..factory_registry_plugin import IFactoryRegistryPlugin
@@ -165,6 +166,9 @@ class WorkflowReader(HasStrictTraits):
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id,
             model_data["parameters"])
+        model_data["kpis"] = self._extract_kpi_specifications(
+            model_data["kpis"]
+        )
 
         try:
             model = mco_factory.create_model(model_data)
@@ -280,6 +284,9 @@ class WorkflowReader(HasStrictTraits):
             parameters.append(model)
 
         return parameters
+
+    def _extract_kpi_specifications(self, info):
+        return [KPISpecification(**d) for d in info]
 
     def _extract_input_slot_info(self, info):
         return [InputSlotInfo(**d) for d in info]

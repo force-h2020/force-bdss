@@ -46,11 +46,7 @@ class WorkflowWriter(HasStrictTraits):
 
         parameters_data = []
         for param in data["model_data"]["parameters"]:
-            state = param.__getstate__()
-            try:
-                state.pop("__traits_version__")
-            except KeyError:
-                pass
+            state = traits_to_dict(param)
 
             parameters_data.append(
                 {
@@ -60,6 +56,15 @@ class WorkflowWriter(HasStrictTraits):
             )
 
         data["model_data"]["parameters"] = parameters_data
+
+        kpis_data = []
+        for kpi in data["model_data"]["kpis"]:
+            kpis_data.append(
+                traits_to_dict(kpi)
+            )
+
+        data["model_data"]["kpis"] = kpis_data
+
         return data
 
     def _execution_layer_data(self, layer):
@@ -75,13 +80,21 @@ class WorkflowWriter(HasStrictTraits):
         """
         Extracts the data from an external model and returns its dictionary
         """
-        state = model.__getstate__()
-        try:
-            state.pop("__traits_version__")
-        except KeyError:
-            pass
+        state = traits_to_dict(model)
 
         return {
             "id": model.factory.id,
             "model_data": state
         }
+
+
+def traits_to_dict(traits_obj):
+    """Converts a traits class into a dict, removing the pesky
+    traits version."""
+    state = traits_obj.__getstate__()
+    try:
+        state.pop("__traits_version__")
+    except KeyError:
+        pass
+
+    return state

@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Any, String, Enum, Bool
+from traits.api import HasStrictTraits, Any, String, Enum
 
 
 class DataValue(HasStrictTraits):
@@ -22,9 +22,6 @@ class DataValue(HasStrictTraits):
     #: A flag for the quality of the data.
     quality = Enum("AVERAGE", "POOR", "GOOD")
 
-    # Set by the engine. True if the data value contains a KPI.
-    is_kpi = Bool(False)
-
     def __str__(self):
 
         s = "{} {} = {}".format(
@@ -34,8 +31,5 @@ class DataValue(HasStrictTraits):
             s += " +/- {}".format(str(self.accuracy))
 
         s += " ({})".format(str(self.quality))
-
-        if self.is_kpi:
-            s += " (KPI)"
 
         return s
