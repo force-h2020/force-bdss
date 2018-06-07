@@ -29,7 +29,7 @@ Next, install the required dev packages::
 
 And the required packages for generating documentation::
 
-  pip install -r force-wfmanager/requirements/doc_requirements.txt
+   pip install -r force-wfmanager/requirements/doc_requirements.txt
 
 Now, install the bdss::
 
