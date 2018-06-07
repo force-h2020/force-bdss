@@ -2,13 +2,18 @@ import json
 import unittest
 
 from six import StringIO
+try:
+    import mock
+except ImportError:
+    from unittest import mock
 
 from force_bdss.core.execution_layer import ExecutionLayer
+from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-from force_bdss.io.workflow_writer import WorkflowWriter
+from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict
 from force_bdss.core.workflow import Workflow
 
 
@@ -53,6 +58,9 @@ class TestWorkflowWriter(unittest.TestCase):
         wf.mco.parameters = [
             self.mco_parameter_factory.create_model()
         ]
+        wf.mco.kpis = [
+            KPISpecification()
+        ]
         wf.execution_layers = [
             ExecutionLayer(data_sources=[
                 self.data_source_factory.create_model(),
@@ -73,3 +81,9 @@ class TestWorkflowWriter(unittest.TestCase):
         wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(fp)
         self.assertIsNone(wf_result.mco)
+
+    def test_traits_to_dict_no_version(self):
+        mock_traits = mock.Mock()
+        mock_traits.__getstate__ = mock.Mock(return_value={"foo": "bar"})
+
+        self.assertEqual(traits_to_dict(mock_traits), {"foo": "bar"})
