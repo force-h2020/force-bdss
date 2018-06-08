@@ -1,5 +1,5 @@
 Installation Instructions - Dev
--------------------------
+-------------------------------
 
 After following the instructions for a standard install, install the required dev packages::
 
