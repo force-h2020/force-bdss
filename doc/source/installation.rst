@@ -13,12 +13,12 @@ writing plugins.
 Next, download EDM package manager, and create an appropriate 
 environment::
 
-    wget https://package-data.enthought.com/edm/rh5_x86_64/1.4/edm_1.4.1_linux_x86_64.sh && bash ./edm_1.4.1_linux_x86_64.sh -b -p $HOME
+    wget https://package-data.enthought.com/edm/rh5_x86_64/1.9/edm_1.9.2_linux_x86_64.sh && bash ./edm_1.9.2_linux_x86_64.sh -b -f -p $HOME
     export PATH=${HOME}/edm/bin:${PATH}
     edm environments create --version 3.5 force 
     edm shell --environment=force
 
-Veryfy that your prompt changes to add "(force)".
+Verify that your prompt changes to add "(force)".
 Install the required packages for the workflow manager::
 
     cat force-wfmanager/requirements/edm_requirements.txt | grep -v "^#" | while read line; do edm install -y `echo $line | awk '{print $1"=="$2}'`; done
