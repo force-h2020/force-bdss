@@ -93,29 +93,30 @@ def traits_to_dict(traits_obj):
     """Converts a traits class into a dict, removing the pesky
     traits version."""
 
-    def pop_traits(dictionary):
-        """Recursively remove the __traits_version__ attribute
-        from dictionary."""
-        try:
-            dictionary.pop("__traits_version__")
-        except KeyError:
-            pass
-
-        for key in dictionary:
-            # If we have a dict, remove the traits version
-            if isinstance(dictionary[key], dict):
-                pop_traits(dictionary[key])
-            # If we have a non-dict which contains a dict, remove traits from
-            # that as well
-            elif isinstance(dictionary[key], Iterable):
-                for element in dictionary[key]:
-                    if isinstance(element, dict):
-                        pop_traits(element)
-
-        return dictionary
-
     state = traits_obj.__getstate__()
 
-    state = pop_traits(state)
+    state = pop_traits_version(state)
 
     return state
+
+
+def pop_traits_version(dictionary):
+    """Recursively remove the __traits_version__ attribute
+    from dictionary."""
+    try:
+        dictionary.pop("__traits_version__")
+    except KeyError:
+        pass
+
+    for key in dictionary:
+        # If we have a dict, remove the traits version
+        if isinstance(dictionary[key], dict):
+            pop_traits(dictionary[key])
+        # If we have a non-dict which contains a dict, remove traits from
+        # that as well
+        elif isinstance(dictionary[key], Iterable):
+            for element in dictionary[key]:
+                if isinstance(element, dict):
+                    pop_traits(element)
+
+    return dictionary
