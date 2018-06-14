@@ -111,12 +111,12 @@ def pop_traits_version(dictionary):
     for key in dictionary:
         # If we have a dict, remove the traits version
         if isinstance(dictionary[key], dict):
-            pop_traits(dictionary[key])
+            pop_traits_version(dictionary[key])
         # If we have a non-dict which contains a dict, remove traits from
         # that as well
         elif isinstance(dictionary[key], Iterable):
             for element in dictionary[key]:
                 if isinstance(element, dict):
-                    pop_traits(element)
+                    pop_traits_version(element)
 
     return dictionary

@@ -14,7 +14,7 @@ from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
 from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
-    pop_traits
+    pop_traits_version
 from force_bdss.core.workflow import Workflow
 
 
@@ -91,11 +91,11 @@ class TestWorkflowWriter(unittest.TestCase):
 
     def test_pop_traits_version(self):
 
-        test_dictionary = {'Entry1': {'Entry1-1': 4, '__traits_version__':67},
+        test_dictionary = {'Entry1': {'Entry1-1': 4, '__traits_version__': 67},
                            'Entry2': [3, 'a', {'Entry2-1': 5,
                                                '__traits_version__': 9001}],
                            '__traits_version__': 13}
         result_dictionary = {'Entry1': {'Entry1-1': 4, },
                              'Entry2': [3, 'a', {'Entry2-1': 5, }], }
-        traitless_dictionary = pop_traits(test_dictionary)
-        self.assertEqual(traitless_dictionary,result_dictionary)
+        traitless_dictionary = pop_traits_version(test_dictionary)
+        self.assertEqual(traitless_dictionary, result_dictionary)
