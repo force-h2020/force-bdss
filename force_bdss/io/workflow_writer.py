@@ -95,28 +95,28 @@ def traits_to_dict(traits_obj):
 
     state = traits_obj.__getstate__()
 
-    state = pop_traits_version(state)
+    state = pop_recursive(state,'__traits_version__')
 
     return state
 
 
-def pop_traits_version(dictionary):
-    """Recursively remove the __traits_version__ attribute
-    from dictionary."""
+def pop_recursive(dictionary,remove_key):
+    """Recursively remove a named key from dictionary and any contained
+    dictionaries."""
     try:
-        dictionary.pop("__traits_version__")
+        dictionary.pop(remove_key)
     except KeyError:
         pass
 
     for key in dictionary:
-        # If we have a dict, remove the traits version
+        # If remove_key is in the dict, remove it
         if isinstance(dictionary[key], dict):
-            pop_traits_version(dictionary[key])
-        # If we have a non-dict which contains a dict, remove traits from
-        # that as well
+            pop_recursive(dictionary[key], remove_key)
+        # If we have a non-dict iterable which contains a dict,
+        # call pop.(remove_key) from that as well
         elif isinstance(dictionary[key], Iterable):
             for element in dictionary[key]:
                 if isinstance(element, dict):
-                    pop_traits_version(element)
+                    pop_recursive(element, remove_key)
 
     return dictionary

@@ -14,7 +14,7 @@ from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
 from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
-    pop_traits_version
+    pop_recursive
 from force_bdss.core.workflow import Workflow
 
 
@@ -89,13 +89,17 @@ class TestWorkflowWriter(unittest.TestCase):
 
         self.assertEqual(traits_to_dict(mock_traits), {"foo": "bar"})
 
-    def test_pop_traits_version(self):
+    def test_pop_recursive(self):
 
-        test_dictionary = {'Entry1': {'Entry1-1': 4, '__traits_version__': 67},
-                           'Entry2': [3, 'a', {'Entry2-1': 5,
-                                               '__traits_version__': 9001}],
-                           '__traits_version__': 13}
-        result_dictionary = {'Entry1': {'Entry1-1': 4, },
-                             'Entry2': [3, 'a', {'Entry2-1': 5, }], }
-        traitless_dictionary = pop_traits_version(test_dictionary)
-        self.assertEqual(traitless_dictionary, result_dictionary)
+        test_dictionary = {'K1': {'K1': 'V1', 'K2': 'V2', 'K3': 'V3'},
+                           'K2': ['V1', 'V2', {'K1': 'V1', 'K2': 'V2',
+                                               'K3': 'V3'}],
+                           'K3': 'V3',
+                           'K4': ('V1', {'K3': 'V3'},)}
+
+        result_dictionary = {'K1': {'K1': 'V1', 'K2': 'V2', },
+                             'K2': ['V1', 'V2', {'K1': 'V1', 'K2': 'V2', }],
+                             'K4': ('V1', {},)}
+
+        test_result_dictionary = pop_recursive(test_dictionary, )
+        self.assertEqual(test_result_dictionary, result_dictionary)
