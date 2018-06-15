@@ -101,5 +101,5 @@ class TestWorkflowWriter(unittest.TestCase):
                              'K2': ['V1', 'V2', {'K1': 'V1', 'K2': 'V2', }],
                              'K4': ('V1', {},)}
 
-        test_result_dictionary = pop_recursive(test_dictionary, )
+        test_result_dictionary = pop_recursive(test_dictionary, 'K3')
         self.assertEqual(test_result_dictionary, result_dictionary)
