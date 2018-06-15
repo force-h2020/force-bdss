@@ -95,12 +95,12 @@ def traits_to_dict(traits_obj):
 
     state = traits_obj.__getstate__()
 
-    state = pop_recursive(state,'__traits_version__')
+    state = pop_recursive(state, '__traits_version__')
 
     return state
 
 
-def pop_recursive(dictionary,remove_key):
+def pop_recursive(dictionary, remove_key):
     """Recursively remove a named key from dictionary and any contained
     dictionaries."""
     try:
