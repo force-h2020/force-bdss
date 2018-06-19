@@ -2,7 +2,7 @@ import click
 from subprocess import check_call
 
 DEFAULT_PYTHON_VERSION = "2.7"
-PYTHON_VERSIONS = ["2.7", "3.6"]
+PYTHON_VERSIONS = ["2.7", "3.5"]
 
 CORE_DEPS = [
     "envisage==4.6.0-1",
@@ -76,7 +76,7 @@ def test(python_version):
 
 @cli.command(help="Run flake")
 @python_version_option
-def flake(python_version):
+def flake8(python_version):
     env_name = get_env_name(python_version)
 
     check_call(["edm", "run", "-e", env_name, "--", "flake8", "."])
