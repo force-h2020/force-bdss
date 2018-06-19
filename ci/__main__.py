@@ -50,7 +50,8 @@ def build_env(python_version):
         "edm", "environments", "remove", "--purge", "--force",
         "--yes", env_name])
     check_call(
-        ["edm", "environments", "create", env_name])
+        ["edm", "environments", "create", "--version", python_version,
+         env_name])
 
     check_call([
         "edm", "install", "-e", env_name,
