@@ -14,11 +14,11 @@ before_install:
     - edm install -y -e force-bootstrap click setuptools
     - edm run -e force-bootstrap -- python -m ci build-env --python-version ${PYTHON_VERSION}
 script:
-    - edm run -e force-bootstrap -- python -m ci flake8
-    - edm run -e force-bootstrap -- python -m ci test
-    - edm run -e force-bootstrap -- python -m ci docs
+    - edm run -e force-bootstrap -- python -m ci flake8 --python-version ${PYTHON_VERSION}
+    - edm run -e force-bootstrap -- python -m ci test --python-version ${PYTHON_VERSION}
+    - edm run -e force-bootstrap -- python -m ci docs --python-version ${PYTHON_VERSION}
 after_success:
-    - edm run -e force-bootstrap -- python -m ci coverage
-    - edm run -e force-bootstrap -- pip install codecov
+    - edm run -e force-bootstrap -- python -m ci coverage --python-version ${PYTHON_VERSION}
+    - edm run -e force-bootstrap -- pip install codecov --python-version ${PYTHON_VERSION}
     - edm run -e force-bootstrap -- codecov
     - bash <(curl -s https://codecov.io/bash)
