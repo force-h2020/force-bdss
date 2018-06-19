@@ -10,40 +10,39 @@ git repositories::
 The last repository is optional, but recommended if you want to practice 
 writing plugins.
 
-Next, download EDM package manager, and create an appropriate 
-environment::
+Next, download EDM package manager, and create a bootstrap environment::
 
-    wget https://package-data.enthought.com/edm/rh5_x86_64/1.4/edm_1.4.1_linux_x86_64.sh && bash ./edm_1.4.1_linux_x86_64.sh -b -p $HOME
+    wget https://package-data.enthought.com/edm/rh5_x86_64/1.9/edm_1.9.2_linux_x86_64.sh && bash ./edm_1.9.2_linux_x86_64.sh -b -f -p $HOME
     export PATH=${HOME}/edm/bin:${PATH}
-    edm environments create --version 3.5 force 
-    edm shell --environment=force
+    edm environments create --version 3.5 force
+    edm install -y -e force-bootstrap click setuptools
+    edm shell --environment=force-bootstrap
 
-Veryfy that your prompt changes to add "(force)".
-Install the required packages for the workflow manager::
+Verify that your prompt changes to add "(force-bootstrap)".
+Installation of the force BDSS runtime environment is performed with the
+following command::
 
-    cat force-wfmanager/requirements/edm_requirements.txt | grep -v "^#" | while read line; do edm install -y `echo $line | awk '{print $1"=="$2}'`; done
+    python -m ci build-env
 
-Now, install the bdss::
+This will create another edm environment called ``force-py27``.
 
-    pushd force-bdss
-    pip install -r requirements/requirements.txt
-    pip install -e . 
-    popd
-
-the workflow manager::
+To install the workflow manager::
 
     pushd force-wfmanager
-    pip install -r requirements/requirements.txt
-    pip install -e .
+    python -m ci install
     popd
 
 and (optional, but recommended), the example plugins::
 
     pushd force-bdss-plugin-enthought-example
-    pip install -r requirements/requirements.txt
-    pip install -e .
+    python -m ci install
     popd
 
-Now you can invoke the workflow manager with force_wfmanager,
-and the bdss with force_bdss.
+Now you can enter the deployed environment and invoke the programs::
+
+    edm shell -e force-py27
+    # Invokes the workflow manager UI
+    force_wfmanager
+    # Invokes the CLI BDSS evaluator
+    force_bdss
 
