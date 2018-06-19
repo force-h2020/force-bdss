@@ -94,7 +94,9 @@ def coverage(python_version):
 @cli.command(help="Builds the documentation")
 @python_version_option
 def docs(python_version):
-    check_call(["make", "html"], cwd="doc")
+    env_name = get_env_name(python_version)
+
+    check_call(["edm", "run", "-e", env_name, "--", "make", "html"], cwd="doc")
 
 
 def get_env_name(python_version):
