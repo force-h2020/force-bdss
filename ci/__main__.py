@@ -85,7 +85,7 @@ def flake8(python_version):
     check_call(["edm", "run", "-e", env_name, "--", "flake8", "."])
 
 
-@cli.command(help="Builds the documentation")
+@cli.command(help="Runs the coverage")
 @python_version_option
 def coverage(python_version):
     env_name = get_env_name(python_version)
