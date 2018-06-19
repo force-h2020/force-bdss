@@ -5,6 +5,9 @@ DEFAULT_PYTHON_VERSION = "2.7"
 PYTHON_VERSIONS = ["2.7", "3.5"]
 
 CORE_DEPS = [
+    "distribute_remove==1.0.0-4",
+    "pip==10.0.1-1",
+    "setuptools==38.2.5-1",
     "envisage==4.6.0-1",
     "click==6.7-1",
     "six==1.10.0-1",
