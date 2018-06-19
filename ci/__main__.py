@@ -11,7 +11,6 @@ CORE_DEPS = [
     "envisage==4.6.0-1",
     "click==6.7-1",
     "six==1.10.0-1",
-    "stevedore==1.2.0-22"
 ]
 
 DOCS_DEPS = [
@@ -26,6 +25,7 @@ DEV_DEPS = [
 ]
 
 PIP_DEPS = [
+    "stevedore==1.24.0"
 ]
 
 
