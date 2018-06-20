@@ -133,6 +133,9 @@ def _compute_layer_results(environment_data_values,
         # execute data source, passing only relevant data values.
         log.info("Evaluating for Data Source {}".format(
             factory.name))
+        log.info("Passed values:")
+        for idx, dv in enumerate(passed_data_values):
+            log.info("{}: {}".format(idx, dv))
 
         try:
             res = data_source.run(model, passed_data_values)
@@ -176,7 +179,12 @@ def _compute_layer_results(environment_data_values,
 
         # If the name was not specified, simply discard the value,
         # because apparently the user is not interested in it.
-        results.extend([r for r in res if r.name != ""])
+        res = [r for r in res if r.name != ""]
+        results.extend(res)
+
+        log.info("Returned values:")
+        for idx, dv in enumerate(res):
+            log.info("{}: {}".format(idx, dv))
 
     # Finally, return all the computed data values from all evaluators,
     # properly named.
