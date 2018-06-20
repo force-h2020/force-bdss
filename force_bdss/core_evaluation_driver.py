@@ -145,7 +145,7 @@ def _compute_layer_results(environment_data_values,
 
         if not isinstance(res, list):
             error_txt = (
-                "The run method of data source {} must return a list." 
+                "The run method of data source {} must return a list."
                 " It returned instead {}. Fix the run() method to return"
                 " the appropriate entity.".format(
                     factory.name,
@@ -196,7 +196,6 @@ def _compute_layer_results(environment_data_values,
                 )
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
-
 
         # At this point, the returned data values are unnamed.
         # Add the names as specified by the user.
