@@ -1,9 +1,13 @@
-from traits.api import HasStrictTraits, Str, Type, Instance
+from traits.api import Str, Type, Instance, provides
 
+from force_bdss.core.base_factory import BaseFactory
 from force_bdss.ids import mco_parameter_id
+from force_bdss.mco.parameters.i_mco_parameter_factory import \
+    IMCOParameterFactory
 
 
-class BaseMCOParameterFactory(HasStrictTraits):
+@provides(IMCOParameterFactory)
+class BaseMCOParameterFactory(BaseFactory):
     """Factory that produces the model instance of a given BASEMCOParameter
     instance.
 
@@ -16,12 +20,6 @@ class BaseMCOParameterFactory(HasStrictTraits):
     mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory',
                            allow_none=False)
 
-    #: A unique string identifying the parameter
-    id = Str()
-
-    #: A user friendly name (for the UI)
-    name = Str()
-
     #: A long description of the parameter
     description = Str()
 
@@ -30,16 +28,6 @@ class BaseMCOParameterFactory(HasStrictTraits):
         "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter",
         allow_none=False
     )
-
-    def get_identifier(self):
-        raise NotImplementedError(
-            "get_identifier was not implemented in factory {}".format(
-                self.__class__))
-
-    def get_name(self):
-        raise NotImplementedError(
-            "get_name was not implemented in factory {}".format(
-                self.__class__))
 
     def get_description(self):
         raise NotImplementedError(
@@ -51,25 +39,13 @@ class BaseMCOParameterFactory(HasStrictTraits):
             "get_model_class was not implemented in factory {}".format(
                 self.__class__))
 
-    def __init__(self, mco_factory, *args, **kwargs):
+    def __init__(self, mco_factory):
         self.mco_factory = mco_factory
-        super(BaseMCOParameterFactory, self).__init__(*args, **kwargs)
+        super(BaseMCOParameterFactory, self).__init__(
+            plugin=mco_factory.plugin)
 
-        self.name = self.get_name()
         self.description = self.get_description()
         self.model_class = self.get_model_class()
-        identifier = self.get_identifier()
-        try:
-            id = mco_parameter_id(self.mco_factory.id, identifier)
-        except ValueError:
-            raise ValueError(
-                "Invalid identifier {} returned by "
-                "{}.get_identifier()".format(
-                    identifier,
-                    self.__class__.__name__
-                )
-            )
-        self.id = id
 
     def create_model(self, data_values=None):
         """Creates the instance of the model class and returns it.
@@ -90,3 +66,6 @@ class BaseMCOParameterFactory(HasStrictTraits):
             data_values = {}
 
         return self.model_class(factory=self, **data_values)
+
+    def _global_id(self, identifier):
+        return mco_parameter_id(self.mco_factory.id, identifier)
