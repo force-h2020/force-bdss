@@ -1,6 +1,5 @@
 import json
 from traits.api import HasStrictTraits
-from collections import Iterable
 
 
 class WorkflowWriter(HasStrictTraits):
@@ -108,7 +107,7 @@ def pop_recursive(dictionary, remove_key):
     except KeyError:
         pass
 
-    for key,value in dictionary.items():
+    for key, value in dictionary.items():
         # If remove_key is in the dict, remove it
         if isinstance(value, dict):
             pop_recursive(value, remove_key)
