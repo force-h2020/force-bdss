@@ -135,3 +135,4 @@ class BaseMCOFactory(HasStrictTraits):
         -------
         List of BaseMCOParameterFactory
         """
+        return []

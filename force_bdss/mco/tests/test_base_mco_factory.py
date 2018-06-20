@@ -29,6 +29,7 @@ class TestBaseMCOFactory(unittest.TestCase):
                               DummyMCOCommunicator)
         self.assertIsInstance(factory.create_model(),
                               DummyMCOModel)
+        self.assertEqual(factory.parameter_factories(), [])
 
     def test_broken_get_identifier(self):
         class Broken(DummyMCOFactory):
