@@ -3,6 +3,7 @@ import logging
 
 from traits.api import on_trait_change
 
+from force_bdss.core.data_value import DataValue
 from force_bdss.ids import InternalPluginID
 from .base_core_driver import BaseCoreDriver
 
@@ -142,6 +143,17 @@ def _compute_layer_results(environment_data_values,
                 "Run method raised exception.")
             raise
 
+        if not isinstance(res, list):
+            error_txt = (
+                "The run method of data source {} must return a list." 
+                " It returned instead {}. Fix the run() method to return"
+                " the appropriate entity.".format(
+                    factory.name,
+                    type(res)
+                ))
+            log.error(error_txt)
+            raise RuntimeError(error_txt)
+
         if len(res) != len(out_slots):
             error_txt = (
                 "The number of data values ({} values) returned"
@@ -168,6 +180,23 @@ def _compute_layer_results(environment_data_values,
 
             log.error(error_txt)
             raise RuntimeError(error_txt)
+
+        for idx, dv in enumerate(res):
+            if not isinstance(dv, DataValue):
+                error_txt = (
+                    "The result list returned by DataSource {} contains"
+                    " an entry that is not a DataValue. An entry of type"
+                    " {} was instead found in position {}."
+                    " Fix the DataSource.run() method"
+                    " to return the appropriate entity.".format(
+                        factory.name,
+                        type(dv),
+                        idx
+                    )
+                )
+                log.error(error_txt)
+                raise RuntimeError(error_txt)
+
 
         # At this point, the returned data values are unnamed.
         # Add the names as specified by the user.

@@ -77,6 +77,40 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     " the number of output slots"):
                 driver.application_started()
 
+    def test_error_for_incorrect_return_type(self):
+        def run(self, *args, **kwargs):
+            return "hello"
+        ds_factory = self.registry.data_source_factories[0]
+        ds_factory.run_function = run
+        driver = CoreEvaluationDriver(application=self.mock_application)
+        with testfixtures.LogCapture():
+            with six.assertRaisesRegex(
+                    self,
+                    RuntimeError,
+                    "The run method of data source test_data_source must"
+                    " return a list. It returned instead <type 'str'>. Fix"
+                    " the run\(\) method to return the appropriate entity."):
+                driver.application_started()
+
+    def test_error_for_incorrect_data_value_entries(self):
+        def run(self, *args, **kwargs):
+            return ["hello"]
+        ds_factory = self.registry.data_source_factories[0]
+        ds_factory.run_function = run
+        driver = CoreEvaluationDriver(application=self.mock_application)
+        with testfixtures.LogCapture():
+            with six.assertRaisesRegex(
+                    self,
+                    RuntimeError,
+                    "The result list returned by DataSource test_data_source"
+                    " contains an entry that is not a DataValue."
+                    " An entry of type <type 'str'> was instead found"
+                    " in position 0."
+                    " Fix the DataSource.run\(\) method to"
+                    " return the appropriate entity."
+                    ):
+                driver.application_started()
+
     def test_error_for_missing_ds_output_names(self):
 
         def run(self, *args, **kwargs):
