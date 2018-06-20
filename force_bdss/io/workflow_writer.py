@@ -108,14 +108,14 @@ def pop_recursive(dictionary, remove_key):
     except KeyError:
         pass
 
-    for key in dictionary:
+    for key,value in dictionary.items():
         # If remove_key is in the dict, remove it
-        if isinstance(dictionary[key], dict):
-            pop_recursive(dictionary[key], remove_key)
+        if isinstance(value, dict):
+            pop_recursive(value, remove_key)
         # If we have a non-dict iterable which contains a dict,
         # call pop.(remove_key) from that as well
-        elif isinstance(dictionary[key], Iterable):
-            for element in dictionary[key]:
+        elif isinstance(value, (tuple, list)):
+            for element in value:
                 if isinstance(element, dict):
                     pop_recursive(element, remove_key)
 
