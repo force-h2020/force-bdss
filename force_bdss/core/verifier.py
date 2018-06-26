@@ -9,6 +9,7 @@ class VerifierError(HasStrictTraits):
     error = Str()
 
 
+
 def verify_workflow(workflow):
     """Verifies if the workflow can be executed, and specifies where the
     error occurs and why.
@@ -45,6 +46,14 @@ def _check_mco(workflow):
         if len(param.type.strip()) == 0:
             errors.append(VerifierError(subject=param,
                                         error="Parameter has empty type"))
+
+    for kpi in mco.kpis:
+        if len(kpi.name.strip()) == 0:
+            errors.append(VerifierError(subject=kpi,
+                                        error="Kpi has empty name"))
+        if len(kpi.objective.strip()) == 0:
+            errors.append(VerifierError(subject=kpi,
+                                        error="Kpi objective is not set"))
     return errors
 
 
@@ -71,7 +80,6 @@ def _check_execution_layers(workflow):
             errors.extend(_check_data_source(ds))
 
     return errors
-
 
 def _check_data_source(data_source_model):
     errors = []
