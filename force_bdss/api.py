@@ -8,6 +8,8 @@ from .core.input_slot_info import InputSlotInfo  # noqa
 from .core.output_slot_info import OutputSlotInfo  # noqa
 from .core.kpi_specification import KPISpecification  # noqa
 from .core.execution_layer import ExecutionLayer  # noqa
+from .core.verifier import verify_workflow  # noqa
+from .core.verifier import VerifierError  # noqa
 
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa
