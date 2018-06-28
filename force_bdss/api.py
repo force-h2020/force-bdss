@@ -20,7 +20,7 @@ from .factory_registry_plugin import IFactoryRegistryPlugin  # noqa
 from .factory_registry_plugin import FactoryRegistryPlugin  # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
-from .io.workflow_reader import InvalidFileException
+from .io.workflow_reader import InvalidFileException  # noqa
 from .io.workflow_writer import WorkflowWriter  # noqa
 
 from .mco.base_mco_model import BaseMCOModel  # noqa
