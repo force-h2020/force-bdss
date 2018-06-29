@@ -19,6 +19,7 @@ class ExtensionPointID:
 class InternalPluginID:
     CORE_MCO_DRIVER_ID = "force.bdss.core.CoreMCODriver"
     CORE_EVALUATION_DRIVER_ID = "force.bdss.core.CoreEvaluationDriver"
+    CORE_RUN_DATASOURCE_DRIVER_ID = "force.bdss.core.CoreRunDataSourceDriver"
 
 
 def factory_id(plugin_id, identifier):

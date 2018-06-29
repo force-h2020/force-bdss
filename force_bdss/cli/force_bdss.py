@@ -13,7 +13,7 @@ push_exception_handler(reraise_exceptions=True)
 @click.option("--evaluate",
               is_flag=True,
               help="Runs the evaluation for a single point.")
-@click.option("--run-datasource",
+@click.option("--run-data-source",
               type=click.STRING,
               help="If specified, runs only the specified datasource "
                    "interactively. This is useful for debugging.")
@@ -22,7 +22,7 @@ push_exception_handler(reraise_exceptions=True)
               help="If specified, the log filename. "
                    " If unspecified, the log will be written to stdout.")
 @click.argument('workflow_filepath', type=click.Path(exists=True))
-def run(evaluate, run_datasource, logfile, workflow_filepath):
+def run(evaluate, run_data_source, logfile, workflow_filepath):
 
     logging_config = {}
     logging_config["level"] = logging.INFO
@@ -36,7 +36,7 @@ def run(evaluate, run_datasource, logfile, workflow_filepath):
     try:
         application = BDSSApplication(
             evaluate=evaluate,
-            run_datasource=run_datasource,
+            run_data_source=run_data_source,
             workflow_filepath=workflow_filepath
         )
 

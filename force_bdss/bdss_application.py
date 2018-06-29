@@ -32,18 +32,18 @@ class BDSSApplication(Application):
     #: This entry, if not None, drives the evaluator to run a single
     #: data source in the workflow. It accepts input parameters on standard
     #: input and returns the output to standard output.
-    run_datasource = Either(Unicode(), None)
+    run_data_source = Either(Unicode(), None)
 
-    def __init__(self, evaluate, run_datasource, workflow_filepath):
+    def __init__(self, evaluate, run_data_source, workflow_filepath):
         self.evaluate = evaluate
-        self.run_datasource = run_datasource
+        self.run_data_source = run_data_source
         self.workflow_filepath = workflow_filepath
 
         plugins = [CorePlugin(), FactoryRegistryPlugin()]
 
         if self.run_datasource:
             plugins.append(CoreRunDataSourceDriver(
-                run_datasource=run_datasource
+                run_data_source=run_data_source
             ))
         elif self.evaluate:
             plugins.append(CoreEvaluationDriver())
