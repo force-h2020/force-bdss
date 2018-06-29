@@ -17,8 +17,8 @@ class BaseFactory(HasStrictTraits):
     #: in your subclass.
     plugin = Instance(Plugin, allow_none=False)
 
-    def __init__(self, plugin):
-        super(BaseFactory, self).__init__(plugin=plugin)
+    def __init__(self, plugin, *args, **kwargs):
+        super(BaseFactory, self).__init__(plugin=plugin, *args, **kwargs)
 
         self.name = self.get_name()
         identifier = self.get_identifier()

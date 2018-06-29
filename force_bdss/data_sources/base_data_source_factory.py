@@ -38,8 +38,11 @@ class BaseDataSourceFactory(BaseFactory):
     #: Define this to your DataSourceModel
     model_class = Type(BaseDataSourceModel, allow_none=False)
 
-    def __init__(self, plugin):
-        super(BaseDataSourceFactory, self).__init__(plugin=plugin)
+    def __init__(self, plugin, *args, **kwargs):
+        super(BaseDataSourceFactory, self).__init__(
+            plugin=plugin,
+            *args,
+            **kwargs)
 
         self.data_source_class = self.get_data_source_class()
         self.model_class = self.get_model_class()
