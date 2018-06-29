@@ -91,10 +91,31 @@ class WorkflowWriter(HasStrictTraits):
 def traits_to_dict(traits_obj):
     """Converts a traits class into a dict, removing the pesky
     traits version."""
+
     state = traits_obj.__getstate__()
+
+    state = pop_recursive(state, '__traits_version__')
+
+    return state
+
+
+def pop_recursive(dictionary, remove_key):
+    """Recursively remove a named key from dictionary and any contained
+    dictionaries."""
     try:
-        state.pop("__traits_version__")
+        dictionary.pop(remove_key)
     except KeyError:
         pass
 
-    return state
+    for key, value in dictionary.items():
+        # If remove_key is in the dict, remove it
+        if isinstance(value, dict):
+            pop_recursive(value, remove_key)
+        # If we have a non-dict iterable which contains a dict,
+        # call pop.(remove_key) from that as well
+        elif isinstance(value, (tuple, list)):
+            for element in value:
+                if isinstance(element, dict):
+                    pop_recursive(element, remove_key)
+
+    return dictionary

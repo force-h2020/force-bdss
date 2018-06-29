@@ -13,8 +13,10 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict
+from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
+    pop_recursive
 from force_bdss.core.workflow import Workflow
+from force_bdss.core.input_slot_info import InputSlotInfo
 
 
 class TestWorkflowWriter(unittest.TestCase):
@@ -87,3 +89,29 @@ class TestWorkflowWriter(unittest.TestCase):
         mock_traits.__getstate__ = mock.Mock(return_value={"foo": "bar"})
 
         self.assertEqual(traits_to_dict(mock_traits), {"foo": "bar"})
+
+    def test_traits_to_dict(self):
+
+        wfwriter = WorkflowWriter()
+        wf = self._create_workflow()
+        exec_layer = wf.execution_layers[0]
+        exec_layer.data_sources[0].input_slot_info = [InputSlotInfo()]
+        slotdata = exec_layer.data_sources[0].input_slot_info[0].__getstate__()
+        self.assertTrue("__traits_version__" in slotdata)
+        # Calls traits_to_dict for each data source
+        datastore_list = wfwriter._execution_layer_data(exec_layer)
+        new_slotdata = datastore_list[0]['model_data']['input_slot_info']
+        self.assertTrue("__traits_version__" not in new_slotdata)
+
+        test_dictionary = {'K1': {'K1': 'V1', 'K2': 'V2', 'K3': 'V3'},
+                           'K2': ['V1', 'V2', {'K1': 'V1', 'K2': 'V2',
+                                               'K3': 'V3'}],
+                           'K3': 'V3',
+                           'K4': ('V1', {'K3': 'V3'},)}
+
+        result_dictionary = {'K1': {'K1': 'V1', 'K2': 'V2', },
+                             'K2': ['V1', 'V2', {'K1': 'V1', 'K2': 'V2', }],
+                             'K4': ('V1', {},)}
+
+        test_result_dictionary = pop_recursive(test_dictionary, 'K3')
+        self.assertEqual(test_result_dictionary, result_dictionary)
