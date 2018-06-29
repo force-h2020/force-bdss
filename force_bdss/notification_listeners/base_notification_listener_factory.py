@@ -2,8 +2,6 @@ import logging
 from traits.api import (
     provides, Type, Bool
 )
-from envisage.plugin import Plugin
-
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
