@@ -1,6 +1,5 @@
 import logging
 from traits.api import provides, Type
-from envisage.plugin import Plugin
 
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.ui_hooks.base_ui_hooks_manager import BaseUIHooksManager
