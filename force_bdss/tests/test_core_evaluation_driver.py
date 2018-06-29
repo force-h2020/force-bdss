@@ -155,9 +155,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                  'Creating communicator'),
                 ('force_bdss.core_evaluation_driver', 'INFO',
                  'Received data from MCO: \n whatever = 1.0 (AVERAGE)'),
-                ('force_bdss.execution', 'INFO',
+                ('force_bdss.core.execution', 'INFO',
                  'Computing data layer 0'),
-                ('force_bdss.execution', 'ERROR',
+                ('force_bdss.core.execution', 'ERROR',
                  'Unable to create data source from factory '
                  "'force.bdss.enthought.plugin.test.v0"
                  ".factory.probe_data_source' in plugin "

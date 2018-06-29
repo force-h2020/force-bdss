@@ -16,7 +16,7 @@ from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
-from force_bdss.execution import execute_workflow, execute_layer, \
+from force_bdss.core.execution import execute_workflow, execute_layer, \
     _bind_data_values
 
 

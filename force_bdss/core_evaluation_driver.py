@@ -3,7 +3,7 @@ import logging
 
 from traits.api import on_trait_change
 
-from force_bdss.execution import execute_workflow
+from force_bdss.core.execution import execute_workflow
 from force_bdss.ids import InternalPluginID
 from .base_core_driver import BaseCoreDriver
 
