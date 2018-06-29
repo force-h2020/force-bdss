@@ -37,11 +37,11 @@ def execute_layer(layer, environment_data_values):
 
     Parameters
     ----------
-    environment_data_values: list
-        A list of data values to submit to the evaluators.
-
     layer: ExecutionLayer
         A list of the models for all the data sources
+
+    environment_data_values: list
+        A list of data values to submit to the evaluators.
 
     NOTE: The above parameter is going to go away as soon as we move
     to unlimited layers and remove the distinction between data sources
