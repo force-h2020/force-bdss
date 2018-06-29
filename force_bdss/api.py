@@ -4,6 +4,7 @@ from .ids import plugin_id, factory_id  # noqa
 from .core.data_value import DataValue  # noqa
 from .core.workflow import Workflow  # noqa
 from .core.slot import Slot  # noqa
+from .core.i_factory import IFactory  # noqa
 from .core.input_slot_info import InputSlotInfo  # noqa
 from .core.output_slot_info import OutputSlotInfo  # noqa
 from .core.kpi_specification import KPISpecification  # noqa
