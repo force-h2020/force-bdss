@@ -8,7 +8,7 @@ from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 from traits.api import Unicode, Bool, Either
 
-from force_bdss.core_run_datasource_driver import CoreRunDataSourceDriver
+from force_bdss.core_run_data_source_driver import CoreRunDataSourceDriver
 from .factory_registry_plugin import FactoryRegistryPlugin
 from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
@@ -41,7 +41,7 @@ class BDSSApplication(Application):
 
         plugins = [CorePlugin(), FactoryRegistryPlugin()]
 
-        if self.run_datasource:
+        if self.run_data_source:
             plugins.append(CoreRunDataSourceDriver(
                 run_data_source=run_data_source
             ))

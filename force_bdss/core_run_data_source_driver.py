@@ -3,6 +3,7 @@ import logging
 
 from traits.api import on_trait_change, Unicode
 
+from force_bdss.core.data_value import DataValue
 from force_bdss.ids import InternalPluginID
 from .base_core_driver import BaseCoreDriver
 
@@ -24,8 +25,14 @@ class CoreRunDataSourceDriver(BaseCoreDriver):
             log.exception("Unable to open workflow file.")
             sys.exit(1)
 
+        model = _find_data_source_model(workflow, self.run_data_source)
 
-        '''factory = model.factory
+        if model is None:
+            raise RuntimeError(
+                "Unable to find model information for data "
+                "source with id {}".format(self.run_data_source))
+
+        factory = model.factory
         try:
             data_source = factory.create_data_source()
         except Exception:
@@ -37,32 +44,48 @@ class CoreRunDataSourceDriver(BaseCoreDriver):
                     factory.plugin.id))
             raise
 
-        # Get the slots for this data source. These must be matched to
-        # the appropriate values in the environment data values.
-        # Matching is by position.
         in_slots, out_slots = data_source.slots(model)
 
-        # Binding performs the extraction of the specified data values
-        # satisfying the above input slots from the environment data values
-        # considering what the user specified in terms of names (which is
-        # in the model input slot info
-        # The resulting data are the ones picked by name from the
-        # environment data values, and in the appropriate ordering as
-        # needed by the input slots.
-        passed_data_values = _bind_data_values(
-            environment_data_values,
-            model.input_slot_info,
-            in_slots)
+        print("DataSource: {}".format(factory.id))
 
-        # execute data source, passing only relevant data values.
-        log.info("Evaluating for Data Source {}".format(
-            factory.name))
-        log.info("Passed values:")
-        for idx, dv in enumerate(passed_data_values):
-            log.info("{}: {}".format(idx, dv))
+        print("Input Slots:")
+        for slot in in_slots:
+            print("    {}: {}".format(slot.type, slot.description))
+
+        print("Output Slots:")
+        for slot in out_slots:
+            print("    {}: {}".format(slot.type, slot.description))
+
+        values = []
+
+        if len(in_slots) > 0:
+            print("Input values for input slots, separated by spaces:")
+            line = sys.stdin.readline().strip()
+            if len(line) == 0:
+                raise RuntimeError(
+                    "Specified input is empty. Please provide values.")
+
+            try:
+                values = [float(x) for x in line.strip().split(' ')]
+            except ValueError:
+                raise RuntimeError(
+                    "Unable to convert values to floating point number. "
+                    "Please check your input.")
+
+        if len(values) != len(in_slots):
+            raise RuntimeError(
+                "The number of specified values did not match the number "
+                "of slots.")
+
+        # transfer the values to datavalue instances, matching then with the
+        # appropriate type from the in_slot.
+        data_values = [
+            DataValue(type=slot.type, value=value)
+            for slot, value in zip(in_slots, values)
+        ]
 
         try:
-            res = data_source.run(model, passed_data_values)
+            res = data_source.run(model, data_values)
         except Exception:
             log.exception(
                 "Evaluation could not be performed. "
@@ -128,12 +151,20 @@ class CoreRunDataSourceDriver(BaseCoreDriver):
         for dv, output_slot_info in zip(res, model.output_slot_info):
             dv.name = output_slot_info.name
 
-        # If the name was not specified, simply discard the value,
-        # because apparently the user is not interested in it.
-        res = [r for r in res if r.name != ""]
-        results.extend(res)
-
-        log.info("Returned values:")
+        print("Result:")
         for idx, dv in enumerate(res):
-            log.info("{}: {}".format(idx, dv))
-        '''
+            print("    {}: {}".format(idx, dv))
+
+
+def _find_data_source_model(workflow, data_source_id):
+    """Finds the data source model on the workflow by data source id.
+    The match looks if the passed id is contained in the full id, so a
+    substring will also suffice.
+    """
+    for layer in workflow.execution_layers:
+        for data_source_model in layer.data_sources:
+            if data_source_id in data_source_model.factory.id:
+                return data_source_model
+
+    return None
+
