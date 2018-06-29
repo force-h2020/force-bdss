@@ -66,7 +66,7 @@ class CoreRunDataSourceDriver(BaseCoreDriver):
                     "Specified input is empty. Please provide values.")
 
             try:
-                values = [float(x) for x in line.strip().split(' ')]
+                values = [float(x) for x in line.split()]
             except ValueError:
                 raise RuntimeError(
                     "Unable to convert values to floating point number. "
