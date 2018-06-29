@@ -7,6 +7,18 @@ log = logging.getLogger(__name__)
 def execute_workflow(workflow, data_values):
     """Executes the given workflow using the list of data values.
     Returns a list of data values for the KPI results
+
+    Parameters
+    ----------
+    workflow: Workflow
+        The instance of the workflow
+
+    data_values: List
+        The data values that the MCO generally provides.
+
+    Returns
+    -------
+    list: A list of DataValues containing the KPI results.
     """
 
     available_data_values = data_values[:]
