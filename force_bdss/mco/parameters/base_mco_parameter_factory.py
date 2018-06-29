@@ -39,10 +39,12 @@ class BaseMCOParameterFactory(BaseFactory):
             "get_model_class was not implemented in factory {}".format(
                 self.__class__))
 
-    def __init__(self, mco_factory):
-        self.mco_factory = mco_factory
+    def __init__(self, mco_factory, *args, **kwargs):
         super(BaseMCOParameterFactory, self).__init__(
-            plugin=mco_factory.plugin)
+            mco_factory=mco_factory,
+            plugin=mco_factory.plugin,
+            *args,
+            **kwargs)
 
         self.description = self.get_description()
         self.model_class = self.get_model_class()

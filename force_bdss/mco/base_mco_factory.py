@@ -26,8 +26,11 @@ class BaseMCOFactory(BaseFactory):
     #: The communicator associated to the MCO. Define this to your MCO comm.
     communicator_class = Type(BaseMCOCommunicator, allow_none=False)
 
-    def __init__(self, plugin):
-        super(BaseMCOFactory, self).__init__(plugin=plugin)
+    def __init__(self, plugin, *args, **kwargs):
+        super(BaseMCOFactory, self).__init__(
+            plugin=plugin,
+            *args,
+            **kwargs)
 
         self.optimizer_class = self.get_optimizer_class()
         self.model_class = self.get_model_class()

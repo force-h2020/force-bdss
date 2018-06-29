@@ -32,7 +32,7 @@ class BaseNotificationListenerFactory(BaseFactory):
     #: listener model class.
     model_class = Type(BaseNotificationListenerModel, allow_none=False)
 
-    def __init__(self, plugin):
+    def __init__(self, plugin, *args, **kwargs):
         """Initializes the instance.
 
         Parameters
@@ -40,7 +40,8 @@ class BaseNotificationListenerFactory(BaseFactory):
         plugin: Plugin
             The plugin that holds this factory.
         """
-        super(BaseNotificationListenerFactory, self).__init__(plugin=plugin)
+        super(BaseNotificationListenerFactory, self).__init__(
+            plugin=plugin, *args, **kwargs)
 
         self.listener_class = self.get_listener_class()
         self.model_class = self.get_model_class()

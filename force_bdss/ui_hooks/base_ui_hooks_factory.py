@@ -18,7 +18,7 @@ class BaseUIHooksFactory(BaseFactory):
     #: base hook managers.
     ui_hooks_manager_class = Type(BaseUIHooksManager, allow_none=False)
 
-    def __init__(self, plugin):
+    def __init__(self, plugin, *args, **kwargs):
         """Initializes the instance.
 
         Parameters
@@ -26,7 +26,8 @@ class BaseUIHooksFactory(BaseFactory):
         plugin: Plugin
             The plugin that holds this factory.
         """
-        super(BaseUIHooksFactory, self).__init__(plugin=plugin)
+        super(BaseUIHooksFactory, self).__init__(
+            plugin=plugin, *args, **kwargs)
 
         self.ui_hooks_manager_class = self.get_ui_hooks_manager_class()
 
