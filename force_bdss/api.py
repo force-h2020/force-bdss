@@ -10,6 +10,7 @@ from .core.kpi_specification import KPISpecification  # noqa
 from .core.execution_layer import ExecutionLayer  # noqa
 from .core.verifier import verify_workflow  # noqa
 from .core.verifier import VerifierError  # noqa
+from .execution import execute_layer, execute_workflow  # noqa
 
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa
