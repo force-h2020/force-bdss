@@ -43,4 +43,4 @@ from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory  # noqa
 from .ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory  # noqa
 from .ui_hooks.base_ui_hooks_manager import BaseUIHooksManager  # noqa
 
-from .local_traits import Identifier  # noqa
+from .local_traits import Identifier, PositiveInt  # noqa
