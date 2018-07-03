@@ -1,7 +1,10 @@
 import unittest
 
+from traits.api import Int
+from traits.testing.api import UnittestTools
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 
 try:
@@ -13,9 +16,18 @@ from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
 
 
-class TestBaseDataSourceModel(unittest.TestCase):
+class ChangesSlotsModel(BaseDataSourceModel):
+    a = Int()
+    b = Int(changes_slots=True)
+    c = Int(changes_slots=False)
+
+
+class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
+    def setUp(self):
+        self.mock_factory = mock.Mock(spec=BaseDataSourceFactory)
+
     def test_getstate(self):
-        model = DummyDataSourceModel(mock.Mock(spec=BaseDataSourceFactory))
+        model = DummyDataSourceModel(self.mock_factory)
         self.assertEqual(
             model.__getstate__(),
             {
@@ -64,3 +76,16 @@ class TestBaseDataSourceModel(unittest.TestCase):
                     }
                 ]
             })
+
+    def test_changes_slots(self):
+        model = ChangesSlotsModel(self.mock_factory)
+
+        with self.assertTraitDoesNotChange(model, "changes_slots"):
+            model.a = 5
+
+        with self.assertTraitChanges(model, "changes_slots"):
+            model.b = 5
+
+        with self.assertTraitDoesNotChange(model, "changes_slots"):
+            model.c = 5
+

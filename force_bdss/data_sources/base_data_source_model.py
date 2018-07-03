@@ -1,4 +1,6 @@
-from traits.api import ABCHasStrictTraits, Instance, List, Event
+from traits.api import (
+    ABCHasStrictTraits, Instance, List, Event, on_trait_change
+)
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
@@ -49,3 +51,13 @@ class BaseDataSourceModel(ABCHasStrictTraits):
             x.__getstate__() for x in self.output_slot_info
         ]
         return state
+
+    @on_trait_change("+changes_slots")
+    def _trigger_changes_slots(self, obj, name, new):
+        try:
+            changes_slots = self.traits()[name].changes_slots
+        except AttributeError:
+            return
+
+        if changes_slots:
+            self.changes_slots = True
