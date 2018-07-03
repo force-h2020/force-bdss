@@ -37,21 +37,22 @@ def _check_mco(workflow):
                                     error="MCO has no defined parameters"))
 
     for idx, param in enumerate(mco.parameters):
+        p_name = param.factory.name
         if len(param.name.strip()) == 0:
             errors.append(VerifierError(subject=param,
-                                        error="Parameter {} "
-                                              "has empty name".format(idx)))
+                                        error="Parameter {} ({}) has empty "
+                                              "name".format(idx, p_name)))
         if len(param.type.strip()) == 0:
             errors.append(VerifierError(subject=param,
-                                        error="Parameter {} "
-                                              "has empty type".format(idx)))
+                                        error="Parameter {} ({}) has empty "
+                                              "type".format(idx, p_name)))
 
     for idx, kpi in enumerate(mco.kpis):
         if len(kpi.name.strip()) == 0:
             errors.append(VerifierError(subject=kpi,
                                         error="KPI {} has empty name".format(
                                             idx)))
-        if len(kpi.objective.strip()) == 0:
+        if kpi.objective == '':
             errors.append(VerifierError(subject=kpi,
                                         error="KPI {} has empty "
                                               "objective".format(idx)))
@@ -85,7 +86,7 @@ def _check_execution_layers(workflow):
     return errors
 
 
-def _check_data_source(data_source_model, layer_no):
+def _check_data_source(data_source_model, layer_number):
     errors = []
 
     factory = data_source_model.factory
@@ -113,26 +114,30 @@ def _check_data_source(data_source_model, layer_no):
         errors.append(VerifierError(
             subject=data_source_model,
             error="Missing input slot name assignment "
-                  "in layer {}".format(layer_no)))
+                  "in layer {}".format(layer_number)))
 
     for idx, info in enumerate(data_source_model.input_slot_info):
         if len(info.name.strip()) == 0:
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for input "
-                      "parameter {} in layer {}".format(idx, layer_no)))
+                      "parameter {} of {} in layer {}".format(idx,
+                                                              factory.name,
+                                                              layer_number)))
 
     if len(output_slots) != len(data_source_model.output_slot_info):
         errors.append(VerifierError(
             subject=data_source_model,
             error="Missing output slot name assignment "
-                  "in layer {}".format(layer_no)))
+                  "in layer {}".format(layer_number)))
 
     for idx, info in enumerate(data_source_model.output_slot_info):
         if len(info.name.strip()) == 0:
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for output "
-                      "parameter {} in layer {}".format(idx, layer_no)))
+                      "parameter {} of {} in layer {}".format(idx,
+                                                              factory.name,
+                                                              layer_number)))
 
     return errors
