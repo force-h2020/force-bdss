@@ -88,4 +88,3 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
 
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.c = 5
-
