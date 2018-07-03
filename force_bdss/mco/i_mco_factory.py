@@ -1,17 +1,14 @@
-from traits.api import Interface, Str, Instance, Type
-from envisage.plugin import Plugin
+from traits.api import Type
+
+from force_bdss.core.i_factory import IFactory
 
 
-class IMCOFactory(Interface):
+class IMCOFactory(IFactory):
     """Interface for the BaseMCOFactory.
     You should not need it, as its main use is for envisage support.
 
     Refer to BaseMCOFactory for documentation
     """
-    id = Str()
-
-    name = Str()
-
     optimizer_class = Type(
         "force_bdss.mco.base_mco.BaseMCO",
         allow_none=False
@@ -28,8 +25,6 @@ class IMCOFactory(Interface):
         allow_none=False
     )
 
-    plugin = Instance(Plugin, allow_none=False)
-
     def get_model_class(self):
         pass
 
@@ -37,12 +32,6 @@ class IMCOFactory(Interface):
         pass
 
     def get_optimizer_class(self):
-        pass
-
-    def get_identifier(self):
-        pass
-
-    def get_name(self):
         pass
 
     def create_optimizer(self):

@@ -4,11 +4,25 @@ from .ids import plugin_id, factory_id  # noqa
 from .core.data_value import DataValue  # noqa
 from .core.workflow import Workflow  # noqa
 from .core.slot import Slot  # noqa
+from .core.i_factory import IFactory  # noqa
+from .core.input_slot_info import InputSlotInfo  # noqa
+from .core.output_slot_info import OutputSlotInfo  # noqa
+from .core.kpi_specification import KPISpecification  # noqa
+from .core.execution_layer import ExecutionLayer  # noqa
+from .core.verifier import verify_workflow  # noqa
+from .core.verifier import VerifierError  # noqa
 
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa
 from .data_sources.base_data_source_factory import BaseDataSourceFactory  # noqa
 from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
+
+from .factory_registry_plugin import IFactoryRegistryPlugin  # noqa
+from .factory_registry_plugin import FactoryRegistryPlugin  # noqa
+
+from .io.workflow_reader import WorkflowReader  # noqa
+from .io.workflow_reader import InvalidFileException  # noqa
+from .io.workflow_writer import WorkflowWriter  # noqa
 
 from .mco.base_mco_model import BaseMCOModel  # noqa
 from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
