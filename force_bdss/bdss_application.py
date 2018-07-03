@@ -6,8 +6,9 @@ from stevedore.exception import NoMatches
 
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
-from traits.api import Unicode, Bool
+from traits.api import Unicode, Bool, Property
 
+from force_bdss.ids import InternalPluginID
 from .factory_registry_plugin import FactoryRegistryPlugin
 from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
@@ -27,6 +28,9 @@ class BDSSApplication(Application):
     #: the MCO, but instead to perform a single evaluation under the
     #: coordination of the MCO itself. See design notes for more details.
     evaluate = Bool()
+
+    #: Gives the currently opened workflow
+    workflow = Property()
 
     def __init__(self, evaluate, workflow_filepath):
         self.evaluate = evaluate
@@ -52,6 +56,15 @@ class BDSSApplication(Application):
             log.info("No extensions found")
 
         super(BDSSApplication, self).__init__(plugins=plugins)
+
+    def _get_workflow(self):
+        if self.evaluate:
+            plugin = self.get_plugin(
+                InternalPluginID.CORE_EVALUATION_DRIVER_ID)
+        else:
+            plugin = self.get_plugin(InternalPluginID.CORE_MCO_DRIVER_ID)
+
+        return plugin.workflow
 
 
 def _import_extensions(plugins, ext):
