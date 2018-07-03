@@ -2,6 +2,7 @@ import unittest
 
 from traits.trait_errors import TraitError
 
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.tests.test_base_mco import DummyMCO
 from force_bdss.mco.tests.test_base_mco_communicator import \
     DummyMCOCommunicator
@@ -29,6 +30,9 @@ class TestBaseMCOFactory(unittest.TestCase):
                               DummyMCOCommunicator)
         self.assertIsInstance(factory.create_model(),
                               DummyMCOModel)
+
+    def test_base_object_parameter_factories(self):
+        factory = BaseMCOFactory(self.plugin)
         self.assertNotEqual(factory.parameter_factories(), [])
 
     def test_broken_get_identifier(self):
