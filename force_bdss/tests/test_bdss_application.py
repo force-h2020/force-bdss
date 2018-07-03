@@ -17,9 +17,10 @@ except ImportError:
 
 class TestBDSSApplication(unittest.TestCase):
     def test_initialization(self):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            app = BDSSApplication(False, "foo/bar")
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(False, "foo/bar")
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
 
