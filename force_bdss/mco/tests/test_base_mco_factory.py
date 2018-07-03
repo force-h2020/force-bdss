@@ -16,6 +16,11 @@ except ImportError:
 from envisage.plugin import Plugin
 
 
+class MCOFactory(BaseMCOFactory):
+    def get_name(self):
+        return "foo"
+
+
 class TestBaseMCOFactory(unittest.TestCase):
     def setUp(self):
         self.plugin = mock.Mock(spec=Plugin, id="pid")
@@ -32,7 +37,7 @@ class TestBaseMCOFactory(unittest.TestCase):
                               DummyMCOModel)
 
     def test_base_object_parameter_factories(self):
-        factory = BaseMCOFactory(self.plugin)
+        factory = MCOFactory(self.plugin)
         self.assertNotEqual(factory.parameter_factories(), [])
 
     def test_broken_get_identifier(self):
