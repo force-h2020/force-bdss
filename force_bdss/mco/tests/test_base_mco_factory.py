@@ -17,8 +17,20 @@ from envisage.plugin import Plugin
 
 
 class MCOFactory(BaseMCOFactory):
+    def get_identifier(self):
+        return "dummy_mco_2"
+
     def get_name(self):
-        return "foo"
+        return "Dummy MCO 2"
+
+    def get_model_class(self):
+        return DummyMCOModel
+
+    def get_communicator_class(self):
+        return DummyMCOCommunicator
+
+    def get_optimizer_class(self):
+        return DummyMCO
 
 
 class TestBaseMCOFactory(unittest.TestCase):
@@ -38,7 +50,7 @@ class TestBaseMCOFactory(unittest.TestCase):
 
     def test_base_object_parameter_factories(self):
         factory = MCOFactory(self.plugin)
-        self.assertNotEqual(factory.parameter_factories(), [])
+        self.assertEqual(factory.parameter_factories(), [])
 
     def test_broken_get_identifier(self):
         class Broken(DummyMCOFactory):
