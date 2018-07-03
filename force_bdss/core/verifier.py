@@ -121,7 +121,7 @@ def _check_data_source(data_source_model, layer_number):
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for input "
-                      "parameter {} of {} in layer {}".format(idx,
+                      "parameter {} from {} in layer {}".format(idx,
                                                               factory.name,
                                                               layer_number)))
 
@@ -136,7 +136,7 @@ def _check_data_source(data_source_model, layer_number):
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for output "
-                      "parameter {} of {} in layer {}".format(idx,
+                      "parameter {} from {} in layer {}".format(idx,
                                                               factory.name,
                                                               layer_number)))
 
