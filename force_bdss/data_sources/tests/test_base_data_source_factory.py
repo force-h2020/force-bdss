@@ -25,6 +25,7 @@ class TestBaseDataSourceFactory(unittest.TestCase):
         factory = DummyDataSourceFactory(self.plugin)
         self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
         self.assertEqual(factory.name, 'Dummy data source')
+        self.assertEqual(factory.description, u"No description available.")
         self.assertEqual(factory.model_class, DummyDataSourceModel)
         self.assertEqual(factory.data_source_class, DummyDataSource)
         self.assertIsInstance(factory.create_data_source(), DummyDataSource)
