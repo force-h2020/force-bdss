@@ -28,7 +28,7 @@ class TestBaseMCOParameterFactory(unittest.TestCase):
         factory = DummyMCOParameterFactory(mco_factory=self.mco_factory)
         self.assertEqual(factory.id, "mcoid.parameter.dummy_mco_parameter")
         self.assertEqual(factory.name, "Dummy MCO parameter")
-        self.assertEqual(factory.description, "description")
+        self.assertEqual(factory.description, u"description")
         self.assertEqual(factory.model_class, DummyMCOParameter)
         self.assertIsInstance(factory.create_model(), DummyMCOParameter)
 

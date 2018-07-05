@@ -37,7 +37,7 @@ class DummyMCOParameterFactory(BaseMCOParameterFactory):
         return "Dummy MCO parameter"
 
     def get_description(self):
-        return "description"
+        return u"description"
 
     def get_model_class(self):
         return DummyMCOParameter
