@@ -54,7 +54,8 @@ def _check_mco(workflow):
                                             idx)))
         if kpi.objective == '':
             errors.append(VerifierError(subject=kpi,
-                                        error="Empty Objective - KPI {}".format(idx)))
+                                        error="Empty Objective - "
+                                              "KPI {}".format(idx)))
 
     return errors
 
