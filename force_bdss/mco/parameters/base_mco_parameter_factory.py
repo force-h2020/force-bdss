@@ -1,4 +1,4 @@
-from traits.api import Str, Type, Instance, provides
+from traits.api import Type, Instance, provides, Unicode
 
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.ids import mco_parameter_id
@@ -20,19 +20,11 @@ class BaseMCOParameterFactory(BaseFactory):
     mco_factory = Instance('force_bdss.mco.base_mco_factory.BaseMCOFactory',
                            allow_none=False)
 
-    #: A long description of the parameter
-    description = Str()
-
     # The model class to instantiate when create_model is called.
     model_class = Type(
         "force_bdss.mco.parameters.base_mco_parameter.BaseMCOParameter",
         allow_none=False
     )
-
-    def get_description(self):
-        raise NotImplementedError(
-            "get_description was not implemented in factory {}".format(
-                self.__class__))
 
     def get_model_class(self):
         raise NotImplementedError(
@@ -46,7 +38,6 @@ class BaseMCOParameterFactory(BaseFactory):
             *args,
             **kwargs)
 
-        self.description = self.get_description()
         self.model_class = self.get_model_class()
 
     def create_model(self, data_values=None):
