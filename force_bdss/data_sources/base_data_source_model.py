@@ -54,10 +54,7 @@ class BaseDataSourceModel(ABCHasStrictTraits):
 
     @on_trait_change("+changes_slots")
     def _trigger_changes_slots(self, obj, name, new):
-        try:
-            changes_slots = self.traits()[name].changes_slots
-        except AttributeError:
-            return
+        changes_slots = self.traits()[name].changes_slots
 
         if changes_slots:
             self.changes_slots = True
