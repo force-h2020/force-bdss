@@ -1,4 +1,4 @@
-from traits.api import Type, Instance, provides, Unicode
+from traits.api import Type, Instance, provides
 
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.ids import mco_parameter_id
