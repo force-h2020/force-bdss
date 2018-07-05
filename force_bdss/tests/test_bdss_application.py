@@ -58,3 +58,10 @@ class TestBDSSApplication(unittest.TestCase):
                 app = BDSSApplication(False, fixtures.get("test_empty.json"))
 
         self.assertIsInstance(app.workflow, Workflow)
+
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(True, fixtures.get("test_empty.json"))
+
+        self.assertIsInstance(app.workflow, Workflow)
