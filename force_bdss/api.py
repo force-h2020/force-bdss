@@ -1,6 +1,7 @@
 from .base_extension_plugin import BaseExtensionPlugin  # noqa
 from .ids import plugin_id, factory_id  # noqa
 
+from .core.base_factory import BaseFactory  # noqa
 from .core.data_value import DataValue  # noqa
 from .core.workflow import Workflow  # noqa
 from .core.slot import Slot  # noqa
