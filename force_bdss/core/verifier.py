@@ -37,25 +37,28 @@ def _check_mco(workflow):
                                     error="MCO has no defined parameters"))
 
     for idx, param in enumerate(mco.parameters):
-        p_name = param.factory.name
+        factory_name = param.factory.name
         if param.name == '':
             errors.append(VerifierError(subject=param,
-                                        error="Parameter {} ({}) has empty "
-                                              "name".format(idx, p_name)))
+                                        error="Empty Name - Parameter {} "
+                                              "({})".format(idx,
+                                                            factory_name)))
+
         if len(param.type.strip()) == 0:
             errors.append(VerifierError(subject=param,
-                                        error="Parameter {} ({}) has empty "
-                                              "type".format(idx, p_name)))
+                                        error="Empty Type - Parameter {} "
+                                              "({})".format(idx,
+                                                            factory_name)))
 
     for idx, kpi in enumerate(mco.kpis):
         if kpi.name == '':
             errors.append(VerifierError(subject=kpi,
-                                        error="KPI {} has empty name".format(
+                                        error="Empty Name - KPI {}".format(
                                             idx)))
         if kpi.objective == '':
             errors.append(VerifierError(subject=kpi,
-                                        error="KPI {} has empty "
-                                              "objective".format(idx)))
+                                        error="Empty Objective - "
+                                              "KPI {}".format(idx)))
 
     return errors
 

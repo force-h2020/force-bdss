@@ -44,9 +44,9 @@ class TestVerifier(unittest.TestCase):
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 3)
         self.assertEqual(errors[0].subject, wf.mco.parameters[0])
-        self.assertIn("empty name", errors[0].error)
+        self.assertIn("Empty Name", errors[0].error)
         self.assertEqual(errors[1].subject, wf.mco.parameters[0])
-        self.assertIn("empty type", errors[1].error)
+        self.assertIn("Empty Type", errors[1].error)
 
     def test_empty_kpi_options(self):
         wf = self.workflow
@@ -59,8 +59,8 @@ class TestVerifier(unittest.TestCase):
 
         self.assertEqual(len(errors), 4)
         self.assertEqual(errors[1].subject, wf.mco.kpis[0])
-        self.assertIn("KPI 0 has empty name", errors[1].error)
-        self.assertIn("KPI 0 has empty objective", errors[2].error)
+        self.assertIn("Empty Name", errors[1].error)
+        self.assertIn("Empty Objective", errors[2].error)
 
     def test_empty_execution_layer(self):
         wf = self.workflow
