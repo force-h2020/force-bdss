@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import HasStrictTraits, Str, Instance
+from traits.api import HasStrictTraits, Str, Unicode, Instance
 
 from force_bdss.ids import factory_id
 
@@ -12,6 +12,9 @@ class BaseFactory(HasStrictTraits):
     #: A human readable name of the factory. Spaces allowed
     name = Str()
 
+    #: A long description of the factory.
+    description = Unicode()
+
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
     #: in your subclass.
@@ -21,6 +24,7 @@ class BaseFactory(HasStrictTraits):
         super(BaseFactory, self).__init__(plugin=plugin, *args, **kwargs)
 
         self.name = self.get_name()
+        self.description = self.get_description()
         identifier = self.get_identifier()
         try:
             id = self._global_id(identifier)
@@ -50,6 +54,9 @@ class BaseFactory(HasStrictTraits):
         raise NotImplementedError(
             "get_identifier was not implemented in factory {}".format(
                 self.__class__))
+
+    def get_description(self):
+        return u"No description available."
 
     def _global_id(self, identifier):
         return factory_id(self.plugin.id, identifier)

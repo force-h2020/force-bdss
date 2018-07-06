@@ -1,12 +1,13 @@
 import unittest
 from traits.api import HasStrictTraits, TraitError
 
-from force_bdss.local_traits import Identifier, CUBAType
+from force_bdss.local_traits import Identifier, CUBAType, PositiveInt
 
 
 class Traited(HasStrictTraits):
     val = Identifier()
     cuba = CUBAType()
+    positive_int = PositiveInt()
 
 
 class TestLocalTraits(unittest.TestCase):
@@ -25,3 +26,13 @@ class TestLocalTraits(unittest.TestCase):
         c = Traited()
         c.cuba = "PRESSURE"
         self.assertEqual(c.cuba, "PRESSURE")
+
+    def test_positive_int(self):
+        c = Traited()
+        with self.assertRaises(TraitError):
+            c.positive_int = 0
+
+        with self.assertRaises(TraitError):
+            c.positive_int = -1
+
+        c.positive_int = 3

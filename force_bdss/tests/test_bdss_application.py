@@ -8,6 +8,8 @@ from force_bdss.bdss_application import (
     _load_failure_callback,
     _import_extensions
 )
+from force_bdss.core.workflow import Workflow
+from force_bdss.tests import fixtures
 
 try:
     import mock
@@ -17,9 +19,10 @@ except ImportError:
 
 class TestBDSSApplication(unittest.TestCase):
     def test_initialization(self):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            app = BDSSApplication(False, "foo/bar")
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(False, "foo/bar")
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
 
@@ -47,3 +50,18 @@ class TestBDSSApplication(unittest.TestCase):
         _import_extensions(plugins, ext)
 
         self.assertEqual(plugins[0], plugin)
+
+    def test_workflow(self):
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(False, fixtures.get("test_empty.json"))
+
+        self.assertIsInstance(app.workflow, Workflow)
+
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(True, fixtures.get("test_empty.json"))
+
+        self.assertIsInstance(app.workflow, Workflow)
