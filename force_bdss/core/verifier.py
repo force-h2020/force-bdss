@@ -38,7 +38,7 @@ def _check_mco(workflow):
 
     for idx, param in enumerate(mco.parameters):
         p_name = param.factory.name
-        if len(param.name.strip()) == 0:
+        if param.name == '':
             errors.append(VerifierError(subject=param,
                                         error="Parameter {} ({}) has empty "
                                               "name".format(idx, p_name)))
@@ -48,7 +48,7 @@ def _check_mco(workflow):
                                               "type".format(idx, p_name)))
 
     for idx, kpi in enumerate(mco.kpis):
-        if len(kpi.name.strip()) == 0:
+        if kpi.name == '':
             errors.append(VerifierError(subject=kpi,
                                         error="KPI {} has empty name".format(
                                             idx)))
@@ -117,7 +117,7 @@ def _check_data_source(data_source_model, layer_number):
                   "in layer {}".format(layer_number)))
 
     for idx, info in enumerate(data_source_model.input_slot_info):
-        if len(info.name.strip()) == 0:
+        if info.name == '':
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for input "
@@ -132,7 +132,7 @@ def _check_data_source(data_source_model, layer_number):
                   "in layer {}".format(layer_number)))
 
     for idx, info in enumerate(data_source_model.output_slot_info):
-        if len(info.name.strip()) == 0:
+        if info.name == '':
             errors.append(VerifierError(
                 subject=data_source_model,
                 error="Undefined name for output "
