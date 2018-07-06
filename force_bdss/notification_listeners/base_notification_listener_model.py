@@ -1,10 +1,11 @@
-from traits.api import ABCHasStrictTraits, Instance
+from traits.api import Instance
 
+from force_bdss.core.base_model import BaseModel
 from force_bdss.notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
 
 
-class BaseNotificationListenerModel(ABCHasStrictTraits):
+class BaseNotificationListenerModel(BaseModel):
     """Base class for the specific Notification Listener models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
@@ -16,7 +17,3 @@ class BaseNotificationListenerModel(ABCHasStrictTraits):
     factory = Instance(INotificationListenerFactory,
                        visible=False,
                        transient=True)
-
-    def __init__(self, factory, *args, **kwargs):
-        self.factory = factory
-        super(BaseNotificationListenerModel, self).__init__(*args, **kwargs)

@@ -1,11 +1,12 @@
-from traits.api import HasStrictTraits, String, Instance
+from traits.api import String, Instance
 
+from force_bdss.core.base_model import BaseModel
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
 from force_bdss.local_traits import Identifier
 
 
-class BaseMCOParameter(HasStrictTraits):
+class BaseMCOParameter(BaseModel):
     """The base class of all MCO Parameter models.
     Must be reimplemented by specific classes handling the specific parameter
     that MCOs understand.
@@ -19,7 +20,3 @@ class BaseMCOParameter(HasStrictTraits):
 
     #: A CUBA key describing the type of the parameter
     type = String(visible=False)
-
-    def __init__(self, factory, *args, **kwargs):
-        self.factory = factory
-        super(BaseMCOParameter, self).__init__(*args, **kwargs)
