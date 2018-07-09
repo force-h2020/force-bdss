@@ -56,7 +56,7 @@ The Factory
 
 The factory must inherit from the appropriate factory for the given type.
 For example, to create a DataSource, the factory must inherit from
-``BaseDataSourceFactory``. It also needs four methods
+``BaseDataSourceFactory``. It then needs these methods to be redefined
 
 - ``get_identifier()``: must returns a unique string, e.g. a uuid or a
   memorable string that must be unique across your plugins, present and future.
