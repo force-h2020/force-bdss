@@ -8,4 +8,4 @@ class KPISpecification(HasStrictTraits):
     name = Identifier()
 
     #: The expected outcome of the procedure relative to this KPI.
-    objective = Enum("MINIMISE")
+    objective = Enum("", "MINIMISE")
