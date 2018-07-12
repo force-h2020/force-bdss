@@ -3,7 +3,7 @@ import unittest
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.verifier import verify_workflow
+from force_bdss.core.verifier import verify_workflow, multi_error_format
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.tests.dummy_classes.extension_plugin import \
@@ -126,3 +126,9 @@ class TestVerifier(unittest.TestCase):
         self.assertEqual(len(errors), 2)
         self.assertIn("Undefined name for output parameter",
                       errors[1].local_error)
+
+    def test_multi_error_format(self):
+
+        self.assertEqual(multi_error_format([2]), '2')
+        self.assertEqual(multi_error_format([4, 2, 3, 7, 8, 11, 43]),
+                         '2-4, 7-8, 11, 43')
