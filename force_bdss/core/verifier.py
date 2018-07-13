@@ -15,12 +15,14 @@ class VerifierError(HasStrictTraits):
     global_error = Str()
 
     def __init__(self, subject, global_error='', local_error=''):
-        self.subject = subject
         if local_error == '':
-            self.local_error = global_error
-        else:
-            self.local_error = local_error
-        self.global_error = global_error
+            local_error = global_error
+
+        super(VerifierError, self).__init__(
+            subject=subject,
+            global_error=global_error,
+            local_error=local_error
+        )
 
 
 def verify_workflow(workflow):
