@@ -231,7 +231,7 @@ class TestCoreMCODriver(unittest.TestCase):
                  'ERROR',
                  'Unable to execute workflow due to verification errors :'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'MCO has no defined parameters'),
+                 'The MCO has no defined parameters'),
                 ('force_bdss.core_mco_driver', 'ERROR',
                  'Missing input slot name assignment in layer 0'),
                 ('force_bdss.core_mco_driver', 'ERROR',
