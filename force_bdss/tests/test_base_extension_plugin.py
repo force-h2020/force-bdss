@@ -14,3 +14,6 @@ class TestBaseExtensionPlugin(unittest.TestCase):
         self.assertFalse(plugin.broken)
         self.assertEqual(plugin.error_msg, "")
         self.assertEqual(plugin.error_tb, "")
+        self.assertEqual(plugin.name, u"Probe extension")
+        self.assertEqual(plugin.version, 0)
+        self.assertEqual(plugin.description, u"A description")

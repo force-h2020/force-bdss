@@ -10,6 +10,15 @@ from force_bdss.tests.probe_classes.ui_hooks import ProbeUIHooksFactory
 class ProbeExtensionPlugin(BaseExtensionPlugin):
     id = plugin_id("enthought", "test", 0)
 
+    def get_name(self):
+        return u"Probe extension"
+
+    def get_description(self):
+        return u"A description"
+
+    def get_version(self):
+        return 0
+
     def get_factory_classes(self):
         return [
             ProbeDataSourceFactory,

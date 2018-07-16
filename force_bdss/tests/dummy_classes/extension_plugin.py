@@ -9,6 +9,15 @@ from force_bdss.tests.dummy_classes.notification_listener import \
 class DummyExtensionPlugin(BaseExtensionPlugin):
     id = plugin_id("enthought", "test", 0)
 
+    def get_name(self):
+        return u"Dummy extension"
+
+    def get_description(self):
+        return u"Dummy description"
+
+    def get_version(self):
+        return 0
+
     def get_factory_classes(self):
         return [
             DummyMCOFactory,
