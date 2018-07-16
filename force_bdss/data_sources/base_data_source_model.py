@@ -1,13 +1,14 @@
 from traits.api import (
-    ABCHasStrictTraits, Instance, List, Event, on_trait_change
+    Instance, List, Event, on_trait_change
 )
 
+from force_bdss.core.base_model import BaseModel
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
 
-class BaseDataSourceModel(ABCHasStrictTraits):
+class BaseDataSourceModel(BaseModel):
     """Base class for the factory specific DataSource models.
     This model will also provide, through traits/traitsui magic the View
     that will appear in the workflow manager UI.
@@ -37,10 +38,6 @@ class BaseDataSourceModel(ABCHasStrictTraits):
     #: option in your model implies a change in the slots. The UI will detect
     #: this and adapt the visual entries.
     changes_slots = Event()
-
-    def __init__(self, factory, *args, **kwargs):
-        self.factory = factory
-        super(BaseDataSourceModel, self).__init__(*args, **kwargs)
 
     def __getstate__(self):
         state = super(BaseDataSourceModel, self).__getstate__()
