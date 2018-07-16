@@ -49,7 +49,11 @@ The plugin class must be
 
 - Implement a method ``get_factory_classes()`` returning a list of all
   the classes (NOT the instances) of the entities you want to export.
-
+- Implement the methods ``get_name()``, ``get_version()`` and
+  ``get_description()`` to return appropriate values. The ``get_version()``
+  method in particular should return the same value as in the id (in this case
+  zero). It is advised to extract this value in a global, module level
+  constant.
 
 The Factory
 ^^^^^^^^^^^
