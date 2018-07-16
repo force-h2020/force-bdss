@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 import traceback
 
@@ -126,6 +127,9 @@ class BaseExtensionPlugin(Plugin):
             self._logger.exception(e)
             self.error_msg = str(e)
             self.error_tb = traceback.format_exc()
+            self.name = ""
+            self.description = ""
+            self.version = 0
             self.broken = True
             self.mco_factories[:] = []
             self.data_source_factories[:] = []
