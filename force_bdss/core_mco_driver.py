@@ -38,7 +38,7 @@ class CoreMCODriver(BaseCoreDriver):
             log.error("Unable to execute workflow due to verification "
                       "errors :")
             for err in errors:
-                log.error(err.error)
+                log.error(err.local_error)
             sys.exit(1)
 
         try:

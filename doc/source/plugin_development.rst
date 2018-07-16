@@ -1,43 +1,231 @@
 Plugin Development
 ------------------
 
-A single Plugin can provide one or more of the pluggable entities described
-elsewhere (MCO/DataSources/NotificationListeners/UIHooks).
-Multiple plugins can be installed to provide a broad range of functionalities.
+Force BDSS is extensible through plugins. A plugin can be (and generally is)
+provided as a separate python package that makes available some new classes.
+Force BDSS will find these classes from the plugin at startup.
+
+A single Plugin can provide one or more of the following entities:
+MCO, DataSources, NotificationListeners, UIHooks.
 
 An example plugin implementation is available at:
 
 https://github.com/force-h2020/force-bdss-plugin-enthought-example
 
-Plugins must return Factories. Each Factory provides factory methods for
-one of the above pluggable entities and its associated classes.
+To implement a new plugin, you must define at least four classes:
 
-To implement a new plugin, you must
+- The plugin class itself.
+- One of the entities you want to implement: a DataSource,
+  NotificationListener, MCO, or UIHook.
+- A Factory class for the entity above: it is responsible for creating the
+  specific entity, for example, a DataSource
+- A Model class which contains configuration options for the entity.
+  For example, it can contain login and password information so that its data
+  source knows how to connect to a service. The Model is also shown visually
+  in the force_wfmanager UI, so some visual aspects need to be configured as
+  well.
 
-- define the entity you want to extend (e.g. ``MyOwnDataSource``) as a derived
-  class of the appropriate class (e.g. ``BaseDataSource``), and reimplement
-  the appropriate methods:
+The plugin is made available by having it defined in the setup.py
+entry_point, under the namespace ``force.bdss.extensions``. For example::
 
-   - ``run()``: where the actual computation takes place, given the
-     configuration options specified in the model (which is received as an
-     argument). It is strongly advised that the ``run()`` method is stateless.
-   - ``slots()``: must return a 2-tuple of tuples. Each tuple contains instances
-     of the ``Slot`` class. Slots are the input and output entities of the
-     data source or KPI calculator. Given that this information depends on the
-     configuration options, ``slots()`` accepts the model and must return the
-     appropriate values according to the model options.
+    entry_points={
+        "force.bdss.extensions": [
+            "enthought_example = "
+            "enthought_example.example_plugin:ExamplePlugin",
+        ]
+    }
 
-- Define the model that this ``DataSource`` needs, by extending
-  ``BaseDataSourceModel`` and adding, with traits, the appropriate data that
-  are required by your data source to perform its task.
-  If a trait change in your model influences the input/output slots, you must
-  make sure that the event ``changes_slots`` is fired as a consequence of
-  those changes. This will notify the UI that the new slots need to be
-  recomputed and presented to the user. Failing to do so will have unexpected
-  consequences.
-- Define the Factory, by reimplementing BaseDataSourceFactory and reimplementing
-  its ``get_*`` methods to return the above entities.
-- Define a ``Plugin`` by reimplementing ``BaseExtensionPlugin`` and
-  reimplementing its initialization defaults methods to return your factory.
-- add the plugin class in the setup.py entry_point, under the namespace
-  ``force.bdss.extensions``
+
+The plugin
+^^^^^^^^^^
+
+The plugin class must be
+
+- Inheriting from ``force_bdss.api.BaseExtensionPlugin``
+- Implement a ``id`` class member, that must be set to the result of
+  calling the function plugin_id(). For example::
+
+    id = plugin_id("enthought", "example", 0)
+
+- Implement a method ``get_factory_classes()`` returning a list of all
+  the classes (NOT the instances) of the entities you want to export.
+
+
+The Factory
+^^^^^^^^^^^
+
+The factory must inherit from the appropriate factory for the given type.
+For example, to create a DataSource, the factory must inherit from
+``BaseDataSourceFactory``. It then needs these methods to be redefined
+
+- ``get_identifier()``: must returns a unique string, e.g. a uuid or a
+  memorable string that must be unique across your plugins, present and future.
+- ``get_name()``: a memorable, user presentable name for the data source.
+- ``get_description()``: a user presentable description.
+- ``get_model_class()``: Must return the Model class.
+- ``get_data_source_class()``: Must return the data source class.
+
+
+The Model class
+^^^^^^^^^^^^^^^
+
+The model class must inherit from the appropriate Base model class, depending
+on the entity, for example ``BaseDataSourceModel`` in case of a data source.
+
+This class then must be treated as a Traits class, where you can use traits
+to define the type of data it holds. Pay particular attention to those data
+that can modify the slots. For those, add a ``changes_slots=True`` metadata
+tag to the trait. This will notify the UI that the new slots need to be
+recomputed and presented to the user. Failing to do so will have unexpected
+consequences. Example::
+
+    class MyModel(BaseDataSourceModel):
+        normal_option = String()
+        option_changing_slots = String(changes_slots=True)
+
+Typically, options that change slots are those options that modify the behavior
+of the computational engine, thus requiring more or less input (input slots)
+or producing more or less output (output slots).
+
+You can also define a view with traitsui (``import traitsui.api``). This is
+recommended as the default view arranges the options in random order. To do
+so, have a ``default_traits_view()`` method::
+
+    def default_traits_view():
+        return View(
+            Item("normal_option"),
+            Item("option_changing_slots")
+        )
+
+The DataSource class
+^^^^^^^^^^^^^^^^^^^^
+
+This is the "business end" of the data source, and where things are done.
+The class must be derived from ``BaseDataSource``), and reimplement
+the appropriate methods:
+
+- ``run()``: where the actual computation takes place, given the
+  configuration options specified in the model (which is received as an
+  argument). It is strongly advised that the ``run()`` method is stateless.
+- ``slots()``: must return a 2-tuple of tuples. Each tuple contains instances
+  of the ``Slot`` class. Slots are the input and output entities of the
+  data source. Given that this information depends on the
+  configuration options, ``slots()`` accepts the model and must return the
+  appropriate values according to the model options.
+
+The MCO class
+^^^^^^^^^^^^^
+
+Like the data source, the MCO needs a model (derived from ``BaseMCOModel``),
+a factory (derived from ``BaseMCOFactory``) and a MCO class (derived from
+``BaseMCO``). Additional entities must be also provided:
+
+- ``MCOCommunicator``: this class is responsible for handling communication
+  between the MCO and the spawned process when the MCO is using a "subprocess"
+  model, that is, the MCO invokes the force_bdss in evaluation mode to compute
+  a single point.
+- ``parameters``: We assume that different MCOs can support different parameter
+  types for the generated variables. Currently, only the "range" type is
+  commonly handled.
+
+
+The factory then must be added to the plugin ``get_factory_classes()`` list.
+
+The factory must define the following methods::
+
+    def get_identifier(self):
+    def get_name(self):
+    def get_description(self):
+    def get_model_class(self):
+
+as in data source factory. The following::
+
+    def get_optimizer_class(self):
+    def get_communicator_class(self):
+
+Must return classes of the MCO and the MCOCommunicator. Finally::
+
+    def parameter_factories(self):
+
+Must return a list of instances (NOT classes) of the parameter factories.
+
+MCO Communicator
+^^^^^^^^^^^^^^^^
+
+The MCO Communicator must reimplement BaseMCOCommunicator and two methods:
+``receive_from_mco()`` and ``send_to_mco()``. These two methods can use files,
+stdin/stdout or any other trick to send and receive data between the MCO and
+the BDSS running as a subprocess of the MCO to evaluate a single point.
+
+Parameter factories
+^^^^^^^^^^^^^^^^^^^
+
+MCO parameter types also require a model and a factory per each type. Right
+now, the only typo encountered is Range, but others may be provided in the
+future, by MCOs that support them.
+
+The parameter factory must inherit from ``BaseMCOParameterFactory`` and
+reimplement::
+
+    def get_identifier(self):
+    def get_name(self):
+    def get_description(self):
+
+as in the case of data source. Then::
+
+    def get_model_class(self):
+
+must return a model class for the given parameter, inheriting from
+``BaseMCOParameter``. This model contains the data the user can set, and is
+relevant to the given parameter. For example, in the case of a Range, it might
+specify the min and max value, as well as the starting value.
+
+Notification Listeners
+^^^^^^^^^^^^^^^^^^^^^^
+
+Notification listeners are used to notify the state of the MCO to external
+listeners, including the data that is obtained by the MCO as it performs the
+evaluation. Communication to databases (for writing) and CSV/HDF5 writers are
+notification listeners.
+
+The notification listener requires a model (inherit from
+``BaseNotificationListenerModel``), a factory (from
+``BaseNotificationListenerFactory``) and a notification listener
+(from ``BaseNotificationListener``). The factory requires, in addition to::
+
+    def get_identifier(self):
+    def get_name(self):
+    def get_description(self):
+    def get_model_class(self):
+
+the method::
+
+    get_listener_class()
+     return the notification listener object class.
+
+
+The NotificationListener class must reimplement the following methods, that
+are invoked in specific lifetime events of the BDSS::
+
+    def initialize(self):
+        Called once, when the BDSS is initialized. For example, to setup the
+        connection to a database, or open a file.
+
+    def finalize(self):
+        Called once, when the BDSS is finalized. For example, to close the
+        connection to a database, or close a file.
+
+    def deliver(self, event):
+        Called every time the MCO generates an event. The event will be passed
+        as an argument. Depending on the argument, the listener implements
+        appropriate action. The available events are in the api module.
+
+UI Hooks
+^^^^^^^^
+
+UI Hooks are callbacks that are triggered at some events during the lifetime
+of the UI. It has no model. The factory must inherit from
+``BaseUIHooksFactory``, and must reimplement ``get_ui_hooks_manager_class()``
+to return a class inheriting from ``BaseUIHooksManager``. This class has
+specific methods to be reimplemented to perform operations before and after
+some UI operations.
