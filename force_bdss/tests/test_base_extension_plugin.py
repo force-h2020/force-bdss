@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 try:
     import mock
@@ -18,9 +19,9 @@ class TestBaseExtensionPlugin(unittest.TestCase):
         self.assertFalse(plugin.broken)
         self.assertEqual(plugin.error_msg, "")
         self.assertEqual(plugin.error_tb, "")
-        self.assertEqual(plugin.name, u"Probe extension")
+        self.assertEqual(plugin.name, "Probe extension")
         self.assertEqual(plugin.version, 0)
-        self.assertEqual(plugin.description, u"A description")
+        self.assertEqual(plugin.description, "A description")
 
     def test_exception(self):
         with mock.patch.object(ProbeExtensionPlugin, "get_name") \

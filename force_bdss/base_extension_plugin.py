@@ -147,7 +147,7 @@ class BaseExtensionPlugin(Plugin):
                 self.__class__))
 
     def get_description(self):
-        return u"No description available"
+        return "No description available"
 
     def get_factory_classes(self):
         """Must return a list of factory classes that this plugin exports.
