@@ -9,7 +9,7 @@ from force_bdss.tests.probe_classes.ui_hooks import ProbeUIHooksFactory
 
 
 class ProbeExtensionPlugin(BaseExtensionPlugin):
-    id = plugin_id(b"enthought", b"test", 0)
+    id = plugin_id("enthought", "test", 0)
 
     def get_name(self):
         return "Probe extension"

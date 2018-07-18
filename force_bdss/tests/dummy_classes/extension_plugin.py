@@ -8,7 +8,7 @@ from force_bdss.tests.dummy_classes.notification_listener import \
 
 
 class DummyExtensionPlugin(BaseExtensionPlugin):
-    id = plugin_id(b"enthought", b"test", 0)
+    id = plugin_id("enthought", "test", 0)
 
     def get_name(self):
         return "Dummy extension"
