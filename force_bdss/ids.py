@@ -51,10 +51,10 @@ def plugin_id(producer, identifier, version):
 
     Parameters
     ----------
-    producer: str
+    producer: basestring
         A unique string identifying the producer (company/research institute)
         of the plugin (e.g. "enthought", "itwm")
-    identifier: str
+    identifier: basestring
         A string identifying the plugin. It must be unique within the context
         of the producer, who is responsible to guarantee that plugin names
         are unique
@@ -78,12 +78,12 @@ def _string_id(*args):
 
     Parameters
     ----------
-    *args: str
+    *args: basestring
         The strings to concatenate
 
     Returns
     -------
-    str: an identifier to be used.
+    basestring: an identifier to be used.
     """
     def is_valid(entry):
         return (

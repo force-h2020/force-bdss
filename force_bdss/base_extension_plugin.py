@@ -1,8 +1,9 @@
+from __future__ import unicode_literals
 import logging
 import traceback
 
 from envisage.plugin import Plugin
-from traits.api import List, Unicode, Bool, Type, Either, Instance
+from traits.api import List, Unicode, Bool, Type, Either, Instance, Int
 
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
@@ -30,6 +31,15 @@ class BaseExtensionPlugin(Plugin):
         class MyPlugin(BaseExtensionPlugin):
             id = plugin_id("enthought", "plugin_name", 0)
 
+            def get_name(self):
+                return "Enthought plugin"
+
+            def get_version(self):
+                return 0
+
+            def get_description(self):
+                return "A long description"
+
             def get_factory_classes(self):
                 return [
                     MyDataSourceFactory1,
@@ -37,6 +47,15 @@ class BaseExtensionPlugin(Plugin):
                     MyMCOFactory
                 ]
     """
+    #: The user visible name of the plugin
+    name = Unicode()
+
+    #: An integer representing the version of the plugin
+    version = Int()
+
+    #: The user visible long description of the plugin
+    description = Unicode()
+
     #: Reports if the plugin loaded its factories successfully or not.
     broken = Bool(False)
 
@@ -85,6 +104,9 @@ class BaseExtensionPlugin(Plugin):
         super(BaseExtensionPlugin, self).__init__(*args, **kwargs)
 
         try:
+            self.name = self.get_name()
+            self.description = self.get_description()
+            self.version = self.get_version()
             self.factory_classes = self.get_factory_classes()
             self.mco_factories[:] = [
                 cls(self)
@@ -105,11 +127,27 @@ class BaseExtensionPlugin(Plugin):
             self._logger.exception(e)
             self.error_msg = str(e)
             self.error_tb = traceback.format_exc()
+            self.name = ""
+            self.description = ""
+            self.version = 0
             self.broken = True
             self.mco_factories[:] = []
             self.data_source_factories[:] = []
             self.notification_listener_factories[:] = []
             self.ui_hooks_factories[:] = []
+
+    def get_name(self):
+        raise NotImplementedError(
+            "get_name was not implemented in plugin {}".format(
+                self.__class__))
+
+    def get_version(self):
+        raise NotImplementedError(
+            "get_version was not implemented in plugin {}".format(
+                self.__class__))
+
+    def get_description(self):
+        return "No description available"
 
     def get_factory_classes(self):
         """Must return a list of factory classes that this plugin exports.
