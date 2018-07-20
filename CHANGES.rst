@@ -1,6 +1,11 @@
 FORCE BDSS Changelog
 --------------------
 
+Release 0.2.0
+-------------
+
+- Development of infrastructure to support ITWM example code.
+
 Release 0.1.0
 -------------
 
