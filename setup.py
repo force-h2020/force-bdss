@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-VERSION = "0.2.0.dev0"
+VERSION = "0.2.0"
 
 
 # Read description
@@ -30,10 +30,4 @@ setup(
         ],
     },
     packages=find_packages(),
-    install_requires=[
-        "envisage >= 4.6.0",
-        "click >= 6.7",
-        "stevedore >= 1.24.0",
-        "six >= 1.10.0",
-    ]
 )
