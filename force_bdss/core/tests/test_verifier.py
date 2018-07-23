@@ -124,7 +124,7 @@ class TestVerifier(unittest.TestCase):
         ds_model.output_slot_info[0].name = ''
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 2)
-        self.assertIn("Undefined name for output parameter",
+        self.assertIn("Undefined names for all output parameters",
                       errors[1].local_error)
 
     def test_multi_error_format(self):
