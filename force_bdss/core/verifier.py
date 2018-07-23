@@ -182,20 +182,15 @@ def _check_data_source(data_source_model, layer_number):
             global_error="Missing output slot name assignment "
                          "in layer {}".format(layer_number)))
 
-    #: Check if any datasources have all outputs unnamed
-    row_index_errors = []
-    for idx, info in enumerate(data_source_model.output_slot_info):
-        if info.name == '':
-            row_index_errors.append(idx)
-
-    if row_index_errors != []:
-        if len(row_index_errors) == len(data_source_model.output_slot_info):
-            errors.append(VerifierError(
-                subject=data_source_model,
-                local_error="Undefined names for all output "
-                            "parameters",
-                global_error="An output parameter is undefined in {}"
-                             " (Layer {})".format(factory.name, layer_number)))
+    #: Check if the datasource has all outputs unnamed
+    unnamed = [info.name == "" for info in data_source_model.output_slot_info]
+    if all(unnamed) and len(unnamed) != 0:
+        errors.append(VerifierError(
+            subject=data_source_model,
+            local_error="Undefined names for all output "
+                        "parameters",
+            global_error="An output parameter is undefined in {}"
+                         " (Layer {})".format(factory.name, layer_number)))
 
     return errors
 
