@@ -11,7 +11,7 @@ class VerifierError(HasStrictTraits):
     subject = Any()
     #: An error message relevant to the local modelview
     local_error = Str()
-    #: An error message relevent to the overall workflow
+    #: An error message relevant to the overall workflow
     global_error = Str()
 
     def __init__(self, subject, global_error='', local_error=''):
@@ -53,6 +53,7 @@ def _check_mco(workflow):
             subject=mco,
             global_error="The MCO has no defined parameters"))
 
+    #: Check MCO parameters have names and types
     for idx, param in enumerate(mco.parameters):
         factory_name = param.factory.name
         if param.name == '':
@@ -69,6 +70,7 @@ def _check_mco(workflow):
                 global_error="Error in MCO parameter "
                              "(Type: {})".format(factory_name)))
 
+    #: Check KPIs have names and optimisation objectives
     for idx, kpi in enumerate(mco.kpis):
         if kpi.name == '':
             errors.append(VerifierError(subject=kpi,
@@ -151,10 +153,12 @@ def _check_data_source(data_source_model, layer_number):
             global_error="Missing input slot name assignment "
                          "in layer {}".format(layer_number)))
 
+    #: Check if any input slots are unnamed
     row_index_errors = []
     for idx, info in enumerate(data_source_model.input_slot_info):
         if info.name == '':
             row_index_errors.append(idx)
+
     if row_index_errors != []:
         err_no_string = multi_error_format(row_index_errors)
         if len(row_index_errors) == 1:
@@ -178,18 +182,15 @@ def _check_data_source(data_source_model, layer_number):
             global_error="Missing output slot name assignment "
                          "in layer {}".format(layer_number)))
 
-    row_index_errors = []
-    for idx, info in enumerate(data_source_model.output_slot_info):
-        if info.name == '':
-            row_index_errors.append(idx)
-    err_no_string = multi_error_format(row_index_errors)
-    if len(row_index_errors) == 1:
+    #: Check if the datasource has all outputs unnamed
+    unnamed = [info.name == "" for info in data_source_model.output_slot_info]
+    if all(unnamed) and len(unnamed) != 0:
         errors.append(VerifierError(
-                subject=data_source_model,
-                local_error="Undefined name for output "
-                            "parameters {}".format(err_no_string),
-                global_error="An output parameter is undefined in {}"
-                             " (Layer {})".format(factory.name, layer_number)))
+            subject=data_source_model,
+            local_error="Undefined names for all output "
+                        "parameters",
+            global_error="An output parameter is undefined in {}"
+                         " (Layer {})".format(factory.name, layer_number)))
 
     return errors
 
