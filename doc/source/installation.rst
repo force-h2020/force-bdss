@@ -15,7 +15,7 @@ We assume the bootstrap environment is the default one (called ``edm``)::
 
     wget https://package-data.enthought.com/edm/rh5_x86_64/1.9/edm_1.9.2_linux_x86_64.sh && bash ./edm_1.9.2_linux_x86_64.sh -b -f -p $HOME
     export PATH=${HOME}/edm/bin:${PATH}
-    edm install --version 3.5 -y pyyaml click setuptools
+    edm install --version 3.5 -y click setuptools
     edm shell
 
 Verify that your prompt changes to add "(edm)".
