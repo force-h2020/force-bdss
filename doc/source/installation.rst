@@ -7,7 +7,7 @@ git repositories::
     git clone https://github.com/force-h2020/force-wfmanager
     git clone https://github.com/force-h2020/force-bdss-plugin-enthought-example
 
-The last repository is optional, but recommended if you want to practice 
+The last repository is optional, but recommended if you want to practice
 writing plugins.
 
 Next, download EDM package manager, and create a bootstrap environment::
@@ -25,6 +25,10 @@ following command::
     python -m ci build-env
 
 This will create another edm environment called ``force-py27``.
+
+To install the BDSS::
+
+    python -m ci install
 
 To install the workflow manager::
 

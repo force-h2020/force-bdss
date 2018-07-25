@@ -62,6 +62,11 @@ def build_env(python_version):
             "edm", "run", "-e", env_name, "--",
             "pip", "install"] + PIP_DEPS)
 
+
+@cli.command(help="Install the BDSS in the execution environment")
+@python_version_option
+def install(python_version):
+    env_name = get_env_name(python_version)
     check_call([
         "edm", "run", "-e", env_name, "--",
         "pip", "install", "-e", "."])
