@@ -4,6 +4,9 @@ FORCE BDSS Changelog
 Release 0.3.0
 -------------
 
+- Installation now requires two separate steps to build the environment
+  and to install the bdss. (#180)
+
 
 Release 0.2.0
 -------------
