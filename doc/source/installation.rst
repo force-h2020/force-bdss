@@ -26,6 +26,10 @@ following command::
 
 This will create another edm environment called ``force-py35``.
 
+To install the BDSS::
+
+    python -m ci install
+
 To install the workflow manager::
 
     pushd force-wfmanager

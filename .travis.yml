@@ -11,7 +11,8 @@ before_install:
     - edm install -y -e force-bootstrap click setuptools
     - edm run -e force-bootstrap -- python -m ci build-env
 script:
-    - edm run -e force-bootstrap -- python -m ci flake8 
+    - edm run -e force-bootstrap -- python -m ci install
+    - edm run -e force-bootstrap -- python -m ci flake8
     - edm run -e force-bootstrap -- python -m ci test
     - edm run -e force-bootstrap -- python -m ci docs
 after_success:

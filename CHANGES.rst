@@ -4,6 +4,8 @@ FORCE BDSS Changelog
 Release 0.3.0
 -------------
 
+- Installation now requires two separate steps to build the environment
+  and to install the BDSS (#180)
 - Removed support for python2 (#179)
 
 Release 0.2.0
