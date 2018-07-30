@@ -6,10 +6,7 @@ from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
 from force_bdss.ui_hooks.tests.test_base_ui_hooks_manager import \
     DummyUIHooksManager
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from envisage.api import Plugin
 

@@ -1,7 +1,6 @@
 import unittest
 
 import testfixtures
-import six
 
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
@@ -9,10 +8,7 @@ from force_bdss.tests.probe_classes.factory_registry_plugin import \
 from force_bdss.core.data_value import DataValue
 from force_bdss.tests import fixtures
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from envisage.api import Application
 
@@ -44,7 +40,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
+            with self.assertRaisesRegex(
                     self,
                     RuntimeError,
                     "The number of data values returned by the MCO"):
@@ -73,7 +69,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
+            with self.assertRaisesRegex(
                     self,
                     RuntimeError,
                     "The run method of data source test_data_source must"
@@ -88,7 +84,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
+            with self.assertRaisesRegex(
                     self,
                     RuntimeError,
                     "The result list returned by DataSource test_data_source"
@@ -112,7 +108,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application,
         )
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
+            with self.assertRaisesRegex(
                     self,
                     RuntimeError,
                     "The number of data values \(2 values\)"
@@ -120,7 +116,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     " the number of user-defined names"):
                 driver.application_started()
 
-    def test_mco_communicator_broken(self):
+    def test_mco_comunicator_broken(self):
         self.registry.mco_factories[0].raises_on_create_communicator = True
         driver = CoreEvaluationDriver(
             application=self.mock_application,

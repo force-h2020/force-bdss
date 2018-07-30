@@ -7,10 +7,7 @@ from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.tests.dummy_classes.mco import DummyMCOParameterFactory, \
     DummyMCOParameter
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 
 class TestBaseMCOParameterFactory(unittest.TestCase):

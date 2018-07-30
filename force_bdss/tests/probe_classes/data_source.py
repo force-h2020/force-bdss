@@ -1,4 +1,4 @@
-from traits.api import Bool, Function, Str, Int, on_trait_change
+from traits.api import Bool, Function, Unicode, Int, on_trait_change
 
 from force_bdss.api import (
     BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
@@ -33,8 +33,8 @@ class ProbeDataSource(BaseDataSource):
 
 
 class ProbeDataSourceModel(BaseDataSourceModel):
-    input_slots_type = Str('PRESSURE')
-    output_slots_type = Str('PRESSURE')
+    input_slots_type = Unicode('PRESSURE')
+    output_slots_type = Unicode('PRESSURE')
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
@@ -49,8 +49,8 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
 
     run_function = Function(default_value=run_func)
 
-    input_slots_type = Str('PRESSURE')
-    output_slots_type = Str('PRESSURE')
+    input_slots_type = Unicode('PRESSURE')
+    output_slots_type = Unicode('PRESSURE')
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)

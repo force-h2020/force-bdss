@@ -3,10 +3,7 @@ import unittest
 from force_bdss.tests.dummy_classes.ui_hooks import DummyUIHooksManager
 from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 
 class TestBaseUIHooksManager(unittest.TestCase):
