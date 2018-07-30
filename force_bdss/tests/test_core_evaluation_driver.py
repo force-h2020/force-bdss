@@ -41,7 +41,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application)
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "The number of data values returned by the MCO"):
                 driver.application_started()
@@ -54,8 +53,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
@@ -70,7 +68,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "The run method of data source test_data_source must"
                     " return a list. It returned instead <.* 'str'>. Fix"
@@ -85,7 +82,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "The result list returned by DataSource test_data_source"
                     " contains an entry that is not a DataValue."
@@ -109,7 +105,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
