@@ -116,7 +116,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     " the number of user-defined names"):
                 driver.application_started()
 
-    def test_mco_comunicator_broken(self):
+    def test_mco_communicator_broken(self):
         self.registry.mco_factories[0].raises_on_create_communicator = True
         driver = CoreEvaluationDriver(
             application=self.mock_application,
