@@ -52,7 +52,6 @@ class TestExecution(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "The length of the slots is not equal to the length of"
                     " the slot map"):
@@ -66,7 +65,6 @@ class TestExecution(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
-                    self,
                     RuntimeError,
                     "Unable to find requested name 'blap' in available"
                     " data values."):
