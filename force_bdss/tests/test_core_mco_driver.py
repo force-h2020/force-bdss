@@ -1,6 +1,7 @@
 import unittest
 from testfixtures import LogCapture
 
+from force_bdss.core.data_value import DataValue
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
 from force_bdss.core_driver_events import (
@@ -55,7 +56,7 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        driver.mco.started = True
+        driver._deliver_start_event()
         self.assertIsInstance(listener.deliver_call_args[0][0], MCOStartEvent)
 
     def test_finished_event_handling(self):
@@ -63,7 +64,7 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        driver.mco.finished = True
+        driver._deliver_finish_event()
         self.assertIsInstance(listener.deliver_call_args[0][0], MCOFinishEvent)
 
     def test_progress_event_handling(self):
@@ -71,12 +72,22 @@ class TestCoreMCODriver(unittest.TestCase):
             application=self.mock_application,
         )
         listener = driver.listeners[0]
-        driver.mco.new_data = {'input': (1, 2), 'output': (3, 4)}
+        driver.mco.notify_new_point(
+            [DataValue(value=1), DataValue(value=2)],
+            [DataValue(value=3), DataValue(value=4)],
+            [0.5, 0.5])
         self.assertIsInstance(
             listener.deliver_call_args[0][0],
             MCOProgressEvent)
-        self.assertEqual(listener.deliver_call_args[0][0].input, (1, 2))
-        self.assertEqual(listener.deliver_call_args[0][0].output, (3, 4))
+
+        event = listener.deliver_call_args[0][0]
+
+        self.assertEqual(event.optimal_point[0].value, 1)
+        self.assertEqual(event.optimal_point[1].value, 2)
+        self.assertEqual(event.optimal_kpis[0].value, 3)
+        self.assertEqual(event.optimal_kpis[1].value, 4)
+        self.assertEqual(event.weights[0], 0.5)
+        self.assertEqual(event.weights[0], 0.5)
 
     def test_listener_init_exception(self):
         driver = CoreMCODriver(
@@ -106,7 +117,7 @@ class TestCoreMCODriver(unittest.TestCase):
         listener = driver.listeners[0]
         listener.deliver_function = raise_exception
         with LogCapture() as capture:
-            driver.mco.started = True
+            driver._deliver_start_event()
             self.assertTrue(listener.deliver_called)
 
             capture.check(

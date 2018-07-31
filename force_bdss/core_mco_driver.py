@@ -64,7 +64,8 @@ class CoreMCODriver(BaseCoreDriver):
         finally:
             self._deliver_finish_event()
 
-        sys.exit(1 if error else 0)
+        if error:
+            sys.exit(1)
 
     @on_trait_change("application:stopping")
     def application_stopping(self):
