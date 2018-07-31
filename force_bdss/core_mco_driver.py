@@ -9,7 +9,7 @@ from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from .base_core_driver import BaseCoreDriver
-from .core_driver_events import MCOStartEvent, MCOFinishEvent, MCOProgressEvent
+from .core_driver_events import MCOStartEvent, MCOFinishEvent
 
 log = logging.getLogger(__name__)
 
