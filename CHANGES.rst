@@ -4,6 +4,17 @@ FORCE BDSS Changelog
 Release 0.3.0
 -------------
 
+Backward incompatible changes that require rework of the plugins:
+
+- Design change of the notification infrastructure in MCO:
+    - the started and finished events do not need to be triggered anymore.
+    - the new_data method is now obsolete and must be removed.
+    - the notify_new_point() method must be called to inform of a new optimal
+      point found. The routine accepts list of DataValue objects, not plain
+      floats as before. The weights must also be passed.
+    - A more generic notify() method is available to send arbitrary events
+      (currently only MCOProgressEvent)
+
 - Installation now requires two separate steps to build the environment
   and to install the BDSS (#180)
 - Removed support for python2 (#179)
