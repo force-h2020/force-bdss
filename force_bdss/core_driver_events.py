@@ -1,4 +1,6 @@
-from traits.api import HasStrictTraits, Tuple
+from traits.api import HasStrictTraits, Tuple, List, Instance, Float
+
+from force_bdss.core.data_value import DataValue
 
 
 class BaseDriverEvent(HasStrictTraits):
@@ -19,5 +21,6 @@ class MCOProgressEvent(BaseDriverEvent):
     """ The MCO driver should emit this event for every new evaluation that has
     been completed. It carries data about the evaluation, specifically the
     input data (MCO parameter values) and the resulting output (KPIs)."""
-    input = Tuple()
-    output = Tuple()
+    optimal_point = List(Instance(DataValue))
+    optimal_kpis = List(Instance(DataValue))
+    weights = List(Float())
