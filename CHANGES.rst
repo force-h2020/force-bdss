@@ -6,7 +6,7 @@ Release 0.3.0
 
 Backward incompatible changes that require rework of the plugins:
 
-- Design change of the notification infrastructure in MCO:
+- Design change of the notification infrastructure in MCO (#187):
     - the started and finished events do not need to be triggered anymore.
     - the new_data method is now obsolete and must be removed.
     - the notify_new_point() method must be called to inform of a new optimal
