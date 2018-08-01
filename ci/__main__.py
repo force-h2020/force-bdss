@@ -20,6 +20,7 @@ DEV_DEPS = [
     "flake8==3.3.0-2",
     "coverage==4.3.4-1",
     "testfixtures==4.10.0-1",
+    "mock==2.0.0-1",
 ]
 
 PIP_DEPS = [
