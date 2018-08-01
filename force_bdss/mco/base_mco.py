@@ -1,6 +1,7 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance, Event, Dict, Str, Tuple
+from traits.api import (
+    ABCHasStrictTraits, Instance, Event, Dict, Unicode, Tuple)
 
 from .i_mco_factory import IMCOFactory
 
@@ -20,7 +21,7 @@ class BaseMCO(ABCHasStrictTraits):
     finished = Event()
 
     # Event triggered when the mco wants to send new data to listeners
-    new_data = Event(Dict(Str(), Tuple()))
+    new_data = Event(Dict(Unicode(), Tuple()))
 
     def __init__(self, factory, *args, **kwargs):
         """Initializes the MCO.

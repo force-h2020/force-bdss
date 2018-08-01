@@ -2,7 +2,7 @@ import logging
 
 from itertools import groupby
 
-from traits.api import HasStrictTraits, Str, Any
+from traits.api import HasStrictTraits, Unicode, Any
 
 logger = logging.getLogger(__name__)
 
@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 class VerifierError(HasStrictTraits):
     subject = Any()
     #: An error message relevant to the local modelview
-    local_error = Str()
+    local_error = Unicode()
     #: An error message relevant to the overall workflow
-    global_error = Str()
+    global_error = Unicode()
 
     def __init__(self, subject, global_error='', local_error=''):
         if local_error == '':

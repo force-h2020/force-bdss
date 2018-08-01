@@ -1,11 +1,8 @@
 import json
 import unittest
 
-from six import StringIO
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from io import StringIO
+from unittest import mock
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification

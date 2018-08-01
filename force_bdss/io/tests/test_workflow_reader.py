@@ -1,6 +1,6 @@
 import json
 import unittest
-from six import StringIO
+from io import StringIO
 
 import testfixtures
 

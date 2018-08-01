@@ -3,10 +3,7 @@ import unittest
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 

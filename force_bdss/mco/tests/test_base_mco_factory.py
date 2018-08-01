@@ -8,10 +8,7 @@ from force_bdss.mco.tests.test_base_mco_communicator import \
     DummyMCOCommunicator
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory, DummyMCOModel
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from envisage.plugin import Plugin
 

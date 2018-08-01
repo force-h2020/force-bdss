@@ -74,7 +74,3 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
             self.registry.notification_listener_factory_by_id(
                 factory_id(self.plugin.id, "foo")
             )
-
-
-if __name__ == '__main__':
-    unittest.main()

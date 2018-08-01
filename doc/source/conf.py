@@ -23,7 +23,7 @@ sphinx.environment.BuildEnvironment.warn_node = _warn_node
 def mock_modules():
     import sys
 
-    from mock import MagicMock
+    from unittest.mock import MagicMock
 
     class Mock(MagicMock):
         @classmethod
@@ -34,7 +34,7 @@ def mock_modules():
             return Mock()
 
     sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
-    print 'mocking {}'.format(MOCK_MODULES)
+    print('mocking {}'.format(MOCK_MODULES))
 
 mock_modules()
 

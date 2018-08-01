@@ -7,10 +7,7 @@ from force_bdss.tests.dummy_classes.notification_listener import \
     DummyNotificationListenerFactory, DummyNotificationListenerModel, \
     DummyNotificationListener
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 
 class TestBaseNotificationListenerFactory(unittest.TestCase):

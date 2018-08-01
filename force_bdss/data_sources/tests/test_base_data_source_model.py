@@ -7,10 +7,7 @@ from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from force_bdss.data_sources.base_data_source_factory import \
     BaseDataSourceFactory
