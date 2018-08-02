@@ -7,10 +7,7 @@ from force_bdss.core_driver_events import (
     MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
 from force_bdss.tests import fixtures
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from envisage.api import Application
 

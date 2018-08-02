@@ -1,6 +1,6 @@
 import sys
 from contextlib import contextmanager
-from six import StringIO
+from io import StringIO
 
 
 @contextmanager

@@ -7,10 +7,7 @@ from force_bdss.data_sources.tests.test_base_data_source_model import \
     DummyDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import testfixtures
 
@@ -25,13 +22,13 @@ class TestBaseDataSourceFactory(unittest.TestCase):
         factory = DummyDataSourceFactory(self.plugin)
         self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
         self.assertEqual(factory.name, 'Dummy data source')
-        self.assertEqual(factory.description, u"No description available.")
+        self.assertEqual(factory.description, "No description available.")
         self.assertEqual(factory.model_class, DummyDataSourceModel)
         self.assertEqual(factory.data_source_class, DummyDataSource)
         self.assertIsInstance(factory.create_data_source(), DummyDataSource)
         self.assertIsInstance(factory.create_model(), DummyDataSourceModel)
 
-    def test_initialization_errors_invalid_identifier(self):
+    def test_initialization_errors_invalid_idetifier(self):
         class Broken(DummyDataSourceFactory):
             def get_identifier(self):
                 return None

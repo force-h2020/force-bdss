@@ -1,9 +1,5 @@
-from __future__ import unicode_literals
 import unittest
-try:
-    import mock
-except ImportError:
-    import unittest.mock
+from unittest import mock
 
 from force_bdss.tests.probe_classes.probe_extension_plugin import \
     ProbeExtensionPlugin

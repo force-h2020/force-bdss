@@ -1,7 +1,6 @@
 import unittest
 
 import testfixtures
-import six
 
 from force_bdss.tests.probe_classes.factory_registry_plugin import \
     ProbeFactoryRegistryPlugin
@@ -9,10 +8,7 @@ from force_bdss.tests.probe_classes.factory_registry_plugin import \
 from force_bdss.core.data_value import DataValue
 from force_bdss.tests import fixtures
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 from envisage.api import Application
 
@@ -44,8 +40,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         driver = CoreEvaluationDriver(
             application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The number of data values returned by the MCO"):
                 driver.application_started()
@@ -58,8 +53,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
@@ -73,8 +67,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The run method of data source test_data_source must"
                     " return a list. It returned instead <.* 'str'>. Fix"
@@ -88,8 +81,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         ds_factory.run_function = run
         driver = CoreEvaluationDriver(application=self.mock_application)
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The result list returned by DataSource test_data_source"
                     " contains an entry that is not a DataValue."
@@ -112,8 +104,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             application=self.mock_application,
         )
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"

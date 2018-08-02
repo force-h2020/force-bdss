@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import Interface, Str, Instance
+from traits.api import Interface, Unicode, Instance
 
 
 class IFactory(Interface):
@@ -8,9 +8,9 @@ class IFactory(Interface):
 
     Refer to the BaseDataSourceFactory for documentation.
     """
-    id = Str()
+    id = Unicode()
 
-    name = Str()
+    name = Unicode()
 
     plugin = Instance(Plugin, allow_none=False)
 

@@ -1,6 +1,3 @@
-import six
-
-
 class ExtensionPointID:
     """The envisage extension points ids for the factories ExtensionPoints.
     These are populated by the envisage plugins.
@@ -51,10 +48,10 @@ def plugin_id(producer, identifier, version):
 
     Parameters
     ----------
-    producer: basestring
+    producer: str
         A unique string identifying the producer (company/research institute)
         of the plugin (e.g. "enthought", "itwm")
-    identifier: basestring
+    identifier: str
         A string identifying the plugin. It must be unique within the context
         of the producer, who is responsible to guarantee that plugin names
         are unique
@@ -78,7 +75,7 @@ def _string_id(*args):
 
     Parameters
     ----------
-    *args: basestring
+    *args: str
         The strings to concatenate
 
     Returns
@@ -87,7 +84,7 @@ def _string_id(*args):
     """
     def is_valid(entry):
         return (
-            isinstance(entry, six.string_types) and
+            isinstance(entry, str) and
             " " not in entry and
             len(entry) != 0)
 
