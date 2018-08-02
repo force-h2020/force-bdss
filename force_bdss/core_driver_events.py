@@ -33,3 +33,9 @@ class MCOProgressEvent(BaseDriverEvent):
 
     #: The weights assigned to the KPIs
     weights = List(Float())
+
+    def __getstate__(self):
+        d = super().__getstate__()
+        d["optimal_point"] = [dv.__getstate__() for dv in d["optimal_point"]]
+        d["optimal_kpis"] = [dv.__getstate__() for dv in d["optimal_kpis"]]
+        return d
