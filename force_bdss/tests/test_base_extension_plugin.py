@@ -1,10 +1,6 @@
-from __future__ import unicode_literals
 import unittest
 import testfixtures
-try:
-    import mock
-except ImportError:
-    import unittest.mock
+from unittest import mock
 
 from force_bdss.tests.probe_classes.probe_extension_plugin import \
     ProbeExtensionPlugin

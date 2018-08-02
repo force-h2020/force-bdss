@@ -10,7 +10,6 @@ CORE_DEPS = [
     "setuptools==38.2.5-1",
     "envisage==4.6.0-1",
     "click==6.7-1",
-    "six==1.10.0-1",
 ]
 
 DOCS_DEPS = [
@@ -20,8 +19,8 @@ DOCS_DEPS = [
 DEV_DEPS = [
     "flake8==3.3.0-2",
     "coverage==4.3.4-1",
-    "mock==2.0.0-1",
     "testfixtures==4.10.0-1",
+    "mock==2.0.0-1",
 ]
 
 PIP_DEPS = [

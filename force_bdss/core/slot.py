@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, String
+from traits.api import HasStrictTraits, Unicode
 from ..local_traits import CUBAType
 
 
@@ -10,7 +10,7 @@ class Slot(HasStrictTraits):
     they return as output.
     """
     #: A textual description of the slot
-    description = String("No description")
+    description = Unicode("No description")
 
     #: The CUBA key of the slot
     type = CUBAType()

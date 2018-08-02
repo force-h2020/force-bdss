@@ -1,7 +1,6 @@
 import unittest
 
 import testfixtures
-import six
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
@@ -52,8 +51,7 @@ class TestExecution(unittest.TestCase):
         )
 
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "The length of the slots is not equal to the length of"
                     " the slot map"):
@@ -66,8 +64,7 @@ class TestExecution(unittest.TestCase):
         )
 
         with testfixtures.LogCapture():
-            with six.assertRaisesRegex(
-                    self,
+            with self.assertRaisesRegex(
                     RuntimeError,
                     "Unable to find requested name 'blap' in available"
                     " data values."):

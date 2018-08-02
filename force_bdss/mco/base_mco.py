@@ -1,6 +1,8 @@
 import abc
 
-from traits.api import ABCHasStrictTraits, Instance, Event
+from traits.api import (
+    ABCHasStrictTraits, Instance, Event
+)
 
 from force_bdss.core_driver_events import MCOProgressEvent
 from .i_mco_factory import IMCOFactory

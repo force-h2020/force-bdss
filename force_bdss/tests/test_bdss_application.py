@@ -11,10 +11,7 @@ from force_bdss.bdss_application import (
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests import fixtures
 
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 
 class TestBDSSApplication(unittest.TestCase):

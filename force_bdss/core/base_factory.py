@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import HasStrictTraits, Str, Unicode, Instance
+from traits.api import HasStrictTraits, Unicode, Instance
 
 from force_bdss.ids import factory_id
 
@@ -7,10 +7,10 @@ from force_bdss.ids import factory_id
 class BaseFactory(HasStrictTraits):
     #: Unique identifier that identifies the factory uniquely in the
     #: universe of factories. Create one with the function factory_id()
-    id = Str()
+    id = Unicode()
 
     #: A human readable name of the factory. Spaces allowed
-    name = Str()
+    name = Unicode()
 
     #: A long description of the factory.
     description = Unicode()
@@ -56,7 +56,7 @@ class BaseFactory(HasStrictTraits):
                 self.__class__))
 
     def get_description(self):
-        return u"No description available."
+        return "No description available."
 
     def _global_id(self, identifier):
         return factory_id(self.plugin.id, identifier)
