@@ -1,6 +1,7 @@
 from traits.api import HasStrictTraits, List, Instance, Float, Unicode
 
 from force_bdss.core.data_value import DataValue
+from force_bdss.io.workflow_writer import pop_recursive
 
 
 class BaseDriverEvent(HasStrictTraits):
@@ -38,4 +39,5 @@ class MCOProgressEvent(BaseDriverEvent):
         d = super().__getstate__()
         d["optimal_point"] = [dv.__getstate__() for dv in d["optimal_point"]]
         d["optimal_kpis"] = [dv.__getstate__() for dv in d["optimal_kpis"]]
+        pop_recursive(d, "__traits_version__")
         return d
