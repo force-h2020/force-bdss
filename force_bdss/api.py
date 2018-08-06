@@ -24,7 +24,7 @@ from .factory_registry_plugin import FactoryRegistryPlugin  # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
-from .io.workflow_writer import WorkflowWriter  # noqa
+from .io.workflow_writer import WorkflowWriter, pop_recursive  # noqa
 
 from .mco.base_mco_model import BaseMCOModel  # noqa
 from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
