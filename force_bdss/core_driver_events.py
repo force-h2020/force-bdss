@@ -1,4 +1,7 @@
-from traits.api import HasStrictTraits, Tuple
+from traits.api import HasStrictTraits, List, Instance, Float, Unicode
+
+from force_bdss.core.data_value import DataValue
+from force_bdss.io.workflow_writer import pop_recursive
 
 
 class BaseDriverEvent(HasStrictTraits):
@@ -7,8 +10,11 @@ class BaseDriverEvent(HasStrictTraits):
 
 class MCOStartEvent(BaseDriverEvent):
     """ The MCO driver should emit this event when the evaluation starts."""
-    input_names = Tuple()
-    output_names = Tuple()
+    #: The names assigned to the parameters.
+    parameter_names = List(Unicode())
+
+    #: The names associated to the KPIs
+    kpi_names = List(Unicode())
 
 
 class MCOFinishEvent(BaseDriverEvent):
@@ -16,8 +22,22 @@ class MCOFinishEvent(BaseDriverEvent):
 
 
 class MCOProgressEvent(BaseDriverEvent):
-    """ The MCO driver should emit this event for every new evaluation that has
-    been completed. It carries data about the evaluation, specifically the
-    input data (MCO parameter values) and the resulting output (KPIs)."""
-    input = Tuple()
-    output = Tuple()
+    """ The MCO driver should emit this event for every new optimal point
+    that is found during the evaluation.
+    """
+    #: The point in parameter space resulting from the pareto
+    #: front optimization
+    optimal_point = List(Instance(DataValue))
+
+    #: The associated KPIs to the above point
+    optimal_kpis = List(Instance(DataValue))
+
+    #: The weights assigned to the KPIs
+    weights = List(Float())
+
+    def __getstate__(self):
+        d = super().__getstate__()
+        d["optimal_point"] = [dv.__getstate__() for dv in d["optimal_point"]]
+        d["optimal_kpis"] = [dv.__getstate__() for dv in d["optimal_kpis"]]
+        pop_recursive(d, "__traits_version__")
+        return d

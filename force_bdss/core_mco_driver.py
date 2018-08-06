@@ -9,7 +9,7 @@ from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import \
     BaseNotificationListener
 from .base_core_driver import BaseCoreDriver
-from .core_driver_events import MCOStartEvent, MCOFinishEvent, MCOProgressEvent
+from .core_driver_events import MCOStartEvent, MCOFinishEvent
 
 log = logging.getLogger(__name__)
 
@@ -32,12 +32,12 @@ class CoreMCODriver(BaseCoreDriver):
             log.exception("Unable to open workflow file.")
             sys.exit(1)
 
-        errors = verify_workflow(workflow)
+        workflow_errors = verify_workflow(workflow)
 
-        if len(errors) != 0:
+        if len(workflow_errors) != 0:
             log.error("Unable to execute workflow due to verification "
                       "errors :")
-            for err in errors:
+            for err in workflow_errors:
                 log.error(err.local_error)
             sys.exit(1)
 
@@ -49,6 +49,8 @@ class CoreMCODriver(BaseCoreDriver):
             )
             sys.exit(1)
 
+        error = False
+        self._deliver_start_event()
         try:
             mco.run(self.workflow.mco)
         except Exception:
@@ -58,6 +60,11 @@ class CoreMCODriver(BaseCoreDriver):
                 "programming error in the plugin.".format(
                     mco.factory.id,
                     mco.factory.plugin.id))
+            error = True
+        finally:
+            self._deliver_finish_event()
+
+        if error:
             sys.exit(1)
 
     @on_trait_change("application:stopping")
@@ -86,22 +93,17 @@ class CoreMCODriver(BaseCoreDriver):
 
         return optimizer
 
-    @on_trait_change("mco:started")
     def _deliver_start_event(self):
         mco_model = self.workflow.mco
         self._deliver_event(MCOStartEvent(
-            input_names=tuple(p.name for p in mco_model.parameters),
-            output_names=tuple([kpi.name for kpi in mco_model.kpis])
+            parameter_names=list(p.name for p in mco_model.parameters),
+            kpi_names=list(kpi.name for kpi in mco_model.kpis)
         ))
 
-    @on_trait_change("mco:finished")
-    def _deliver_finished_event(self):
+    def _deliver_finish_event(self):
         self._deliver_event(MCOFinishEvent())
 
-    @on_trait_change("mco:new_data")
-    def _deliver_mco_progress_event(self, data):
-        self._deliver_event(MCOProgressEvent(**data))
-
+    @on_trait_change("mco:event")
     def _deliver_event(self, event):
         """ Delivers an event to the listeners """
         for listener in self.listeners[:]:

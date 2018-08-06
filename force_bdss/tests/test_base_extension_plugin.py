@@ -1,4 +1,5 @@
 import unittest
+import testfixtures
 from unittest import mock
 
 from force_bdss.tests.probe_classes.probe_extension_plugin import \
@@ -21,7 +22,8 @@ class TestBaseExtensionPlugin(unittest.TestCase):
 
     def test_exception(self):
         with mock.patch.object(ProbeExtensionPlugin, "get_name") \
-                as mock_get_name:
+                as mock_get_name, \
+                testfixtures.LogCapture():
             mock_get_name.side_effect = Exception("Boom")
             plugin = ProbeExtensionPlugin()
 
