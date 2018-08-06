@@ -44,3 +44,73 @@ The result can be represented with the following data flow
 4. The KPI values are then sent to the notification listeners with the
    associated MCO parameters values
 5. The cycle repeats until all evaluations have been performed.
+
+
+Current classes and brief description
+-------------------------------------
+
+The BDSS is an Envisage/Task application. it uses tasks to manage the plugin
+system, with stevedore to manage the additions.
+
+The main class is BDSSApplication, which is in charge of loading the plugins,
+and also adding the relevant core plugins to make the whole system run.
+Specifically it loads:
+
+- The FactoryRegistryPlugin, which is where all external plugins will put
+  their classes.
+- Depending on the --evaluate switch, a relevant execution plugin:
+    - CoreMCODriver: Invokes the MCO.
+    - CoreEvaluationDriver: performs a single point evaluation, that is,
+      executes the pipeline only once.
+
+Note: the design requiring the --evaluate switch assumed a "Dakota" model of
+execution (external process controlled by Dakota). In the current ITWM plugin
+we use both the --evaluate strategy and direct control, where all the
+calculation is performed without spawning additional processes other than the
+initial force_bdss.
+
+The packages data_sources, mco, notification_listeners and ui_hooks, as well as
+the base_extension_plugin, contain the base classes that plugin developers need
+to use in order to write a plugin. They have been coded to be as error tolerant
+as possible, and deliver robust error messages as much as possible.
+
+The io package contains the reader and writer for the model. It simply
+serializes the model objects and dumps them to json, or vice-versa. Note that
+the reader requires the factory registry, because you can't load entities
+from the file if you don't have the appropriate plugin, as only the plugin
+knows the model structure and can therefore take the JSON content and apply
+it to the model object.
+
+core_plugins is currently empty, but the assumption is that some plugins will
+be so fundamental that we should put them here, as a "standard library" of
+plugins, providing common data sources, mcos, and so on.
+
+Finally, core contains:
+
+- base classes for a few entities that are reused for the plugins.
+- the DataValue entity. This is the "exchange entity" between data sources.
+  It is a value that also contains the type, the accuracy, and so on. It can
+  refer to anything: a float, an array, a string, etc.
+- workflow: contains the topmost model object.
+- input/output_slot_info contain the _bound_ information for slots. A
+  DataSource provides slots (see slot module) but these are not bound to a
+  specific "variable name". the SlotInfo classes provide this binding.
+- execution contains the actual machinery that runs the pipeline.
+- verifier contains a verification function that checks if the workflow can
+  run or has errors.
+
+
+Future directions
+-----------------
+
+The future design will probably need to address the following:
+
+- Check if the --evaluate strategy and design is still relevant. More MCOs are
+  needed for reasonable conclusions.
+- IWM is going to provide a strict description of types (emmc-info, previously
+  known as simphony). Currently, all type entries in the e.g. slots are simple
+  strings as a workaround. This is supposed to change once IWM provides a
+  comprehensive set of types.
+- The project is now at a stage where plugins can be developed, and real
+  evaluations can be performed. We can solve the current toy cases, but real
+  cases and UI requirements may promote the need for additional requirements.

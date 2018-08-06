@@ -15,10 +15,10 @@ API to provide new entities, specifically:
 - Notification Listeners, like a remote database which retrieve data during the
   computation
 - UI Hooks, which permit to define additional operations which will be executed
-  at specific moments in the UI lifetime (before and after exectution of the
-  bdss, before saving the workflow)
+  at specific moments in the UI lifetime (before and after execution of the
+  BDSS, before saving the workflow)
 
-Plugin support requires compliancy to the Force BDSS api for plugins.
+Plugin support requires compliance to the Force BDSS api for plugins.
 Extensions are registered via setuptools entry points.
 
 Execution of the force bdss executable is simple. Invoke with::
