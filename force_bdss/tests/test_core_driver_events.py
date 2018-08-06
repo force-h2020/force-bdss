@@ -12,7 +12,8 @@ class TestCoreDriverEvents(unittest.TestCase):
         ev.weights = [1.0]
 
         self.maxDiff = 1000
-        self.assertEqual(ev.__getstate__(),
+        self.assertEqual(
+            ev.__getstate__(),
             {
                 'optimal_kpis': [
                     {
