@@ -32,12 +32,12 @@ class CoreMCODriver(BaseCoreDriver):
             log.exception("Unable to open workflow file.")
             sys.exit(1)
 
-        errors = verify_workflow(workflow)
+        workflow_errors = verify_workflow(workflow)
 
-        if len(errors) != 0:
+        if len(workflow_errors) != 0:
             log.error("Unable to execute workflow due to verification "
                       "errors :")
-            for err in errors:
+            for err in workflow_errors:
                 log.error(err.local_error)
             sys.exit(1)
 
