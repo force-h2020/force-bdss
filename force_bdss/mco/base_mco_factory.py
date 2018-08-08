@@ -1,10 +1,12 @@
 import logging
-from traits.api import provides, Type
+from traits.api import provides, Type, List, Instance
 
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
+from force_bdss.mco.parameters.base_mco_parameter_factory import \
+    BaseMCOParameterFactory
 from .i_mco_factory import IMCOFactory
 
 log = logging.getLogger(__name__)
@@ -26,6 +28,12 @@ class BaseMCOFactory(BaseFactory):
     #: The communicator associated to the MCO. Define this to your MCO comm.
     communicator_class = Type(BaseMCOCommunicator, allow_none=False)
 
+    #: The list of parameter factory classes this MCO supports.
+    parameter_factory_classes = List(Type(BaseMCOParameterFactory))
+
+    #: The instantiated parameter factories.
+    parameter_factories = List(Instance(BaseMCOParameterFactory))
+
     def __init__(self, plugin, *args, **kwargs):
         super(BaseMCOFactory, self).__init__(
             plugin=plugin,
@@ -35,6 +43,8 @@ class BaseMCOFactory(BaseFactory):
         self.optimizer_class = self.get_optimizer_class()
         self.model_class = self.get_model_class()
         self.communicator_class = self.get_communicator_class()
+        self.parameter_factory_classes = self.get_parameter_factory_classes()
+        self.parameter_factories = self._create_parameter_factories()
 
     def get_optimizer_class(self):
         raise NotImplementedError(
@@ -50,6 +60,11 @@ class BaseMCOFactory(BaseFactory):
         raise NotImplementedError(
             "get_communicator_class was not implemented in factory {}".format(
                 self.__class__))
+
+    def get_parameter_factory_classes(self):
+        raise NotImplementedError(
+            "get_parameter_factory_classes was not implemented "
+            "in factory {}".format(self.__class__))
 
     def create_optimizer(self):
         """Factory method.
@@ -97,11 +112,13 @@ class BaseMCOFactory(BaseFactory):
         """
         return self.communicator_class(self)
 
-    def parameter_factories(self):
+    def _create_parameter_factories(self):
         """Returns the parameter factories supported by this MCO
 
         Returns
         -------
         List of BaseMCOParameterFactory
         """
-        return []
+        return [factory(self)
+                for factory in self.parameter_factory_classes
+                ]
