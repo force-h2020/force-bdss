@@ -149,9 +149,9 @@ as in data source factory. The following::
 
 Must return classes of the MCO and the MCOCommunicator. Finally::
 
-    def parameter_factories(self):
+    def get_parameter_factory_classes(self):
 
-Must return a list of instances (NOT classes) of the parameter factories.
+Must return a list of classes of the parameter factories.
 
 MCO Communicator
 ^^^^^^^^^^^^^^^^

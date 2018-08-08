@@ -1,5 +1,5 @@
-force\_bdss.tests.fixtures package
-==================================
+force\_bdss\.tests\.fixtures package
+====================================
 
 Module contents
 ---------------

@@ -20,7 +20,7 @@ class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
         self.registry = DummyFactoryRegistryPlugin()
         self.mco_factory = self.registry.mco_factories[0]
-        self.mco_parameter_factory = self.mco_factory.parameter_factories()[0]
+        self.mco_parameter_factory = self.mco_factory.parameter_factories[0]
         self.data_source_factory = self.registry.data_source_factories[0]
 
     def test_write(self):

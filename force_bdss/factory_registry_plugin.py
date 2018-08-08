@@ -132,7 +132,7 @@ class FactoryRegistryPlugin(Plugin):
         """
         mco_factory = self.mco_factory_by_id(mco_id)
 
-        for factory in mco_factory.parameter_factories():
+        for factory in mco_factory.parameter_factories:
             if factory.id == parameter_id:
                 return factory
 

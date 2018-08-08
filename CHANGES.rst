@@ -6,6 +6,11 @@ Release 0.3.0
 
 Backward incompatible changes that require rework of the plugins:
 
+- Parameter factories are now instantiated once and for all (#135).
+  - requires to change the plugins to return a list of factory classes
+    in the get_parameter_factory_classes() method, instead of the
+    parameter_factories() method. This method becomes a trait now.
+    All plugins exporting an MCO must be updated.
 - Design change of the notification infrastructure in MCO (#187):
     - the started and finished events do not need to be triggered anymore.
     - the new_data method is now obsolete and must be removed.
