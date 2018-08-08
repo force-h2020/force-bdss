@@ -29,6 +29,9 @@ class MCOFactory(BaseMCOFactory):
     def get_optimizer_class(self):
         return DummyMCO
 
+    def get_parameter_factory_classes(self):
+        return []
+
 
 class TestBaseMCOFactory(unittest.TestCase):
     def setUp(self):
@@ -47,7 +50,7 @@ class TestBaseMCOFactory(unittest.TestCase):
 
     def test_base_object_parameter_factories(self):
         factory = MCOFactory(self.plugin)
-        self.assertEqual(factory.parameter_factories(), [])
+        self.assertEqual(factory.parameter_factories, [])
 
     def test_broken_get_identifier(self):
         class Broken(DummyMCOFactory):

@@ -51,7 +51,7 @@ class ProbeFactoryRegistryPlugin(HasStrictTraits):
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
         mco_factory = self.mco_factory_by_id(mco_id)
 
-        for factory in mco_factory.parameter_factories():
+        for factory in mco_factory.parameter_factories:
             if factory.id == parameter_id:
                 return factory
 

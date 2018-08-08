@@ -38,7 +38,7 @@ class TestVerifier(unittest.TestCase):
         wf = self.workflow
         mco_factory = self.plugin.mco_factories[0]
         wf.mco = mco_factory.create_model()
-        parameter_factory = mco_factory.parameter_factories()[0]
+        parameter_factory = mco_factory.parameter_factories[0]
         wf.mco.parameters.append(parameter_factory.create_model())
 
         errors = verify_workflow(wf)
@@ -66,7 +66,7 @@ class TestVerifier(unittest.TestCase):
         wf = self.workflow
         mco_factory = self.plugin.mco_factories[0]
         wf.mco = mco_factory.create_model()
-        parameter_factory = mco_factory.parameter_factories()[0]
+        parameter_factory = mco_factory.parameter_factories[0]
         wf.mco.parameters.append(parameter_factory.create_model())
         wf.mco.parameters[0].name = "name"
         wf.mco.parameters[0].type = "type"
@@ -83,7 +83,7 @@ class TestVerifier(unittest.TestCase):
         wf = self.workflow
         mco_factory = self.plugin.mco_factories[0]
         wf.mco = mco_factory.create_model()
-        parameter_factory = mco_factory.parameter_factories()[0]
+        parameter_factory = mco_factory.parameter_factories[0]
         wf.mco.parameters.append(parameter_factory.create_model())
         wf.mco.parameters[0].name = "name"
         wf.mco.parameters[0].type = "type"

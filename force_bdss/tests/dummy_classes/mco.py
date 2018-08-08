@@ -59,5 +59,5 @@ class DummyMCOFactory(BaseMCOFactory):
     def get_optimizer_class(self):
         return DummyMCO
 
-    def parameter_factories(self):
-        return [DummyMCOParameterFactory(mco_factory=self)]
+    def get_parameter_factory_classes(self):
+        return [DummyMCOParameterFactory]

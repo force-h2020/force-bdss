@@ -116,5 +116,6 @@ class ProbeMCOFactory(BaseMCOFactory):
 
         return self.optimizer
 
-    def parameter_factories(self):
-        return [ProbeParameterFactory(mco_factory=self)]
+    def get_parameter_factory_classes(self):
+        return [ProbeParameterFactory]
+
