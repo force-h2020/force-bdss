@@ -119,6 +119,6 @@ class BaseMCOFactory(BaseFactory):
         -------
         List of BaseMCOParameterFactory
         """
-        return [factory(self)
-                for factory in self.parameter_factory_classes
+        return [factory_cls(self)
+                for factory_cls in self.parameter_factory_classes
                 ]
