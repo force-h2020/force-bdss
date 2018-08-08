@@ -21,7 +21,7 @@ Backward incompatible changes that require rework of the plugins:
 
 Internal changes:
 
-- Changed internal plugin ids to prevent conflicts with external ones.
+- Changed internal plugin ids to prevent conflicts with external ones (#131)
 
 Release 0.2.0
 -------------
