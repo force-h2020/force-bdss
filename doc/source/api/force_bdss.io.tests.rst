@@ -1,19 +1,19 @@
-force\_bdss.io.tests package
-============================
+force\_bdss\.io\.tests package
+==============================
 
 Submodules
 ----------
 
-force\_bdss.io.tests.test\_workflow\_reader module
---------------------------------------------------
+force\_bdss\.io\.tests\.test\_workflow\_reader module
+-----------------------------------------------------
 
 .. automodule:: force_bdss.io.tests.test_workflow_reader
     :members:
     :undoc-members:
     :show-inheritance:
 
-force\_bdss.io.tests.test\_workflow\_writer module
---------------------------------------------------
+force\_bdss\.io\.tests\.test\_workflow\_writer module
+-----------------------------------------------------
 
 .. automodule:: force_bdss.io.tests.test_workflow_writer
     :members:
