@@ -6,16 +6,16 @@ class ExtensionPointID:
     as they just have to reimplement the plugin base class and implement
     the appropriate default methods.
     """
-    MCO_FACTORIES = 'force.bdss.mco.factories'
-    DATA_SOURCE_FACTORIES = 'force.bdss.data_source.factories'
+    MCO_FACTORIES = 'force.bdss_core.mco.factories'
+    DATA_SOURCE_FACTORIES = 'force.bdss_core.data_source.factories'
     NOTIFICATION_LISTENER_FACTORIES = \
-        'force.bdss.notification_listener.factories'
-    UI_HOOKS_FACTORIES = 'force.bdss.ui_hooks.factories'
+        'force.bdss_core.notification_listener.factories'
+    UI_HOOKS_FACTORIES = 'force.bdss_core.ui_hooks.factories'
 
 
 class InternalPluginID:
-    CORE_MCO_DRIVER_ID = "force.bdss.core.CoreMCODriver"
-    CORE_EVALUATION_DRIVER_ID = "force.bdss.core.CoreEvaluationDriver"
+    CORE_MCO_DRIVER_ID = "force.bdss_core.CoreMCODriver"
+    CORE_EVALUATION_DRIVER_ID = "force.bdss_core.CoreEvaluationDriver"
 
 
 def factory_id(plugin_id, identifier):
