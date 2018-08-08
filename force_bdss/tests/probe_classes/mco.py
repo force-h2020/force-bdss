@@ -118,4 +118,3 @@ class ProbeMCOFactory(BaseMCOFactory):
 
     def get_parameter_factory_classes(self):
         return [ProbeParameterFactory]
-
