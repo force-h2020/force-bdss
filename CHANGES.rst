@@ -19,6 +19,10 @@ Backward incompatible changes that require rework of the plugins:
   and to install the BDSS (#180)
 - Removed support for python2 (#179)
 
+Internal changes:
+
+- Changed internal plugin ids to prevent conflicts with external ones (#131)
+
 Release 0.2.0
 -------------
 
@@ -27,4 +31,5 @@ Release 0.2.0
 Release 0.1.0
 -------------
 
-- Initial release. Implements basic functionality of the BDSS and its plugin system.
+- Initial release. Implements basic functionality of the BDSS and its
+  plugin system.

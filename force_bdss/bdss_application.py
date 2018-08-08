@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 class BDSSApplication(Application):
     """Main application for the BDSS.
     """
-    id = "force_bdss.bdss_application"
+    id = "force.bdss_core.bdss_application"
 
     #: The path of the workflow file to open
     workflow_filepath = Unicode()
