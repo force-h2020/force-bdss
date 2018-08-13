@@ -21,6 +21,7 @@ from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
 
 from .factory_registry_plugin import IFactoryRegistryPlugin  # noqa
 from .factory_registry_plugin import FactoryRegistryPlugin  # noqa
+from .factory_registry_plugin import FACTORY_REGISTRY_PLUGIN_ID  # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
