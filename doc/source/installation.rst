@@ -28,8 +28,9 @@ The BDSS software will not be installed in this environment, but in a separate o
 commands however must be executed from the bootstrap environment.
 
 Installation of the force BDSS runtime environment is performed with the
-following command::
+following command. This should be done from the directory containing the 'force-bdss' folder::
 
+    pushd force-bdss
     python -m ci build-env
 
 This will create another edm environment called ``force-py35``.
@@ -38,7 +39,8 @@ Do not enter this environment.
 To install the BDSS::
 
     python -m ci install
-
+    popd
+    
 To install the workflow manager::
 
     pushd force-wfmanager
