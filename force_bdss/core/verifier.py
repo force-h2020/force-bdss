@@ -70,15 +70,11 @@ def _check_mco(workflow):
                 global_error="Error in MCO parameter "
                              "(Type: {})".format(factory_name)))
 
-    #: Check KPIs have names and optimisation objectives
+    #: Check KPIs have names
     for idx, kpi in enumerate(mco.kpis):
         if kpi.name == '':
             errors.append(VerifierError(subject=kpi,
                                         local_error="KPI is not named",
-                                        global_error="A KPI has an error"))
-        if kpi.objective == '':
-            errors.append(VerifierError(subject=kpi,
-                                        local_error="KPI has no objective set",
                                         global_error="A KPI has an error"))
 
     return errors

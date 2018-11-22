@@ -52,15 +52,13 @@ class TestVerifier(unittest.TestCase):
         wf = self.workflow
         mco_factory = self.plugin.mco_factories[0]
         wf.mco = mco_factory.create_model()
-        kpi = KPISpecification(name='', objective='')
+        kpi = KPISpecification(name='')
         wf.mco.kpis.append(kpi)
 
         errors = verify_workflow(wf)
-
-        self.assertEqual(len(errors), 4)
+        self.assertEqual(len(errors), 3)
         self.assertEqual(errors[1].subject, wf.mco.kpis[0])
         self.assertIn("KPI is not named", errors[1].local_error)
-        self.assertIn("KPI has no objective set", errors[2].local_error)
 
     def test_empty_execution_layer(self):
         wf = self.workflow
