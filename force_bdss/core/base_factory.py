@@ -43,7 +43,6 @@ class BaseFactory(HasStrictTraits):
             )
         self.id = id
 
-
     def get_name(self):
         """Must be reimplemented to return a user-visible name of the
         data source.
