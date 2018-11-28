@@ -1,6 +1,6 @@
 import logging
 from traits.api import (
-    provides, Type, Bool
+    provides, Type
 )
 from force_bdss.core.base_factory import BaseFactory
 from force_bdss.notification_listeners.base_notification_listener import \
@@ -19,11 +19,6 @@ class BaseNotificationListenerFactory(BaseFactory):
     Notification listeners are extensions that receive event notifications
     from the MCO and perform an associated action.
     """
-    #: If the factor should be visible in the UI. Set to false to make it
-    #: invisible. This is normally useful for notification systems that are
-    #: not supposed to be configured by the user.
-    ui_visible = Bool(True)
-
     #: The listener class that must be instantiated. Define this to your
     #: listener class.
     listener_class = Type(BaseNotificationListener, allow_none=False)

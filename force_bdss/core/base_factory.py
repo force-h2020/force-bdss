@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import HasStrictTraits, Unicode, Instance
+from traits.api import Bool, HasStrictTraits, Unicode, Instance
 
 from force_bdss.ids import factory_id
 
@@ -14,6 +14,11 @@ class BaseFactory(HasStrictTraits):
 
     #: A long description of the factory.
     description = Unicode()
+
+    #: If the factor should be visible in the UI. Set to false to make it
+    #: invisible. This is normally useful for notification systems that are
+    #: not supposed to be configured by the user.
+    ui_visible = Bool(True)
 
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
