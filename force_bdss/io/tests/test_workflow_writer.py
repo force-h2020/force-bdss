@@ -94,7 +94,6 @@ class TestWorkflowWriter(unittest.TestCase):
         exec_layer = wf.execution_layers[0]
         exec_layer.data_sources[0].input_slot_info = [InputSlotInfo()]
         slotdata = exec_layer.data_sources[0].input_slot_info[0].__getstate__()
-        self.assertTrue("__traits_version__" in slotdata)
         # Calls traits_to_dict for each data source
         datastore_list = wfwriter._execution_layer_data(exec_layer)
         new_slotdata = datastore_list[0]['model_data']['input_slot_info']
