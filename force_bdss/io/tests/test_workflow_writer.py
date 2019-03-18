@@ -11,7 +11,7 @@ from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
 from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
-    pop_recursive
+    pop_recursive, pop_dunder_recursive
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.input_slot_info import InputSlotInfo
 
@@ -112,3 +112,17 @@ class TestWorkflowWriter(unittest.TestCase):
 
         test_result_dictionary = pop_recursive(test_dictionary, 'K3')
         self.assertEqual(test_result_dictionary, result_dictionary)
+
+    def test_dunder_recursive(self):
+        test_dict = {
+            '__traits_version__': '4.6.0',
+            'some_important_data':
+                {'__traits_version__': '4.6.0', 'value': 10},
+            '_some_private_data':
+                {'__instance_traits__': ['yes', 'some']},
+            '___':
+                {'__': 'a', 'foo': 'bar'}
+        }
+        expected = {'some_important_data': {'value': 10},
+                    '_some_private_data': {}}
+        self.assertEqual(pop_dunder_recursive(test_dict), expected)

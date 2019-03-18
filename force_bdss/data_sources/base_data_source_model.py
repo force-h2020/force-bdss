@@ -6,6 +6,7 @@ from force_bdss.core.base_model import BaseModel
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 class BaseDataSourceModel(BaseModel):
@@ -40,13 +41,14 @@ class BaseDataSourceModel(BaseModel):
     changes_slots = Event()
 
     def __getstate__(self):
-        state = super(BaseDataSourceModel, self).__getstate__()
+        state = pop_dunder_recursive(super(BaseDataSourceModel, self).__getstate__())
         state["input_slot_info"] = [
             x.__getstate__() for x in self.input_slot_info
         ]
         state["output_slot_info"] = [
             x.__getstate__() for x in self.output_slot_info
         ]
+
         return state
 
     @on_trait_change("+changes_slots")

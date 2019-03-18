@@ -25,10 +25,9 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
 
     def test_getstate(self):
         model = DummyDataSourceModel(self.mock_factory)
-        self.assertEqual(
+        self.assertDictEqual(
             model.__getstate__(),
             {
-                "__traits_version__": "4.6.0",
                 "input_slot_info": [],
                 "output_slot_info": []
             })
@@ -46,29 +45,24 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             OutputSlotInfo(name="quux")
         ]
 
-        self.assertEqual(
+        self.assertDictEqual(
             model.__getstate__(),
             {
-                "__traits_version__": "4.6.0",
                 "input_slot_info": [
                     {
-                        "__traits_version__": "4.6.0",
                         "source": "Environment",
                         "name": "foo"
                     },
                     {
-                        "__traits_version__": "4.6.0",
                         "source": "Environment",
                         "name": "bar"
                     }
                 ],
                 "output_slot_info": [
                     {
-                        "__traits_version__": "4.6.0",
                         "name": "baz",
                     },
                     {
-                        "__traits_version__": "4.6.0",
                         "name": "quux",
                     }
                 ]

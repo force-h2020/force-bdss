@@ -93,9 +93,6 @@ def traits_to_dict(traits_obj):
     traits version."""
 
     state = traits_obj.__getstate__()
-
-    state = pop_recursive(state, '__traits_version__')
-
     return state
 
 
@@ -117,5 +114,34 @@ def pop_recursive(dictionary, remove_key):
             for element in value:
                 if isinstance(element, dict):
                     pop_recursive(element, remove_key)
+
+    return dictionary
+
+
+def pop_dunder_recursive(dictionary):
+    """ Recursively removes all dunder keys from a nested dictionary. """
+    try:
+        found = False
+        for key in dictionary:
+            if key.startswith('__') and key.endswith('__'):
+                dictionary.pop(key)
+                found = True
+                break
+        if found:
+            pop_dunder_recursive(dictionary)
+
+    except KeyError:
+        pass
+
+    for key, value in dictionary.items():
+        # If remove_key is in the dict, remove it
+        if isinstance(value, dict):
+            pop_dunder_recursive(value)
+        # If we have a non-dict iterable which contains a dict,
+        # call pop.(remove_key) from that as well
+        elif isinstance(value, (tuple, list)):
+            for element in value:
+                if isinstance(element, dict):
+                    pop_dunder_recursive(element)
 
     return dictionary

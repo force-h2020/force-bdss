@@ -1,5 +1,6 @@
 from traits.api import HasStrictTraits, Unicode
 from ..local_traits import CUBAType
+from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 class Slot(HasStrictTraits):
@@ -14,3 +15,6 @@ class Slot(HasStrictTraits):
 
     #: The CUBA key of the slot
     type = CUBAType()
+
+    def __getstate__(self):
+        return pop_dunder_recursive(super().__getstate__())
