@@ -14,7 +14,7 @@ If you never installed the Enthought Deployment Manager, perform the following o
 
     wget https://package-data.enthought.com/edm/rh5_x86_64/1.9/edm_1.9.2_linux_x86_64.sh && bash ./edm_1.9.2_linux_x86_64.sh -b -f -p $HOME
     export PATH=${HOME}/edm/bin:${PATH}
-    edm install --version 3.5 -y click setuptools
+    edm install --version 3.6 -y click setuptools
     edm shell
 
 If you instead already have an EDM installation and a default environment, perform the following:
@@ -33,7 +33,7 @@ following command. This should be done from the directory containing the 'force-
     pushd force-bdss
     python -m ci build-env
 
-This will create another edm environment called ``force-py35``.
+This will create another edm environment called ``force-py36``.
 Do not enter this environment. 
 
 To install the BDSS::
@@ -55,7 +55,7 @@ and (optional, but recommended), the example plugins::
 
 Now you can enter the deployed environment and invoke the programs::
 
-    edm shell -e force-py35
+    edm shell -e force-py36
     # Invokes the workflow manager UI
     force_wfmanager
     # Invokes the CLI BDSS evaluator
