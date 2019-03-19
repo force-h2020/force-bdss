@@ -88,8 +88,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     " An entry of type <.* 'str'> was instead found"
                     " in position 0."
                     " Fix the DataSource.run\(\) method to"
-                    " return the appropriate entity."
-                    ):
+                    " return the appropriate entity."):
                 driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):

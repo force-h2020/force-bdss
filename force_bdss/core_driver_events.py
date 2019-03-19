@@ -7,7 +7,7 @@ from force_bdss.io.workflow_writer import pop_dunder_recursive
 class BaseDriverEvent(HasStrictTraits):
     """ Base event for the MCO driver."""
     def __getstate__(self):
-        return pop_dunder_recursive(super(BaseDriverEvent, self).__getstate__())
+        return pop_dunder_recursive(super().__getstate__())
 
 
 class MCOStartEvent(BaseDriverEvent):

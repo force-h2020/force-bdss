@@ -41,7 +41,7 @@ class BaseDataSourceModel(BaseModel):
     changes_slots = Event()
 
     def __getstate__(self):
-        state = pop_dunder_recursive(super(BaseDataSourceModel, self).__getstate__())
+        state = pop_dunder_recursive(super().__getstate__())
         state["input_slot_info"] = [
             x.__getstate__() for x in self.input_slot_info
         ]
