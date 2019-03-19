@@ -119,8 +119,14 @@ class TestWorkflowWriter(unittest.TestCase):
             '_some_private_data':
                 {'__instance_traits__': ['yes', 'some']},
             '___':
-                {'__': 'a', 'foo': 'bar'}
+                {'__': 'a', 'foo': 'bar'},
+            'list_of_dicts': [
+                {'__bad_key__': 'bad', 'good_key': 'good'},
+                {'also_good_key': 'good'}]
         }
         expected = {'some_important_data': {'value': 10},
-                    '_some_private_data': {}}
+                    '_some_private_data': {},
+                    'list_of_dicts': [{'good_key': 'good'},
+                                      {'also_good_key': 'good'}]
+                    }
         self.assertEqual(pop_dunder_recursive(test_dict), expected)
