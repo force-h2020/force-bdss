@@ -10,8 +10,7 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
-    pop_recursive, pop_dunder_recursive
+from force_bdss.io.workflow_writer import WorkflowWriter, pop_recursive, pop_dunder_recursive
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.input_slot_info import InputSlotInfo
 
@@ -85,7 +84,7 @@ class TestWorkflowWriter(unittest.TestCase):
         mock_traits = mock.Mock()
         mock_traits.__getstate__ = mock.Mock(return_value={"foo": "bar"})
 
-        self.assertEqual(traits_to_dict(mock_traits), {"foo": "bar"})
+        self.assertEqual(mock_traits.__getstate__(), {"foo": "bar"})
 
     def test_traits_to_dict(self):
 
@@ -93,7 +92,6 @@ class TestWorkflowWriter(unittest.TestCase):
         wf = self._create_workflow()
         exec_layer = wf.execution_layers[0]
         exec_layer.data_sources[0].input_slot_info = [InputSlotInfo()]
-        slotdata = exec_layer.data_sources[0].input_slot_info[0].__getstate__()
         # Calls traits_to_dict for each data source
         datastore_list = wfwriter._execution_layer_data(exec_layer)
         new_slotdata = datastore_list[0]['model_data']['input_slot_info']
