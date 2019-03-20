@@ -1,6 +1,7 @@
 from traits.api import HasStrictTraits, Enum
 
 from ..local_traits import Identifier
+from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 class InputSlotInfo(HasStrictTraits):
@@ -19,3 +20,6 @@ class InputSlotInfo(HasStrictTraits):
 
     #: The user defined name of the variable containing the value.
     name = Identifier()
+
+    def __getstate__(self):
+        return pop_dunder_recursive(super().__getstate__())

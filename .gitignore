@@ -3,3 +3,4 @@ __pycache__
 doc/build/
 *.pyc
 force_bdss/version.py
+.DS_Store

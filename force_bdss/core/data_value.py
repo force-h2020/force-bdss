@@ -1,4 +1,5 @@
 from traits.api import HasStrictTraits, Any, String, Enum
+from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 class DataValue(HasStrictTraits):
@@ -33,3 +34,6 @@ class DataValue(HasStrictTraits):
         s += " ({})".format(str(self.quality))
 
         return s
+
+    def __getstate__(self):
+        return pop_dunder_recursive(super().__getstate__())

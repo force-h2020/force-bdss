@@ -10,8 +10,8 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry_plugin import \
     DummyFactoryRegistryPlugin
 
-from force_bdss.io.workflow_writer import WorkflowWriter, traits_to_dict,\
-    pop_recursive
+from force_bdss.io.workflow_writer import WorkflowWriter, pop_recursive, \
+    pop_dunder_recursive
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.input_slot_info import InputSlotInfo
 
@@ -85,7 +85,7 @@ class TestWorkflowWriter(unittest.TestCase):
         mock_traits = mock.Mock()
         mock_traits.__getstate__ = mock.Mock(return_value={"foo": "bar"})
 
-        self.assertEqual(traits_to_dict(mock_traits), {"foo": "bar"})
+        self.assertEqual(mock_traits.__getstate__(), {"foo": "bar"})
 
     def test_traits_to_dict(self):
 
@@ -93,8 +93,6 @@ class TestWorkflowWriter(unittest.TestCase):
         wf = self._create_workflow()
         exec_layer = wf.execution_layers[0]
         exec_layer.data_sources[0].input_slot_info = [InputSlotInfo()]
-        slotdata = exec_layer.data_sources[0].input_slot_info[0].__getstate__()
-        self.assertTrue("__traits_version__" in slotdata)
         # Calls traits_to_dict for each data source
         datastore_list = wfwriter._execution_layer_data(exec_layer)
         new_slotdata = datastore_list[0]['model_data']['input_slot_info']
@@ -112,3 +110,23 @@ class TestWorkflowWriter(unittest.TestCase):
 
         test_result_dictionary = pop_recursive(test_dictionary, 'K3')
         self.assertEqual(test_result_dictionary, result_dictionary)
+
+    def test_dunder_recursive(self):
+        test_dict = {
+            '__traits_version__': '4.6.0',
+            'some_important_data':
+                {'__traits_version__': '4.6.0', 'value': 10},
+            '_some_private_data':
+                {'__instance_traits__': ['yes', 'some']},
+            '___':
+                {'__': 'a', 'foo': 'bar'},
+            'list_of_dicts': [
+                {'__bad_key__': 'bad', 'good_key': 'good'},
+                {'also_good_key': 'good'}]
+        }
+        expected = {'some_important_data': {'value': 10},
+                    '_some_private_data': {},
+                    'list_of_dicts': [{'good_key': 'good'},
+                                      {'also_good_key': 'good'}]
+                    }
+        self.assertEqual(pop_dunder_recursive(test_dict), expected)

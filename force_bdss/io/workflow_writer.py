@@ -46,7 +46,7 @@ class WorkflowWriter(HasStrictTraits):
 
         parameters_data = []
         for param in data["model_data"]["parameters"]:
-            state = traits_to_dict(param)
+            state = param.__getstate__()
 
             parameters_data.append(
                 {
@@ -60,7 +60,7 @@ class WorkflowWriter(HasStrictTraits):
         kpis_data = []
         for kpi in data["model_data"]["kpis"]:
             kpis_data.append(
-                traits_to_dict(kpi)
+                kpi.__getstate__()
             )
 
         data["model_data"]["kpis"] = kpis_data
@@ -80,23 +80,12 @@ class WorkflowWriter(HasStrictTraits):
         """
         Extracts the data from an external model and returns its dictionary
         """
-        state = traits_to_dict(model)
+        state = model.__getstate__()
 
         return {
             "id": model.factory.id,
             "model_data": state
         }
-
-
-def traits_to_dict(traits_obj):
-    """Converts a traits class into a dict, removing the pesky
-    traits version."""
-
-    state = traits_obj.__getstate__()
-
-    state = pop_recursive(state, '__traits_version__')
-
-    return state
 
 
 def pop_recursive(dictionary, remove_key):
@@ -117,5 +106,26 @@ def pop_recursive(dictionary, remove_key):
             for element in value:
                 if isinstance(element, dict):
                     pop_recursive(element, remove_key)
+
+    return dictionary
+
+
+def pop_dunder_recursive(dictionary):
+    """ Recursively removes all dunder keys from a nested dictionary. """
+    keys = [key for key in dictionary.keys()]
+    for key in keys:
+        if key.startswith('__') and key.endswith('__'):
+            dictionary.pop(key)
+
+    for key, value in dictionary.items():
+        # Check subdicts for dunder keys
+        if isinstance(value, dict):
+            pop_dunder_recursive(value)
+        # If we have a non-dict iterable which contains a dict,
+        # remove dunder keys from that too
+        elif isinstance(value, (tuple, list)):
+            for element in value:
+                if isinstance(element, dict):
+                    pop_dunder_recursive(element)
 
     return dictionary
