@@ -16,5 +16,9 @@ class Slot(HasStrictTraits):
     #: The CUBA key of the slot
     type = CUBAType()
 
+    #: A default name for the slot item
+    name = Unicode("")
+
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())
+
