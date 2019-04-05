@@ -34,8 +34,9 @@ def execute_workflow(workflow, data_values):
 
     kpi_results = [
         dv
+        for kpi_name in kpi_names
         for dv in available_data_values
-        if dv.name in kpi_names
+        if dv.name == kpi_name
     ]
 
     return kpi_results
