@@ -16,13 +16,6 @@ from .core_mco_driver import CoreMCODriver
 
 log = logging.getLogger(__name__)
 
-# This is a command-line app, we don't want GUI event loops
-try:
-    ETSConfig.toolkit = 'null'
-except ValueError:
-    # already been set, so can't do anything much
-    pass
-
 
 class BDSSApplication(Application):
     """Main application for the BDSS.
@@ -41,6 +34,13 @@ class BDSSApplication(Application):
     workflow = Property()
 
     def __init__(self, evaluate, workflow_filepath):
+        # This is a command-line app, we don't want GUI event loops
+        try:
+            ETSConfig.toolkit = 'null'
+        except ValueError:
+            # already been set, so can't do anything much
+            pass
+
         self.evaluate = evaluate
         self.workflow_filepath = workflow_filepath
 
