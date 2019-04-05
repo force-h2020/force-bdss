@@ -7,6 +7,7 @@ from stevedore.exception import NoMatches
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 from traits.api import Unicode, Bool, Property
+from traits.etsconfig.api import ETSConfig
 
 from force_bdss.ids import InternalPluginID
 from .factory_registry_plugin import FactoryRegistryPlugin
@@ -14,6 +15,13 @@ from .core_evaluation_driver import CoreEvaluationDriver
 from .core_mco_driver import CoreMCODriver
 
 log = logging.getLogger(__name__)
+
+# This is a command-line app, we don't want GUI event loops
+try:
+    ETSConfig.toolkit = 'null'
+except ValueError:
+    # already been set, so can't do anything much
+    pass
 
 
 class BDSSApplication(Application):
