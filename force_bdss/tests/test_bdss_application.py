@@ -32,24 +32,23 @@ class TestBDSSApplication(unittest.TestCase):
                 app = BDSSApplication(False, "foo/bar")
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'null')
 
     def test_toolkit(self):
         ETSConfig.toolkit = 'dummy'
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                app = BDSSApplication(False, "foo/bar")
-        self.assertFalse(app.evaluate)
-        self.assertEqual(app.workflow_filepath, "foo/bar")
+                BDSSApplication(False, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'dummy')
 
     def test_toolkit_null(self):
         ETSConfig.toolkit = 'null'
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                app = BDSSApplication(False, "foo/bar")
-        self.assertFalse(app.evaluate)
-        self.assertEqual(app.workflow_filepath, "foo/bar")
+                BDSSApplication(False, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'null')
 
     def test_extension_load_failure(self):
         plugins = []
