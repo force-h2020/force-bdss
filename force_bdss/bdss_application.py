@@ -39,7 +39,11 @@ class BDSSApplication(Application):
             ETSConfig.toolkit = 'null'
         except ValueError:
             # already been set, so can't do anything much
-            pass
+            if ETSConfig.toolkit != 'null':
+                log.info(
+                    "ETS toolkit is set to '%s', should not override.",
+                    ETSConfig.toolkit
+                )
 
         self.evaluate = evaluate
         self.workflow_filepath = workflow_filepath
