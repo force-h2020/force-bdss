@@ -121,6 +121,8 @@ class BaseDataSourceModel(BaseModel):
                     ),
                 )
             )
+        for output_slot in self.output_slot_info:
+            errors += output_slot.verify()
 
         return errors
 
