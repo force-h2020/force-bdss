@@ -42,6 +42,15 @@ class TestBDSSApplication(unittest.TestCase):
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
 
+    def test_toolkit_null(self):
+        ETSConfig.toolkit = 'null'
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(False, "foo/bar")
+        self.assertFalse(app.evaluate)
+        self.assertEqual(app.workflow_filepath, "foo/bar")
+
     def test_extension_load_failure(self):
         plugins = []
         with testfixtures.LogCapture() as log:
