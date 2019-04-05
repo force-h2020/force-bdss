@@ -2,6 +2,7 @@ from traits.api import Instance, List
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core.kpi_specification import KPISpecification
+from force_bdss.core.verifier import VerifierError
 from .parameters.base_mco_parameter import BaseMCOParameter
 from .i_mco_factory import IMCOFactory
 
@@ -22,3 +23,35 @@ class BaseMCOModel(BaseModel):
 
     #: A list of KPI specification objects and their objective.
     kpis = List(KPISpecification, visible=False)
+
+    def verify(self):
+        """ Verify the MCO model.
+
+        Check that the MCO model:
+
+        - has at least one parameter
+        - has at least one KPI
+        - has no parameter errors
+        - has no KPI errors
+
+        Returns
+        -------
+        errors : list of VerifierErrors
+            The list of all detected errors in the MCO model.
+        """
+        errors = []
+
+        if not self.parameters:
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    global_error="The MCO has no defined parameters",
+                )
+            )
+        for parameter in self.parameters:
+            errors += parameter.verify()
+
+        for kpi in self.kpis:
+            errors += kpi.verify()
+
+        return errors

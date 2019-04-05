@@ -94,7 +94,7 @@ class TestVerifier(unittest.TestCase):
 
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("Missing input slot name assignment in layer 0",
+        self.assertIn("The number of input slots is incorrect.",
                       errors[0].local_error)
 
         ds_model.input_slot_info.append(
@@ -103,7 +103,7 @@ class TestVerifier(unittest.TestCase):
 
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("Missing output slot name assignment in layer 0",
+        self.assertIn("The number of output slots is incorrect.",
                       errors[0].local_error)
 
         ds_model.output_slot_info.append(
@@ -116,13 +116,13 @@ class TestVerifier(unittest.TestCase):
         ds_model.input_slot_info[0].name = ''
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 1)
-        self.assertIn("Undefined name for input parameter",
+        self.assertIn("Input slot is not named",
                       errors[0].local_error)
 
         ds_model.output_slot_info[0].name = ''
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 2)
-        self.assertIn("Undefined names for all output parameters",
+        self.assertIn("All output parameters have undefined names",
                       errors[1].local_error)
 
     def test_multi_error_format(self):

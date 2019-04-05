@@ -241,6 +241,6 @@ class TestCoreMCODriver(unittest.TestCase):
                 ('force_bdss.core_mco_driver', 'ERROR',
                  'The MCO has no defined parameters'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'Missing input slot name assignment in layer 0'),
+                 'The number of input slots is incorrect.'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'Missing output slot name assignment in layer 0'))
+                 'The number of output slots is incorrect.'))
