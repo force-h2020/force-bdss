@@ -65,8 +65,8 @@ class BaseDataSourceModel(BaseModel):
             logger.exception(
                 "Unable to create data source from factory '%s', plugin "
                 "'%s'. This might indicate a  programming error",
-                factory.id,
-                factory.plugin.id,
+                self.factory.id,
+                self.factory.plugin.id,
             )
             raise
 
@@ -77,8 +77,8 @@ class BaseDataSourceModel(BaseModel):
                 "Unable to retrieve slot information from data source"
                 " created by factory '%s', plugin '%s'. This might "
                 "indicate a programming error.",
-                data_source.factory.id,
-                data_source.factory.plugin.id
+                self.factory.id,
+                self.factory.plugin.id
             )
             raise
 
@@ -88,8 +88,10 @@ class BaseDataSourceModel(BaseModel):
                 VerifierError(
                     subject=self,
                     local_error="The number of input slots is incorrect.",
-                    global_error="A data source model has incorrect number "
-                        "of input slots.",
+                    global_error=(
+                        "A data source model has incorrect number "
+                        "of input slots."
+                    ),
                 )
             )
         for input_slot in self.input_slot_info:
@@ -100,8 +102,10 @@ class BaseDataSourceModel(BaseModel):
                 VerifierError(
                     subject=self,
                     local_error="The number of output slots is incorrect.",
-                    global_error="A data source model has incorrect number "
-                        "of output slots.",
+                    global_error=(
+                        "A data source model has incorrect number "
+                        "of output slots."
+                    ),
                 )
             )
 
@@ -112,12 +116,13 @@ class BaseDataSourceModel(BaseModel):
                     subject=self,
                     severity='warning',
                     local_error="All output parameters have undefined names",
-                    global_error="A data source model has no defined output names",
+                    global_error=(
+                        "A data source model has no defined output names"
+                    ),
                 )
             )
 
         return errors
-
 
     def __getstate__(self):
         state = pop_dunder_recursive(super().__getstate__())
