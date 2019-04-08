@@ -1,75 +1,35 @@
-from envisage.extension_point import ExtensionPoint
-from envisage.plugin import Plugin
-from traits.api import List, Interface, provides
+from traits.api import HasStrictTraits, Instance, List, provides
 
 from force_bdss.core.i_factory_registry import IFactoryRegistry
-from force_bdss.ids import ExtensionPointID
-from force_bdss.notification_listeners.i_notification_listener_factory import \
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.mco.i_mco_factory import IMCOFactory
+from force_bdss.notification_listeners.i_notification_listener_factory import (  # noqa: E501
     INotificationListenerFactory
-from .data_sources.i_data_source_factory import (
-    IDataSourceFactory)
-from .mco.i_mco_factory import IMCOFactory
-from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
+)
+from force_bdss.ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
-FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
-
-
-class IFactoryRegistryPlugin(IFactoryRegistry):
-    def data_source_factory_by_id(self, id):
-        pass
-
-    def kpi_calculator_factory_by_id(self, id):
-        pass
-
-    def mco_factory_by_id(self, id):
-        pass
-
-    def mco_parameter_factory_by_id(self, mco_id, parameter_id):
-        pass
-
-    def notification_listener_factory_by_id(self, id):
-        pass
-
-
-@provides(IFactoryRegistryPlugin)
-class FactoryRegistryPlugin(Plugin):
-    """Main plugin that handles the execution of the MCO
-    or the evaluation.
+@provides(IFactoryRegistry)
+class FactoryRegistry(HasStrictTraits):
+    """ Default factory registry for the application.
     """
-    id = FACTORY_REGISTRY_PLUGIN_ID
-
-    # Note: we are forced to declare these extensions points here instead
-    # of the application object, and this is why we have to use this plugin.
-    # It is a workaround to an envisage bug that does not find the extension
-    # points if declared on the application.
 
     #: A List of the available Multi Criteria Optimizers.
-    #: This will be populated by MCO plugins.
-    mco_factories = ExtensionPoint(
-        List(IMCOFactory),
-        id=ExtensionPointID.MCO_FACTORIES)
+    mco_factories = List(Instance(IMCOFactory))
 
     #: A list of the available Data Sources.
-    #: It will be populated by plugins.
-    data_source_factories = ExtensionPoint(
-        List(IDataSourceFactory),
-        id=ExtensionPointID.DATA_SOURCE_FACTORIES)
+    data_source_factories = List(Instance(IDataSourceFactory))
 
     #: Notification listeners are pluggable entities that will listen
     #: to MCO events and act accordingly.
-    notification_listener_factories = ExtensionPoint(
-        List(INotificationListenerFactory),
-        id=ExtensionPointID.NOTIFICATION_LISTENER_FACTORIES
+    notification_listener_factories = List(
+        Instance(INotificationListenerFactory)
     )
 
     #: UI Hooks are pluggable entities holding methods that are called
     #: at specific moments in the UI application lifetime. They can be used
     #: to inject special behaviors at those moments.
-    ui_hooks_factories = ExtensionPoint(
-        List(IUIHooksFactory),
-        id=ExtensionPointID.UI_HOOKS_FACTORIES
-    )
+    ui_hooks_factories = List(Instance(IUIHooksFactory))
 
     def data_source_factory_by_id(self, id):
         """Finds a given data source factory by means of its id.
@@ -88,7 +48,6 @@ class FactoryRegistryPlugin(Plugin):
         for ds in self.data_source_factories:
             if ds.id == id:
                 return ds
-
         raise KeyError(id)
 
     def mco_factory_by_id(self, id):
@@ -108,7 +67,6 @@ class FactoryRegistryPlugin(Plugin):
         for mco in self.mco_factories:
             if mco.id == id:
                 return mco
-
         raise KeyError(id)
 
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
