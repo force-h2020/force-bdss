@@ -12,16 +12,11 @@ from force_bdss.ui_hooks.tests.test_base_ui_hooks_factory import \
 
 
 @provides(IFactoryRegistry)
-class DummyFactoryRegistryPlugin(HasStrictTraits):
+class DummyFactoryRegistry(HasStrictTraits):
     mco_factories = List()
     data_source_factories = List()
     notification_listener_factories = List()
     ui_hooks_factories = List()
-
-    plugin = Any()
-
-    def _plugin_default(self):
-        return DummyExtensionPlugin()
 
     def _mco_factories_default(self):
         return [DummyMCOFactory(self.plugin)]

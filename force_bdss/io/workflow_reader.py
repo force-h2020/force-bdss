@@ -4,11 +4,11 @@ import logging
 from traits.api import HasStrictTraits, Instance
 
 from force_bdss.core.execution_layer import ExecutionLayer
+from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow
-from ..factory_registry_plugin import IFactoryRegistryPlugin
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class WorkflowReader(HasStrictTraits):
     """
     #: The Factory registry. The reader needs it to create the
     #: specific model objects.
-    factory_registry = Instance(IFactoryRegistryPlugin)
+    factory_registry = Instance(IFactoryRegistry)
 
     def __init__(self,
                  factory_registry,

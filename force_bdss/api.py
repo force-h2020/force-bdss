@@ -6,7 +6,9 @@ from .core.base_model import BaseModel  # noqa
 from .core.data_value import DataValue  # noqa
 from .core.workflow import Workflow  # noqa
 from .core.slot import Slot  # noqa
+from .core.factory_registry import FactoryRegistry  # noqa
 from .core.i_factory import IFactory  # noqa
+from .core.i_factory_registry import IFactoryRegistry  # noqa
 from .core.input_slot_info import InputSlotInfo  # noqa
 from .core.output_slot_info import OutputSlotInfo  # noqa
 from .core.kpi_specification import KPISpecification  # noqa
@@ -19,10 +21,6 @@ from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa
 from .data_sources.base_data_source_factory import BaseDataSourceFactory  # noqa
 from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
-
-from .factory_registry_plugin import IFactoryRegistryPlugin  # noqa
-from .factory_registry_plugin import FactoryRegistryPlugin  # noqa
-from .factory_registry_plugin import FACTORY_REGISTRY_PLUGIN_ID  # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
