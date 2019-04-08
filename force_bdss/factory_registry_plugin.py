@@ -55,10 +55,18 @@ class FactoryRegistryPlugin(Plugin, FactoryRegistry):
     )
 
     #: Service offers provided by this plugin.
-    service_offers = List(Instance(ServiceOffer))
+    service_offers = List(
+        Instance(ServiceOffer),
+        contributes_to='envisage.service_offers',
+    )
 
     def _create_factory_registry(self):
-        return self
+        return FactoryRegistry(
+            mco_factories=self.mco_factories,
+            data_source_factories=self.data_source_factories,
+            notification_listener_factories=self.notification_listener_factories,  # noqa: E501
+            ui_hooks_factories=self.ui_hooks_factories,  # noqa: E501
+        )
 
     def _service_offers_default(self):
         factory_registry_offer = ServiceOffer(

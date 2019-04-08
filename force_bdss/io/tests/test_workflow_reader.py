@@ -8,16 +8,19 @@ from force_bdss.core.workflow import Workflow
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
     InvalidVersionException, InvalidFileException, MissingPluginException,
-    ModelInstantiationFailedException)
-from force_bdss.tests.dummy_classes.factory_registry_plugin import \
-    DummyFactoryRegistryPlugin
-from force_bdss.tests.probe_classes.factory_registry_plugin import \
-    ProbeFactoryRegistryPlugin
+    ModelInstantiationFailedException,
+)
+from force_bdss.tests.dummy_classes.factory_registry import (
+    DummyFactoryRegistry,
+)
+from force_bdss.tests.probe_classes.factory_registry import (
+    ProbeFactoryRegistry,
+)
 
 
 class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
-        self.registry = DummyFactoryRegistryPlugin()
+        self.registry = DummyFactoryRegistry()
         self.wfreader = WorkflowReader(self.registry)
 
         self.working_data = {
@@ -130,7 +133,7 @@ class TestWorkflowReader(unittest.TestCase):
 
 class TestModelCreationFailure(unittest.TestCase):
     def setUp(self):
-        self.registry = ProbeFactoryRegistryPlugin()
+        self.registry = ProbeFactoryRegistry()
         self.wfreader = WorkflowReader(self.registry)
 
         self.working_data = {

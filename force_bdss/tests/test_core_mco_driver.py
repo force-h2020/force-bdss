@@ -2,8 +2,8 @@ import unittest
 from testfixtures import LogCapture
 
 from force_bdss.core.data_value import DataValue
-from force_bdss.tests.probe_classes.factory_registry_plugin import \
-    ProbeFactoryRegistryPlugin
+from force_bdss.tests.probe_classes.factory_registry import \
+    ProbeFactoryRegistry
 from force_bdss.core_driver_events import (
     MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
 from force_bdss.tests import fixtures
@@ -21,7 +21,7 @@ def raise_exception(*args, **kwargs):
 
 class TestCoreMCODriver(unittest.TestCase):
     def setUp(self):
-        self.factory_registry_plugin = ProbeFactoryRegistryPlugin()
+        self.factory_registry_plugin = ProbeFactoryRegistry()
         application = mock.Mock(spec=Application)
         application.get_service = mock.Mock(
             return_value=self.factory_registry_plugin

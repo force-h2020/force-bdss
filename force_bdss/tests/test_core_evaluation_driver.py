@@ -2,8 +2,8 @@ import unittest
 
 import testfixtures
 
-from force_bdss.tests.probe_classes.factory_registry_plugin import \
-    ProbeFactoryRegistryPlugin
+from force_bdss.tests.probe_classes.factory_registry import \
+    ProbeFactoryRegistry
 
 from force_bdss.core.data_value import DataValue
 from force_bdss.tests import fixtures
@@ -19,7 +19,7 @@ from force_bdss.core_evaluation_driver import (
 
 class TestCoreEvaluationDriver(unittest.TestCase):
     def setUp(self):
-        self.registry = ProbeFactoryRegistryPlugin()
+        self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
         application = mock.Mock(spec=Application)
         application.get_service = mock.Mock(
