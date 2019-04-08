@@ -1,6 +1,9 @@
 FORCE BDSS Changelog
 --------------------
 
+Release 0.4.0
+-------------
+
 Release 0.3.0
 -------------
 
@@ -34,7 +37,6 @@ Internal changes:
 - Set the ETS toolkit to null for the command line app, this was causing
   slowdown by instantiating a Qt application which was never actually used
   (#206)
-
 
 Release 0.2.0
 -------------
