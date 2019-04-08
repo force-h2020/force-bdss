@@ -1,11 +1,12 @@
 import logging
 import click
 
-from ..bdss_application import BDSSApplication
+from traits.api import push_exception_handler
+
+from force_bdss.bdss_application import BDSSApplication
 
 # Makes the application rethrow the exception so that it exits return code
 # different from zero.
-from traits.api import push_exception_handler
 push_exception_handler(reraise_exceptions=True)
 
 
@@ -17,7 +18,6 @@ push_exception_handler(reraise_exceptions=True)
                    " If unspecified, the log will be written to stdout.")
 @click.argument('workflow_filepath', type=click.Path(exists=True))
 def run(evaluate, logfile, workflow_filepath):
-
     logging_config = {}
     logging_config["level"] = logging.INFO
 
