@@ -64,3 +64,16 @@ class DummyFactoryRegistryPlugin(HasStrictTraits):
                 return nl
 
         raise KeyError(id)
+
+    #: Service offers provided by this plugin.
+    service_offers = List()
+
+    def _create_factory_registry(self):
+        return self
+
+    def _service_offers_default(self):
+        factory_registry_offer = ServiceOffer(
+            protocol=IFactoryRegistry,
+            factory=self._create_factory_registry,
+        )
+        return [factory_registry_offer]

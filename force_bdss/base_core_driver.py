@@ -3,7 +3,6 @@ from traits.trait_types import Instance
 
 from .core.i_factory_registry import IFactoryRegistry
 from .core.workflow import Workflow
-from .factory_registry_plugin import FACTORY_REGISTRY_PLUGIN_ID
 from .io.workflow_reader import WorkflowReader
 
 
@@ -19,7 +18,7 @@ class BaseCoreDriver(Plugin):
     workflow = Instance(Workflow)
 
     def _factory_registry_default(self):
-        return self.application.get_plugin(FACTORY_REGISTRY_PLUGIN_ID)
+        return self.application.get_service(IFactoryRegistry)
 
     def _workflow_default(self):
         reader = WorkflowReader(self.factory_registry)

@@ -22,7 +22,7 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         self.registry = ProbeFactoryRegistryPlugin()
         self.plugin = self.registry.plugin
         application = mock.Mock(spec=Application)
-        application.get_plugin = mock.Mock(
+        application.get_service = mock.Mock(
             return_value=self.registry
         )
         application.workflow_filepath = fixtures.get("test_probe.json")

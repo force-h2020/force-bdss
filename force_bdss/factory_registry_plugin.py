@@ -1,6 +1,5 @@
-from envisage.extension_point import ExtensionPoint
-from envisage.plugin import Plugin
-from traits.api import List, Interface, provides
+from envisage.api import ExtensionPoint, Plugin, ServiceOffer
+from traits.api import List, Instance, Interface, provides
 
 from force_bdss.core.factory_registry import FactoryRegistry
 from force_bdss.core.i_factory_registry import IFactoryRegistry
@@ -54,3 +53,16 @@ class FactoryRegistryPlugin(Plugin, FactoryRegistry):
         List(IUIHooksFactory),
         id=ExtensionPointID.UI_HOOKS_FACTORIES
     )
+
+    #: Service offers provided by this plugin.
+    service_offers = List(Instance(ServiceOffer))
+
+    def _create_factory_registry(self):
+        return self
+
+    def _service_offers_default(self):
+        factory_registry_offer = ServiceOffer(
+            protocol=IFactoryRegistry,
+            factory=self._create_factory_registry,
+        )
+        return [factory_registry_offer]
