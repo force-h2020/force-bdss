@@ -1,4 +1,4 @@
-from traits.api import Any, HasStrictTraits, List, provides
+from traits.api import Any
 
 from force_bdss.core.factory_registry import FactoryRegistry
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory

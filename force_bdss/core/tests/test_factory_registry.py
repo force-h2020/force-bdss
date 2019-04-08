@@ -1,5 +1,4 @@
 import unittest
-import warnings
 
 from force_bdss.ids import factory_id, mco_parameter_id
 from force_bdss.tests.dummy_classes.extension_plugin import (
@@ -26,7 +25,9 @@ class TestFactoryRegistryWithContent(unittest.TestCase):
         self.registry = FactoryRegistry(
             mco_factories=[DummyMCOFactory(plugin=self.plugin)],
             data_source_factories=[DummyDataSourceFactory(plugin=self.plugin)],
-            notification_listener_factories=[DummyNotificationListenerFactory(plugin=self.plugin)],
+            notification_listener_factories=[
+                DummyNotificationListenerFactory(plugin=self.plugin),
+            ],
         )
 
     def tearDown(self):

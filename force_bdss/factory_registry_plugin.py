@@ -1,5 +1,5 @@
 from envisage.api import ExtensionPoint, Plugin, ServiceOffer
-from traits.api import List, Instance, Interface, provides
+from traits.api import List, Instance, provides
 
 from force_bdss.core.factory_registry import FactoryRegistry
 from force_bdss.core.i_factory_registry import IFactoryRegistry

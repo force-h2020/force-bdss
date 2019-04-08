@@ -1,7 +1,6 @@
-from traits.api import List, HasStrictTraits, provides, Any
+from traits.api import Any
 
 from force_bdss.core.factory_registry import FactoryRegistry
-from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.tests.probe_classes.probe_extension_plugin import \
     ProbeExtensionPlugin
 
