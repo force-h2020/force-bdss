@@ -1,7 +1,7 @@
 import abc
 
 from traits.api import (
-    ABCHasStrictTraits, Instance, Event
+    ABCHasStrictTraits, Event, File, Instance
 )
 
 from force_bdss.core_driver_events import MCOProgressEvent
@@ -16,10 +16,13 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
+    #: The file containing the workflow.
+    workflow_path = File
+
     #: Propagation channel for events from the MCO
     event = Event()
 
-    def __init__(self, factory, *args, **kwargs):
+    def __init__(self, factory, **traits):
         """Initializes the MCO.
 
         Parameters
@@ -27,8 +30,7 @@ class BaseMCO(ABCHasStrictTraits):
         factory: BaseMCOFactory
             The factory this BaseMCO belongs to
         """
-        self.factory = factory
-        super(BaseMCO, self).__init__(*args, **kwargs)
+        super(BaseMCO, self).__init__(factory=factory, **traits)
 
     @abc.abstractmethod
     def run(self, model):

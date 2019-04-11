@@ -20,8 +20,8 @@ def execute_workflow(workflow, data_values):
     -------
     list: A list of DataValues containing the KPI results.
     """
+    available_data_values = workflow.mco.bind_parameters(data_values)
 
-    available_data_values = data_values[:]
     for index, layer in enumerate(workflow.execution_layers):
         log.info("Computing data layer {}".format(index))
         ds_results = execute_layer(layer, available_data_values)
@@ -29,15 +29,7 @@ def execute_workflow(workflow, data_values):
 
     log.info("Aggregating KPI data")
 
-    kpi_results = []
-    kpi_names = [kpi.name for kpi in workflow.mco.kpis]
-
-    kpi_results = [
-        dv
-        for kpi_name in kpi_names
-        for dv in available_data_values
-        if dv.name == kpi_name
-    ]
+    kpi_results = workflow.mco.bind_kpis(data_values)
 
     return kpi_results
 

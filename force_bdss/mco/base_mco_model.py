@@ -1,9 +1,14 @@
+import logging
+
 from traits.api import Instance, List
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core.kpi_specification import KPISpecification
 from .parameters.base_mco_parameter import BaseMCOParameter
 from .i_mco_factory import IMCOFactory
+
+
+log = logging.getLogger(__name__)
 
 
 class BaseMCOModel(BaseModel):
@@ -22,3 +27,63 @@ class BaseMCOModel(BaseModel):
 
     #: A list of KPI specification objects and their objective.
     kpis = List(KPISpecification, visible=False)
+
+    def bind_parameters(self, data_values):
+        """ Bind and filter values from the MCO to the model parameters.
+
+        Takes data values from the MCO, and binds them to the specified
+        parameter names from the model.  Parameters with no name are removed.
+
+        Parameters
+        ----------
+        data_values: list of DataValues
+            A list of data values (usually from the MCO).
+
+        Returns
+        -------
+        data_values : list of DataValues
+            The data values from the MCO, ignoring those with no name.
+        """
+        if len(data_values) != len(self.parameters):
+            error_txt = ("The number of data values returned by"
+                        " the MCO ({} values) does not match the"
+                        " number of parameters specified ({} values)."
+                        " This is either a MCO plugin error or the workflow"
+                        " file is corrupted.").format(
+                len(data_values), len(self.parameters)
+            )
+            log.error(error_txt)
+            raise RuntimeError(error_txt)
+
+        # The data values obtained by the communicator are unnamed.
+        # Assign the name to each datavalue as specified by the user.
+        for dv, param in zip(data_values, self.parameters):
+            dv.name = param.name
+
+        # Exclude those who have no name set.
+        return [dv for dv in data_values if dv.name != ""]
+
+    def bind_kpis(self, data_values):
+        """ Bind and filter KPI values from execution results.
+
+        Parameters
+        ----------
+        data_values: list of DataValues
+            A list of data values (usually from execution results).
+
+        Returns
+        -------
+        data_values : list of DataValues
+            The data values corresponding to the KPIs.
+        """
+        kpi_results = []
+        kpi_names = [kpi.name for kpi in self.kpis]
+
+        kpi_results = [
+            dv
+            for kpi_name in kpi_names
+            for dv in data_values
+            if dv.name == kpi_name
+        ]
+
+        return kpi_results
