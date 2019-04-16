@@ -3,6 +3,8 @@ import warnings
 
 import testfixtures
 
+from traits.etsconfig.api import ETSConfig
+
 from force_bdss.bdss_application import (
     BDSSApplication,
     _load_failure_callback,
@@ -14,7 +16,15 @@ from force_bdss.tests import fixtures
 from unittest import mock
 
 
+def clear_toolkit():
+    # note, this won't unimport any toolkit backends
+    ETSConfig._toolkit = None
+
+
 class TestBDSSApplication(unittest.TestCase):
+    def setUp(self):
+        self.addCleanup(clear_toolkit)
+
     def test_initialization(self):
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
@@ -22,6 +32,23 @@ class TestBDSSApplication(unittest.TestCase):
                 app = BDSSApplication(False, "foo/bar")
         self.assertFalse(app.evaluate)
         self.assertEqual(app.workflow_filepath, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'null')
+
+    def test_toolkit(self):
+        ETSConfig.toolkit = 'dummy'
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                BDSSApplication(False, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'dummy')
+
+    def test_toolkit_null(self):
+        ETSConfig.toolkit = 'null'
+        with testfixtures.LogCapture():
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                BDSSApplication(False, "foo/bar")
+        self.assertEqual(ETSConfig.toolkit, 'null')
 
     def test_extension_load_failure(self):
         plugins = []
