@@ -11,8 +11,8 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
-from force_bdss.tests.probe_classes.factory_registry_plugin import \
-    ProbeFactoryRegistryPlugin
+from force_bdss.tests.probe_classes.factory_registry import \
+    ProbeFactoryRegistry
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
 from force_bdss.core.execution import execute_workflow, execute_layer, \
@@ -21,7 +21,7 @@ from force_bdss.core.execution import execute_workflow, execute_layer, \
 
 class TestExecution(unittest.TestCase):
     def setUp(self):
-        self.registry = ProbeFactoryRegistryPlugin()
+        self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
 
     def test_bind_data_values(self):

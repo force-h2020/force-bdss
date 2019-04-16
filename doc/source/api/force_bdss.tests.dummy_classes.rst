@@ -20,10 +20,10 @@ force\_bdss\.tests\.dummy\_classes\.extension\_plugin module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.dummy\_classes\.factory\_registry\_plugin module
+force\_bdss\.tests\.dummy\_classes\.factory\_registry module
 --------------------------------------------------------------------
 
-.. automodule:: force_bdss.tests.dummy_classes.factory_registry_plugin
+.. automodule:: force_bdss.tests.dummy_classes.factory_registry
     :members:
     :undoc-members:
     :show-inheritance:

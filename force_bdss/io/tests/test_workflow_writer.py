@@ -7,8 +7,9 @@ from unittest import mock
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.io.workflow_reader import WorkflowReader
-from force_bdss.tests.dummy_classes.factory_registry_plugin import \
-    DummyFactoryRegistryPlugin
+from force_bdss.tests.dummy_classes.factory_registry import (
+    DummyFactoryRegistry
+)
 
 from force_bdss.io.workflow_writer import WorkflowWriter, pop_recursive, \
     pop_dunder_recursive
@@ -18,7 +19,7 @@ from force_bdss.core.input_slot_info import InputSlotInfo
 
 class TestWorkflowWriter(unittest.TestCase):
     def setUp(self):
-        self.registry = DummyFactoryRegistryPlugin()
+        self.registry = DummyFactoryRegistry()
         self.mco_factory = self.registry.mco_factories[0]
         self.mco_parameter_factory = self.mco_factory.parameter_factories[0]
         self.data_source_factory = self.registry.data_source_factories[0]
