@@ -7,6 +7,7 @@ from stevedore.exception import NoMatches
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 from traits.api import Unicode, Bool, Property
+from traits.etsconfig.api import ETSConfig
 
 from force_bdss.ids import InternalPluginID
 from .factory_registry_plugin import FactoryRegistryPlugin
@@ -33,6 +34,17 @@ class BDSSApplication(Application):
     workflow = Property()
 
     def __init__(self, evaluate, workflow_filepath):
+        # This is a command-line app, we don't want GUI event loops
+        try:
+            ETSConfig.toolkit = 'null'
+        except ValueError:
+            # already been set, so can't do anything much
+            if ETSConfig.toolkit != 'null':
+                log.info(
+                    "ETS toolkit is set to '%s', should not override.",
+                    ETSConfig.toolkit
+                )
+
         self.evaluate = evaluate
         self.workflow_filepath = workflow_filepath
 

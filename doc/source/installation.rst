@@ -12,7 +12,7 @@ writing plugins.
 
 If you never installed the Enthought Deployment Manager, perform the following operations::
 
-    wget https://package-data.enthought.com/edm/rh5_x86_64/1.9/edm_1.9.2_linux_x86_64.sh && bash ./edm_1.9.2_linux_x86_64.sh -b -f -p $HOME
+    wget https://package-data.enthought.com/edm/rh5_x86_64/1.11/edm_1.11.0_linux_x86_64.sh && bash ./edm_1.11.0_linux_x86_64.sh-b -f -p $HOME
     export PATH=${HOME}/edm/bin:${PATH}
     edm install --version 3.6 -y click setuptools
     edm shell

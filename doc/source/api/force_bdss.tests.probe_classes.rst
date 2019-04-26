@@ -12,10 +12,10 @@ force\_bdss\.tests\.probe\_classes\.data\_source module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.tests\.probe\_classes\.factory\_registry\_plugin module
+force\_bdss\.tests\.probe\_classes\.factory\_registry module
 --------------------------------------------------------------------
 
-.. automodule:: force_bdss.tests.probe_classes.factory_registry_plugin
+.. automodule:: force_bdss.tests.probe_classes.factory_registry
     :members:
     :undoc-members:
     :show-inheritance:
