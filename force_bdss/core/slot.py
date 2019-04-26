@@ -21,4 +21,3 @@ class Slot(HasStrictTraits):
 
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())
-
