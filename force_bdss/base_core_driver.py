@@ -1,11 +1,8 @@
 from envisage.plugin import Plugin
 from traits.trait_types import Instance
 
+from .core.i_factory_registry import IFactoryRegistry
 from .core.workflow import Workflow
-from .factory_registry_plugin import (
-    IFactoryRegistryPlugin,
-    FACTORY_REGISTRY_PLUGIN_ID
-)
 from .io.workflow_reader import WorkflowReader
 
 
@@ -15,13 +12,13 @@ class BaseCoreDriver(Plugin):
     """
 
     #: The registry of the factories
-    factory_registry = Instance(IFactoryRegistryPlugin)
+    factory_registry = Instance(IFactoryRegistry)
 
     #: Deserialized content of the workflow file.
     workflow = Instance(Workflow)
 
     def _factory_registry_default(self):
-        return self.application.get_plugin(FACTORY_REGISTRY_PLUGIN_ID)
+        return self.application.get_service(IFactoryRegistry)
 
     def _workflow_default(self):
         reader = WorkflowReader(self.factory_registry)

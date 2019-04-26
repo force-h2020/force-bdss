@@ -11,8 +11,8 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
-from force_bdss.tests.probe_classes.factory_registry_plugin import \
-    ProbeFactoryRegistryPlugin
+from force_bdss.tests.probe_classes.factory_registry import \
+    ProbeFactoryRegistry
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
 from force_bdss.core.execution import execute_workflow, execute_layer, \
@@ -21,7 +21,7 @@ from force_bdss.core.execution import execute_workflow, execute_layer, \
 
 class TestExecution(unittest.TestCase):
     def setUp(self):
-        self.registry = ProbeFactoryRegistryPlugin()
+        self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
 
     def test_bind_data_values(self):
@@ -131,7 +131,7 @@ class TestExecution(unittest.TestCase):
 
             first = parameters[0].value
             second = parameters[1].value
-            return [DataValue(value=(first+second))]
+            return [DataValue(value=(first + second))]
 
         adder_factory = ProbeDataSourceFactory(
             self.plugin,
@@ -142,7 +142,7 @@ class TestExecution(unittest.TestCase):
         def multiplier(model, parameters):
             first = parameters[0].value
             second = parameters[1].value
-            return [DataValue(value=(first*second))]
+            return [DataValue(value=(first * second))]
 
         multiplier_factory = ProbeDataSourceFactory(
             self.plugin,
@@ -222,3 +222,93 @@ class TestExecution(unittest.TestCase):
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 1)
         self.assertEqual(kpi_results[0].value, 8750)
+
+    def test_kpi_specification_adherence(self):
+        # Often the user may only wish to treat a subset of DataSource
+        # output slots as KPIs. This test makes sure they get what they
+        # ask for!
+
+        # keep input DataValues constant
+        data_values = [
+            DataValue(value=99, name="in1"),
+            DataValue(value=1, name="in2")
+        ]
+
+        # dummy addition DataSource(a, b) that also returns it's inputs
+        # [a, b, a+b]
+        def adder(model, parameters):
+            first = parameters[0].value
+            second = parameters[1].value
+            return [
+                DataValue(value=first),
+                DataValue(value=second),
+                DataValue(value=(first + second))
+            ]
+
+        adder_factory = ProbeDataSourceFactory(
+            self.plugin,
+            input_slots_size=2,
+            output_slots_size=3,
+            run_function=adder)
+
+        mco_factory = ProbeMCOFactory(self.plugin)
+        mco_model = mco_factory.create_model()
+
+        # DataSourceModel stats constant throughout
+        model = adder_factory.create_model()
+        model.input_slot_info = [
+            InputSlotInfo(name="in1"),
+            InputSlotInfo(name="in2")
+        ]
+        model.output_slot_info = [
+            OutputSlotInfo(name="out1"),
+            OutputSlotInfo(name="out2"),
+            OutputSlotInfo(name="out3")
+        ]
+
+        # test KPI spec that follows DataSource slots exactly
+        mco_model.kpis = [
+            KPISpecification(name="out1"),
+            KPISpecification(name="out2"),
+            KPISpecification(name="out3")
+        ]
+        # need to make a new workflow for each KPISpecification
+        wf = Workflow(
+            mco=mco_model,
+            execution_layers=[
+                ExecutionLayer()
+            ]
+        )
+        wf.execution_layers[0].data_sources.append(model)
+
+        kpi_results = execute_workflow(wf, data_values)
+        self.assertEqual(len(kpi_results), 3)
+        self.assertEqual(kpi_results[0].value, 99)
+        self.assertEqual(kpi_results[1].value, 1)
+        self.assertEqual(kpi_results[2].value, 100)
+        self.assertEqual(kpi_results[0].name, 'out1')
+        self.assertEqual(kpi_results[1].name, 'out2')
+        self.assertEqual(kpi_results[2].name, 'out3')
+
+        # now test all possible combinations of KPISpecification, including
+        # those with KPIs repeated, and empty KPI specification
+        import itertools
+        out_options = [('out1', 99), ('out2', 1), ('out3', 100)]
+        for num_outputs in range(len(out_options) + 2, 0, -1):
+            for spec in itertools.permutations(out_options, r=num_outputs):
+                mco_model.kpis = [KPISpecification(name=opt[0])
+                                  for opt in spec]
+
+                wf = Workflow(
+                    mco=mco_model,
+                    execution_layers=[
+                        ExecutionLayer()
+                    ]
+                )
+                wf.execution_layers[0].data_sources.append(model)
+                kpi_results = execute_workflow(wf, data_values)
+                self.assertEqual(len(kpi_results), num_outputs)
+
+                for i in range(num_outputs):
+                    self.assertEqual(kpi_results[i].name, spec[i][0])
+                    self.assertEqual(kpi_results[i].value, spec[i][1])

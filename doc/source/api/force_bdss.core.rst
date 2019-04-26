@@ -51,10 +51,26 @@ force\_bdss\.core\.execution\_layer module
     :undoc-members:
     :show-inheritance:
 
+force\_bdss\.core\.factory_registry module
+---------------------------------------------
+
+.. automodule:: force_bdss.core.factory_registry
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 force\_bdss\.core\.i\_factory module
 ------------------------------------
 
 .. automodule:: force_bdss.core.i_factory
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+force\_bdss\.core\.i\_factory_registry module
+---------------------------------------------
+
+.. automodule:: force_bdss.core.i_factory_registry
     :members:
     :undoc-members:
     :show-inheritance:
