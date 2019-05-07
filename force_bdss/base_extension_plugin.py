@@ -107,6 +107,10 @@ class BaseExtensionPlugin(Plugin):
             self.description = self.get_description()
             self.version = self.get_version()
             self.factory_classes = self.get_factory_classes()
+            try:
+                self.data_views = self.get_data_views()
+            except:
+                self.data_views = []
             self.mco_factories[:] = [
                 cls(self)
                 for cls in self._factory_by_type(BaseMCOFactory)]
@@ -127,6 +131,7 @@ class BaseExtensionPlugin(Plugin):
             self.error_msg = str(e)
             self.error_tb = traceback.format_exc()
             self.name = ""
+            self.data_views = []
             self.description = ""
             self.version = 0
             self.broken = True
