@@ -1,7 +1,7 @@
 from traits.api import HasStrictTraits, Instance, List
 
 from force_bdss.core.execution_layer import ExecutionLayer
-from force_bdss.core.verifier import VerifierError, multi_error_format
+from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
@@ -56,27 +56,5 @@ class Workflow(HasStrictTraits):
         else:
             for layer in self.execution_layers:
                 errors += layer.verify()
-            missing_layers = [
-                i for i, layer in enumerate(self.execution_layers)
-                if not layer.data_sources
-            ]
-            if len(missing_layers) == 1:
-                errors.append(
-                    VerifierError(
-                        subject=self,
-                        global_error="Layer {} has no data sources".format(
-                            missing_layers[0]
-                        ),
-                    )
-                )
-            elif len(missing_layers) > 1:
-                errors.append(
-                    VerifierError(
-                        subject=self,
-                        global_error="Layers {} have no data sources".format(
-                            multi_error_format(missing_layers)
-                        ),
-                    )
-                )
 
         return errors

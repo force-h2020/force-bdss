@@ -1,5 +1,6 @@
 from traits.api import HasStrictTraits
 
+from force_bdss.core.verifier import VerifierError
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 from force_bdss.local_traits import Identifier
 
@@ -16,8 +17,19 @@ class OutputSlotInfo(HasStrictTraits):
     name = Identifier()
 
     def verify(self):
-        """ OutputSlotInfo are always valid. """
-        return []
+        """ OutputSlotInfo require a non-empty name to be used in a later
+        execution layer. However, not all outputs are required to be used in
+        later stages."""
+        errors = []
+        if not self.name:
+            errors.append(
+                VerifierError(
+                    severity='warning', subject=self, trait_name='name',
+                    global_error='An output variable has an undefined name'
+                )
+            )
+
+        return errors
 
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())

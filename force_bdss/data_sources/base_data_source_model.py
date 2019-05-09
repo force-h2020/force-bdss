@@ -115,7 +115,7 @@ class BaseDataSourceModel(BaseModel):
                 VerifierError(
                     subject=self,
                     severity='warning',
-                    local_error="All output parameters have undefined names",
+                    local_error="All output variables have undefined names",
                     global_error=(
                         "A data source model has no defined output names"
                     ),
