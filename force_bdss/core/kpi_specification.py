@@ -1,4 +1,4 @@
-from traits.api import Enum, HasStrictTraits, Float
+from traits.api import Enum, HasStrictTraits, Float, Bool
 
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 from force_bdss.local_traits import Identifier
@@ -12,7 +12,10 @@ class KPISpecification(HasStrictTraits):
     #: The expected outcome of the procedure relative to this KPI.
     objective = Enum("MINIMISE", "MAXIMISE")
 
-    #: Initial scalar for weighted cost function.
+    #: Whether to perform auto scaling in weighted cost function of MCO.
+    auto_scale = Bool(True)
+
+    #: Manual scaling factor for weighted cost function.
     scale_factor = Float(1.)
 
     def __getstate__(self):
