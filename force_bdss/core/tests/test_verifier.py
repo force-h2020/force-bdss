@@ -3,7 +3,7 @@ import unittest
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.verifier import verify_workflow, multi_error_format
+from force_bdss.core.verifier import verify_workflow
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.tests.dummy_classes.extension_plugin import \
@@ -73,9 +73,8 @@ class TestVerifier(unittest.TestCase):
         wf.execution_layers.append(layer)
         errors = verify_workflow(wf)
 
-        self.assertEqual(len(errors), 2)
+        self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0].subject, wf.execution_layers[0])
-        self.assertIn("Layer 0 has no data sources", errors[1].local_error)
 
     def test_data_sources(self):
         wf = self.workflow
@@ -94,7 +93,7 @@ class TestVerifier(unittest.TestCase):
 
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("Missing input slot name assignment in layer 0",
+        self.assertIn("The number of input slots is incorrect.",
                       errors[0].local_error)
 
         ds_model.input_slot_info.append(
@@ -103,7 +102,7 @@ class TestVerifier(unittest.TestCase):
 
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("Missing output slot name assignment in layer 0",
+        self.assertIn("The number of output slots is incorrect.",
                       errors[0].local_error)
 
         ds_model.output_slot_info.append(
@@ -116,17 +115,13 @@ class TestVerifier(unittest.TestCase):
         ds_model.input_slot_info[0].name = ''
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 1)
-        self.assertIn("Undefined name for input parameter",
+        self.assertIn("Input slot is not named",
                       errors[0].local_error)
 
         ds_model.output_slot_info[0].name = ''
         errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 2)
-        self.assertIn("Undefined names for all output parameters",
+        self.assertEqual(len(errors), 3)
+        self.assertIn("All output variables have undefined names",
                       errors[1].local_error)
-
-    def test_multi_error_format(self):
-
-        self.assertEqual(multi_error_format([2]), '2')
-        self.assertEqual(multi_error_format([4, 2, 3, 7, 8, 11, 43]),
-                         '2-4, 7-8, 11, 43')
+        self.assertIn("An output variable has an undefined name",
+                      errors[2].local_error)
