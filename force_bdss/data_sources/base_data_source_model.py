@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from traits.api import (
     Instance, List, Event, on_trait_change
 )
@@ -5,8 +7,12 @@ from traits.api import (
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
+from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
+
+
+logger = getLogger(__name__)
 
 
 class BaseDataSourceModel(BaseModel):
@@ -39,6 +45,86 @@ class BaseDataSourceModel(BaseModel):
     #: option in your model implies a change in the slots. The UI will detect
     #: this and adapt the visual entries.
     changes_slots = Event()
+
+    def verify(self):
+        """ Verify the data source model.
+
+        The data source model must have:
+        - input and output slots match between instance and model
+        - all output slots named
+        - no errors in input or output slots
+
+        Returns
+        -------
+        errors : list of VerifierErrors
+            The list of all detected errors in the data source model.
+        """
+        try:
+            data_source = self.factory.create_data_source()
+        except Exception:
+            logger.exception(
+                "Unable to create data source from factory '%s', plugin "
+                "'%s'. This might indicate a  programming error",
+                self.factory.id,
+                self.factory.plugin.id,
+            )
+            raise
+
+        try:
+            input_slots, output_slots = data_source.slots(self)
+        except Exception:
+            logger.exception(
+                "Unable to retrieve slot information from data source"
+                " created by factory '%s', plugin '%s'. This might "
+                "indicate a programming error.",
+                self.factory.id,
+                self.factory.plugin.id
+            )
+            raise
+
+        errors = []
+        if len(input_slots) != len(self.input_slot_info):
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    local_error="The number of input slots is incorrect.",
+                    global_error=(
+                        "A data source model has incorrect number "
+                        "of input slots."
+                    ),
+                )
+            )
+        for input_slot in self.input_slot_info:
+            errors += input_slot.verify()
+
+        if len(output_slots) != len(self.output_slot_info):
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    local_error="The number of output slots is incorrect.",
+                    global_error=(
+                        "A data source model has incorrect number "
+                        "of output slots."
+                    ),
+                )
+            )
+
+        if self.output_slot_info and not any(
+                output_slot.name for output_slot in self.output_slot_info):
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    severity='warning',
+                    local_error="All output variables have undefined names",
+                    global_error=(
+                        "A data source model has no defined output names"
+                    ),
+                )
+            )
+        for output_slot in self.output_slot_info:
+            errors += output_slot.verify()
+
+        return errors
 
     def __getstate__(self):
         state = pop_dunder_recursive(super().__getstate__())
