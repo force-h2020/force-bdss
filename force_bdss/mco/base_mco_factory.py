@@ -66,22 +66,17 @@ class BaseMCOFactory(BaseFactory):
             "get_parameter_factory_classes was not implemented "
             "in factory {}".format(self.__class__))
 
-    def create_optimizer(self, workflow_path=''):
+    def create_optimizer(self):
         """Factory method.
         Creates the optimizer with the given application
         and model and returns it to the caller.
-
-        Parameters
-        ----------
-        workflow_path : path
-            The path to the file containing the workflow.
 
         Returns
         -------
         BaseMCO
             The optimizer
         """
-        return self.optimizer_class(self, workflow_path=workflow_path)
+        return self.optimizer_class(self)
 
     def create_model(self, model_data=None):
         """Factory method.

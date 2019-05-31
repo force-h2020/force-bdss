@@ -16,9 +16,6 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-    #: The file containing the workflow.
-    workflow_path = File
-
     #: Propagation channel for events from the MCO
     event = Event()
 
