@@ -3,6 +3,7 @@ import logging
 from traits.api import HasStrictTraits, Instance, List
 
 from force_bdss.core.execution_layer import ExecutionLayer
+from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
@@ -51,3 +52,40 @@ class Workflow(HasStrictTraits):
         kpi_results = self.mco.bind_kpis(data_values)
 
         return kpi_results
+    def verify(self):
+        """ Verify the workflow.
+
+        The workflow must have:
+        - an MCO
+        - at least one execution layer
+        - no errors in the MCO or any execution layer
+
+        Returns
+        -------
+        errors : list of VerifierErrors
+            The list of all detected errors in the workflow.
+        """
+        errors = []
+
+        if not self.mco:
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    global_error="Workflow has no MCO",
+                )
+            )
+        else:
+            errors += self.mco.verify()
+
+        if not self.execution_layers:
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    global_error="Workflow has no execution layers",
+                )
+            )
+        else:
+            for layer in self.execution_layers:
+                errors += layer.verify()
+
+        return errors
