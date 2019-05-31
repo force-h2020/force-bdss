@@ -1,4 +1,4 @@
-from traits.api import File, HasStrictTraits, List
+from traits.api import File, HasStrictTraits, Instance, List
 
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.verifier import VerifierError

@@ -1,13 +1,19 @@
+import logging
+
 from traits.api import (
-    HasStrictTraits, Instance, List, on_trait_change, provides
+    DelegatesTo, HasStrictTraits, Instance, List, on_trait_change, provides
 )
 
+from force_bdss.core_driver_events import MCOFinishEvent, MCOStartEvent
 from force_bdss.mco.mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener
 )
 from .i_operation import IOperation
 from .workflow_file import WorkflowFile
+
+
+log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
@@ -17,7 +23,7 @@ class OptimizeOperation(HasStrictTraits):
     workflow_file = Instance(WorkflowFile)
 
     #: The workflow instance.
-    workflow = DelegegatesTo('workflow_file')
+    workflow = DelegatesTo('workflow_file')
 
     #: The mco instance.
     mco = Instance(BaseMCO)
@@ -47,27 +53,34 @@ class OptimizeOperation(HasStrictTraits):
         try:
             self.mco.run(mco_model)
         except Exception:
-            log.exception(
-                ("Method run() of MCO with id '{}' from plugin '{}' "
+            log.exception((
+                "Method run() of MCO with id '{}' from plugin '{}' "
                 "raised exception. This might indicate a "
                 "programming error in the plugin.").format(
                     self.mco.factory.id,
-                    self.mco.factory.plugin.id))
+                    self.mco.factory.plugin.id
+                )
+            )
             raise
         finally:
             self._deliver_finish_event()
             self.destroy_mco()
 
     def create_mco(self):
-        mco_factory = mco_model.factory
+        """ Create the MCO from the model's factory. """
+        mco_factory = self.workflow.mco.factory
         try:
             self.mco = mco_factory.create_optimizer(self.workflow_file.path)
         except Exception:
-            log.exception("Unable to instantiate optimizer for mco '{}' in "
-                          "plugin '{}'. An exception was raised. "
-                          "This might indicate a programming error in the "
-                          "plugin.".format(mco_factory.id,
-                                           mco_factory.plugin.id))
+            log.exception((
+                "Unable to instantiate optimizer for mco '{}' in "
+                "plugin '{}'. An exception was raised. "
+                "This might indicate a programming error in the "
+                "plugin.").format(
+                    mco_factory.id,
+                    mco_factory.plugin.id
+                )
+            )
             raise
 
         self._initialize_listeners()
@@ -93,13 +106,14 @@ class OptimizeOperation(HasStrictTraits):
             try:
                 listener.deliver(event)
             except Exception:
-                log.exception(
-                    ("Exception while delivering to listener "
+                log.exception((
+                    "Exception while delivering to listener "
                     "'{}' in plugin '{}'. The listener will be dropped and "
                     "computation will continue.").format(
                         listener.factory.id,
                         listener.factory.plugin.id
-                    ))
+                    )
+                )
                 self._finalize_listener(listener)
                 self.listeners.remove(listener)
 
@@ -111,12 +125,13 @@ class OptimizeOperation(HasStrictTraits):
         try:
             listener.finalize()
         except Exception:
-            log.exception(
-                ("Exception while finalizing listener '{}'"
+            log.exception((
+                "Exception while finalizing listener '{}'"
                 " in plugin '{}'.").format(
                     listener.factory.id,
                     listener.factory.plugin.id
-                ))
+                )
+            )
 
     def _initialize_listeners(self):
         listeners = []
@@ -126,8 +141,8 @@ class OptimizeOperation(HasStrictTraits):
             try:
                 listener = factory.create_listener()
             except Exception:
-                log.exception(
-                    ("Failed to create listener with id '{}' in plugin '{}'. "
+                log.exception((
+                    "Failed to create listener with id '{}' in plugin '{}'. "
                     "This may indicate a programming error in the "
                     "plugin.").format(
                         factory.id,
@@ -139,8 +154,8 @@ class OptimizeOperation(HasStrictTraits):
             try:
                 listener.initialize(nl_model)
             except Exception:
-                log.exception(
-                    ("Failed to initialize listener with id '{}' in "
+                log.exception((
+                    "Failed to initialize listener with id '{}' in "
                     "plugin '{}'. The listener will be dropped.").format(
                         factory.id,
                         factory.plugin.id

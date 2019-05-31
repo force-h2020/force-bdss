@@ -1,26 +1,28 @@
+import logging
+
 from traits.api import HasStrictTraits, List
 
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.core.data_value import DataValue
+
+
+log = logging.getLogger(__name__)
 
 
 class ExecutionLayer(HasStrictTraits):
     """Represents a single layer in the execution stack.
     It contains a list of the data source models that must be executed.
     """
+
+    #: The data sources in the execution layer.
     data_sources = List(BaseDataSourceModel)
 
     def execute_layer(self, environment_data_values):
-        """Helper routine.
-        Performs the evaluation of a single layer.
-        At the moment we have a single layer of DataSources followed
-        by a single layer of KPI calculators.
+        """ Performs the evaluation of a single layer.
 
         Parameters
         ----------
-        layer: ExecutionLayer
-            A list of the models for all the data sources
-
         environment_data_values: list
             A list of data values to submit to the evaluators.
 
@@ -146,6 +148,7 @@ class ExecutionLayer(HasStrictTraits):
         # Finally, return all the computed data values from all evaluators,
         # properly named.
         return results
+
     def verify(self):
         """ Verify an ExecutionLayer.
 
@@ -174,3 +177,33 @@ class ExecutionLayer(HasStrictTraits):
             errors += data_source.verify()
 
         return errors
+
+
+def _bind_data_values(available_data_values,
+                      model_slot_map,
+                      slots):
+    """
+    Given the named data values in the environment, the slots a given
+    data source expects, and the user-specified names for each of these
+    slots, returns those data values with the requested names, ordered
+    in the correct order as specified by the slot map.
+    """
+    passed_data_values = []
+    lookup_map = {dv.name: dv for dv in available_data_values}
+
+    if len(slots) != len(model_slot_map):
+        raise RuntimeError("The length of the slots is not equal to"
+                           " the length of the slot map. This may"
+                           " indicate a file error.")
+
+    try:
+        for slot, slot_map in zip(slots, model_slot_map):
+            passed_data_values.append(lookup_map[slot_map.name])
+    except KeyError:
+        raise RuntimeError(
+            "Unable to find requested name '{}' in available "
+            "data values. Current data value names: {}".format(
+                slot_map.name,
+                list(lookup_map.keys())))
+
+    return passed_data_values

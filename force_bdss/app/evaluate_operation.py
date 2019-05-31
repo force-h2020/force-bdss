@@ -1,6 +1,12 @@
-from traits.api import HasStrictTraits, provides
+import logging
 
-from i_operation import IOperation
+from traits.api import DelegatesTo, HasStrictTraits, Instance, provides
+
+from .i_operation import IOperation
+from .workflow_file import WorkflowFile
+
+
+log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
@@ -10,7 +16,7 @@ class EvaluateOperation(HasStrictTraits):
     workflow_file = Instance(WorkflowFile)
 
     #: The workflow instance.
-    workflow = DelegegatesTo('workflow_file')
+    workflow = DelegatesTo('workflow_file')
 
     def run(self):
         """ Evaluate the workflow. """
@@ -35,6 +41,6 @@ class EvaluateOperation(HasStrictTraits):
 
         mco_data_values = mco_communicator.receive_from_mco(mco_model)
 
-        kpi_results = workflow.execute(mco_data_values)
+        kpi_results = self.workflow.execute(mco_data_values)
 
         mco_communicator.send_to_mco(mco_model, kpi_results)

@@ -46,12 +46,15 @@ class BaseMCOModel(BaseModel):
             The data values from the MCO, ignoring those with no name.
         """
         if len(data_values) != len(self.parameters):
-            error_txt = ("The number of data values returned by"
-                        " the MCO ({} values) does not match the"
-                        " number of parameters specified ({} values)."
-                        " This is either a MCO plugin error or the workflow"
-                        " file is corrupted.").format(
-                len(data_values), len(self.parameters)
+            error_txt = (
+                "The number of data values returned by"
+                " the MCO ({} values) does not match the"
+                " number of parameters specified ({} values)."
+                " This is either a MCO plugin error or the workflow"
+                " file is corrupted."
+            ).format(
+                len(data_values),
+                len(self.parameters)
             )
             log.error(error_txt)
             raise RuntimeError(error_txt)

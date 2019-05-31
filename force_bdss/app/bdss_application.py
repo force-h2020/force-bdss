@@ -1,5 +1,6 @@
 import functools
 import logging
+import sys
 
 from stevedore.extension import ExtensionManager
 from stevedore.exception import NoMatches
@@ -7,13 +8,18 @@ from stevedore.exception import NoMatches
 from envisage.api import Application
 from envisage.core_plugin import CorePlugin
 from traits.api import Instance
+from traits.etsconfig.api import ETSConfig
 
 from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.core_plugins.factory_registry_plugin import (
     FactoryRegistryPlugin
 )
+from force_bdss.io.workflow_reader import WorkflowReader
 from .workflow_file import WorkflowFile
 from .i_operation import IOperation
+
+
+log = logging.getLogger(__name__)
 
 
 class BDSSApplication(Application):

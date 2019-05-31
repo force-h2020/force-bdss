@@ -1,6 +1,6 @@
 from traits.api import Instance, Interface
 
-from .workflow import Workflow
+from .workflow_file import WorkflowFile
 
 
 class IOperation(Interface):
@@ -10,5 +10,3 @@ class IOperation(Interface):
 
     def run(self):
         """ Run an operation on the workflow. """
-
-

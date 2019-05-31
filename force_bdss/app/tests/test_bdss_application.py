@@ -5,10 +5,8 @@ import testfixtures
 
 from traits.etsconfig.api import ETSConfig
 
-from force_bdss.bdss_application import (
-    BDSSApplication,
-    _load_failure_callback,
-    _import_extensions
+from force_bdss.app.bdss_application import (
+    BDSSApplication, _load_failure_callback, _import_extensions
 )
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests import fixtures
@@ -22,6 +20,7 @@ def clear_toolkit():
 
 
 class TestBDSSApplication(unittest.TestCase):
+
     def setUp(self):
         self.addCleanup(clear_toolkit)
 

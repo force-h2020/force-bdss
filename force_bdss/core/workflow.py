@@ -52,6 +52,7 @@ class Workflow(HasStrictTraits):
         kpi_results = self.mco.bind_kpis(data_values)
 
         return kpi_results
+
     def verify(self):
         """ Verify the workflow.
 

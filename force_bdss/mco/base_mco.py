@@ -1,7 +1,7 @@
 import abc
 
 from traits.api import (
-    ABCHasStrictTraits, Event, File, Instance
+    ABCHasStrictTraits, Event, Instance
 )
 
 from force_bdss.core_driver_events import MCOProgressEvent
