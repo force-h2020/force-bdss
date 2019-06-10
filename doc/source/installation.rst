@@ -17,7 +17,7 @@ If you never installed the Enthought Deployment Manager, perform the following o
     edm install --version 3.6 -y click setuptools
     edm shell
 
-If you instead already have an EDM installation and a default environment, perform the following:
+If you instead already have an EDM installation and a default environment, perform the following::
 
     edm shell
     edm install -y click setuptools
@@ -28,36 +28,40 @@ The BDSS software will not be installed in this environment, but in a separate o
 commands however must be executed from the bootstrap environment.
 
 Installation of the force BDSS runtime environment is performed with the
-following command. This should be done from the directory containing the 'force-bdss' folder::
+following command. This should be done from the directory containing the ``force-bdss`` folder (named
+``Force-Project`` in this example)::
 
-    pushd force-bdss
-    python -m ci build-env
+    ~/Force-Project (edm)$ pushd force-bdss
+    ~/Force-Project/force-bdss (edm)$ python -m ci build-env
 
 This will create another edm environment called ``force-py36``.
 Do not enter this environment. 
 
 To install the BDSS::
 
-    python -m ci install
-    popd
+    ~/Force-Project/force-bdss (edm)$ python -m ci install
+    ~/Force-Project/force-bdss (edm)$ popd
     
 To install the workflow manager::
 
-    pushd force-wfmanager
-    python -m ci install
-    popd
+    ~/Force-Project (edm)$ pushd force-wfmanager
+    ~/Force-Project/force-wfmanager (edm)$ python -m ci install
+    ~/Force-Project/force-wfmanager (edm)$ popd
 
 and (optional, but recommended), the example plugins::
 
-    pushd force-bdss-plugin-enthought-example
-    python -m ci install
-    popd
+    ~/Force-Project (edm)$ pushd force-bdss-plugin-enthought-example
+    ~/Force-Project/force-bdss-plugin-enthought-example (edm)$ python -m ci install
+    ~/Force-Project/force-bdss-plugin-enthought-example (edm)$ popd
 
 Now you can enter the deployed environment and invoke the programs::
 
-    edm shell -e force-py36
+    ~/Force-Project (edm)$ edm shell -e force-py36
     # Invokes the workflow manager UI
-    force_wfmanager
+    ~/Force-Project (force-py36)$ force_wfmanager
     # Invokes the CLI BDSS evaluator
-    force_bdss
-
+    ~/Force-Project (force-py36)$ force_bdss
+    
+The programs can also be launched with an ``edm run`` command::
+    
+    ~/Anywhere $ edm run -e force-py36 -- force_wfmanager
