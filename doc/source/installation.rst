@@ -31,7 +31,7 @@ Installation of the force BDSS runtime environment is performed with the
 following command. This should be done from the directory containing the ``force-bdss`` folder (named
 ``Force-Project`` in this example)::
 
-    ~/Force-Project (edm)$ pushd force-bdss
+    ~/Force-Project (edm)$ cd force-bdss
     ~/Force-Project/force-bdss (edm)$ python -m ci build-env
 
 This will create another edm environment called ``force-py36``.
@@ -40,19 +40,19 @@ Do not enter this environment.
 To install the BDSS::
 
     ~/Force-Project/force-bdss (edm)$ python -m ci install
-    ~/Force-Project/force-bdss (edm)$ popd
+    ~/Force-Project/force-bdss (edm)$ cd ..
     
 To install the workflow manager::
 
-    ~/Force-Project (edm)$ pushd force-wfmanager
+    ~/Force-Project (edm)$ cd force-wfmanager
     ~/Force-Project/force-wfmanager (edm)$ python -m ci install
-    ~/Force-Project/force-wfmanager (edm)$ popd
+    ~/Force-Project/force-wfmanager (edm)$ cd ..
 
 and (optional, but recommended), the example plugins::
 
-    ~/Force-Project (edm)$ pushd force-bdss-plugin-enthought-example
+    ~/Force-Project (edm)$ cd force-bdss-plugin-enthought-example
     ~/Force-Project/force-bdss-plugin-enthought-example (edm)$ python -m ci install
-    ~/Force-Project/force-bdss-plugin-enthought-example (edm)$ popd
+    ~/Force-Project/force-bdss-plugin-enthought-example (edm)$ cd ..
 
 Now you can enter the deployed environment and invoke the programs::
 
