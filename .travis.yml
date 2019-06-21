@@ -1,4 +1,4 @@
-language: c
+language: generic
 sudo: false
 
 env:
@@ -23,7 +23,7 @@ before_install:
     - if [[ ${TRAVIS_OS_NAME} == "osx" ]] ; then sudo installer -pkg ./edm_${EDM_FULL}${EDM_INSTALLER_SUFFIX} -target / ; fi
     - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then export PATH=${HOME}/edm/bin:${PATH} ; fi
     - if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then export PATH="${PATH}:/usr/local/bin" ; fi
-    - edm install --version 3.5 -y click setuptools
+    - edm install --version 3.6 -y click setuptools
     - edm run -- python -m ci build-env
 script:
     - edm run -- python -m ci install
@@ -31,7 +31,7 @@ script:
     - edm run -- python -m ci test
     - edm run -- python -m ci docs
 after_success:
-    - edm run -- python -m ci coverage
-    - edm run -- pip install codecov
-    - edm run -- codecov
+    - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then edm run -- python -m ci coverage; fi
+    - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then edm run -- pip install codecov; fi
+    - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then edm run -- codecov; fi
     - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then bash <(curl -s https://codecov.io/bash); fi
