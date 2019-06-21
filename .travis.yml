@@ -4,16 +4,18 @@ sudo: false
 env:
   global:
     - EDM_FULL=1.11.0
-    - EDM_X_Y=1.11
+      EDM_X_Y=1.11
 
 matrix:
   include:
   - os: linux
-    env: EDM_OS="rh5_x86_64"
-    env: EDM_INSTALLER_SUFFIX="_linux_x86_64.sh"
+    env: 
+      - EDM_OS="rh5_x86_64"
+        EDM_INSTALLER_SUFFIX="_linux_x86_64.sh"
   - os: osx
-    env: EDM_OS="osx_x86_64"
-    env: EDM_INSTALLER_SUFFIX=".pkg"
+    env:
+      - EDM_OS="osx_x86_64"
+        EDM_INSTALLER_SUFFIX=".pkg"
 
 before_install:
     - wget https://package-data.enthought.com/edm/${EDM_OS}/${EDM_X_Y}/edm_${EDM_FULL}${EDM_INSTALLER_SUFFIX}
