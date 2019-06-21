@@ -89,6 +89,10 @@
             "state": "auto"
         },
         {
+            "name": "pip",
+            "state": "manual"
+        },
+        {
             "name": "pycodestyle",
             "state": "auto"
         },
@@ -306,6 +310,12 @@
             "repository": "enthought/free",
             "sha256": "63ac05ad91dae2fb9440bf339d0d93854f8ba16a0c4e35f507df47c74cb6af99",
             "version": "16.8-3"
+        },
+        {
+            "name": "pip",
+            "repository": "enthought/free",
+            "sha256": "6e61f1f6cdebc64939fcdca6ab778951ec543e2a7beee1fa83bfaa554f41e24d",
+            "version": "18.1-1"
         },
         {
             "name": "pycodestyle",

@@ -1,11 +1,11 @@
 import click
 from distutils.version import StrictVersion
 from subprocess import check_call, check_output
+import sys
 import os
 
 DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
-PYTHON_NAMES = {"3.6": "py36"}
 PLATFORMS = ["osx-x86_64", "rh6-x86_64", "win-x86_64"]
 
 BUNDLE_PATH = os.path.join(os.path.dirname(__file__), "bundle")
@@ -15,15 +15,16 @@ EDM_DEPS = [
     # Run `ci generate-edm-bundles` to reflect the updates
 
     # core
-    "envisage",
     "click",
+    "envisage",
 
     # doc
     "sphinx",
 
     # CI
-    "flake8",
     "coverage",
+    "flake8",
+    "pip",
     "testfixtures",
 ]
 
@@ -52,15 +53,20 @@ def build_env(python_version):
     check_call([
         "edm", "environments", "remove", "--purge", "--force",
         "--yes", env_name])
-    check_call(
-        ["edm", "environments", "create", "--version", python_version,
-         env_name])
+
+    platform = {
+        "win32": "win-x86_64",
+        "linux": "rh6-x86_64",
+        "darwi": "osx-x86_64"
+    }[sys.platform[:5]]
+    bundle_file = get_bundle_file(python_version, platform)
 
     check_call([
-        "edm", "install", "-e", env_name,
-        "--yes"] + CORE_DEPS + DEV_DEPS + DOCS_DEPS)
+        "edm", "envs", "import", env_name,
+        "--filename", bundle_file
+    ])
 
-    if len(PIP_DEPS):
+    if PIP_DEPS:
         check_call([
             "edm", "run", "-e", env_name, "--",
             "pip", "install"] + PIP_DEPS)
@@ -81,13 +87,7 @@ def generate_edm_bundles():
 
     for platform in PLATFORMS:
         for python_version in PYTHON_VERSIONS:
-            output_file = os.path.join(
-                BUNDLE_PATH,
-                BUNDLE_NAME_TPL.format(
-                    python_version=PYTHON_NAMES[python_version],
-                    platform=platform
-                )
-            )
+            output_file = get_bundle_file(python_version, platform)
             click.echo("Creating bundle: {}".format(output_file))
             check_call(
                 [
@@ -148,6 +148,16 @@ def docs(python_version):
 
 def get_env_name(python_version):
     return "force-py{}".format(remove_dot(python_version))
+
+
+def get_bundle_file(python_version, platform):
+    return os.path.join(
+        BUNDLE_PATH,
+        BUNDLE_NAME_TPL.format(
+            python_version="py"+remove_dot(python_version),
+            platform=platform
+        )
+    )
 
 
 def remove_dot(python_version):
