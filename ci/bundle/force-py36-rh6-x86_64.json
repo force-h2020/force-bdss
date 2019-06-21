@@ -1,0 +1,411 @@
+{
+    "mark": [
+        {
+            "name": "alabaster",
+            "state": "auto"
+        },
+        {
+            "name": "appdirs",
+            "state": "auto"
+        },
+        {
+            "name": "apptools",
+            "state": "auto"
+        },
+        {
+            "name": "babel",
+            "state": "auto"
+        },
+        {
+            "name": "certifi",
+            "state": "auto"
+        },
+        {
+            "name": "chardet",
+            "state": "auto"
+        },
+        {
+            "name": "click",
+            "state": "manual"
+        },
+        {
+            "name": "configobj",
+            "state": "auto"
+        },
+        {
+            "name": "configparser",
+            "state": "auto"
+        },
+        {
+            "name": "coverage",
+            "state": "manual"
+        },
+        {
+            "name": "distribute_remove",
+            "state": "auto"
+        },
+        {
+            "name": "docutils",
+            "state": "auto"
+        },
+        {
+            "name": "entrypoints",
+            "state": "auto"
+        },
+        {
+            "name": "envisage",
+            "state": "manual"
+        },
+        {
+            "name": "flake8",
+            "state": "manual"
+        },
+        {
+            "name": "idna",
+            "state": "auto"
+        },
+        {
+            "name": "imagesize",
+            "state": "auto"
+        },
+        {
+            "name": "jinja2",
+            "state": "auto"
+        },
+        {
+            "name": "markupsafe",
+            "state": "auto"
+        },
+        {
+            "name": "mccabe",
+            "state": "auto"
+        },
+        {
+            "name": "packaging",
+            "state": "auto"
+        },
+        {
+            "name": "pycodestyle",
+            "state": "auto"
+        },
+        {
+            "name": "pyface",
+            "state": "auto"
+        },
+        {
+            "name": "pyflakes",
+            "state": "auto"
+        },
+        {
+            "name": "pygments",
+            "state": "auto"
+        },
+        {
+            "name": "pyparsing",
+            "state": "auto"
+        },
+        {
+            "name": "pytz",
+            "state": "auto"
+        },
+        {
+            "name": "requests",
+            "state": "auto"
+        },
+        {
+            "name": "setuptools",
+            "state": "auto"
+        },
+        {
+            "name": "six",
+            "state": "auto"
+        },
+        {
+            "name": "snowballstemmer",
+            "state": "auto"
+        },
+        {
+            "name": "sphinx",
+            "state": "manual"
+        },
+        {
+            "name": "sphinx_rtd_theme",
+            "state": "auto"
+        },
+        {
+            "name": "sphinxcontrib_websupport",
+            "state": "auto"
+        },
+        {
+            "name": "testfixtures",
+            "state": "manual"
+        },
+        {
+            "name": "traits",
+            "state": "auto"
+        },
+        {
+            "name": "traitsui",
+            "state": "auto"
+        },
+        {
+            "name": "urllib3",
+            "state": "auto"
+        }
+    ],
+    "metadata_version": "2.0",
+    "modifiers": {
+        "allow_any": [],
+        "allow_newer": [],
+        "allow_older": []
+    },
+    "repositories": {
+        "packages": [
+            "enthought/commercial",
+            "enthought/free",
+            "enthought/platform",
+            "shell/geoduck"
+        ],
+        "runtimes": [
+            "enthought/free"
+        ]
+    },
+    "requirements": [
+        {
+            "name": "alabaster",
+            "repository": "enthought/free",
+            "sha256": "266c2fe277eb5f0d9954b4840e4c3f7d8d2efa8238e14511c705fbb0502ecb62",
+            "version": "0.7.10-1"
+        },
+        {
+            "name": "appdirs",
+            "repository": "enthought/free",
+            "sha256": "82d5108b9b708dfd1853e8e747755f2c7dce71c58d3955b36fc6722422d628af",
+            "version": "1.4.3-1"
+        },
+        {
+            "name": "apptools",
+            "repository": "enthought/free",
+            "sha256": "6fcdf6d43c4818903fe4a4b01d492d93439a05919a12d9905f91ff3a87c1c31c",
+            "version": "4.4.0-14"
+        },
+        {
+            "name": "babel",
+            "repository": "enthought/free",
+            "sha256": "3ead2026cb26ca9b6dc835ff6b44d77e5844fcb3a0e8c807d7ae4973fff00cdf",
+            "version": "2.6.0-1"
+        },
+        {
+            "name": "certifi",
+            "repository": "enthought/free",
+            "sha256": "3e71d2e66e79fbbed34e78be77c56cc7939bdce51e51334aa7de8c9850c46e3f",
+            "version": "2018.11.29-1"
+        },
+        {
+            "name": "chardet",
+            "repository": "enthought/free",
+            "sha256": "f62a34ebb2119303e88c70d783e6777fb219d22bf23a0da6c7354a806d59774c",
+            "version": "3.0.4-1"
+        },
+        {
+            "name": "click",
+            "repository": "enthought/free",
+            "sha256": "c65444b98db3840adc1e24bbfddd663a7d0d46d5cd756c7e4b72727d973724d7",
+            "version": "7.0-1"
+        },
+        {
+            "name": "configobj",
+            "repository": "enthought/free",
+            "sha256": "a2969d34f7ccba9828e90f4b69c61dfd5245e102eae97e1301fbf3229d188914",
+            "version": "5.0.6-3"
+        },
+        {
+            "name": "configparser",
+            "repository": "enthought/free",
+            "sha256": "34042b8a1d6afaac9f4721356012092e57580101ac0541907ac6111d3d58c0cf",
+            "version": "3.5.0-1"
+        },
+        {
+            "name": "coverage",
+            "repository": "enthought/free",
+            "sha256": "5dc22307daad353fd8e6dd86f260f595b43032b532fd5a8cfb7a9c985396d2b9",
+            "version": "4.3.4-1"
+        },
+        {
+            "name": "distribute_remove",
+            "repository": "enthought/free",
+            "sha256": "3ccc80bc7f68050d4f1a2a9e6e0ff3b277060caf1d51db03ef552b21c849687e",
+            "version": "1.0.0-4"
+        },
+        {
+            "name": "docutils",
+            "repository": "enthought/free",
+            "sha256": "fa829d7a2f19e1d661f096e8b64a39dc626deb5244b5886b3988c7789221de33",
+            "version": "0.13.1-1"
+        },
+        {
+            "name": "entrypoints",
+            "repository": "enthought/free",
+            "sha256": "9244661a17024b3e77a4b9bc833ddfec2afab3e9e3b80683f1bc8e0a4f3ebec5",
+            "version": "0.3-1"
+        },
+        {
+            "name": "envisage",
+            "repository": "enthought/free",
+            "sha256": "9f5153562ac3eea2debc58ba81fb215a47a52a037d95d88d065f04eecc296066",
+            "version": "4.7.2-1"
+        },
+        {
+            "name": "flake8",
+            "repository": "enthought/free",
+            "sha256": "d175d2fb7da536e2287674ebbfb40dee8f4e89be51cac31a8be2b7b061d28aa6",
+            "version": "3.7.7-1"
+        },
+        {
+            "name": "idna",
+            "repository": "enthought/free",
+            "sha256": "ffaf6c2304f9aa62276adcc33c835c768dc946567d7f500995b26e2187bf5692",
+            "version": "2.5-1"
+        },
+        {
+            "name": "imagesize",
+            "repository": "enthought/free",
+            "sha256": "54b150bc0e96a9b6e471fee62ec7eeef785278da62ace41b6fc20829a16efe91",
+            "version": "0.7.1-1"
+        },
+        {
+            "name": "jinja2",
+            "repository": "enthought/free",
+            "sha256": "49be68bfe7c3e34762e44233cd2c6a25b3278f2ebe692155b51e170206a5832e",
+            "version": "2.10.1-1"
+        },
+        {
+            "name": "markupsafe",
+            "repository": "enthought/free",
+            "sha256": "a4cecf5c2b764a60ff93c25ee46d65fe208df6ac93f6247db4ec39d851c70acf",
+            "version": "1.1.1-1"
+        },
+        {
+            "name": "mccabe",
+            "repository": "enthought/free",
+            "sha256": "8da243e1fd12b88a42d9584e46921f17ca93af2053f957f28ffc4a7fe14216a7",
+            "version": "0.6.1-1"
+        },
+        {
+            "name": "packaging",
+            "repository": "enthought/free",
+            "sha256": "e29c32c48565d32a58358306662a44b63df5348a59d766847ec38a8b36e2016f",
+            "version": "16.8-3"
+        },
+        {
+            "name": "pycodestyle",
+            "repository": "enthought/free",
+            "sha256": "72aa7e7b86b37bdcb17df352c23a68065312ea1df1632e077110d88b1a4b97ca",
+            "version": "2.5.0-1"
+        },
+        {
+            "name": "pyface",
+            "repository": "enthought/free",
+            "sha256": "000a55ca8edca580b469dc948d0d4a5b9e39600bf34d9385e46d10678e569aeb",
+            "version": "6.1.1-1"
+        },
+        {
+            "name": "pyflakes",
+            "repository": "enthought/free",
+            "sha256": "f7f76558b4464675f6d800c2c6c6a483807c1615d79658c9522ed852398d26cd",
+            "version": "2.1.1-1"
+        },
+        {
+            "name": "pygments",
+            "repository": "enthought/free",
+            "sha256": "122225544301ccbd61279b6ab0c9410ddafcc911a417ed2e6a8405dc23043982",
+            "version": "2.2.0-1"
+        },
+        {
+            "name": "pyparsing",
+            "repository": "enthought/free",
+            "sha256": "6fe8234a197ae9f9bb45d56c1e84c97a00a5f1570336d27ed0ab9514b178a51c",
+            "version": "2.2.0-1"
+        },
+        {
+            "name": "pytz",
+            "repository": "enthought/free",
+            "sha256": "7dcece3cfd104110e0a37d6fedc2dae3973550cc69847279bfebd81aa24b7851",
+            "version": "2018.9-1"
+        },
+        {
+            "name": "requests",
+            "repository": "enthought/free",
+            "sha256": "dd4359a6e5b9a1a5589bc00dd016df4ccf429af707bec6cf77a729e241911f93",
+            "version": "2.21.0-1"
+        },
+        {
+            "name": "setuptools",
+            "repository": "enthought/free",
+            "sha256": "381be57acfe79807ecae13c84f22d2325965e3c6434217f7f4d1e3f1808de5a9",
+            "version": "38.2.5-2"
+        },
+        {
+            "name": "six",
+            "repository": "enthought/free",
+            "sha256": "8470f5ce71367d794c1c1b193e812992242cf15f6f9ee3b5569f4a46bfbc75a0",
+            "version": "1.11.0-1"
+        },
+        {
+            "name": "snowballstemmer",
+            "repository": "enthought/free",
+            "sha256": "d7ef8ecbcb021a278b746953ae2e57c2d5fa254783090748eb9dcf6a9614d639",
+            "version": "1.2.1-1"
+        },
+        {
+            "name": "sphinx",
+            "repository": "enthought/free",
+            "sha256": "ec838052a6f8b4db7129e63542957ca9d1d87b6480f73a208e9d32c643cabb5c",
+            "version": "1.8.5-3"
+        },
+        {
+            "name": "sphinx_rtd_theme",
+            "repository": "enthought/free",
+            "sha256": "f000a38fc51b52465d52d3e09d7921bfb580a7a9bd63ab5cba1f785158de512b",
+            "version": "0.2.4-1"
+        },
+        {
+            "name": "sphinxcontrib_websupport",
+            "repository": "enthought/free",
+            "sha256": "fbcd6e093381dea5bccb8cec09b4db1e1a651968634208578b14d5da19618515",
+            "version": "1.1.0-1"
+        },
+        {
+            "name": "testfixtures",
+            "repository": "enthought/free",
+            "sha256": "e58c346a255838bd5c55af9442be3c7cbd110d701e0ddf16bffc0e9e0df3bdb1",
+            "version": "4.10.0-1"
+        },
+        {
+            "name": "traits",
+            "repository": "enthought/free",
+            "sha256": "86b823d5fb2eae1f12491bf448856d84182cb814806eefcb8e9fb5a1ad7b4e6a",
+            "version": "5.1.1-1"
+        },
+        {
+            "name": "traitsui",
+            "repository": "enthought/free",
+            "sha256": "e508a72200c0196d504b7b9c0af26bedaac9d32734528d5dd0fc4a6ee26dd7e6",
+            "version": "6.1.1-2"
+        },
+        {
+            "name": "urllib3",
+            "repository": "enthought/free",
+            "sha256": "2e1f8fa610dcfe2b9016a4ba9fafb5ee44a052bf41860ff91626a9991f26df93",
+            "version": "1.22-4"
+        }
+    ],
+    "runtime": {
+        "implementation": "cpython",
+        "platform": "rh6_x86_64",
+        "platform_abi": "gnu",
+        "repository": "enthought/free",
+        "sha256": "8f4bd731f23f1e6711a6f65b88e8b1e208ac7941348b599a2420efd320fd2a04",
+        "version": "3.6.0+7"
+    }
+}

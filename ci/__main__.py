@@ -1,22 +1,30 @@
 import click
-from subprocess import check_call
+from distutils.version import StrictVersion
+from subprocess import check_call, check_output
+import os
 
 DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
+PYTHON_NAMES = {"3.6": "py36"}
+PLATFORMS = ["osx-x86_64", "rh6-x86_64", "win-x86_64"]
 
-CORE_DEPS = [
-    "envisage==4.7.2-1",
-    "click==7.0-1",
-]
+BUNDLE_PATH = os.path.join(os.path.dirname(__file__), "bundle")
+BUNDLE_NAME_TPL = "force-{python_version}-{platform}.json"
 
-DOCS_DEPS = [
-    "sphinx==1.8.5-3"
-]
+EDM_DEPS = [
+    # Run `ci generate-edm-bundles` to reflect the updates
 
-DEV_DEPS = [
-    "flake8==3.7.7-1",
-    "coverage==4.3.4-1",
-    "testfixtures==4.10.0-1",
+    # core
+    "envisage",
+    "click",
+
+    # doc
+    "sphinx",
+
+    # CI
+    "flake8",
+    "coverage",
+    "testfixtures",
 ]
 
 PIP_DEPS = [
@@ -56,6 +64,41 @@ def build_env(python_version):
         check_call([
             "edm", "run", "-e", env_name, "--",
             "pip", "install"] + PIP_DEPS)
+
+
+@cli.command(name="generate-edm-bundles")
+def generate_edm_bundles():
+    """ Generate EDM bundles for all the target platforms. """
+
+    # Requires EDM 1.11.0 or higher to work without authentication.
+    min_edm = "1.11.0"
+    edm_ver = check_output(
+        ["edm", "--version"], universal_newlines=True).split()[1]
+    if StrictVersion(edm_ver) < StrictVersion(min_edm):
+        raise click.ClickException(
+            "Bundles can only be generated with EDM >= {}. {} found."
+            .format(min_edm, edm_ver))
+
+    for platform in PLATFORMS:
+        for python_version in PYTHON_VERSIONS:
+            output_file = os.path.join(
+                BUNDLE_PATH,
+                BUNDLE_NAME_TPL.format(
+                    python_version=PYTHON_NAMES[python_version],
+                    platform=platform
+                )
+            )
+            click.echo("Creating bundle: {}".format(output_file))
+            check_call(
+                [
+                    "edm", "bundle", "generate", "--bundle-format", "2.0",
+                    "--platform", platform, "--version", python_version,
+                    "--output-file", output_file
+                ] + EDM_DEPS
+            )
+
+    click.echo("Done.\n"
+               "Remember to push significant updates to the repository.")
 
 
 @cli.command(help="Install the BDSS in the execution environment")
