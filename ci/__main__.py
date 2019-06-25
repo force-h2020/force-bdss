@@ -5,26 +5,22 @@ DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
 
 CORE_DEPS = [
-    "distribute_remove==1.0.0-4",
-    "pip==18.1-1",
-    "setuptools==38.2.5-1",
-    "envisage==4.7.1-1",
-    "click==6.7-1",
+    "envisage==4.7.2-1",
+    "click==7.0-1",
 ]
 
 DOCS_DEPS = [
-    "sphinx==1.5.5-5"
+    "sphinx==1.8.5-3"
 ]
 
 DEV_DEPS = [
-    "flake8==3.3.0-2",
+    "flake8==3.7.7-1",
     "coverage==4.3.4-1",
     "testfixtures==4.10.0-1",
-    "mock==2.0.0-1",
 ]
 
 PIP_DEPS = [
-    "stevedore==1.24.0"
+    "stevedore==1.30.1"
 ]
 
 

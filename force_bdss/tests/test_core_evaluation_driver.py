@@ -55,9 +55,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
                     RuntimeError,
-                    "The number of data values \(2 values\)"
-                    " returned by 'test_data_source' does not match"
-                    " the number of output slots"):
+                    r"The number of data values \(2 values\)"
+                    r" returned by 'test_data_source' does not match"
+                    r" the number of output slots"):
                 driver.application_started()
 
     def test_error_for_incorrect_return_type(self):
@@ -69,9 +69,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
                     RuntimeError,
-                    "The run method of data source test_data_source must"
-                    " return a list. It returned instead <.* 'str'>. Fix"
-                    " the run\(\) method to return the appropriate entity."):
+                    r"The run method of data source test_data_source must"
+                    r" return a list. It returned instead <.* 'str'>. Fix"
+                    r" the run\(\) method to return the appropriate entity."):
                 driver.application_started()
 
     def test_error_for_incorrect_data_value_entries(self):
@@ -83,12 +83,12 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
                     RuntimeError,
-                    "The result list returned by DataSource test_data_source"
-                    " contains an entry that is not a DataValue."
-                    " An entry of type <.* 'str'> was instead found"
-                    " in position 0."
-                    " Fix the DataSource.run\(\) method to"
-                    " return the appropriate entity."):
+                    r"The result list returned by DataSource test_data_source"
+                    r" contains an entry that is not a DataValue."
+                    r" An entry of type <.* 'str'> was instead found"
+                    r" in position 0."
+                    r" Fix the DataSource.run\(\) method to"
+                    r" return the appropriate entity."):
                 driver.application_started()
 
     def test_error_for_missing_ds_output_names(self):
@@ -105,9 +105,9 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(
                     RuntimeError,
-                    "The number of data values \(2 values\)"
-                    " returned by 'test_data_source' does not match"
-                    " the number of user-defined names"):
+                    r"The number of data values \(2 values\)"
+                    r" returned by 'test_data_source' does not match"
+                    r" the number of user-defined names"):
                 driver.application_started()
 
     def test_mco_communicator_broken(self):
