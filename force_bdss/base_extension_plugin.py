@@ -107,10 +107,14 @@ class BaseExtensionPlugin(Plugin):
             self.description = self.get_description()
             self.version = self.get_version()
             self.factory_classes = self.get_factory_classes()
+
+            # Optional custom UI layouts provided for use with a graphical
+            # workflow manager.
             try:
                 self.data_views = self.get_data_views()
-            except:
+            except AttributeError:
                 self.data_views = []
+
             self.mco_factories[:] = [
                 cls(self)
                 for cls in self._factory_by_type(BaseMCOFactory)]
