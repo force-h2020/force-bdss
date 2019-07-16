@@ -248,6 +248,10 @@ them discoverable by a GUI application (wfmanager) through the
         of its subclasses.
         """
 
+Note that this method doesn't exist in ``force_bdss.api.BaseExtensionPlugin``
+and there is no need to override it, unless you want to provide custom data
+views.
+
 Make sure to import the module containing the data view class from inside
 ``get_data_views``: this ensures that running BDSS without a GUI application
 doesn't import the graphical stack. For instance::
