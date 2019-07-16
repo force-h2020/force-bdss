@@ -6,7 +6,8 @@ provided as a separate python package that makes available some new classes.
 Force BDSS will find these classes from the plugin at startup.
 
 A single Plugin can provide one or more of the following entities:
-MCO, DataSources, NotificationListeners, UIHooks.
+MCO, DataSources, NotificationListeners, UIHooks. It can optionally
+provide data_views to be used by the wfmanager GUI.
 
 An example plugin implementation is available at:
 
@@ -233,3 +234,24 @@ of the UI. It has no model. The factory must inherit from
 to return a class inheriting from ``BaseUIHooksManager``. This class has
 specific methods to be reimplemented to perform operations before and after
 some UI operations.
+
+Data views
+^^^^^^^^^^
+
+A plugin can also define one or more custom visualization classes, and make
+them discoverable by a GUI application (wfmanager) through the
+``get_data_views`` method of the plugin class::
+
+    def get_data_views(self):
+        """ Returns a list of classes, which must inherit from
+        `force_wfmanager.ui.review.data_view.BaseDataView` or from one
+        of its subclasses.
+        """
+
+Make sure to import the module containing the data view class from inside
+``get_data_views``: this ensures that running BDSS without a GUI application
+doesn't import the graphical stack. For instance::
+
+    def get_data_views(self):
+        from .example_data_views import ExampleCustomPlot
+        return [ExampleCustomPlot]
