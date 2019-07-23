@@ -69,13 +69,19 @@ def install(python_version):
 
 @cli.command(help="Run the tests")
 @python_version_option
-def test(python_version):
+@click.option(
+    "--verbose/--quiet", default=True,
+    help="Run tests in verbose mode? [default: --verbose]",
+)
+def test(python_version, verbose):
     env_name = get_env_name(python_version)
 
-    check_call([
-        "edm", "run", "-e", env_name, "--", "python", "-m", "unittest",
-        "discover"
-    ])
+    verbosity_args = ["--verbose"] if verbose else []
+
+    check_call(
+        ["edm", "run", "-e", env_name, "--", "python", "-m", "unittest",
+         "discover"] + verbosity_args
+    )
 
 
 @cli.command(help="Run flake")
