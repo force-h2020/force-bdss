@@ -30,9 +30,19 @@ class TestVerifier(unittest.TestCase):
         wf.mco = self.plugin.mco_factories[0].create_model()
 
         errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 2)
+        self.assertEqual(len(errors), 3)
         self.assertEqual(errors[0].subject, wf.mco)
         self.assertIn("no defined parameters", errors[0].local_error)
+
+    def test_no_mco_kpis(self):
+        wf = self.workflow
+        mco_factory = self.plugin.mco_factories[0]
+        wf.mco = mco_factory.create_model()
+
+        errors = verify_workflow(wf)
+        self.assertEqual(len(errors), 3)
+        self.assertEqual(errors[0].subject, wf.mco)
+        self.assertIn("no defined KPIs", errors[1].local_error)
 
     def test_empty_parameter_options(self):
         wf = self.workflow
@@ -42,11 +52,11 @@ class TestVerifier(unittest.TestCase):
         wf.mco.parameters.append(parameter_factory.create_model())
 
         errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 3)
-        self.assertEqual(errors[0].subject, wf.mco.parameters[0])
-        self.assertIn("MCO parameter is not named", errors[0].local_error)
+        self.assertEqual(len(errors), 4)
         self.assertEqual(errors[1].subject, wf.mco.parameters[0])
-        self.assertIn("MCO parameter has no type set", errors[1].local_error)
+        self.assertIn("MCO parameter is not named", errors[1].local_error)
+        self.assertEqual(errors[1].subject, wf.mco.parameters[0])
+        self.assertIn("MCO parameter has no type set", errors[2].local_error)
 
     def test_empty_kpi_options(self):
         wf = self.workflow
@@ -68,6 +78,7 @@ class TestVerifier(unittest.TestCase):
         wf.mco.parameters.append(parameter_factory.create_model())
         wf.mco.parameters[0].name = "name"
         wf.mco.parameters[0].type = "type"
+        wf.mco.kpis.append(KPISpecification(name='name'))
 
         layer = ExecutionLayer()
         wf.execution_layers.append(layer)
@@ -84,6 +95,7 @@ class TestVerifier(unittest.TestCase):
         wf.mco.parameters.append(parameter_factory.create_model())
         wf.mco.parameters[0].name = "name"
         wf.mco.parameters[0].type = "type"
+        wf.mco.kpis.append(KPISpecification(name='name'))
 
         layer = ExecutionLayer()
         wf.execution_layers.append(layer)

@@ -48,6 +48,15 @@ class BaseMCOModel(BaseModel):
                     global_error="The MCO has no defined parameters",
                 )
             )
+
+        if not self.kpis:
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    global_error="The MCO has no defined KPIs",
+                )
+            )
+
         for parameter in self.parameters:
             errors += parameter.verify()
 
