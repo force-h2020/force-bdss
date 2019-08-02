@@ -124,8 +124,6 @@ class WorkflowReader(HasStrictTraits):
             logger.exception(msg)
             raise InvalidFileException(msg)
 
-
-
         return wf
 
     def read_dict(self, wf_data):
