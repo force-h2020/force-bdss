@@ -115,6 +115,7 @@ class WorkflowReader(HasStrictTraits):
 
         try:
             wf_data = json_data["workflow"]
+            wf = self.read_dict(wf_data)
         except KeyError as e:
             msg = (
                 "Could not read file {}. "
@@ -123,7 +124,7 @@ class WorkflowReader(HasStrictTraits):
             logger.exception(msg)
             raise InvalidFileException(msg)
 
-        wf = self.read_dict(wf_data)
+
 
         return wf
 
