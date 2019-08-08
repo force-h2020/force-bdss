@@ -113,14 +113,9 @@ class WorkflowReader(HasStrictTraits):
             raise InvalidVersionException(
                 "File version {} not supported".format(json_data["version"]))
 
-        wf = Workflow()
-
         try:
             wf_data = json_data["workflow"]
-            wf.mco = self._extract_mco(wf_data)
-            wf.execution_layers[:] = self._extract_execution_layers(wf_data)
-            wf.notification_listeners[:] = \
-                self._extract_notification_listeners(wf_data)
+            wf = self.read_dict(wf_data)
         except KeyError as e:
             msg = (
                 "Could not read file {}. "
@@ -129,6 +124,24 @@ class WorkflowReader(HasStrictTraits):
             logger.exception(msg)
             raise InvalidFileException(msg)
 
+        return wf
+
+    def read_dict(self, wf_data):
+        """Read a dictionary containing workflow data and return a Workflow
+        object
+
+        Parameters
+        ----------
+        wf_data: Data
+            The dictionary containing the workflow data.
+        """
+        wf = Workflow()
+
+        wf.mco = self._extract_mco(wf_data)
+        wf.execution_layers[:] = self._extract_execution_layers(wf_data)
+        wf.notification_listeners[:] = (
+            self._extract_notification_listeners(wf_data)
+        )
         return wf
 
     def _extract_mco(self, wf_data):
