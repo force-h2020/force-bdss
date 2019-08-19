@@ -50,7 +50,10 @@ class ServiceOfferExtensionPlugin(BaseExtensionPlugin):
         Where both `ExperimentUI` and `AnalysisUI` are subclasses of
         `ContributedUI`
         """
-        raise NotImplementedError
+        raise NotImplementedError(
+            "get_service_offer_factories was not implemented "
+            "in plugin {}".format(self.__class__)
+        )
 
     def _service_offers_default(self):
         """Method that imports all subclasses returned by
