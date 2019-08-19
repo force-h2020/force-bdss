@@ -1,4 +1,4 @@
-from traits.api import HasTraits, Interface
+from traits.api import HasTraits
 
 from force_bdss.base_extension_plugin import BaseExtensionPlugin
 from force_bdss.core_plugins.service_offers_plugin import \
@@ -30,10 +30,6 @@ class DummyExtensionPlugin(BaseExtensionPlugin):
         ]
 
 
-class DummyInterface(Interface):
-    pass
-
-
 class DummyUIFactory(HasTraits):
     pass
 
@@ -52,4 +48,6 @@ class DummyServiceOffersPlugin(ServiceOffersPlugin):
         return [DummyDataSourceFactory]
 
     def get_service_offer_factories(self):
+        from force_bdss.tests.dummy_classes.interface import \
+            DummyInterface
         return [(DummyInterface, [DummyUIFactory])]
