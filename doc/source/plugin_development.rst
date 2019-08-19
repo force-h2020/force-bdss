@@ -264,9 +264,14 @@ can then be made discoverable by ``force-wfmanager`` using the ``envisage``
 
 Make sure to import the module containing the data view class from inside
 ``get_service_offer_factories``: this ensures that running BDSS without a GUI
-application doesn't import the graphical stack. For instance::
+application doesn't import the graphical stack. Also, multiple types of plugin
+contributed UI objects can be imported in the same call. For instance::
 
     def get_service_offer_factories(self):
-        from force_wfmanager.ui import IBasePlot
-        from .example_data_views import ExampleCustomPlot
-        return [(IBasePlot, [ExampleCustomPlot])]
+        from force_wfmanager.ui import IBasePlot, IContributedUI
+        from .example_custom_uis import PlotUI, ExperimentUI, AnalysisUI
+
+        return [
+            (IBasePlot, [PlotUI]),
+            (IContributedUI, [ExperimentUI, AnalysisUI])
+        ]
