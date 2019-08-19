@@ -46,7 +46,7 @@ class ServiceOffersPlugin(BaseExtensionPlugin):
         """Method that imports all subclasses returned by get_service_offers
         as ServiceOffer objects using their associated Interface protocols
         """
-        print('_service_offers_default')
+
         service_offers_factories = self.get_service_offer_factories()
         service_offers = []
 
