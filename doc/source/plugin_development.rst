@@ -235,27 +235,43 @@ to return a class inheriting from ``BaseUIHooksManager``. This class has
 specific methods to be reimplemented to perform operations before and after
 some UI operations.
 
-Data views
-^^^^^^^^^^
+Envisage Service Offers
+^^^^^^^^^^^^^^^^^^^^^^^
 
-A plugin can also define one or more custom visualization classes, and make
-them discoverable by a GUI application (wfmanager) through the
-``get_data_views`` method of the plugin class::
+A plugin can also define one or more custom visualization classes for the
+GUI application ``force-wfmanager``, typically to either display data or
+provide a tailor-made UI for a specific user. In which case, the plugin class
+must inherit from ``force_bdss.core_plugins.service_offer_plugin.ServiceOfferExtensionPlugin``
+, which is a child class of ``BaseExtensionPlugin``. Any UI subclasses
+can then be made discoverable by ``force-wfmanager`` using the ``envisage``
+``ServiceOffer`` protocol through the ``get_service_offer_factories`` method::
 
-    def get_data_views(self):
-        """ Returns a list of classes, which must inherit from
-        `force_wfmanager.ui.review.data_view.BaseDataView` or from one
-        of its subclasses.
+    def get_service_offer_factories(self):
+        """A method returning a list user-made objects to be provided by this
+        plugin as envisage ServiceOffer objects. Each item in the outer list is
+        a tuple containing an Interface trait to be used as the ServiceOffer
+        protocol and an inner list of subclass factories to be instantiated
+        from said protocol.
+
+        Returns
+        -------
+        service_offer_factories: list of tuples
+            List of objects to load, where each tuple takes the form
+            (Interface, [HasTraits1, HasTraits2..]), defining a Traits
+            Interface subclass and a list of HasTraits subclasses to be
+            instantiated as an envisage ServiceOffer.
         """
 
-Note that this method doesn't exist in ``force_bdss.api.BaseExtensionPlugin``
-and there is no need to override it, unless you want to provide custom data
-views.
-
 Make sure to import the module containing the data view class from inside
-``get_data_views``: this ensures that running BDSS without a GUI application
-doesn't import the graphical stack. For instance::
+``get_service_offer_factories``: this ensures that running BDSS without a GUI
+application doesn't import the graphical stack. Also, multiple types of plugin
+contributed UI objects can be imported in the same call. For instance::
 
-    def get_data_views(self):
-        from .example_data_views import ExampleCustomPlot
-        return [ExampleCustomPlot]
+    def get_service_offer_factories(self):
+        from force_wfmanager.ui import IBasePlot, IContributedUI
+        from .example_custom_uis import PlotUI, ExperimentUI, AnalysisUI
+
+        return [
+            (IBasePlot, [PlotUI]),
+            (IContributedUI, [ExperimentUI, AnalysisUI])
+        ]
