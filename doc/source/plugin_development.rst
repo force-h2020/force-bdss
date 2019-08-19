@@ -244,7 +244,7 @@ provide a tailor-made UI for a specific user. In which case, the plugin class
 must inherit from ``force_bdss.core_plugins.service_offer_plugin.ServiceOfferExtensionPlugin``
 , which is a child class of ``BaseExtensionPlugin``. Any UI subclasses
 can then be made discoverable by ``force-wfmanager`` using the ``envisage``
-``ServiceOffer`` protocol through the ``get_service_offers_factories`` method::
+``ServiceOffer`` protocol through the ``get_service_offer_factories`` method::
 
     def get_service_offer_factories(self):
         """A method returning a list user-made objects to be provided by this

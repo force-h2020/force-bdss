@@ -38,8 +38,8 @@ class ServiceOfferExtensionPlugin(BaseExtensionPlugin):
         This example showcases a situation where a plugin wants contribute
         subclasses of UI objects defined in force-wfmanager. Specifically,
         to offer the ContributedUI factories: `ExperimentUI` and `AnalysisUI`
-        via the IContributedUI Interface. In which case, `get_contributed_uis`
-        would be implemented as below
+        via the IContributedUI Interface. In which case,
+        `get_service_offer_factories` would be implemented as below
 
         >>> def get_service_offer_factories(self):
         ...     from force_wfmanager.ui import IContributedUI
@@ -53,8 +53,9 @@ class ServiceOfferExtensionPlugin(BaseExtensionPlugin):
         raise NotImplementedError
 
     def _service_offers_default(self):
-        """Method that imports all subclasses returned by get_service_offers
-        as ServiceOffer objects using their associated Interface protocols
+        """Method that imports all subclasses returned by
+        `get_service_offer_factories` as ServiceOffer objects using their
+        associated Interface protocols
         """
 
         service_offers_factories = self.get_service_offer_factories()
