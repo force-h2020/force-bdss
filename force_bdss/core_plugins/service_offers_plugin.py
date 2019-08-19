@@ -19,20 +19,20 @@ class ServiceOffersPlugin(BaseExtensionPlugin):
     protocol = Instance(Interface)
 
     def get_service_offer_factories(self):
-        """A method returning a tuple containing and Interface trait for a list of
-        subclass factories provided by this plugin. The Interface trait is then used
-        by _service_offers_default as a protocol to instantiate a ServiceOffer for
-        each subclass.
+        """A method returning a tuple containing and Interface trait for a list
+        of subclass factories provided by this plugin. The Interface trait is
+        then used by _service_offers_default as a protocol to instantiate a
+        ServiceOffer for each subclass.
 
         Example
         -------
-        For a plugin which wants to offer the ContributedUI factories: `ExperimentUI`
-        and `AnalysisUI` via the IContributedUI Interface, `get_contributed_uis`
-        would be implemented as below
+        For a plugin which wants to offer the ContributedUI factories:
+        `ExperimentUI` and `AnalysisUI` via the IContributedUI Interface,
+        `get_contributed_uis` would be implemented as below
 
         >>> def get_service_offer_factories(self):
-        ...     from force_wfmanager.ui.contributed_ui.i_contributed_ui import \
-        ...         IContributedUI
+        ...     from force_wfmanager.ui.contributed_ui.i_contributed_ui \
+        ...         import IContributedUI
         ...     return [
         ...         (IContributedUI, [ExperimentUI, AnalysisUI])
         ...     ]
@@ -43,8 +43,8 @@ class ServiceOffersPlugin(BaseExtensionPlugin):
         raise NotImplementedError
 
     def _service_offers_default(self):
-        """Method that imports all subclasses returned by get_service_offers as
-        ServiceOffer objects using their associated Interface protocols
+        """Method that imports all subclasses returned by get_service_offers
+        as ServiceOffer objects using their associated Interface protocols
         """
 
         service_offers_factories = self.get_service_offer_factories()
