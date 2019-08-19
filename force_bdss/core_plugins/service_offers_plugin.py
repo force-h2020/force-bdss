@@ -42,8 +42,7 @@ class ServiceOffersPlugin(BaseExtensionPlugin):
         would be implemented as below
 
         >>> def get_service_offer_factories(self):
-        ...     from force_wfmanager.ui.contributed_ui.i_contributed_ui \
-        ...         import IContributedUI
+        ...     from force_wfmanager.ui import IContributedUI
         ...     return [
         ...         (IContributedUI, [ExperimentUI, AnalysisUI])
         ...     ]
