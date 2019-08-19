@@ -1,8 +1,8 @@
-from traits.api import HasTraits
+from traits.api import HasTraits, Interface
 
 from force_bdss.base_extension_plugin import BaseExtensionPlugin
-from force_bdss.core_plugins.service_offers_plugin import \
-    ServiceOffersPlugin
+from force_bdss.core_plugins.service_offer_plugin import \
+    ServiceOfferExtensionPlugin
 from force_bdss.ids import plugin_id
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
@@ -34,7 +34,11 @@ class DummyUIFactory(HasTraits):
     pass
 
 
-class DummyServiceOffersPlugin(ServiceOffersPlugin):
+class DummyInterface(Interface):
+    pass
+
+
+class DummyServiceOfferExtensionPlugin(ServiceOfferExtensionPlugin):
 
     id = plugin_id("enthought", "test", 1)
 
@@ -48,6 +52,4 @@ class DummyServiceOffersPlugin(ServiceOffersPlugin):
         return [DummyDataSourceFactory]
 
     def get_service_offer_factories(self):
-        from force_bdss.tests.dummy_classes.interface import \
-            DummyInterface
         return [(DummyInterface, [DummyUIFactory])]

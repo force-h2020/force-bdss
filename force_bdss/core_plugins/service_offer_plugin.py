@@ -4,7 +4,7 @@ from traits.api import Instance, List, Interface
 from force_bdss.api import BaseExtensionPlugin
 
 
-class ServiceOffersPlugin(BaseExtensionPlugin):
+class ServiceOfferExtensionPlugin(BaseExtensionPlugin):
     """A plugin which is able to contribute one or more user-made
     subclasses via the envisage ServiceOffer protocol. This plugin can
     handle multiple types of objects, via appropriate configuration of the

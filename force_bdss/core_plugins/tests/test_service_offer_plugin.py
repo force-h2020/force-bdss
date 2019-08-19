@@ -1,34 +1,28 @@
-import sys
-
 from unittest import TestCase, mock
 
 from envisage.api import ServiceOffer
 
 from force_bdss.tests.dummy_classes.extension_plugin import \
-    DummyServiceOffersPlugin
+    DummyServiceOfferExtensionPlugin
 
-
-MOCK_IMPORT = 'builtins.__import__'
 
 class TestServiceOffersPlugin(TestCase):
 
     def setUp(self):
 
-        self.plugin = DummyServiceOffersPlugin()
+        self.plugin = DummyServiceOfferExtensionPlugin()
 
     def test___init__(self):
-        """Tests instantiation of <class ServiceOffersPlugin>
+        """Tests instantiation of <class ServiceOfferExtensionPlugin>
         .service_offers only occurs after attribute is called"""
-        with mock.patch(MOCK_IMPORT) as mock_import, \
-             mock.patch.object(DummyServiceOffersPlugin,
-                   'get_service_offer_factories') as mock_default:
-            plugin = DummyServiceOffersPlugin()
+        with mock.patch.object(
+                DummyServiceOfferExtensionPlugin,
+                'get_service_offer_factories') as mock_default:
+            plugin = DummyServiceOfferExtensionPlugin()
             mock_default.assert_not_called()
-            mock_import.assert_not_called()
 
             self.assertIsNotNone(plugin.service_offers)
             mock_default.assert_called()
-            mock_import.called_once()
 
     def test_get_service_offer_factories(self):
 

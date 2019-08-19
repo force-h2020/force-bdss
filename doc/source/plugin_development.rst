@@ -235,13 +235,13 @@ to return a class inheriting from ``BaseUIHooksManager``. This class has
 specific methods to be reimplemented to perform operations before and after
 some UI operations.
 
-Service Offers Plugin
-^^^^^^^^^^^^^^^^^^^^^
+Envisage Service Offers
+^^^^^^^^^^^^^^^^^^^^^^^
 
 A plugin can also define one or more custom visualization classes for the
 GUI application ``force-wfmanager``, typically to either display data or
 provide a tailor-made UI for a specific user. In which case, the plugin class
-must inherit from ``force_bdss.core_plugins.service_offers_plugin.ServiceOffersPlugin``
+must inherit from ``force_bdss.core_plugins.service_offer_plugin.ServiceOfferExtensionPlugin``
 , which is a child class of ``BaseExtensionPlugin``. Any UI subclasses
 can then be made discoverable by ``force-wfmanager`` using the ``envisage``
 ``ServiceOffer`` protocol through the ``get_service_offers_factories`` method::
