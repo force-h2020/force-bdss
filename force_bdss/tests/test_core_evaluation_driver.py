@@ -91,25 +91,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
                     r" return the appropriate entity."):
                 driver.application_started()
 
-    def test_error_for_missing_ds_output_names(self):
-
-        def run(self, *args, **kwargs):
-            return [DataValue(), DataValue()]
-
-        ds_factory = self.registry.data_source_factories[0]
-        ds_factory.run_function = run
-        ds_factory.output_slots_size = 2
-        driver = CoreEvaluationDriver(
-            application=self.mock_application,
-        )
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    r"The number of data values \(2 values\)"
-                    r" returned by 'test_data_source' does not match"
-                    r" the number of user-defined names"):
-                driver.application_started()
-
     def test_mco_communicator_broken(self):
         self.registry.mco_factories[0].raises_on_create_communicator = True
         driver = CoreEvaluationDriver(
@@ -138,18 +119,22 @@ class TestCoreEvaluationDriver(unittest.TestCase):
         )
 
         with testfixtures.LogCapture() as capture:
-            with self.assertRaises(Exception):
+            with self.assertRaises(SystemExit):
                 driver.application_started()
             capture.check(
-                ('force_bdss.core_evaluation_driver', 'INFO',
-                 'Creating communicator'),
-                ('force_bdss.core_evaluation_driver', 'INFO',
-                 'Received data from MCO: \n whatever = 1.0 (AVERAGE)'),
-                ('force_bdss.core.execution', 'INFO',
-                 'Computing data layer 0'),
-                ('force_bdss.core.execution', 'ERROR',
-                 'Unable to create data source from factory '
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_data_source' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "This may indicate a programming error in the plugin"))
+                ("force_bdss.data_sources.base_data_source_model",
+                 'ERROR',
+                 "Unable to create data source from factory "
+                 "'force.bdss.enthought.plugin.test.v0.factory"
+                 ".probe_data_source', plugin 'force.bdss.enthought."
+                 "plugin.test.v0'. This might indicate a  programming"
+                 " error"),
+                ('force_bdss.io.workflow_reader', 'ERROR',
+                 'Unable to create model for DataSource '
+                 'force.bdss.enthought.plugin.test.v0.factory'
+                 '.probe_data_source : ProbeDataSourceFactory'
+                 '.create_data_source. This is likely due to a coding '
+                 'error in the plugin. Check the logs for more information.'),
+                ('force_bdss.core_evaluation_driver',
+                 'ERROR',
+                 'Unable to open workflow file.'))

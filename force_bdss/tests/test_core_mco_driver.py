@@ -243,6 +243,10 @@ class TestCoreMCODriver(unittest.TestCase):
                 ('force_bdss.core_mco_driver', 'ERROR',
                  'The MCO has no defined KPIs'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'The number of input slots is incorrect.'),
+                 'Input slot is not named'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'The number of output slots is incorrect.'))
+                 'All output variables have undefined names'),
+                ('force_bdss.core_mco_driver',
+                 'ERROR',
+                 'An output variable has an undefined name')
+            )

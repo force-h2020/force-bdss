@@ -1,8 +1,6 @@
 import unittest
 
 from force_bdss.core.execution_layer import ExecutionLayer
-from force_bdss.core.input_slot_info import InputSlotInfo
-from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.verifier import verify_workflow
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.kpi_specification import KPISpecification
@@ -104,36 +102,18 @@ class TestVerifier(unittest.TestCase):
         layer.data_sources.append(ds_model)
 
         errors = verify_workflow(wf)
-        self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("The number of input slots is incorrect.",
-                      errors[0].local_error)
-
-        ds_model.input_slot_info.append(
-            InputSlotInfo(name="name")
-        )
-
-        errors = verify_workflow(wf)
-        self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("The number of output slots is incorrect.",
-                      errors[0].local_error)
-
-        ds_model.output_slot_info.append(
-            OutputSlotInfo(name="name")
-        )
-
-        errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 0)
-
-        ds_model.input_slot_info[0].name = ''
-        errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 1)
+        self.assertEqual(len(errors), 3)
         self.assertIn("Input slot is not named",
                       errors[0].local_error)
-
-        ds_model.output_slot_info[0].name = ''
-        errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 3)
         self.assertIn("All output variables have undefined names",
                       errors[1].local_error)
         self.assertIn("An output variable has an undefined name",
                       errors[2].local_error)
+
+        ds_model.input_slot_info[0].name = 'in'
+        errors = verify_workflow(wf)
+        self.assertEqual(len(errors), 2)
+
+        ds_model.output_slot_info[0].name = 'out'
+        errors = verify_workflow(wf)
+        self.assertEqual(len(errors), 0)
