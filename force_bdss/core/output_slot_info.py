@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits
+from traits.api import HasStrictTraits, Unicode
 
 from force_bdss.core.verifier import VerifierError
 from force_bdss.io.workflow_writer import pop_dunder_recursive
@@ -18,6 +18,9 @@ class OutputSlotInfo(HasStrictTraits):
 
     #: The CUBA key of the slot
     type = CUBAType()
+
+    #: A textual description of the slot
+    description = Unicode("No description")
 
     def verify(self):
         """ OutputSlotInfo require a non-empty name to be used in a later

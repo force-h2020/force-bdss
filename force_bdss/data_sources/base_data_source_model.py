@@ -89,7 +89,10 @@ class BaseDataSourceModel(BaseModel):
 
         if len(self.input_slot_info) == 0:
             self.input_slot_info = [
-                InputSlotInfo(name='', type=slot.type)
+                InputSlotInfo(
+                    name='', type=slot.type,
+                    description=slot.description
+                )
                 for slot in input_slots
             ]
         else:
@@ -109,7 +112,10 @@ class BaseDataSourceModel(BaseModel):
 
         if len(self.output_slot_info) == 0:
             self.output_slot_info = [
-                OutputSlotInfo(name='', type=slot.type)
+                OutputSlotInfo(
+                    name='', type=slot.type,
+                    description=slot.description
+                )
                 for slot in output_slots
             ]
         else:

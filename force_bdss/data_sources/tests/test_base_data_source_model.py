@@ -45,9 +45,11 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             model.__getstate__(),
             {
                 "input_slot_info": [{'source': 'Environment',
+                                     'description': 'No description',
                                      'name': '',
                                      'type': 'TYPE1'}],
                 "output_slot_info": [{'name': '',
+                                      'description': 'No description',
                                       'type': 'TYPE2'}]
             })
 
@@ -65,13 +67,15 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                     {
                         "source": "Environment",
                         "name": "foo",
-                        'type': 'TYPE1'
+                        'type': 'TYPE1',
+                        'description': 'No description'
                     }
                 ],
                 "output_slot_info": [
                     {
                         "name": "baz",
-                        "type": 'TYPE2'
+                        "type": 'TYPE2',
+                        'description': 'No description'
                     }
                 ]
             })

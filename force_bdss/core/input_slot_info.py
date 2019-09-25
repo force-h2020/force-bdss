@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Enum
+from traits.api import HasStrictTraits, Enum, Unicode
 
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 from force_bdss.local_traits import Identifier, CUBAType
@@ -25,6 +25,9 @@ class InputSlotInfo(HasStrictTraits):
 
     #: The CUBA key of the slot
     type = CUBAType()
+
+    #: A textual description of the slot
+    description = Unicode("No description")
 
     def verify(self):
         """ Verify that the InputSlotInfo is valid. """
