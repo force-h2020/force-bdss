@@ -1,18 +1,17 @@
-import unittest
+from unittest import TestCase, mock
 
 from traits.api import Int
 from traits.testing.api import UnittestTools
+
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import (
-    DummyDataSource, DummyDataSourceModel
+    DummyDataSourceFactory, DummyDataSource, DummyDataSourceModel
 )
-
-from unittest import mock
-
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
+from force_bdss.tests.dummy_classes.extension_plugin import (
+    DummyExtensionPlugin
+)
 
 
 class ChangesSlotsModel(BaseDataSourceModel):
@@ -21,36 +20,42 @@ class ChangesSlotsModel(BaseDataSourceModel):
     c = Int(changes_slots=False)
 
 
+class BadDataSourceFactory(DummyDataSourceFactory):
+
+    def create_data_source(self):
+        raise Exception("Bad data source factory")
+
+
 class BadDataSource(DummyDataSource):
 
     def slots(self, model):
+        print('exception')
         raise Exception("bad slots")
 
 
-class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
+class TestBaseDataSourceModel(TestCase, UnittestTools):
     def setUp(self):
-        self.mock_factory = mock.Mock(spec=BaseDataSourceFactory)
+        self.plugin = DummyExtensionPlugin()
+        self.factory = self.plugin.data_source_factories[0]
 
     def test_getstate(self):
-        model = DummyDataSourceModel(self.mock_factory)
+        model = self.factory.create_model()
+
         self.assertDictEqual(
             model.__getstate__(),
             {
-                "input_slot_info": [],
-                "output_slot_info": []
+                "input_slot_info": [{'source': 'Environment',
+                                     'name': '',
+                                     'type': 'TYPE1'}],
+                "output_slot_info": [{'name': '',
+                                      'type': 'TYPE2'}]
             })
 
         model.input_slot_info = [
-            InputSlotInfo(
-                name="foo"
-            ),
-            InputSlotInfo(
-                name="bar"
-            )
+            InputSlotInfo(name="foo")
         ]
         model.output_slot_info = [
-            OutputSlotInfo(name="baz"),
-            OutputSlotInfo(name="quux")
+            OutputSlotInfo(name="baz")
         ]
 
         self.assertDictEqual(
@@ -59,25 +64,20 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
                 "input_slot_info": [
                     {
                         "source": "Environment",
-                        "name": "foo"
-                    },
-                    {
-                        "source": "Environment",
-                        "name": "bar"
+                        "name": "foo",
+                        'type': 'TYPE1'
                     }
                 ],
                 "output_slot_info": [
                     {
                         "name": "baz",
-                    },
-                    {
-                        "name": "quux",
+                        "type": 'TYPE2'
                     }
                 ]
             })
 
     def test_changes_slots(self):
-        model = ChangesSlotsModel(self.mock_factory)
+        model = ChangesSlotsModel(self.factory)
 
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.a = 5
@@ -89,18 +89,16 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             model.c = 5
 
     def test_bad_factory(self):
-        def create_data_source(self):
-            raise Exception("Bad data source factory")
 
-        self.mock_factory.create_data_source = create_data_source
-        model = DummyDataSourceModel(self.mock_factory)
+        factory = BadDataSourceFactory(self.plugin)
         with self.assertRaises(Exception):
-            model.verify()
+            DummyDataSourceModel(factory)
 
     def test_bad_slots(self):
-        self.mock_factory.create_data_source = mock.MagicMock(
-            return_value=BadDataSource(self.mock_factory)
-        )
-        model = DummyDataSourceModel(self.mock_factory)
-        with self.assertRaises(Exception):
-            model.verify()
+
+        with mock.patch('force_bdss.tests.dummy_classes.data_source.'
+                        'DummyDataSourceFactory.create_data_source')\
+                as mock_data_source:
+            mock_data_source.return_value = BadDataSource(self.factory)
+            with self.assertRaises(Exception):
+                DummyDataSourceModel(self.factory)

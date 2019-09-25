@@ -2,7 +2,7 @@ from traits.api import HasStrictTraits
 
 from force_bdss.core.verifier import VerifierError
 from force_bdss.io.workflow_writer import pop_dunder_recursive
-from force_bdss.local_traits import Identifier
+from force_bdss.local_traits import Identifier, CUBAType
 
 
 class OutputSlotInfo(HasStrictTraits):
@@ -15,6 +15,9 @@ class OutputSlotInfo(HasStrictTraits):
     """
     #: The user defined name of the variable containing the value.
     name = Identifier()
+
+    #: The CUBA key of the slot
+    type = CUBAType()
 
     def verify(self):
         """ OutputSlotInfo require a non-empty name to be used in a later
