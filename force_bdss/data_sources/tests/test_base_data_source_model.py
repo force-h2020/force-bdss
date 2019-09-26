@@ -38,6 +38,49 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         self.plugin = DummyExtensionPlugin()
         self.factory = self.plugin.data_source_factories[0]
 
+    def test___sync_slot_info(self):
+        model = self.factory.create_model()
+
+        old_info = InputSlotInfo(name="foo", type='GOOD')
+        new_info = InputSlotInfo(name="bar", type='GOOD')
+
+        model._sync_slot_info(new_info, old_info)
+
+        self.assertEqual(new_info.name, old_info.name)
+
+        wrong_class = OutputSlotInfo(name="foo", type='GOOD')
+        with self.assertRaises(RuntimeError):
+            model._sync_slot_info(wrong_class, old_info)
+
+        wrong_type = InputSlotInfo(name="foo", type='BAD')
+        with self.assertRaises(RuntimeError):
+            model._sync_slot_info(wrong_type, old_info)
+
+    def test_update_slot_info(self):
+
+        model = self.factory.create_model()
+
+        model.update_slot_info(
+            "input_slot_info",
+            [InputSlotInfo(name="bar")]
+        )
+
+        self.assertEqual("bar", model.input_slot_info[0].name)
+        self.assertEqual("TYPE1", model.input_slot_info[0].type)
+
+        with self.assertRaises(RuntimeError):
+            model.update_slot_info(
+                "wrong_attribute_name",
+                [InputSlotInfo(name="bar")]
+            )
+
+        with self.assertRaises(RuntimeError):
+            model.update_slot_info(
+                "input_slot_info",
+                [InputSlotInfo(name="bar"),
+                 InputSlotInfo(name='too_long')]
+            )
+
     def test_getstate(self):
         model = self.factory.create_model()
 
@@ -53,12 +96,8 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                                       'type': 'TYPE2'}]
             })
 
-        model.input_slot_info = [
-            InputSlotInfo(name="foo")
-        ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="baz")
-        ]
+        model.input_slot_info[0].name = "foo"
+        model.output_slot_info[0].name = "baz"
 
         self.assertDictEqual(
             model.__getstate__(),
@@ -95,14 +134,53 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
     def test_bad_factory(self):
 
         factory = BadDataSourceFactory(self.plugin)
+        model = DummyDataSourceModel(factory)
+
         with self.assertRaises(Exception):
-            DummyDataSourceModel(factory)
+            model.verify()
 
     def test_bad_slots(self):
+
+        model = DummyDataSourceModel(self.factory)
 
         with mock.patch('force_bdss.tests.dummy_classes.data_source.'
                         'DummyDataSourceFactory.create_data_source')\
                 as mock_data_source:
             mock_data_source.return_value = BadDataSource(self.factory)
             with self.assertRaises(Exception):
-                DummyDataSourceModel(self.factory)
+                model.verify()
+
+    def test___reset_data_source_slots(self):
+
+        model = self.factory.create_model()
+        model.input_slot_info[0].name = 'foo'
+
+        model._reset_data_source_slots()
+
+        self.assertEqual('', model.input_slot_info[0].name)
+
+    def test_verify(self):
+
+        model = DummyDataSourceModel(self.factory)
+
+        model.input_slot_info = [
+            InputSlotInfo(name="bar"),
+            InputSlotInfo(name='too_long')
+        ]
+
+        errors = model.verify()
+        messages = [error.local_error for error in errors]
+
+        self.assertIn("The number of input slots is incorrect.",
+                      messages)
+        self.assertIn("All output variables have undefined names.",
+                      messages)
+
+        model.output_slot_info = []
+
+        errors = model.verify()
+        messages = [error.local_error for error in errors]
+        self.assertIn("The number of output slots is incorrect.",
+                      messages)
+        self.assertNotIn("All output variables have undefined names.",
+                         messages)

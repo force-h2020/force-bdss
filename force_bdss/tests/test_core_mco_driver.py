@@ -245,7 +245,7 @@ class TestCoreMCODriver(unittest.TestCase):
                 ('force_bdss.core_mco_driver', 'ERROR',
                  'Input slot is not named'),
                 ('force_bdss.core_mco_driver', 'ERROR',
-                 'All output variables have undefined names'),
+                 'All output variables have undefined names.'),
                 ('force_bdss.core_mco_driver',
                  'ERROR',
                  'An output variable has an undefined name')

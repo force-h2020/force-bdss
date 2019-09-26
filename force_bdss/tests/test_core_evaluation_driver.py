@@ -122,19 +122,6 @@ class TestCoreEvaluationDriver(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 driver.application_started()
             capture.check(
-                ("force_bdss.data_sources.base_data_source_model",
-                 'ERROR',
-                 "Unable to create data source from factory "
-                 "'force.bdss.enthought.plugin.test.v0.factory"
-                 ".probe_data_source', plugin 'force.bdss.enthought."
-                 "plugin.test.v0'. This might indicate a  programming"
-                 " error"),
-                ('force_bdss.io.workflow_reader', 'ERROR',
-                 'Unable to create model for DataSource '
-                 'force.bdss.enthought.plugin.test.v0.factory'
-                 '.probe_data_source : ProbeDataSourceFactory'
-                 '.create_data_source. This is likely due to a coding '
-                 'error in the plugin. Check the logs for more information.'),
                 ('force_bdss.core_evaluation_driver',
                  'ERROR',
                  'Unable to open workflow file.'))
