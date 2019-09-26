@@ -64,16 +64,9 @@ def execute_layer(layer, environment_data_values):
 
     for model in layer.data_sources:
         factory = model.factory
-        try:
-            data_source = factory.create_data_source()
-        except Exception:
-            log.exception(
-                "Unable to create data source from factory '{}' "
-                "in plugin '{}'. This may indicate a programming "
-                "error in the plugin".format(
-                    factory.id,
-                    factory.plugin.id))
-            raise
+
+        # Create an instance of the data source contained in the factory
+        data_source = factory.create_data_source()
 
         # Get the slots for this data source. These must be matched to
         # the appropriate values in the environment data values.
