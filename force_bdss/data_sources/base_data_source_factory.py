@@ -70,7 +70,21 @@ class BaseDataSourceFactory(BaseFactory):
         BaseDataSource
             The specific instance of the generated DataSource
         """
-        return self.data_source_class(self)
+
+        try:
+            data_source = self.data_source_class(self)
+        except Exception:
+            log.exception(
+                "Unable to create DataSource from factory {} "
+                "in plugin {}. This may indicate a programming "
+                "error in the plugin".format(
+                    self.id,
+                    self.plugin.id
+                )
+            )
+            raise
+
+        return data_source
 
     def create_model(self, model_data=None):
         """Factory method.
@@ -92,4 +106,16 @@ class BaseDataSourceFactory(BaseFactory):
         if model_data is None:
             model_data = {}
 
-        return self.model_class(self, **model_data)
+        try:
+            model = self.model_class(self, **model_data)
+        except Exception:
+            log.exception(
+                "Unable to create DataSourceModel from factory {} "
+                "in plugin {}. This may indicate a programming "
+                "error in the plugin".format(
+                    self.id,
+                    self.plugin.id)
+            )
+            raise
+
+        return model
