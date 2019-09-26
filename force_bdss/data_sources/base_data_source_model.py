@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from traits.api import (
-    Instance, List, Event, on_trait_change, Property, Tuple, Int
+    Instance, List, Event, on_trait_change
 )
 
 from force_bdss.core.base_model import BaseModel
