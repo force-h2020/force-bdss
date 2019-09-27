@@ -73,23 +73,23 @@ class TestDataSourceUtilities(TestCase):
         self.assertEqual(10, self.old_trait.an_integer)
 
         sync_trait_with_check(self.new_trait, self.old_trait,
-                              'a_string', attr_checks=['an_integer'])
+                              'a_string', attributes=['an_integer'])
         self.assertEqual('new', self.old_trait.a_string)
 
         sync_trait_with_check(self.new_trait, self.old_trait,
-                              'a_string', attr_checks='an_integer')
+                              'a_string', attributes='an_integer')
         self.assertEqual('new', self.old_trait.a_string)
 
         another_trait = AnotherDummyTrait(a_string='new')
         with self.assertRaises(RuntimeError):
             sync_trait_with_check(another_trait, self.old_trait,
-                                  'a_string', attr_checks=['an_integer'])
+                                  'a_string', attributes=['an_integer'])
 
         with self.assertRaises(RuntimeError):
             sync_trait_with_check(another_trait, self.old_trait,
-                                  'a_string', attr_checks='__class__')
+                                  'a_string', attributes='__class__')
 
         sync_trait_with_check(
             another_trait, self.old_trait, 'a_string',
-            attr_checks=['an_integer'], ignore_default=True)
+            attributes=['an_integer'], ignore_default=True)
         self.assertEqual('new', self.old_trait.a_string)

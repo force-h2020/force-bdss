@@ -35,20 +35,20 @@ def trait_check(source, target, name, ignore_default=False):
     return target_attr == source_attr
 
 
-def attr_checker(source, target, attr_checks, ignore_default=False):
-    """Check whether attributes listed in `attr_checks` are equivalent on both
+def attr_checker(source, target, attributes, ignore_default=False):
+    """Check whether attributes listed in `attributes` are equivalent on both
      source and target objects
 
     Parameters
     ----------
     source, target: objects
         Object instances to perform attribute checks on
-    attr_checks: str or list of str
+    attributes: str or list of str
         An attribute or list of attributes to check equivalence on both
         source and target objects
     ignore_default: bool, optional, default: False
         Whether or not to ignore any attributes on source listed in
-        attr_checks that are are equal to their default values
+        attributes that are are equal to their default values
 
     Returns
     -------
@@ -57,30 +57,30 @@ def attr_checker(source, target, attr_checks, ignore_default=False):
         equality check
     """
 
-    # Ensure attr_checks argument is in an iterable format
-    if attr_checks is None:
-        attr_checks = []
-    elif isinstance(attr_checks, str):
-        attr_checks = [attr_checks]
+    # Ensure attributes argument is in an iterable format
+    if attributes is None:
+        attributes = []
+    elif isinstance(attributes, str):
+        attributes = [attributes]
     else:
-        attr_checks = list(attr_checks)
+        attributes = list(attributes)
 
     failed_attr = []
 
-    # Iterate through attr_checks list
-    for attr_name in attr_checks:
+    # Iterate through attributes list
+    for attr_name in attributes:
         if not trait_check(source, target, attr_name, ignore_default):
             failed_attr.append(attr_name)
 
     return failed_attr
 
 
-def sync_trait_with_check(source, target, name, attr_checks=None,
+def sync_trait_with_check(source, target, name, attributes=None,
                           ignore_default=False):
     """Sync an attribute on a HasTraits object (target) with that of another
     HasTraits object (source). Performs the same function as `sync_trait`
     method, but with some extra logic checks on on selected attributes
-    supplied by `attr_checks`.
+    supplied by `attributes`.
 
     Parameters
     ----------
@@ -88,12 +88,12 @@ def sync_trait_with_check(source, target, name, attr_checks=None,
         HasTraits instances to have an attribute synchronised
     name: str
         Name of an attribute on both source and target to be synced
-    attr_checks: str or list of str, optional
+    attributes: str or list of str, optional
         An attribute or list of attributes to check equivalence on both
         source and target objects
     ignore_default: bool, optional, default: False
         Whether or not to ignore any attributes on source listed in
-        attr_checks that are are equal to their default values
+        attributes that are are equal to their default values
 
     Raises
     -----
@@ -102,10 +102,10 @@ def sync_trait_with_check(source, target, name, attr_checks=None,
 
     # Obtain names of any attributes in `attr_check` on both source and target
     # that do not match
-    failed_attr = attr_checker(source, target, attr_checks,
+    failed_attr = attr_checker(source, target, attributes,
                                ignore_default=ignore_default)
 
-    if len(failed_attr) > 0:
+    if failed_attr:
         attr_name = failed_attr[0]
         error_msg = (
             "The {} attribute of source {} ({}) doesn't match the "

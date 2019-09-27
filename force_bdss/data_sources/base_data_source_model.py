@@ -195,7 +195,7 @@ class BaseDataSourceModel(BaseModel):
         for new_info, old_info in zip(new_slot_info, slot_info_attr):
             sync_trait_with_check(
                 new_info, old_info, 'name',
-                attr_checks=['__class__', 'type', 'description'],
+                attributes=['__class__', 'type', 'description'],
                 ignore_default=True
             )
 
