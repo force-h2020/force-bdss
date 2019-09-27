@@ -11,7 +11,7 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
-from .utilities import sync_trait_with_check
+from .data_source_utilities import sync_trait_with_check
 
 logger = getLogger(__name__)
 

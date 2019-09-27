@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from traits.api import HasTraits, Int, Unicode
 
-from force_bdss.data_sources.utilities import (
+from force_bdss.data_sources.data_source_utilities import (
     trait_check, attr_checker, sync_trait_with_check
 )
 
@@ -21,7 +21,7 @@ class AnotherDummyTrait(HasTraits):
     a_string = Unicode('default')
 
 
-class TestUtilities(TestCase):
+class TestDataSourceUtilities(TestCase):
 
     def setUp(self):
         self.old_trait = DummyTrait()
