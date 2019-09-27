@@ -4,7 +4,6 @@ from traits.api import Int
 from traits.testing.api import UnittestTools
 
 from force_bdss.core.input_slot_info import InputSlotInfo
-from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import (
     DummyDataSourceFactory, DummyDataSource, DummyDataSourceModel
@@ -38,29 +37,11 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         self.plugin = DummyExtensionPlugin()
         self.factory = self.plugin.data_source_factories[0]
 
-    def test___sync_slot_info(self):
-        model = self.factory.create_model()
-
-        old_info = InputSlotInfo(name="foo", type='GOOD')
-        new_info = InputSlotInfo(name="bar", type='GOOD')
-
-        model._sync_slot_info(new_info, old_info)
-
-        self.assertEqual(new_info.name, old_info.name)
-
-        wrong_class = OutputSlotInfo(name="foo", type='GOOD')
-        with self.assertRaises(RuntimeError):
-            model._sync_slot_info(wrong_class, old_info)
-
-        wrong_type = InputSlotInfo(name="foo", type='BAD')
-        with self.assertRaises(RuntimeError):
-            model._sync_slot_info(wrong_type, old_info)
-
-    def test_update_slot_info(self):
+    def test__assign_slot_info(self):
 
         model = self.factory.create_model()
 
-        model.update_slot_info(
+        model._assign_slot_info(
             "input_slot_info",
             [InputSlotInfo(name="bar")]
         )
@@ -69,13 +50,27 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         self.assertEqual("TYPE1", model.input_slot_info[0].type)
 
         with self.assertRaises(RuntimeError):
-            model.update_slot_info(
+            model._assign_slot_info(
                 "wrong_attribute_name",
                 [InputSlotInfo(name="bar")]
             )
 
         with self.assertRaises(RuntimeError):
-            model.update_slot_info(
+            model._assign_slot_info(
+                "input_slot_info",
+                [InputSlotInfo(name="bar",
+                               type='wrong_type')]
+            )
+
+        with self.assertRaises(RuntimeError):
+            model._assign_slot_info(
+                "input_slot_info",
+                [InputSlotInfo(name="bar",
+                               description='wrong_desc')]
+            )
+
+        with self.assertRaises(RuntimeError):
+            model._assign_slot_info(
                 "input_slot_info",
                 [InputSlotInfo(name="bar"),
                  InputSlotInfo(name='too_long')]
@@ -150,14 +145,16 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             with self.assertRaises(Exception):
                 model.verify()
 
-    def test___reset_data_source_slots(self):
+    def test_slot_info_defaults(self):
 
-        model = self.factory.create_model()
-        model.input_slot_info[0].name = 'foo'
+        model = DummyDataSourceModel(self.factory)
+        input_slot_info, output_slot_info = model.slot_info_defaults()
 
-        model._reset_data_source_slots()
+        self.assertEqual(1, len(input_slot_info))
+        self.assertEqual(1, len(output_slot_info))
 
-        self.assertEqual('', model.input_slot_info[0].name)
+        self.assertEqual('TYPE1', input_slot_info[0].type)
+        self.assertEqual('TYPE2', output_slot_info[0].type)
 
     def test_verify(self):
 
