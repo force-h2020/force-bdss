@@ -29,7 +29,7 @@ def execute_workflow(workflow, data_values):
 
     log.info("Aggregating KPI data")
 
-    kpi_results = workflow.mco.bind_kpis(data_values)
+    kpi_results = workflow.mco.bind_kpis(ds_results)
 
     return kpi_results
 

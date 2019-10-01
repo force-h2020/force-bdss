@@ -13,8 +13,9 @@ from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import \
     ProbeFactoryRegistry
-from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
-
+from force_bdss.tests.probe_classes.mco import (
+    ProbeMCOFactory, ProbeParameterFactory
+)
 from force_bdss.core.execution import execute_workflow, execute_layer, \
     _bind_data_values
 
@@ -152,6 +153,14 @@ class TestExecution(unittest.TestCase):
 
         mco_factory = ProbeMCOFactory(self.plugin)
         mco_model = mco_factory.create_model()
+        parameter_factory = mco_factory.parameter_factories[0]
+
+        mco_model.parameters = [
+            parameter_factory.create_model({'name': "in1"}),
+            parameter_factory.create_model({'name': "in2"}),
+            parameter_factory.create_model({'name': "in3"}),
+            parameter_factory.create_model({'name': "in4"})
+        ]
         mco_model.kpis = [
             KPISpecification(name="out1")
         ]
@@ -234,7 +243,7 @@ class TestExecution(unittest.TestCase):
             DataValue(value=1, name="in2")
         ]
 
-        # dummy addition DataSource(a, b) that also returns it's inputs
+        # dummy addition DataSource(a, b) that also returns its inputs
         # [a, b, a+b]
         def adder(model, parameters):
             first = parameters[0].value
@@ -252,6 +261,7 @@ class TestExecution(unittest.TestCase):
             run_function=adder)
 
         mco_factory = ProbeMCOFactory(self.plugin)
+        parameter_factory = mco_factory.parameter_factories[0]
         mco_model = mco_factory.create_model()
 
         # DataSourceModel stats constant throughout
@@ -266,7 +276,12 @@ class TestExecution(unittest.TestCase):
             OutputSlotInfo(name="out3")
         ]
 
-        # test KPI spec that follows DataSource slots exactly
+        # test Parameter and KPI spec that follows DataSource slots
+        # exactly
+        mco_model.parameters = [
+            parameter_factory.create_model({'name': "in1"}),
+            parameter_factory.create_model({'name': "in2"})
+        ]
         mco_model.kpis = [
             KPISpecification(name="out1"),
             KPISpecification(name="out2"),
@@ -280,7 +295,6 @@ class TestExecution(unittest.TestCase):
             ]
         )
         wf.execution_layers[0].data_sources.append(model)
-
         kpi_results = execute_workflow(wf, data_values)
         self.assertEqual(len(kpi_results), 3)
         self.assertEqual(kpi_results[0].value, 99)
