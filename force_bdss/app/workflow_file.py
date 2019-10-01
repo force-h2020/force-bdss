@@ -34,11 +34,13 @@ class WorkflowFile(HasStrictTraits):
         """ Read the workflow from disk. """
         if self.reader is None:
             raise ValueError("No workflow reader specified.")
-        self.workflow = self.reader.read(self.path)
+
+        with open(self.path, 'r') as input_file:
+            self.workflow = self.reader.read(input_file)
 
     def write(self):
         """ Write the workflow to disk. """
-        if self.reader is None:
+        if self.writer is None:
             raise ValueError("No workflow writer specified.")
         self.workflow = self.writer.write(self.workflow, self.path)
 
