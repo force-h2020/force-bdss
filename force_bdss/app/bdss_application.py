@@ -56,27 +56,34 @@ class BDSSApplication(Application):
     def run(self):
         if self.start():
             # read the workflow
-            self.workflow_file.reader = WorkflowReader(self.factory_registry)
-            try:
-                self.workflow_file.read()
-            except Exception:
-                log.exception(
-                    "Unable to open workflow file '{}'.".format(
-                        self.workflow_file.path
-                    )
-                )
-                self.stop()
-                sys.exit(1)
+            self._load_workflow()
 
             # Do the actual work.
-            try:
-                self.operation.run()
-            except Exception:
-                log.exception("Error running workflow.")
-                self.stop()
-                sys.exit(1)
+            self._run_workflow()
 
             self.stop()
+
+    def _run_workflow(self):
+        try:
+            self.operation.run()
+        except Exception:
+            log.exception("Error running workflow.")
+            self.stop()
+            sys.exit(1)
+
+    def _load_workflow(self):
+        # read the workflow
+        self.workflow_file.reader = WorkflowReader(self.factory_registry)
+        try:
+            self.workflow_file.read()
+        except Exception:
+            log.exception(
+                "Unable to open workflow file '{}'.".format(
+                    self.workflow_file.path
+                )
+            )
+            self.stop()
+            sys.exit(1)
 
     def _set_ets_toolkit(self, toolkit='null'):
         # This is a command-line app, we don't want GUI event loops

@@ -8,6 +8,7 @@ from traits.etsconfig.api import ETSConfig
 from force_bdss.app.bdss_application import (
     BDSSApplication, _load_failure_callback, _import_extensions
 )
+from force_bdss.app.optimize_operation import OptimizeOperation
 from force_bdss.core.workflow import Workflow
 from force_bdss.tests import fixtures
 
@@ -29,8 +30,8 @@ class TestBDSSApplication(unittest.TestCase):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 app = BDSSApplication(False, "foo/bar")
-        self.assertFalse(app.evaluate)
-        self.assertEqual(app.workflow_filepath, "foo/bar")
+        self.assertIsInstance(app.operation, OptimizeOperation)
+        self.assertEqual(app.workflow_file.path, "foo/bar")
         self.assertEqual(ETSConfig.toolkit, 'null')
 
     def test_toolkit(self):
@@ -79,12 +80,14 @@ class TestBDSSApplication(unittest.TestCase):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 app = BDSSApplication(False, fixtures.get("test_empty.json"))
+                app._load_workflow()
 
-        self.assertIsInstance(app.workflow, Workflow)
+        self.assertIsInstance(app.workflow_file.workflow, Workflow)
 
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 app = BDSSApplication(True, fixtures.get("test_empty.json"))
+                app._load_workflow()
 
-        self.assertIsInstance(app.workflow, Workflow)
+        self.assertIsInstance(app.workflow_file.workflow, Workflow)
