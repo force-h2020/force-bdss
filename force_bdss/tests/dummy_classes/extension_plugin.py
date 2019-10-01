@@ -1,4 +1,4 @@
-from force_bdss.base_extension_plugin import BaseExtensionPlugin
+from force_bdss.core_plugins.base_extension_plugin import BaseExtensionPlugin
 from force_bdss.ids import plugin_id
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory

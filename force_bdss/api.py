@@ -1,4 +1,4 @@
-from .base_extension_plugin import BaseExtensionPlugin  # noqa
+from .core_driver_events import *  # noqa
 from .ids import plugin_id, factory_id  # noqa
 
 from .core.base_factory import BaseFactory  # noqa
@@ -17,6 +17,8 @@ from .core.verifier import verify_workflow  # noqa
 from .core.verifier import VerifierError  # noqa
 from .core.execution import execute_layer, execute_workflow  # noqa
 
+from .core_plugins.base_extension_plugin import BaseExtensionPlugin  # noqa
+
 from .data_sources.base_data_source_model import BaseDataSourceModel  # noqa
 from .data_sources.base_data_source import BaseDataSource  # noqa
 from .data_sources.base_data_source_factory import BaseDataSourceFactory  # noqa
@@ -31,11 +33,8 @@ from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
 from .mco.base_mco import BaseMCO  # noqa
 from .mco.base_mco_factory import BaseMCOFactory  # noqa
 from .mco.i_mco_factory import IMCOFactory  # noqa
-
 from .mco.parameters.base_mco_parameter_factory import BaseMCOParameterFactory  # noqa
 from .mco.parameters.base_mco_parameter import BaseMCOParameter  # noqa
-
-from .core_driver_events import *  # noqa
 
 from .notification_listeners.i_notification_listener_factory import INotificationListenerFactory  # noqa
 from .notification_listeners.base_notification_listener import BaseNotificationListener  # noqa
