@@ -58,7 +58,7 @@ class TestBDSSApplication(unittest.TestCase):
                                    Exception("hello"))
 
         log.check(
-            ('force_bdss.bdss_application',
+            ('force_bdss.app.bdss_application',
              'ERROR',
              "Unable to load plugin foo. Exception: "
              "Exception. Message: hello"),

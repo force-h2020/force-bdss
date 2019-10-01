@@ -5,7 +5,7 @@ from traits.api import (
 )
 
 from force_bdss.core_driver_events import MCOFinishEvent, MCOStartEvent
-from force_bdss.mco.mco import BaseMCO
+from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener
 )
