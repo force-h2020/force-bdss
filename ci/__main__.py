@@ -5,8 +5,8 @@ DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
 
 CORE_DEPS = [
-    "envisage==4.7.1-1",
-    "click==6.7-1",
+    "envisage==4.7.2-1",
+    "click==7.0-1",
 ]
 
 DOCS_DEPS = [
@@ -14,13 +14,13 @@ DOCS_DEPS = [
 ]
 
 DEV_DEPS = [
-    "flake8==3.3.0-2",
+    "flake8==3.7.7-1",
     "coverage==4.3.4-1",
     "testfixtures==4.10.0-1",
 ]
 
 PIP_DEPS = [
-    "stevedore==1.24.0"
+    "stevedore==1.30.1"
 ]
 
 
@@ -69,13 +69,19 @@ def install(python_version):
 
 @cli.command(help="Run the tests")
 @python_version_option
-def test(python_version):
+@click.option(
+    "--verbose/--quiet", default=True,
+    help="Run tests in verbose mode? [default: --verbose]",
+)
+def test(python_version, verbose):
     env_name = get_env_name(python_version)
 
-    check_call([
-        "edm", "run", "-e", env_name, "--", "python", "-m", "unittest",
-        "discover"
-    ])
+    verbosity_args = ["--verbose"] if verbose else []
+
+    check_call(
+        ["edm", "run", "-e", env_name, "--", "python", "-m", "unittest",
+         "discover"] + verbosity_args
+    )
 
 
 @cli.command(help="Run flake")
