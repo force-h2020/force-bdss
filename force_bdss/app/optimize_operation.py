@@ -70,7 +70,7 @@ class OptimizeOperation(HasStrictTraits):
         """ Create the MCO from the model's factory. """
         mco_factory = self.workflow.mco.factory
         try:
-            self.mco = mco_factory.create_optimizer(self.workflow_file.path)
+            self.mco = mco_factory.create_optimizer()
         except Exception:
             log.exception((
                 "Unable to instantiate optimizer for mco '{}' in "
