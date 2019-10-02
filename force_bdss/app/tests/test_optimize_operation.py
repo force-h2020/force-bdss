@@ -51,6 +51,23 @@ class TestOptimizeOperation(TestCase):
         operation.workflow_file.read()
         self.assertIsNotNone(operation.workflow)
 
+    def test_run_missing_mco(self):
+        # Test for missing MCO
+        self.operation.workflow.mco = None
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Workflow file has errors"):
+                self.operation.run()
+            capture.check(
+                ('force_bdss.app.optimize_operation',
+                 'ERROR',
+                 'Unable to execute workflow due to verification errors:'),
+                ('force_bdss.app.optimize_operation',
+                 'ERROR',
+                 'Workflow has no MCO'),
+            )
+
     def test__initialize_listeners(self):
 
         # Test normal operation
