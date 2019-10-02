@@ -96,6 +96,31 @@ class TestBDSSApplication(unittest.TestCase):
 
         self.assertIsInstance(app.workflow_file.workflow, Workflow)
 
+    def test_run_workflow_error(self):
+
+        with testfixtures.LogCapture() as capture:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                app = BDSSApplication(
+                    False, fixtures.get("test_empty.json")
+                )
+                app._load_workflow()
+                capture.clear()
+                with self.assertRaises(Exception):
+                    app._run_workflow()
+            capture.check(
+                ('force_bdss.app.optimize_operation',
+                 'ERROR',
+                 'Unable to execute workflow due to verification errors:'),
+                ('force_bdss.app.optimize_operation',
+                 'ERROR', 'Workflow has no MCO'),
+                ('force_bdss.app.optimize_operation',
+                 'ERROR',
+                 'Workflow has no execution layers'),
+                ('force_bdss.app.bdss_application',
+                 'ERROR', 'Error running workflow.')
+            )
+
     def test_nonexistent_file(self):
 
         # Provide a workflow file path that does not exists
@@ -114,3 +139,20 @@ class TestBDSSApplication(unittest.TestCase):
                  "Unable to open workflow file '{}'.".format(
                      fixtures.get("test_nonexistent.json")))
             )
+
+    def test_run_error_raise_sys_exit(self):
+        # Sys exit on non-existent file
+        with testfixtures.LogCapture():
+            app = BDSSApplication(
+                False, fixtures.get("test_nonexistent.json")
+            )
+            with self.assertRaises(SystemExit):
+                app.run()
+
+        # Sys exit on empty workflow file
+        with testfixtures.LogCapture():
+            app = BDSSApplication(
+                False, fixtures.get("test_empty.json")
+            )
+            with self.assertRaises(SystemExit):
+                app.run()
