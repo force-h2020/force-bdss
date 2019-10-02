@@ -106,7 +106,8 @@ class TestBDSSApplication(unittest.TestCase):
                     False, fixtures.get("test_nonexistent.json")
                 )
                 capture.clear()
-                app._load_workflow()
+                with self.assertRaises(FileNotFoundError):
+                    app._load_workflow()
             capture.check(
                 ('force_bdss.app.bdss_application',
                  'ERROR',

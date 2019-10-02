@@ -30,7 +30,7 @@ def run(evaluate, logfile, workflow_filepath):
     try:
         application = BDSSApplication(
             evaluate=evaluate,
-            workflow_filepath=workflow_filepath
+            workflow_file=workflow_filepath
         )
 
         application.run()
