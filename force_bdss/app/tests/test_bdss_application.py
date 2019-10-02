@@ -79,7 +79,9 @@ class TestBDSSApplication(unittest.TestCase):
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                app = BDSSApplication(False, fixtures.get("test_empty.json"))
+                app = BDSSApplication(
+                    False, fixtures.get("test_empty.json")
+                )
                 app._load_workflow()
 
         self.assertIsInstance(app.workflow_file.workflow, Workflow)
@@ -87,7 +89,27 @@ class TestBDSSApplication(unittest.TestCase):
         with testfixtures.LogCapture():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                app = BDSSApplication(True, fixtures.get("test_empty.json"))
+                app = BDSSApplication(
+                    True, fixtures.get("test_empty.json")
+                )
                 app._load_workflow()
 
         self.assertIsInstance(app.workflow_file.workflow, Workflow)
+
+    def test_nonexistent_file(self):
+
+        # Provide a workflow file path that does not exists
+        with testfixtures.LogCapture() as capture:
+            with warnings.catch_warnings():
+                warnings.simplefilter("error")
+                app = BDSSApplication(
+                    False, fixtures.get("test_nonexistent.json")
+                )
+                capture.clear()
+                app._load_workflow()
+            capture.check(
+                ('force_bdss.app.bdss_application',
+                 'ERROR',
+                 "Unable to open workflow file '{}'.".format(
+                     fixtures.get("test_nonexistent.json")))
+            )

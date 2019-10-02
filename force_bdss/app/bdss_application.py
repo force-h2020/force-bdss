@@ -55,11 +55,16 @@ class BDSSApplication(Application):
 
     def run(self):
         if self.start():
-            # read the workflow
-            self._load_workflow()
+            try:
+                # read the workflow
+                self._load_workflow()
 
-            # Do the actual work.
-            self._run_workflow()
+                # Do the actual work.
+                self._run_workflow()
+
+            except:
+                self.stop()
+                sys.exit(1)
 
             self.stop()
 
@@ -68,8 +73,6 @@ class BDSSApplication(Application):
             self.operation.run()
         except Exception:
             log.exception("Error running workflow.")
-            self.stop()
-            sys.exit(1)
 
     def _load_workflow(self):
         # read the workflow
@@ -82,8 +85,6 @@ class BDSSApplication(Application):
                     self.workflow_file.path
                 )
             )
-            self.stop()
-            sys.exit(1)
 
     def _set_ets_toolkit(self, toolkit='null'):
         # This is a command-line app, we don't want GUI event loops
