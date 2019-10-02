@@ -1,12 +1,18 @@
+from traits.api import Instance
+
 from force_bdss.app.workflow_file import WorkflowFile
-from force_bdss.core_plugins.factory_registry_plugin import (
-    FactoryRegistryPlugin
-)
 from force_bdss.io.workflow_reader import WorkflowReader
 
-factory_registry = FactoryRegistryPlugin()
+from .factory_registry import ProbeFactoryRegistry
+
+
+class ProbeWorkflowReader(WorkflowReader):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(factory_registry=ProbeFactoryRegistry())
 
 
 class ProbeWorkflowFile(WorkflowFile):
 
-    reader = WorkflowReader(factory_registry)
+    def _reader_default(self):
+        return ProbeWorkflowReader()
