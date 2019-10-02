@@ -22,4 +22,3 @@ class TestWorkflowFile(TestCase):
         self.workflow_file.path = fixtures.get("test_empty.json")
         self.workflow_file.read()
         self.assertIsNotNone(self.workflow_file.workflow)
-
