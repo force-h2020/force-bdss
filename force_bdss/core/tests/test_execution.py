@@ -14,7 +14,7 @@ from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import \
     ProbeFactoryRegistry
 from force_bdss.tests.probe_classes.mco import (
-    ProbeMCOFactory, ProbeParameterFactory
+    ProbeMCOFactory
 )
 from force_bdss.core.execution import execute_workflow, execute_layer, \
     _bind_data_values

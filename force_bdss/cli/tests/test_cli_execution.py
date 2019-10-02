@@ -16,7 +16,7 @@ def cd(dir):
         os.chdir(cwd)
 
 
-class TestExecution(unittest.TestCase):
+class TestCLIExecution(unittest.TestCase):
     def test_plain_invocation_mco(self):
         with cd(fixtures.dirpath()):
             try:
