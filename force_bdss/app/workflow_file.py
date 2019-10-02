@@ -42,7 +42,7 @@ class WorkflowFile(HasStrictTraits):
         """ Write the workflow to disk. """
         if self.writer is None:
             raise ValueError("No workflow writer specified.")
-        self.workflow = self.writer.write(self.workflow, self.path)
+        self.writer.write(self.workflow, self.path)
 
     def verify(self):
         """ Find any errors in the workflow. """
