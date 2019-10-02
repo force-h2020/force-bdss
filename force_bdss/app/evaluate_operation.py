@@ -32,8 +32,8 @@ class EvaluateOperation(HasStrictTraits):
             mco_communicator = mco_factory.create_communicator()
         except Exception:
             log.exception((
-                "Unable to create communicator from MCO factory '' "
-                "in plugin '{}'. This may indicate a programming "
+                "Unable to create communicator from MCO factory '{}'"
+                " in plugin '{}'. This may indicate a programming "
                 "error in the plugin").format(
                     mco_factory.id,
                     mco_factory.plugin.id))
