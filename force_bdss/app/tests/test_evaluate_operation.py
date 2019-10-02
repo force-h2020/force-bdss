@@ -69,7 +69,6 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow.mco = None
         with testfixtures.LogCapture() as capture:
             self.operation.run()
-
             capture.check(
                 ('force_bdss.app.evaluate_operation',
                  'INFO',
@@ -100,14 +99,15 @@ class TestEvaluateOperation(TestCase):
         factory = self.registry.mco_factories[0]
         self.operation.workflow.mco = factory.create_model()
 
-        with self.assertRaisesRegex(
-                RuntimeError,
-                r"The number of data values returned by the MCO "
-                r"\(1 values\) does not match the number of "
-                r"parameters specified \(0 values\). This is either "
-                "a MCO plugin error or the workflow file is "
-                "corrupted."):
-            self.operation.run()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    r"The number of data values returned by the MCO "
+                    r"\(1 values\) does not match the number of "
+                    r"parameters specified \(0 values\). This is either "
+                    "a MCO plugin error or the workflow file is "
+                    "corrupted."):
+                self.operation.run()
 
     def test_error_for_incorrect_output_slots(self):
 
@@ -117,13 +117,14 @@ class TestEvaluateOperation(TestCase):
         factory = self.registry.data_source_factories[0]
         factory.run_function = probe_run
 
-        with self.assertRaisesRegex(
-                RuntimeError,
-                r"The number of data values \(2 values\)"
-                " returned by 'test_data_source' does not match"
-                " the number of output slots it specifies "
-                r"\(1 values\). This is likely a plugin error."):
-            self.operation.run()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    r"The number of data values \(2 values\)"
+                    " returned by 'test_data_source' does not match"
+                    " the number of output slots it specifies "
+                    r"\(1 values\). This is likely a plugin error."):
+                self.operation.run()
 
     def test_error_for_incorrect_return_type(self):
 
@@ -133,13 +134,14 @@ class TestEvaluateOperation(TestCase):
         factory = self.registry.data_source_factories[0]
         factory.run_function = probe_run
 
-        with self.assertRaisesRegex(
-                RuntimeError,
-                "The run method of data source "
-                "test_data_source must return a list. It "
-                r"returned instead <.* 'str'>. Fix the run\(\)"
-                " method to return the appropriate entity."):
-            self.operation.run()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The run method of data source "
+                    "test_data_source must return a list. It "
+                    r"returned instead <.* 'str'>. Fix the run\(\)"
+                    " method to return the appropriate entity."):
+                self.operation.run()
 
     def test_error_for_incorrect_data_value_entries(self):
 
@@ -149,16 +151,17 @@ class TestEvaluateOperation(TestCase):
         factory = self.registry.data_source_factories[0]
         factory.run_function = probe_run
 
-        with self.assertRaisesRegex(
-                RuntimeError,
-                "The result list returned by DataSource "
-                "test_data_source"
-                " contains an entry that is not a DataValue."
-                " An entry of type <.* 'str'> was instead found"
-                " in position 0."
-                r" Fix the DataSource.run\(\) method to"
-                " return the appropriate entity."):
-            self.operation.run()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    "The result list returned by DataSource "
+                    "test_data_source"
+                    " contains an entry that is not a DataValue."
+                    " An entry of type <.* 'str'> was instead found"
+                    " in position 0."
+                    r" Fix the DataSource.run\(\) method to"
+                    " return the appropriate entity."):
+                self.operation.run()
 
     def test_error_for_missing_ds_output_names(self):
 
@@ -166,12 +169,13 @@ class TestEvaluateOperation(TestCase):
         factory.output_slots_size = 2
         self.operation.workflow_file.read()
 
-        with self.assertRaisesRegex(
-                RuntimeError,
-                r"The number of data values \(2 values\)"
-                " returned by 'test_data_source' does not match"
-                " the number of user-defined names"):
-            self.operation.run()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    RuntimeError,
+                    r"The number of data values \(2 values\)"
+                    " returned by 'test_data_source' does not match"
+                    " the number of user-defined names"):
+                self.operation.run()
 
     def test_data_source_broken(self):
 
