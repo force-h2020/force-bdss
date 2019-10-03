@@ -13,10 +13,9 @@ from force_bdss.tests.probe_classes.factory_registry import \
 from force_bdss.tests.probe_classes.mco import (
     ProbeMCOFactory
 )
-from force_bdss.core.execution import execute_workflow
 
 
-class TestExecuteWorkflow(unittest.TestCase):
+class TestWorkflow(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
@@ -141,9 +140,9 @@ class TestExecuteWorkflow(unittest.TestCase):
         ]
         wf.execution_layers[3].data_sources.append(model)
 
-        kpi_results = execute_workflow(wf, data_values)
-        self.assertEqual(len(kpi_results), 1)
-        self.assertEqual(kpi_results[0].value, 8750)
+        kpi_results = wf.execute(data_values)
+        self.assertEqual(1, len(kpi_results))
+        self.assertEqual(8750, kpi_results[0].value)
 
     def test_kpi_specification_adherence(self):
         # Often the user may only wish to treat a subset of DataSource
@@ -208,7 +207,7 @@ class TestExecuteWorkflow(unittest.TestCase):
             ]
         )
         wf.execution_layers[0].data_sources.append(model)
-        kpi_results = execute_workflow(wf, data_values)
+        kpi_results = wf.execute(data_values)
         self.assertEqual(len(kpi_results), 3)
         self.assertEqual(kpi_results[0].value, 99)
         self.assertEqual(kpi_results[1].value, 1)
@@ -233,7 +232,7 @@ class TestExecuteWorkflow(unittest.TestCase):
                     ]
                 )
                 wf.execution_layers[0].data_sources.append(model)
-                kpi_results = execute_workflow(wf, data_values)
+                kpi_results = wf.execute(data_values)
                 self.assertEqual(len(kpi_results), num_outputs)
 
                 for i in range(num_outputs):

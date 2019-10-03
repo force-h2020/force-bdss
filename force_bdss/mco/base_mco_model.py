@@ -80,7 +80,6 @@ class BaseMCOModel(BaseModel):
         data_values : list of DataValues
             The data values corresponding to the KPIs.
         """
-        kpi_results = []
         kpi_names = [kpi.name for kpi in self.kpis]
 
         kpi_results = [

@@ -48,8 +48,7 @@ class Workflow(HasStrictTraits):
             available_data_values += ds_results
 
         log.info("Aggregating KPI data")
-
-        kpi_results = self.mco.bind_kpis(data_values)
+        kpi_results = self.mco.bind_kpis(available_data_values)
 
         return kpi_results
 
