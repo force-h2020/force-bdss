@@ -1,7 +1,5 @@
 import unittest
 
-import testfixtures
-
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
@@ -10,103 +8,18 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
-from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import \
     ProbeFactoryRegistry
 from force_bdss.tests.probe_classes.mco import (
     ProbeMCOFactory
 )
-from force_bdss.core.execution import execute_workflow, execute_layer, \
-    _bind_data_values
+from force_bdss.core.execution import execute_workflow
 
 
-class TestExecution(unittest.TestCase):
+class TestExecuteWorkflow(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
-
-    def test_bind_data_values(self):
-        data_values = [
-            DataValue(name="foo"),
-            DataValue(name="bar"),
-            DataValue(name="baz")
-        ]
-
-        slot_map = (
-            InputSlotInfo(name="baz"),
-            InputSlotInfo(name="bar")
-        )
-
-        slots = (
-            Slot(),
-            Slot()
-        )
-
-        result = _bind_data_values(data_values, slot_map, slots)
-        self.assertEqual(result[0], data_values[2])
-        self.assertEqual(result[1], data_values[1])
-
-        # Check the errors. Only one slot map for two slots.
-        slot_map = (
-            InputSlotInfo(name="baz"),
-        )
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    "The length of the slots is not equal to the length of"
-                    " the slot map"):
-                _bind_data_values(data_values, slot_map, slots)
-
-        # missing value in the given data values.
-        slot_map = (
-            InputSlotInfo(name="blap"),
-            InputSlotInfo(name="bar")
-        )
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    "Unable to find requested name 'blap' in available"
-                    " data values."):
-                _bind_data_values(data_values, slot_map, slots)
-
-    def test_compute_layer_results(self):
-        data_values = [
-            DataValue(name="foo"),
-            DataValue(name="bar"),
-            DataValue(name="baz"),
-            DataValue(name="quux")
-        ]
-
-        def run(self, *args, **kwargs):
-            return [DataValue(value=1), DataValue(value=2), DataValue(value=3)]
-
-        ds_factory = self.registry.data_source_factories[0]
-        ds_factory.input_slots_size = 2
-        ds_factory.output_slots_size = 3
-        ds_factory.run_function = run
-        evaluator_model = ds_factory.create_model()
-
-        evaluator_model.input_slot_info = [
-            InputSlotInfo(name="foo"),
-            InputSlotInfo(name="quux")
-        ]
-        evaluator_model.output_slot_info = [
-            OutputSlotInfo(name="one"),
-            OutputSlotInfo(name=""),
-            OutputSlotInfo(name="three")
-        ]
-
-        res = execute_layer(
-            ExecutionLayer(data_sources=[evaluator_model]),
-            data_values,
-        )
-        self.assertEqual(len(res), 2)
-        self.assertEqual(res[0].name, "one")
-        self.assertEqual(res[0].value, 1)
-        self.assertEqual(res[1].name, "three")
-        self.assertEqual(res[1].value, 3)
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution

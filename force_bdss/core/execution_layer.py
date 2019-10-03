@@ -96,7 +96,6 @@ class ExecutionLayer(HasStrictTraits):
                     " This is likely a plugin error.").format(
                     len(res), factory.name, len(out_slots)
                 )
-
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
 

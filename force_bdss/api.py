@@ -15,7 +15,7 @@ from .core.kpi_specification import KPISpecification  # noqa
 from .core.execution_layer import ExecutionLayer  # noqa
 from .core.verifier import verify_workflow  # noqa
 from .core.verifier import VerifierError  # noqa
-from .core.execution import execute_layer, execute_workflow  # noqa
+from .core.execution import execute_workflow  # noqa
 
 from .core_plugins.base_extension_plugin import BaseExtensionPlugin  # noqa
 
