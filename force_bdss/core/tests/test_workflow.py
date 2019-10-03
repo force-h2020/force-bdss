@@ -16,6 +16,7 @@ from force_bdss.tests.probe_classes.mco import (
 
 
 class TestWorkflow(unittest.TestCase):
+
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin

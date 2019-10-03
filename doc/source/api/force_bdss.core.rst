@@ -35,14 +35,6 @@ force\_bdss\.core\.data\_value module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\.execution module
------------------------------------
-
-.. automodule:: force_bdss.core.execution
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force\_bdss\.core\.execution\_layer module
 ------------------------------------------
 

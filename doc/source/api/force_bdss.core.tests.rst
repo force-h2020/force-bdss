@@ -12,13 +12,22 @@ force\_bdss\.core\.tests\.test\_data\_value module
     :undoc-members:
     :show-inheritance:
 
-force\_bdss\.core\.tests\.test\_execution module
-------------------------------------------------
+force\_bdss\.core\.tests\.test\_execution\_layer module
+-------------------------------------------------------
 
-.. automodule:: force_bdss.core.tests.test_execution
+.. automodule:: force_bdss.core.tests.test_execution_layer
     :members:
     :undoc-members:
     :show-inheritance:
+
+force\_bdss\.core\.tests\.test\_factory\_registry module
+--------------------------------------------------------
+
+.. automodule:: force_bdss.core.tests.test_factory_registry
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 force\_bdss\.core\.tests\.test\_input\_slot\_info module
 --------------------------------------------------------
@@ -44,6 +53,13 @@ force\_bdss\.core\.tests\.test\_verifier module
     :undoc-members:
     :show-inheritance:
 
+force\_bdss\.core\.tests\.test\_workflow module
+------------------------------------------------
+
+.. automodule:: force_bdss.core.tests.test_workflow
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------
