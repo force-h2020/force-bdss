@@ -18,6 +18,10 @@ log = logging.getLogger(__name__)
 
 @provides(IOperation)
 class OptimizeOperation(HasStrictTraits):
+    """Performs a full MCO run on a system described by a `Workflow`
+    object, based on the format given by a `BaseMCO` class. Contains
+    optional `NotificationListener` classes in order to broadcast
+    information during the MCO run."""
 
     #: The workflow file being operated on.
     workflow_file = Instance(WorkflowFile)

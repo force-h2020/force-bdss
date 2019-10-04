@@ -23,6 +23,10 @@ log = logging.getLogger(__name__)
 
 
 class BDSSApplication(Application):
+    """Main application for the BDSS, performs an operation defined
+    by an `Operation` class on a multi-objective process described
+    by a `Workflow` object, interpreted by the `WorkflowFile` class."""
+
     id = "force.bdss_core.bdss_application"
 
     #: The factory registry for workflow components.

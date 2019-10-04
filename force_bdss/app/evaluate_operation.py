@@ -11,6 +11,9 @@ log = logging.getLogger(__name__)
 
 @provides(IOperation)
 class EvaluateOperation(HasStrictTraits):
+    """Performs the evaluation of a single point in an MCO,
+    based on the system described by a `Workflow` object.
+    """
 
     #: The workflow file being operated on.
     workflow_file = Instance(WorkflowFile)
