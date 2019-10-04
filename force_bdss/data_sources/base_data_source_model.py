@@ -66,7 +66,7 @@ class BaseDataSourceModel(BaseModel):
                 "Unable to create data source from factory '%s', plugin "
                 "'%s'. This might indicate a  programming error",
                 self.factory.id,
-                self.factory.plugin.id,
+                self.factory.plugin_id,
             )
             raise
 
@@ -78,7 +78,7 @@ class BaseDataSourceModel(BaseModel):
                 " created by factory '%s', plugin '%s'. This might "
                 "indicate a programming error.",
                 self.factory.id,
-                self.factory.plugin.id
+                self.factory.plugin_id
             )
             raise
 
