@@ -59,7 +59,7 @@ class OptimizeOperation(HasStrictTraits):
                 "raised exception. This might indicate a "
                 "programming error in the plugin.").format(
                     self.mco.factory.id,
-                    self.mco.factory.plugin.id
+                    self.mco.factory.plugin_id
                 )
             )
             raise
@@ -79,7 +79,7 @@ class OptimizeOperation(HasStrictTraits):
                 "This might indicate a programming error in the "
                 "plugin.").format(
                     mco_factory.id,
-                    mco_factory.plugin.id
+                    mco_factory.plugin_id
                 )
             )
             raise
@@ -112,7 +112,7 @@ class OptimizeOperation(HasStrictTraits):
                     "'{}' in plugin '{}'. The listener will be dropped and "
                     "computation will continue.").format(
                         listener.factory.id,
-                        listener.factory.plugin.id
+                        listener.factory.plugin_id
                     )
                 )
                 self._finalize_listener(listener)
@@ -130,7 +130,7 @@ class OptimizeOperation(HasStrictTraits):
                 "Exception while finalizing listener '{}'"
                 " in plugin '{}'.").format(
                     listener.factory.id,
-                    listener.factory.plugin.id
+                    listener.factory.plugin_id
                 )
             )
 
@@ -147,7 +147,7 @@ class OptimizeOperation(HasStrictTraits):
                     "This may indicate a programming error in the "
                     "plugin.").format(
                         factory.id,
-                        factory.plugin.id
+                        factory.plugin_id
                     )
                 )
                 raise
@@ -159,7 +159,7 @@ class OptimizeOperation(HasStrictTraits):
                     "Failed to initialize listener with id '{}' in "
                     "plugin '{}'. The listener will be dropped.").format(
                         factory.id,
-                        factory.plugin.id
+                        factory.plugin_id
                     )
                 )
                 continue
