@@ -28,6 +28,9 @@ class BaseFactory(HasStrictTraits):
     def __init__(self, plugin, *args, **kwargs):
         super(BaseFactory, self).__init__(*args, **kwargs)
 
+        # For backwards compatibility, we allow passing in of
+        # an Envisage Plugin instance as an argument to extract
+        # plugin_id
         if isinstance(plugin, Plugin):
             self.plugin_id = plugin.id
         else:
