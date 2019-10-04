@@ -23,13 +23,19 @@ class BaseFactory(HasStrictTraits):
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
     #: in your subclass.
-    plugin = Instance(Plugin, allow_none=False)
+    plugin_id = Unicode(allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
-        super(BaseFactory, self).__init__(plugin=plugin, *args, **kwargs)
+        super(BaseFactory, self).__init__(*args, **kwargs)
+
+        if isinstance(plugin, Plugin):
+            self.plugin_id = plugin.id
+        else:
+            self.plugin_id = plugin
 
         self.name = self.get_name()
         self.description = self.get_description()
+
         identifier = self.get_identifier()
         try:
             id = self._global_id(identifier)
@@ -64,4 +70,4 @@ class BaseFactory(HasStrictTraits):
         return "No description available."
 
     def _global_id(self, identifier):
-        return factory_id(self.plugin.id, identifier)
+        return factory_id(self.plugin_id, identifier)
