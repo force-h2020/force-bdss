@@ -12,11 +12,11 @@ from force_bdss.notification_listeners.base_notification_listener_factory \
     import \
     BaseNotificationListenerFactory
 from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
-from .notification_listeners.i_notification_listener_factory import \
+from force_bdss.notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
-from .data_sources.i_data_source_factory import IDataSourceFactory
-from .mco.i_mco_factory import IMCOFactory
-from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.mco.i_mco_factory import IMCOFactory
+from force_bdss.ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
 class BaseExtensionPlugin(Plugin):

@@ -1,6 +1,7 @@
 from traits.api import HasTraits, Interface
 
-from force_bdss.base_extension_plugin import BaseExtensionPlugin
+from force_bdss.core_plugins.base_extension_plugin import \
+    BaseExtensionPlugin
 from force_bdss.core_plugins.service_offer_plugin import \
     ServiceOfferExtensionPlugin
 from force_bdss.ids import plugin_id

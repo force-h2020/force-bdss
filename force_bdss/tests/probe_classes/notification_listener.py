@@ -9,6 +9,10 @@ def pass_function(*args, **kwargs):
     pass
 
 
+def raise_exception(*args, **kwargs):
+    raise Exception()
+
+
 class ProbeNotificationListener(BaseNotificationListener):
     initialize_called = Bool(False)
     deliver_called = Bool(False)
@@ -49,6 +53,10 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
     raises_on_create_model = Bool(False)
     raises_on_create_listener = Bool(False)
 
+    raises_on_initialize_listener = Bool(False)
+    raises_on_finalize_listener = Bool(False)
+    raises_on_deliver_listener = Bool(False)
+
     def get_name(self):
         return "test_notification_listener"
 
@@ -74,8 +82,23 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
         if self.raises_on_create_listener:
             raise Exception("ProbeNotificationListenerFactory.create_listener")
 
+        if self.raises_on_initialize_listener:
+            initialize_function = raise_exception
+        else:
+            initialize_function = self.initialize_function
+
+        if self.raises_on_finalize_listener:
+            finalize_function = raise_exception
+        else:
+            finalize_function = self.finalize_function
+
+        if self.raises_on_deliver_listener:
+            deliver_function = raise_exception
+        else:
+            deliver_function = self.deliver_function
+
         return self.listener_class(
             self,
-            initialize_function=self.initialize_function,
-            deliver_function=self.deliver_function,
-            finalize_function=self.finalize_function)
+            initialize_function=initialize_function,
+            deliver_function=deliver_function,
+            finalize_function=finalize_function)

@@ -13,50 +13,10 @@ Subpackages
 Submodules
 ----------
 
-force\_bdss\.tests\.test\_base\_extension\_plugin module
---------------------------------------------------------
-
-.. automodule:: force_bdss.tests.test_base_extension_plugin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force\_bdss\.tests\.test\_bdss\_application module
---------------------------------------------------
-
-.. automodule:: force_bdss.tests.test_bdss_application
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 force\_bdss\.tests\.test\_core\_driver\_events module
 -----------------------------------------------------
 
 .. automodule:: force_bdss.tests.test_core_driver_events
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force\_bdss\.tests\.test\_core\_evaluation\_driver module
----------------------------------------------------------
-
-.. automodule:: force_bdss.tests.test_core_evaluation_driver
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force\_bdss\.tests\.test\_core\_mco\_driver module
---------------------------------------------------
-
-.. automodule:: force_bdss.tests.test_core_mco_driver
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-force\_bdss\.tests\.test\_factory\_registry\_plugin module
-----------------------------------------------------------
-
-.. automodule:: force_bdss.tests.test_factory_registry_plugin
     :members:
     :undoc-members:
     :show-inheritance:

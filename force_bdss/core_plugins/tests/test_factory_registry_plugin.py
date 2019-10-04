@@ -7,7 +7,8 @@ from force_bdss.tests.dummy_classes.extension_plugin import \
 
 from envisage.application import Application
 
-from force_bdss.factory_registry_plugin import FactoryRegistryPlugin
+from force_bdss.core_plugins.factory_registry_plugin import \
+    FactoryRegistryPlugin
 
 
 class TestFactoryRegistry(unittest.TestCase):

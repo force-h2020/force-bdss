@@ -6,10 +6,10 @@ from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.ids import ExtensionPointID
 from force_bdss.notification_listeners.i_notification_listener_factory import \
     INotificationListenerFactory
-from .data_sources.i_data_source_factory import (
+from force_bdss.data_sources.i_data_source_factory import (
     IDataSourceFactory)
-from .mco.i_mco_factory import IMCOFactory
-from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory
+from force_bdss.mco.i_mco_factory import IMCOFactory
+from force_bdss.ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
 
 FACTORY_REGISTRY_PLUGIN_ID = "force.bdss.plugins.factory_registry"
