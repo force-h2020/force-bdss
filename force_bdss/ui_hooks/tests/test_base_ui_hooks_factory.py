@@ -6,10 +6,6 @@ from force_bdss.ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory
 from force_bdss.ui_hooks.tests.test_base_ui_hooks_manager import \
     DummyUIHooksManager
 
-from unittest import mock
-
-from envisage.api import Plugin
-
 
 class DummyUIHooksFactory(BaseUIHooksFactory):
     def get_identifier(self):
@@ -24,11 +20,11 @@ class DummyUIHooksFactory(BaseUIHooksFactory):
 
 class TestBaseUIHooksFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = mock.Mock(spec=Plugin, id="pid")
+        self.plugin = "pid"
 
     def test_initialize(self):
         factory = DummyUIHooksFactory(plugin=self.plugin)
-        self.assertEqual(factory.plugin_id, self.plugin.id)
+        self.assertEqual(factory.plugin_id, self.plugin)
         self.assertEqual(factory.id, "pid.factory.foo")
         self.assertEqual(factory.name, "bar")
         self.assertEqual(factory.ui_hooks_manager_class, DummyUIHooksManager)

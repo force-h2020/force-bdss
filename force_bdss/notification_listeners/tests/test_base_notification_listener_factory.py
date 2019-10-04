@@ -1,18 +1,15 @@
 import unittest
 
-from envisage.plugin import Plugin
 from traits.trait_errors import TraitError
 
 from force_bdss.tests.dummy_classes.notification_listener import \
     DummyNotificationListenerFactory, DummyNotificationListenerModel, \
     DummyNotificationListener
 
-from unittest import mock
-
 
 class TestBaseNotificationListenerFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = mock.Mock(spec=Plugin, id="pid")
+        self.plugin = "pid"
 
     def test_initialization(self):
         factory = DummyNotificationListenerFactory(self.plugin)

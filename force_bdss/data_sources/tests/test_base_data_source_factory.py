@@ -1,5 +1,7 @@
 import unittest
 
+import testfixtures
+
 from traits.trait_errors import TraitError
 
 from force_bdss.data_sources.tests.test_base_data_source import DummyDataSource
@@ -7,20 +9,15 @@ from force_bdss.data_sources.tests.test_base_data_source_model import \
     DummyDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
-from unittest import mock
-
-import testfixtures
-
-from envisage.plugin import Plugin
-
 
 class TestBaseDataSourceFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = mock.Mock(spec=Plugin, id="pid")
+        self.plugin_id = "pid"
 
     def test_initialization(self):
-        factory = DummyDataSourceFactory(self.plugin)
+        factory = DummyDataSourceFactory(self.plugin_id)
         self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
+        self.assertEqual(factory.plugin_id, 'pid')
         self.assertEqual(factory.name, 'Dummy data source')
         self.assertEqual(factory.description, "No description available.")
         self.assertEqual(factory.model_class, DummyDataSourceModel)
@@ -35,7 +32,7 @@ class TestBaseDataSourceFactory(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaises(ValueError):
-                Broken(self.plugin)
+                Broken(self.plugin_id)
 
     def test_initialization_errors_invalid_name(self):
         class Broken(DummyDataSourceFactory):
@@ -44,7 +41,7 @@ class TestBaseDataSourceFactory(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaises(TraitError):
-                Broken(self.plugin)
+                Broken(self.plugin_id)
 
     def test_initialization_errors_invalid_model_class(self):
         class Broken(DummyDataSourceFactory):
@@ -53,7 +50,7 @@ class TestBaseDataSourceFactory(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaises(TraitError):
-                Broken(self.plugin)
+                Broken(self.plugin_id)
 
     def test_initialization_errors_invalid_data_source_class(self):
         class Broken(DummyDataSourceFactory):
@@ -62,4 +59,4 @@ class TestBaseDataSourceFactory(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaises(TraitError):
-                Broken(self.plugin)
+                Broken(self.plugin_id)

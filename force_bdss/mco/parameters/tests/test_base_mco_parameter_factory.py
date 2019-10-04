@@ -1,4 +1,4 @@
-import unittest
+from unittest import mock, TestCase
 
 from traits.trait_errors import TraitError
 
@@ -6,10 +6,8 @@ from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.tests.dummy_classes.mco import DummyMCOParameterFactory, \
     DummyMCOParameter
 
-from unittest import mock
 
-
-class TestBaseMCOParameterFactory(unittest.TestCase):
+class TestBaseMCOParameterFactory(TestCase):
     def setUp(self):
         self.mco_factory = mock.Mock(
             spec=BaseMCOFactory,
