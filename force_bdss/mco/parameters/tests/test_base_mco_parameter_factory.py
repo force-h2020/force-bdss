@@ -1,6 +1,5 @@
 import unittest
 
-from envisage.plugin import Plugin
 from traits.trait_errors import TraitError
 
 from force_bdss.mco.base_mco_factory import BaseMCOFactory

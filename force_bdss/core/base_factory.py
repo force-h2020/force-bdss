@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import Bool, HasStrictTraits, Unicode, Instance
+from traits.api import Bool, HasStrictTraits, Unicode
 
 from force_bdss.ids import factory_id
 
