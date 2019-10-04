@@ -11,6 +11,10 @@ def run_func(model, parameters):
     return [DataValue() for _ in range(model.output_slots_size)]
 
 
+def raise_exception(*args, **kwargs):
+    raise Exception()
+
+
 class ProbeDataSource(BaseDataSource):
     run_function = Function(default_value=run_func)
 
@@ -58,6 +62,8 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
     raises_on_create_model = Bool(False)
     raises_on_create_data_source = Bool(False)
 
+    raises_on_data_source_run = Bool(False)
+
     def get_identifier(self):
         return "probe_data_source"
 
@@ -89,7 +95,12 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
         if self.raises_on_create_data_source:
             raise Exception("ProbeDataSourceFactory.create_data_source")
 
+        if self.raises_on_data_source_run:
+            run_function = raise_exception
+        else:
+            run_function = self.run_function
+
         return self.data_source_class(
             factory=self,
-            run_function=self.run_function,
+            run_function=run_function,
         )

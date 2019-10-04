@@ -1,7 +1,5 @@
 import unittest
 
-import testfixtures
-
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
@@ -10,102 +8,18 @@ from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
-from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import \
     ProbeFactoryRegistry
-from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
+from force_bdss.tests.probe_classes.mco import (
+    ProbeMCOFactory
+)
 
-from force_bdss.core.execution import execute_workflow, execute_layer, \
-    _bind_data_values
 
+class TestWorkflow(unittest.TestCase):
 
-class TestExecution(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
-
-    def test_bind_data_values(self):
-        data_values = [
-            DataValue(name="foo"),
-            DataValue(name="bar"),
-            DataValue(name="baz")
-        ]
-
-        slot_map = (
-            InputSlotInfo(name="baz"),
-            InputSlotInfo(name="bar")
-        )
-
-        slots = (
-            Slot(),
-            Slot()
-        )
-
-        result = _bind_data_values(data_values, slot_map, slots)
-        self.assertEqual(result[0], data_values[2])
-        self.assertEqual(result[1], data_values[1])
-
-        # Check the errors. Only one slot map for two slots.
-        slot_map = (
-            InputSlotInfo(name="baz"),
-        )
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    "The length of the slots is not equal to the length of"
-                    " the slot map"):
-                _bind_data_values(data_values, slot_map, slots)
-
-        # missing value in the given data values.
-        slot_map = (
-            InputSlotInfo(name="blap"),
-            InputSlotInfo(name="bar")
-        )
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    "Unable to find requested name 'blap' in available"
-                    " data values."):
-                _bind_data_values(data_values, slot_map, slots)
-
-    def test_compute_layer_results(self):
-        data_values = [
-            DataValue(name="foo"),
-            DataValue(name="bar"),
-            DataValue(name="baz"),
-            DataValue(name="quux")
-        ]
-
-        def run(self, *args, **kwargs):
-            return [DataValue(value=1), DataValue(value=2), DataValue(value=3)]
-
-        ds_factory = self.registry.data_source_factories[0]
-        ds_factory.input_slots_size = 2
-        ds_factory.output_slots_size = 3
-        ds_factory.run_function = run
-        evaluator_model = ds_factory.create_model()
-
-        evaluator_model.input_slot_info = [
-            InputSlotInfo(name="foo"),
-            InputSlotInfo(name="quux")
-        ]
-        evaluator_model.output_slot_info = [
-            OutputSlotInfo(name="one"),
-            OutputSlotInfo(name=""),
-            OutputSlotInfo(name="three")
-        ]
-
-        res = execute_layer(
-            ExecutionLayer(data_sources=[evaluator_model]),
-            data_values,
-        )
-        self.assertEqual(len(res), 2)
-        self.assertEqual(res[0].name, "one")
-        self.assertEqual(res[0].value, 1)
-        self.assertEqual(res[1].name, "three")
-        self.assertEqual(res[1].value, 3)
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution
@@ -152,6 +66,14 @@ class TestExecution(unittest.TestCase):
 
         mco_factory = ProbeMCOFactory(self.plugin)
         mco_model = mco_factory.create_model()
+        parameter_factory = mco_factory.parameter_factories[0]
+
+        mco_model.parameters = [
+            parameter_factory.create_model({'name': "in1"}),
+            parameter_factory.create_model({'name': "in2"}),
+            parameter_factory.create_model({'name': "in3"}),
+            parameter_factory.create_model({'name': "in4"})
+        ]
         mco_model.kpis = [
             KPISpecification(name="out1")
         ]
@@ -219,9 +141,9 @@ class TestExecution(unittest.TestCase):
         ]
         wf.execution_layers[3].data_sources.append(model)
 
-        kpi_results = execute_workflow(wf, data_values)
-        self.assertEqual(len(kpi_results), 1)
-        self.assertEqual(kpi_results[0].value, 8750)
+        kpi_results = wf.execute(data_values)
+        self.assertEqual(1, len(kpi_results))
+        self.assertEqual(8750, kpi_results[0].value)
 
     def test_kpi_specification_adherence(self):
         # Often the user may only wish to treat a subset of DataSource
@@ -234,7 +156,7 @@ class TestExecution(unittest.TestCase):
             DataValue(value=1, name="in2")
         ]
 
-        # dummy addition DataSource(a, b) that also returns it's inputs
+        # dummy addition DataSource(a, b) that also returns its inputs
         # [a, b, a+b]
         def adder(model, parameters):
             first = parameters[0].value
@@ -252,6 +174,7 @@ class TestExecution(unittest.TestCase):
             run_function=adder)
 
         mco_factory = ProbeMCOFactory(self.plugin)
+        parameter_factory = mco_factory.parameter_factories[0]
         mco_model = mco_factory.create_model()
 
         # DataSourceModel stats constant throughout
@@ -266,7 +189,12 @@ class TestExecution(unittest.TestCase):
             OutputSlotInfo(name="out3")
         ]
 
-        # test KPI spec that follows DataSource slots exactly
+        # test Parameter and KPI spec that follows DataSource slots
+        # exactly
+        mco_model.parameters = [
+            parameter_factory.create_model({'name': "in1"}),
+            parameter_factory.create_model({'name': "in2"})
+        ]
         mco_model.kpis = [
             KPISpecification(name="out1"),
             KPISpecification(name="out2"),
@@ -280,8 +208,7 @@ class TestExecution(unittest.TestCase):
             ]
         )
         wf.execution_layers[0].data_sources.append(model)
-
-        kpi_results = execute_workflow(wf, data_values)
+        kpi_results = wf.execute(data_values)
         self.assertEqual(len(kpi_results), 3)
         self.assertEqual(kpi_results[0].value, 99)
         self.assertEqual(kpi_results[1].value, 1)
@@ -306,7 +233,7 @@ class TestExecution(unittest.TestCase):
                     ]
                 )
                 wf.execution_layers[0].data_sources.append(model)
-                kpi_results = execute_workflow(wf, data_values)
+                kpi_results = wf.execute(data_values)
                 self.assertEqual(len(kpi_results), num_outputs)
 
                 for i in range(num_outputs):

@@ -52,6 +52,14 @@ force\_bdss\.tests\.probe\_classes\.ui\_hooks module
     :undoc-members:
     :show-inheritance:
 
+force\_bdss\.tests\.probe\_classes\.workflow\_file module
+---------------------------------------------------------
+
+.. automodule:: force_bdss.tests.probe_classes.workflow_file
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
