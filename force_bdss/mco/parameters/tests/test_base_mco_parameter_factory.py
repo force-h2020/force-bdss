@@ -14,10 +14,7 @@ class TestBaseMCOParameterFactory(unittest.TestCase):
     def setUp(self):
         self.mco_factory = mock.Mock(
             spec=BaseMCOFactory,
-            plugin=mock.Mock(
-                spec=Plugin,
-                id="pid"
-            ),
+            plugin_id="pid",
             id="mcoid"
         )
 
@@ -27,6 +24,7 @@ class TestBaseMCOParameterFactory(unittest.TestCase):
         self.assertEqual(factory.name, "Dummy MCO parameter")
         self.assertEqual(factory.description, "description")
         self.assertEqual(factory.model_class, DummyMCOParameter)
+        self.assertEqual(factory.plugin_id, "pid")
         self.assertIsInstance(factory.create_model(), DummyMCOParameter)
 
     def test_create_model(self):
