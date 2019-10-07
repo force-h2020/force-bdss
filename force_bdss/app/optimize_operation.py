@@ -51,6 +51,7 @@ class OptimizeOperation(HasStrictTraits):
         self.create_mco()
 
         self._deliver_start_event()
+
         try:
             self.mco.run(mco_model)
         except Exception:
