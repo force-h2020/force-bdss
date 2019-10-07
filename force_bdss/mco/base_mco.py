@@ -29,7 +29,6 @@ class BaseMCO(ABCHasStrictTraits):
         """
         super(BaseMCO, self).__init__(factory=factory, **traits)
 
-
     @abc.abstractmethod
     def run(self, *args, **kwargs):
         """Performs the actual MCO operations.
