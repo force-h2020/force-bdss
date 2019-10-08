@@ -30,9 +30,16 @@ class BaseMCO(ABCHasStrictTraits):
         super(BaseMCO, self).__init__(factory=factory, **traits)
 
     @abc.abstractmethod
-    def run(self, *args, **kwargs):
+    def run(self, model, *args, **kwargs):
         """Performs the actual MCO operations.
-        Reimplement this method to tailor to your MCO."""
+        Reimplement this method to tailor to your MCO.
+
+        Parameters
+        ----------
+        model: BaseMCOModel
+            An instance of the model information, as created from
+            create_model()
+        """
 
     def notify_new_point(self, optimal_point, optimal_kpis, weights):
         """Notify the discovery of a new optimal point.
