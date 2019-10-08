@@ -47,11 +47,27 @@ class WorkflowSolver(HasStrictTraits):
                       name=parameter.name,
                       value=value)
             for parameter, value in zip(
-                self.workflow.mco.parameter, self.parameter_values)]
+                self.workflow.mco.parameters, self.parameter_values)]
 
         kpi_results = self.workflow.execute(data_values)
 
         return kpi_results
+
+    def _call_subprocess(self, command, user_input):
+        """Calls a subprocess to perform a command with parsed
+        user_input"""
+
+        log.info("Spawning subprocess: {}".format(command))
+        ps = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+
+        log.info("Sending values: {}".format(user_input))
+        stdout, stderr = ps.communicate(" ".join(user_input).encode("utf-8"))
+
+        return stdout
 
     def _subprocess_solve(self):
         """Executes the workflow using the given parameter values
@@ -62,31 +78,25 @@ class WorkflowSolver(HasStrictTraits):
         # parameter values. A BaseMCOCommunicator will be needed to be
         # defined in the workflow to receive the data and send back values
         # corresponding to each KPI via the command line.
-        cmd = [self.executable_path,
-               "--logfile",
-               "bdss.log",
-               "--evaluate",
-               self.workflow_filepath]
+        command = [self.executable_path,
+                   "--logfile",
+                   "bdss.log",
+                   "--evaluate",
+                   self.workflow_filepath]
 
-        log.info("Spawning subprocess: {}".format(cmd))
-        ps = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-        )
-
-        # Converts the parameter values to a string to send via subprocess
+        # Converts the parameter values to a string to send via
+        # subprocess
         string_values = [str(v) for v in self.parameter_values]
-        log.info("Sending values: {}".format(string_values))
-        out = ps.communicate(" ".join(string_values).encode("utf-8"))
 
-        # Converts an incoming string of KPI values into floats
-        kpi_values = [float(x) for x in out[0].decode("utf-8").split()]
-        log.info("Received values: {}".format(kpi_values))
+        # Call subprocess to perform executable with user input
+        stdout = self._call_subprocess(command, string_values)
 
+        # Decode stdout into KPI float values
+        kpi_values = [float(x) for x in stdout.decode("utf-8").split()]
+
+        # Convert values into DataValues
         kpi_results = [
-            DataValue(type=kpi.type,
-                      name=kpi.name,
+            DataValue(name=kpi.name,
                       value=value)
             for kpi, value in zip(
                 self.workflow.mco.kpis, kpi_values)]
@@ -116,4 +126,14 @@ class WorkflowSolver(HasStrictTraits):
             return self._internal_solve()
 
         elif self.mode == 'Subprocess':
-            return self._subprocess_solve()
+            try:
+                return self._subprocess_solve()
+            except Exception:
+                message = (
+                    'Subprocess mode in a WorkflowSolver failed '
+                    'to run. This is likely due to a error in the '
+                    'BaseMCOCommunicator assigned to {}.'.format(
+                        self.workflow.mco.factory.__class__)
+                )
+                log.exception(message)
+                raise RuntimeError(message)
