@@ -4,6 +4,8 @@ from traits.api import (
     DelegatesTo, HasStrictTraits, Instance, List, on_trait_change, provides
 )
 
+from force_bdss.core.i_solver import ISolver
+from force_bdss.core.workflow_solver import WorkflowSolver
 from force_bdss.core_driver_events import MCOFinishEvent, MCOStartEvent
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
@@ -35,6 +37,17 @@ class OptimizeOperation(HasStrictTraits):
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
+    #: The Solver to use in the MCO run
+    solver = Instance(ISolver)
+
+    def _solver_default(self):
+        return WorkflowSolver(
+            workflow=self.workflow,
+            workflow_file_path=self.workflow_file.path,
+            executable_path='force_bdss',
+            mode='Internal'
+        )
+
     def run(self):
         """ Create and run the optimizer. """
         self.workflow_file.verify()
@@ -46,14 +59,12 @@ class OptimizeOperation(HasStrictTraits):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
-        mco_model = self.workflow.mco
-
         self.create_mco()
 
         self._deliver_start_event()
 
         try:
-            self.mco.run(mco_model)
+            self.mco.run(self.solver)
         except Exception:
             log.exception((
                 "Method run() of MCO with id '{}' from plugin '{}' "

@@ -1,4 +1,5 @@
 import logging
+
 from traits.api import provides, Type, List, Instance
 
 from force_bdss.core.base_factory import BaseFactory
@@ -7,6 +8,7 @@ from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.mco.parameters.base_mco_parameter_factory import \
     BaseMCOParameterFactory
+
 from .i_mco_factory import IMCOFactory
 
 log = logging.getLogger(__name__)
