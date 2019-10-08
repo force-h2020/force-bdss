@@ -59,12 +59,14 @@ class OptimizeOperation(HasStrictTraits):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
+        mco_model = self.workflow.mco
+
         self.create_mco()
 
         self._deliver_start_event()
 
         try:
-            self.mco.run(self.solver)
+            self.mco.run(mco_model, self.self.solver)
         except Exception:
             log.exception((
                 "Method run() of MCO with id '{}' from plugin '{}' "
