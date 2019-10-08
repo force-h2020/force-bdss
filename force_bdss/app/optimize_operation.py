@@ -43,7 +43,7 @@ class OptimizeOperation(HasStrictTraits):
     def _solver_default(self):
         return WorkflowSolver(
             workflow=self.workflow,
-            workflow_file_path=self.workflow_file.path,
+            workflow_filepath=self.workflow_file.path,
             executable_path='force_bdss',
             mode='Internal'
         )
@@ -66,7 +66,7 @@ class OptimizeOperation(HasStrictTraits):
         self._deliver_start_event()
 
         try:
-            self.mco.run(mco_model, self.self.solver)
+            self.mco.run(mco_model, self.solver)
         except Exception:
             log.exception((
                 "Method run() of MCO with id '{}' from plugin '{}' "

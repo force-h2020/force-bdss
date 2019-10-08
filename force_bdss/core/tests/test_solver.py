@@ -32,7 +32,6 @@ class TestWorkflowSolver(TestCase):
         solver = WorkflowSolver()
         self.assertIsNone(solver.workflow)
         self.assertEqual('', solver.workflow_filepath)
-        self.assertListEqual([], solver.parameter_values)
         self.assertEqual('', solver.executable_path)
         self.assertEqual('Internal', solver.mode)
 
@@ -40,14 +39,12 @@ class TestWorkflowSolver(TestCase):
 
         self.assertIsInstance(self.solver.workflow, Workflow)
         self.assertEqual("test_probe.json", self.solver.workflow_filepath)
-        self.assertListEqual([], self.solver.parameter_values)
         self.assertEqual('', self.solver.executable_path)
         self.assertEqual('Internal', self.solver.mode)
 
     def test__internal_solve(self):
 
-        self.solver.parameter_values = [1.0]
-        kpi_results = self.solver._internal_solve()
+        kpi_results = self.solver._internal_solve([1.0])
 
         self.assertEqual(1, len(kpi_results))
         self.assertIsInstance(kpi_results[0], DataValue)
@@ -63,10 +60,9 @@ class TestWorkflowSolver(TestCase):
 
     def test__subprocess_solve(self):
 
-        self.solver.parameter_values = [1.0]
         with mock.patch("subprocess.Popen") as mock_popen:
             mock_popen.return_value = self.mock_process
-            kpi_results = self.solver._subprocess_solve()
+            kpi_results = self.solver._subprocess_solve([1.0])
 
         self.assertEqual(1, len(kpi_results))
         self.assertIsInstance(kpi_results[0], DataValue)

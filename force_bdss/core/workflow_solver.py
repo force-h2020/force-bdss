@@ -1,3 +1,4 @@
+import os
 import logging
 import subprocess
 
@@ -27,10 +28,6 @@ class WorkflowSolver(HasStrictTraits):
     #: The path to the workflow file.
     workflow_filepath = Unicode()
 
-    #: Values for each parameter in thw workflow to calculate a
-    #: single point
-    parameter_values = List(Float)
-
     #: The path to the force_bdss executable
     executable_path = Unicode()
 
@@ -38,7 +35,7 @@ class WorkflowSolver(HasStrictTraits):
     #: or spawning another process using subprocess
     mode = Enum('Internal', 'Subprocess')
 
-    def _internal_solve(self):
+    def _internal_solve(self, parameter_values):
         """Executes the workflow using the given parameter values
         running on the internal process"""
 
@@ -47,7 +44,7 @@ class WorkflowSolver(HasStrictTraits):
                       name=parameter.name,
                       value=value)
             for parameter, value in zip(
-                self.workflow.mco.parameters, self.parameter_values)]
+                self.workflow.mco.parameters, parameter_values)]
 
         kpi_results = self.workflow.execute(data_values)
 
@@ -58,8 +55,19 @@ class WorkflowSolver(HasStrictTraits):
         user_input"""
 
         log.info("Spawning subprocess: {}".format(command))
+
+        # Setting ETS_TOOLKIT=null before executing bdss prevents it
+        # from trying to create GUI every call, giving reducing the
+        # overhead by a factor of 2.
+        env = {**os.environ, "ETS_TOOLKIT": "null"}
+
+        # Spawn the single point evaluation, which is the bdss itself
+        # with the option evaluate.
+        # We pass the specific parameter values via stdin, and read
+        # the result via stdout.
         ps = subprocess.Popen(
             command,
+            env=env,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
         )
@@ -69,9 +77,12 @@ class WorkflowSolver(HasStrictTraits):
 
         return stdout
 
-    def _subprocess_solve(self):
+    def _subprocess_solve(self, parameter_values):
         """Executes the workflow using the given parameter values
-        running on an external process via the subprocess library."""
+        running on an external process via the subprocess library.
+        Values for each parameter in thw workflow to calculate a
+        single point
+        """
 
         # This command calls a force_bdss executable on another process
         # to evaluate the same workflow at a state determined by the
@@ -86,7 +97,7 @@ class WorkflowSolver(HasStrictTraits):
 
         # Converts the parameter values to a string to send via
         # subprocess
-        string_values = [str(v) for v in self.parameter_values]
+        string_values = [str(v) for v in parameter_values]
 
         # Call subprocess to perform executable with user input
         stdout = self._call_subprocess(command, string_values)
@@ -120,14 +131,12 @@ class WorkflowSolver(HasStrictTraits):
             workflow
         """
 
-        self.parameter_values = parameter_values
-
         if self.mode == 'Internal':
-            return self._internal_solve()
+            return self._internal_solve(parameter_values)
 
         elif self.mode == 'Subprocess':
             try:
-                return self._subprocess_solve()
+                return self._subprocess_solve(parameter_values)
             except Exception:
                 message = (
                     'Subprocess mode in a WorkflowSolver failed '
