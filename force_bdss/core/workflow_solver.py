@@ -3,8 +3,7 @@ import logging
 import subprocess
 
 from traits.api import (
-    HasStrictTraits, Instance, Unicode, Enum, List, Float,
-    provides
+    HasStrictTraits, Instance, Unicode, Enum, provides
 )
 
 from force_bdss.core.data_value import DataValue
