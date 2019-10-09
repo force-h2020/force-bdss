@@ -9,7 +9,7 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import \
 
 
 class DummyMCO(BaseMCO):
-    def run(self, model, *args, **kwargs):
+    def run(self, solver):
         pass
 
 

@@ -25,9 +25,9 @@ class ProbeMCO(BaseMCO):
 
     run_called = Bool(False)
 
-    def run(self, model, solver):
+    def run(self, solver):
         self.run_called = True
-        return self.run_function(model, solver)
+        return self.run_function(solver)
 
 
 class ProbeParameter(BaseMCOParameter):
