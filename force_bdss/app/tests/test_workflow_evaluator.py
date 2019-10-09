@@ -1,4 +1,4 @@
-from unittest import TestCase, mock
+from unittest import TestCase
 
 from force_bdss.tests import fixtures
 from force_bdss.tests.probe_classes.workflow_file import (
@@ -20,10 +20,6 @@ class TestWorkflowEvaluator(TestCase):
         self.evaluator = WorkflowEvaluator(
             workflow=workflow_file.workflow,
             workflow_filepath=file_path
-        )
-        self.mock_process = mock.Mock()
-        self.mock_process.communicate = mock.Mock(
-            return_value=(b"2", b"1 0")
         )
 
     def test_empty_init(self):
@@ -49,4 +45,4 @@ class TestWorkflowEvaluator(TestCase):
         kpi_results = self.evaluator.evaluate([1.0])
 
         self.assertEqual(1, len(kpi_results))
-        self.assertIsNone(kpi_results[0].value)
+        self.assertIsNone(kpi_results[0])

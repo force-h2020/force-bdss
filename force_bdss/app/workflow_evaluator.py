@@ -40,7 +40,11 @@ class WorkflowEvaluator(HasStrictTraits):
 
         kpi_results = self.workflow.execute(data_values)
 
-        return kpi_results
+        # Return just the values to the MCO, since the DataValue
+        # class is not specific to the BaseMCO classes
+        kpi_values = [kpi.value for kpi in kpi_results]
+
+        return kpi_values
 
     def evaluate(self, parameter_values):
         """Public method to evaluate the workflow at a given set of
@@ -48,14 +52,14 @@ class WorkflowEvaluator(HasStrictTraits):
 
         Parameters
         ----------
-        parameter_values: List(Float)
+        parameter_values: list
             List of values to assign to each BaseMCOParameter defined
             in the workflow
 
         Returns
         -------
-        kpi_results: List(DataValue)
-            List of DataValues corresponding to each MCO KPI in the
+        kpi_results: list
+            List of values corresponding to each MCO KPI in the
             workflow
         """
         return self._internal_evaluate(parameter_values)

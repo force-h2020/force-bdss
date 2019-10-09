@@ -23,13 +23,13 @@ class IEvaluator(Interface):
 
         Parameters
         ----------
-        parameter_values: List(Float)
+        parameter_values: list
             List of values to assign to each BaseMCOParameter defined
             in the workflow
 
         Returns
         -------
-        kpi_results: List(DataValue)
-            List of DataValues corresponding to each MCO KPI in the
+        kpi_results: list
+            List of values corresponding to each MCO KPI in the
             workflow
         """
