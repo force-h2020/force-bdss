@@ -1,7 +1,7 @@
 from .core_driver_events import *  # noqa
 from .ids import plugin_id, factory_id  # noqa
 
-from .app.workflow_evaluator import WorkflowEvaluator
+from .app.workflow_evaluator import WorkflowEvaluator # noqa
 
 from .core.base_factory import BaseFactory  # noqa
 from .core.base_model import BaseModel  # noqa
@@ -33,7 +33,7 @@ from .mco.base_mco_model import BaseMCOModel  # noqa
 from .mco.base_mco_communicator import BaseMCOCommunicator  # noqa
 from .mco.base_mco import BaseMCO  # noqa
 from .mco.base_mco_factory import BaseMCOFactory  # noqa
-from .mco.i_evaluator import IEvaluator
+from .mco.i_evaluator import IEvaluator # noqa
 from .mco.i_mco_factory import IMCOFactory  # noqa
 from .mco.parameters.base_mco_parameter_factory import BaseMCOParameterFactory  # noqa
 from .mco.parameters.base_mco_parameter import BaseMCOParameter  # noqa
