@@ -20,11 +20,12 @@ class DummyUIHooksFactory(BaseUIHooksFactory):
 
 class TestBaseUIHooksFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = "pid"
+        self.plugin = {'id': "pid", 'name': 'Plugin'}
 
     def test_initialize(self):
         factory = DummyUIHooksFactory(plugin=self.plugin)
-        self.assertEqual(factory.plugin_id, self.plugin)
+        self.assertEqual(factory.plugin_id, "pid")
+        self.assertEqual(factory.plugin_name, 'Plugin')
         self.assertEqual(factory.id, "pid.factory.foo")
         self.assertEqual(factory.name, "bar")
         self.assertEqual(factory.ui_hooks_manager_class, DummyUIHooksManager)

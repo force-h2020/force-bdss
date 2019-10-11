@@ -31,7 +31,7 @@ class MCOFactory(BaseMCOFactory):
 
 class TestBaseMCOFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = "pid"
+        self.plugin = {'id': "pid", 'name': 'Plugin'}
 
     def test_initialization(self):
         factory = DummyMCOFactory(self.plugin)

@@ -9,7 +9,7 @@ from force_bdss.tests.dummy_classes.notification_listener import \
 
 class TestBaseNotificationListenerFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = "pid"
+        self.plugin = {'id': "pid", 'name': 'Plugin'}
 
     def test_initialization(self):
         factory = DummyNotificationListenerFactory(self.plugin)

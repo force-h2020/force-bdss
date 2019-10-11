@@ -12,6 +12,7 @@ class TestBaseMCOParameterFactory(TestCase):
         self.mco_factory = mock.Mock(
             spec=BaseMCOFactory,
             plugin_id="pid",
+            plugin_name='Plugin',
             id="mcoid"
         )
 
