@@ -20,7 +20,11 @@ class TestBaseFactory(unittest.TestCase):
 
     def setUp(self):
         self.plugin_id = "pid"
-        self.plugin = mock.Mock(spec=Plugin, id=self.plugin_id)
+        self.plugin_name = "Mock Plugin"
+        self.plugin = mock.Mock(
+            spec=Plugin, id=self.plugin_id
+        )
+        self.plugin.name = self.plugin_name
 
     def test_initialization(self):
 
@@ -28,13 +32,16 @@ class TestBaseFactory(unittest.TestCase):
         factory = DummyBaseFactory(self.plugin)
         self.assertEqual(factory.id, 'pid.factory.dummy_factory')
         self.assertEqual(factory.plugin_id, 'pid')
+        self.assertEqual(factory.plugin_name, "Mock Plugin")
         self.assertEqual(factory.name, 'Dummy Factory')
         self.assertEqual(factory.description, "No description available.")
 
         # Initialisation with a Unicode argument
-        factory = DummyBaseFactory(self.plugin_id)
+        factory = DummyBaseFactory({'id': self.plugin_id,
+                                    'name': self.plugin_name})
         self.assertEqual(factory.id, 'pid.factory.dummy_factory')
         self.assertEqual(factory.plugin_id, 'pid')
+        self.assertEqual(factory.plugin_name, "Mock Plugin")
         self.assertEqual(factory.name, 'Dummy Factory')
         self.assertEqual(factory.description, "No description available.")
 

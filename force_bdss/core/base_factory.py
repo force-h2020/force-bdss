@@ -25,16 +25,22 @@ class BaseFactory(HasStrictTraits):
     #: in your subclass.
     plugin_id = Unicode(allow_none=False)
 
+    #: Human readable name of Plugin for UI
+    plugin_name = Unicode(allow_none=False)
+
     def __init__(self, plugin, *args, **kwargs):
         super(BaseFactory, self).__init__(*args, **kwargs)
 
         # For backwards compatibility, we allow passing in of
         # an Envisage Plugin instance as an argument to extract
-        # plugin_id
+        # plugin_id and plugin_name, otherwise a dictionary with
+        # keys 'id' and 'name' is acceptable
         if isinstance(plugin, Plugin):
             self.plugin_id = plugin.id
+            self.plugin_name = plugin.name
         else:
-            self.plugin_id = plugin
+            self.plugin_id = plugin['id']
+            self.plugin_name = plugin['name']
 
         self.name = self.get_name()
         self.description = self.get_description()
