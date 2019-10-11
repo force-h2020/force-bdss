@@ -33,8 +33,9 @@ class BaseMCOParameterFactory(BaseFactory):
 
     def __init__(self, mco_factory, *args, **kwargs):
         super(BaseMCOParameterFactory, self).__init__(
+            plugin={'id': mco_factory.plugin_id,
+                    'name': mco_factory.plugin_name},
             mco_factory=mco_factory,
-            plugin=mco_factory.plugin_id,
             *args,
             **kwargs)
 
