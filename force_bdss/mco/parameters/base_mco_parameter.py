@@ -22,6 +22,11 @@ class BaseMCOParameter(BaseModel):
     #: A CUBA key describing the type of the parameter
     type = String(visible=False)
 
+    def __init__(self, factory, *args, **kwargs):
+        super(BaseMCOParameter, self).__init__(
+            factory=factory, *args, **kwargs
+        )
+
     def verify(self):
         """ Verify the MCO parameter.
 

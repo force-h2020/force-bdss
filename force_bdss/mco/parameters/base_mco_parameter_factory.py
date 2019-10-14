@@ -8,7 +8,7 @@ from force_bdss.mco.parameters.i_mco_parameter_factory import \
 
 @provides(IMCOParameterFactory)
 class BaseMCOParameterFactory(BaseFactory):
-    """Factory that produces the model instance of a given BASEMCOParameter
+    """Factory that produces the model instance of a given BaseMCOParameter
     instance.
 
     Must be reimplemented for the specific parameter. The generic create_model
@@ -33,8 +33,9 @@ class BaseMCOParameterFactory(BaseFactory):
 
     def __init__(self, mco_factory, *args, **kwargs):
         super(BaseMCOParameterFactory, self).__init__(
+            plugin={'id': mco_factory.plugin_id,
+                    'name': mco_factory.plugin_name},
             mco_factory=mco_factory,
-            plugin=mco_factory.plugin,
             *args,
             **kwargs)
 
@@ -58,7 +59,7 @@ class BaseMCOParameterFactory(BaseFactory):
         if data_values is None:
             data_values = {}
 
-        return self.model_class(factory=self, **data_values)
+        return self.model_class(self, **data_values)
 
     def _global_id(self, identifier):
         return mco_parameter_id(self.mco_factory.id, identifier)

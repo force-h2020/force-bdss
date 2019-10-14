@@ -5,6 +5,7 @@ from traits.api import (
 )
 
 from force_bdss.core_driver_events import MCOProgressEvent
+
 from .i_mco_factory import IMCOFactory
 
 
@@ -30,15 +31,15 @@ class BaseMCO(ABCHasStrictTraits):
         super(BaseMCO, self).__init__(factory=factory, **traits)
 
     @abc.abstractmethod
-    def run(self, model):
+    def run(self, evaluator):
         """Performs the actual MCO operations.
-        Reimplement this method to tailor to your MCO.
+        Re-implement this method to tailor to your MCO.
 
         Parameters
         ----------
-        model: BaseMCOModel
-            An instance of the model information, as created from
-            create_model()
+        evaluator: IEvaluator
+            An instance of a class providing an interface to IEvaluator,
+            containing a BaseMCOModel instance as an attribute
         """
 
     def notify_new_point(self, optimal_point, optimal_kpis, weights):

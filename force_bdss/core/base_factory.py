@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import Bool, HasStrictTraits, Unicode, Instance
+from traits.api import Bool, HasStrictTraits, Unicode
 
 from force_bdss.ids import factory_id
 
@@ -23,13 +23,28 @@ class BaseFactory(HasStrictTraits):
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
     #: in your subclass.
-    plugin = Instance(Plugin, allow_none=False)
+    plugin_id = Unicode(allow_none=False)
+
+    #: Human readable name of Plugin for UI
+    plugin_name = Unicode(allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
-        super(BaseFactory, self).__init__(plugin=plugin, *args, **kwargs)
+        super(BaseFactory, self).__init__(*args, **kwargs)
+
+        # For backwards compatibility, we allow passing in of
+        # an Envisage Plugin instance as an argument to extract
+        # plugin_id and plugin_name, otherwise a dictionary with
+        # keys 'id' and 'name' is acceptable
+        if isinstance(plugin, Plugin):
+            self.plugin_id = plugin.id
+            self.plugin_name = plugin.name
+        else:
+            self.plugin_id = plugin['id']
+            self.plugin_name = plugin['name']
 
         self.name = self.get_name()
         self.description = self.get_description()
+
         identifier = self.get_identifier()
         try:
             id = self._global_id(identifier)
@@ -64,4 +79,4 @@ class BaseFactory(HasStrictTraits):
         return "No description available."
 
     def _global_id(self, identifier):
-        return factory_id(self.plugin.id, identifier)
+        return factory_id(self.plugin_id, identifier)
