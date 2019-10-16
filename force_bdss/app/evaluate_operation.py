@@ -39,7 +39,7 @@ class EvaluateOperation(HasStrictTraits):
                 " in plugin '{}'. This may indicate a programming "
                 "error in the plugin").format(
                     mco_factory.id,
-                    mco_factory.plugin.id))
+                    mco_factory.plugin_id))
             return False
 
         mco_data_values = mco_communicator.receive_from_mco(mco_model)

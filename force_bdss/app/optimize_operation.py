@@ -4,6 +4,8 @@ from traits.api import (
     DelegatesTo, HasStrictTraits, Instance, List, on_trait_change, provides
 )
 
+from force_bdss.mco.i_evaluator import IEvaluator
+from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 from force_bdss.core_driver_events import MCOFinishEvent, MCOStartEvent
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
@@ -35,6 +37,15 @@ class OptimizeOperation(HasStrictTraits):
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
+    #: The Solver to use in the MCO run
+    solver = Instance(IEvaluator)
+
+    def _solver_default(self):
+        return WorkflowEvaluator(
+            workflow=self.workflow,
+            workflow_filepath=self.workflow_file.path,
+        )
+
     def run(self):
         """ Create and run the optimizer. """
         self.workflow_file.verify()
@@ -46,20 +57,19 @@ class OptimizeOperation(HasStrictTraits):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
-        mco_model = self.workflow.mco
-
         self.create_mco()
 
         self._deliver_start_event()
+
         try:
-            self.mco.run(mco_model)
+            self.mco.run(self.solver)
         except Exception:
             log.exception((
                 "Method run() of MCO with id '{}' from plugin '{}' "
                 "raised exception. This might indicate a "
                 "programming error in the plugin.").format(
                     self.mco.factory.id,
-                    self.mco.factory.plugin.id
+                    self.mco.factory.plugin_id
                 )
             )
             raise
@@ -79,7 +89,7 @@ class OptimizeOperation(HasStrictTraits):
                 "This might indicate a programming error in the "
                 "plugin.").format(
                     mco_factory.id,
-                    mco_factory.plugin.id
+                    mco_factory.plugin_id
                 )
             )
             raise
@@ -112,7 +122,7 @@ class OptimizeOperation(HasStrictTraits):
                     "'{}' in plugin '{}'. The listener will be dropped and "
                     "computation will continue.").format(
                         listener.factory.id,
-                        listener.factory.plugin.id
+                        listener.factory.plugin_id
                     )
                 )
                 self._finalize_listener(listener)
@@ -130,7 +140,7 @@ class OptimizeOperation(HasStrictTraits):
                 "Exception while finalizing listener '{}'"
                 " in plugin '{}'.").format(
                     listener.factory.id,
-                    listener.factory.plugin.id
+                    listener.factory.plugin_id
                 )
             )
 
@@ -147,7 +157,7 @@ class OptimizeOperation(HasStrictTraits):
                     "This may indicate a programming error in the "
                     "plugin.").format(
                         factory.id,
-                        factory.plugin.id
+                        factory.plugin_id
                     )
                 )
                 raise
@@ -159,7 +169,7 @@ class OptimizeOperation(HasStrictTraits):
                     "Failed to initialize listener with id '{}' in "
                     "plugin '{}'. The listener will be dropped.").format(
                         factory.id,
-                        factory.plugin.id
+                        factory.plugin_id
                     )
                 )
                 continue

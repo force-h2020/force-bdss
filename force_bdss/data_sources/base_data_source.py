@@ -14,8 +14,9 @@ class BaseDataSource(ABCHasStrictTraits):
     factory = Instance(IDataSourceFactory)
 
     def __init__(self, factory, *args, **kwargs):
-        super(BaseDataSource, self).__init__(*args, **kwargs)
-        self.factory = factory
+        super(BaseDataSource, self).__init__(
+            factory=factory, *args, **kwargs
+        )
 
     @abc.abstractmethod
     def run(self, model, parameters):

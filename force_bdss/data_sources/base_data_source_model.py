@@ -71,10 +71,9 @@ class BaseDataSourceModel(BaseModel):
         input_slots, _ = self._generate_slots()
 
         return [
-            InputSlotInfo(
-                name='', type=slot.type,
-                description=slot.description
-            )
+            InputSlotInfo(name='',
+                          type=slot.type,
+                          description=slot.description)
             for slot in input_slots
         ]
 
@@ -85,10 +84,9 @@ class BaseDataSourceModel(BaseModel):
         _, output_slots = self._generate_slots()
 
         return [
-            OutputSlotInfo(
-                name='', type=slot.type,
-                description=slot.description
-            )
+            OutputSlotInfo(name='',
+                           type=slot.type,
+                           description=slot.description)
             for slot in output_slots
         ]
 
@@ -136,7 +134,7 @@ class BaseDataSourceModel(BaseModel):
                 " created by factory {}, plugin {}. This might "
                 "indicate a programming error.",
                 self.factory.id,
-                self.factory.plugin.id
+                self.factory.plugin_id
             )
             raise
 

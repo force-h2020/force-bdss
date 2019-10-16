@@ -8,10 +8,6 @@ from force_bdss.mco.tests.test_base_mco_communicator import \
     DummyMCOCommunicator
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory, DummyMCOModel
 
-from unittest import mock
-
-from envisage.plugin import Plugin
-
 
 class MCOFactory(BaseMCOFactory):
     def get_identifier(self):
@@ -35,7 +31,7 @@ class MCOFactory(BaseMCOFactory):
 
 class TestBaseMCOFactory(unittest.TestCase):
     def setUp(self):
-        self.plugin = mock.Mock(spec=Plugin, id="pid")
+        self.plugin = {'id': "pid", 'name': 'Plugin'}
 
     def test_initialization(self):
         factory = DummyMCOFactory(self.plugin)

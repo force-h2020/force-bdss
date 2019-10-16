@@ -1,7 +1,6 @@
-from unittest import TestCase, mock
+from unittest import TestCase
 import testfixtures
 
-from envisage.plugin import Plugin
 from traits.trait_errors import TraitError
 
 from force_bdss.data_sources.tests.test_base_data_source import \
@@ -13,11 +12,12 @@ from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
 class TestBaseDataSourceFactory(TestCase):
     def setUp(self):
-        self.plugin = mock.Mock(spec=Plugin, id="pid")
+        self.plugin = {'id': "pid", 'name': 'Plugin'}
 
     def test_initialization(self):
         factory = DummyDataSourceFactory(self.plugin)
         self.assertEqual(factory.id, 'pid.factory.dummy_data_source')
+        self.assertEqual(factory.plugin_id, 'pid')
         self.assertEqual(factory.name, 'Dummy data source')
         self.assertEqual(factory.description, "No description available.")
         self.assertEqual(factory.model_class, DummyDataSourceModel)

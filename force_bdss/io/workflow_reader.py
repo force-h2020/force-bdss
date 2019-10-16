@@ -58,9 +58,9 @@ class WorkflowReader(HasStrictTraits):
             The factory registry that provides lookup services
             for a factory identified by a given id.
         """
-        self.factory_registry = factory_registry
-
-        super(WorkflowReader, self).__init__(*args, **kwargs)
+        super(WorkflowReader, self).__init__(
+            factory_registry=factory_registry, *args, **kwargs
+        )
 
     def read(self, file):
         """Reads the file and returns a Workflow object.

@@ -1,23 +1,18 @@
-import unittest
+from unittest import mock, TestCase
 
-from envisage.plugin import Plugin
 from traits.trait_errors import TraitError
 
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.tests.dummy_classes.mco import DummyMCOParameterFactory, \
     DummyMCOParameter
 
-from unittest import mock
 
-
-class TestBaseMCOParameterFactory(unittest.TestCase):
+class TestBaseMCOParameterFactory(TestCase):
     def setUp(self):
         self.mco_factory = mock.Mock(
             spec=BaseMCOFactory,
-            plugin=mock.Mock(
-                spec=Plugin,
-                id="pid"
-            ),
+            plugin_id="pid",
+            plugin_name='Plugin',
             id="mcoid"
         )
 
@@ -27,6 +22,7 @@ class TestBaseMCOParameterFactory(unittest.TestCase):
         self.assertEqual(factory.name, "Dummy MCO parameter")
         self.assertEqual(factory.description, "description")
         self.assertEqual(factory.model_class, DummyMCOParameter)
+        self.assertEqual(factory.plugin_id, "pid")
         self.assertIsInstance(factory.create_model(), DummyMCOParameter)
 
     def test_create_model(self):

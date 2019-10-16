@@ -42,7 +42,7 @@ class ExecutionLayer(HasStrictTraits):
                     "in plugin '{}'. This may indicate a programming "
                     "error in the plugin".format(
                         factory.id,
-                        factory.plugin.id))
+                        factory.plugin_id))
                 raise
 
             # Get the slots for this data source. These must be matched to

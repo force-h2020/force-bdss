@@ -79,7 +79,7 @@ class BaseDataSourceFactory(BaseFactory):
                 "in plugin {}. This may indicate a programming "
                 "error in the plugin".format(
                     self.id,
-                    self.plugin.id
+                    self.plugin_id
                 )
             )
             raise
@@ -114,7 +114,7 @@ class BaseDataSourceFactory(BaseFactory):
                 "in plugin {}. This may indicate a programming "
                 "error in the plugin".format(
                     self.id,
-                    self.plugin.id)
+                    self.plugin_id)
             )
             raise
 

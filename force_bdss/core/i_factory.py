@@ -1,5 +1,4 @@
-from envisage.plugin import Plugin
-from traits.api import Interface, Unicode, Instance
+from traits.api import Interface, Unicode
 
 
 class IFactory(Interface):
@@ -12,7 +11,7 @@ class IFactory(Interface):
 
     name = Unicode()
 
-    plugin = Instance(Plugin, allow_none=False)
+    plugin_id = Unicode(allow_none=False)
 
     def get_name(self):
         pass
