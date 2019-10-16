@@ -3,7 +3,7 @@ from unittest import TestCase
 from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
-    trait_check, attr_checker, sync_trait_with_check
+    trait_merge_check, attr_checker, sync_trait_with_check
 )
 
 
@@ -30,20 +30,20 @@ class TestDataSourceUtilities(TestCase):
     def test_trait_check(self):
 
         self.assertFalse(
-            trait_check(self.old_trait, self.new_trait, 'an_integer')
+            trait_merge_check(self.old_trait, self.new_trait, 'an_integer')
         )
         self.assertTrue(
-            trait_check(self.old_trait, self.new_trait, '__class__')
+            trait_merge_check(self.old_trait, self.new_trait, '__class__')
         )
         self.assertTrue(
-            trait_check(self.old_trait, self.new_trait, '__class__',
-                        ignore_default=True)
+            trait_merge_check(self.old_trait, self.new_trait, '__class__',
+                              ignore_default=True)
         )
 
         another_trait = AnotherDummyTrait()
         self.assertTrue(
-            trait_check(self.old_trait, another_trait, 'an_integer',
-                        ignore_default=True)
+            trait_merge_check(self.old_trait, another_trait, 'an_integer',
+                              ignore_default=True)
         )
 
     def test_attr_checker(self):

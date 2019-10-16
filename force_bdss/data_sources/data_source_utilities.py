@@ -3,14 +3,17 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 
-def trait_check(source, target, name, ignore_default=False):
-    """Check whether attribute on source matches with the same
-    attribute on target
+def trait_merge_check(source, target, name, ignore_default=False):
+    """Check whether attribute on target can be merged with the
+    same attribute on source. As a rule, this is allowed only when
+    both attributes share the same value, except if
+    ignore_default==True, then it is also allowed if the
+    source attribute has not been changed from its default value.
 
     Parameters
     ----------
     source, target: objects
-        Object instances to have attribute checked
+        Object instances to have attributes compared
     name: str
         Name of an attribute to check
     ignore_default: bool, optional, default: False
@@ -36,25 +39,26 @@ def trait_check(source, target, name, ignore_default=False):
 
 
 def attr_checker(source, target, attributes, ignore_default=False):
-    """Check whether attributes listed in `attributes` are equivalent on both
-     source and target objects
+    """Performs a `trait_merge_check` between source and target
+    objects for each attribute listed in `attributes`. Returns a list
+    of attributes that fail this check.
 
     Parameters
     ----------
     source, target: objects
         Object instances to perform attribute checks on
     attributes: str or list of str
-        An attribute or list of attributes to check equivalence on both
-        source and target objects
+        An attribute or list of attributes used to check merge
+        eligibility of source and target objects
     ignore_default: bool, optional, default: False
         Whether or not to ignore any attributes on source listed in
         attributes that are are equal to their default values
 
     Returns
     -------
-    unequal_attr: list of str
-        Names of attributes on source and target that fail an
-        equality check
+    failed_attr: list of str
+        Names of attributes on source and target that fail a
+        merge check
     """
 
     # Ensure attributes argument is in an iterable format
@@ -69,7 +73,7 @@ def attr_checker(source, target, attributes, ignore_default=False):
 
     # Iterate through attributes list
     for attr_name in attributes:
-        if not trait_check(source, target, attr_name, ignore_default):
+        if not trait_merge_check(source, target, attr_name, ignore_default):
             failed_attr.append(attr_name)
 
     return failed_attr
@@ -80,7 +84,9 @@ def sync_trait_with_check(source, target, name, attributes=None,
     """Sync an attribute on a HasTraits object (target) with that of another
     HasTraits object (source). Performs the same function as `sync_trait`
     method, but with some extra logic checks on on selected attributes
-    supplied by `attributes`.
+    supplied by `attributes`. These checks are designed to determine
+    whether both objects possess a similar enough state to sync the
+    `name` attribute.
 
     Parameters
     ----------
@@ -100,8 +106,8 @@ def sync_trait_with_check(source, target, name, attributes=None,
     RuntimeError, if any attribute checks fail
     """
 
-    # Obtain names of any attributes in `attr_check` on both source and target
-    # that do not match
+    # Obtain names of any attributes in `attr_check` on both source and
+    # target that fail a `trait_merge_check`
     failed_attr = attr_checker(source, target, attributes,
                                ignore_default=ignore_default)
 
