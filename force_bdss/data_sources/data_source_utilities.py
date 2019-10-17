@@ -1,3 +1,4 @@
+import copy
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -126,3 +127,52 @@ def sync_trait_with_check(source, target, name, attributes=None,
 
     # Sync attribute `name` on target with that of source
     source.sync_trait(name, target, mutual=False)
+
+
+def retain_list(new_list, old_list, attributes):
+    """Cross checks all elements in new_list against old_list
+    to identify those that are similar enough to be considered
+    as relating to the same variable.
+    Returns a list containing the old instances of elements
+    that match, and any elements in new_list that are not in old_list
+
+    Parameters
+    ----------
+    new_list: list
+        List of new elements
+    old_list: list
+        List of old elements to be retained
+    attributes: str or list of str, optional
+        An attribute or list of attributes to check equivalence on both
+        source and target objects
+
+    Returns
+    -------
+    retained_list: list
+        List containing all elements to be retained
+    """
+    retained_list = []
+    old_list = copy.copy(old_list)
+
+    for new_element in new_list:
+        retained = False
+        for old_element in old_list:
+            # Obtain names of any attributes in `attr_check` on
+            # both new_list and old_list that fail a
+            # `trait_merge_check`
+            failed_attr = attr_checker(
+                new_element, old_element, attributes
+            )
+
+            # If failed_attr is empty, we consider both elements
+            # to be referring to the same variable
+            if not failed_attr:
+                retained = True
+                retained_list.append(old_element)
+                old_list.remove(old_element)
+                break
+
+        if not retained:
+            retained_list.append(new_element)
+
+    return retained_list

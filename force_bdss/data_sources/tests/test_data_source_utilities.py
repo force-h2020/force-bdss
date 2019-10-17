@@ -3,7 +3,8 @@ from unittest import TestCase
 from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
-    trait_merge_check, attr_checker, sync_trait_with_check
+    trait_merge_check, attr_checker, sync_trait_with_check,
+    retain_list
 )
 
 
@@ -93,3 +94,21 @@ class TestDataSourceUtilities(TestCase):
             another_trait, self.old_trait, 'a_string',
             attributes=['an_integer'], ignore_default=True)
         self.assertEqual('new', self.old_trait.a_string)
+
+    def test_retain_list(self):
+
+        object_1 = DummyTrait()
+        object_1.a_string = 'A string'
+
+        object_2 = AnotherDummyTrait()
+        object_2.a_string = 'Another string'
+
+        list_1 = [object_1, object_1, object_2]
+        list_2 = [object_1]
+
+        retained_list = retain_list(list_1, list_2, ['a_string'])
+        self.assertEqual(3, len(retained_list))
+
+        retained_list = retain_list(list_2, list_1, ['a_string'])
+        self.assertEqual(1, len(retained_list))
+        self.assertEqual('A string', retained_list[0].a_string)

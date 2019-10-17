@@ -11,7 +11,7 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
-from .data_source_utilities import sync_trait_with_check
+from .data_source_utilities import sync_trait_with_check, retain_list
 
 logger = getLogger(__name__)
 
@@ -101,6 +101,37 @@ class BaseDataSourceModel(BaseModel):
         if changes_slots:
             self.changes_slots = True
 
+    @on_trait_change('changes_slots')
+    def _update_slot_info(self):
+        """This method is designed to be performed upon a `change_slots`
+        event to obtain the new format for input_slot_info
+        and output_slot_info lists. It obtains the new input_slot_info
+        and output_slot_info defaults, and updates the existing
+        attributes with any format changes.
+
+        Retains any InputSlotInfo or OutputSlotInfo elements
+        referring to variables that have been defined before.
+        These are identified as having matching `type` and
+        `description` attributes.
+        """
+
+        # Get new slots, caused by change_slots event
+        new_input_slot_info = self._input_slot_info_default()
+        new_output_slot_info = self._output_slot_info_default()
+
+        # Update the input_slot_info and output_slot_info attributes
+        # by retaining any slots that already exist and are named in the
+        # UI
+        self.input_slot_info = retain_list(
+            new_input_slot_info, self.input_slot_info,
+            ['type', 'description']
+        )
+
+        self.output_slot_info = retain_list(
+            new_output_slot_info, self.output_slot_info,
+            ['type', 'description']
+        )
+
     # -------------------
     #  Protected Methods
     # -------------------
@@ -142,8 +173,10 @@ class BaseDataSourceModel(BaseModel):
 
     def _assign_slot_info(self, name, new_slot_info):
         """Assign either input_slot_info or output_slot_info attributes
-        with new values. The argument slot_info must have the same length as
-        the existing class trait name.
+        with new values. The argument `new_slot_info` must have the same length
+        as the existing `name` attribute. Each element in new_slot_info must also
+        contain matching `type`, `description` attributes as the corresponding
+        element in the existing `name` attribute.
 
         Parameters
         ----------
@@ -167,6 +200,7 @@ class BaseDataSourceModel(BaseModel):
         if len(new_slot_info) == 0:
             return
 
+        # Perform a value check on `name` argument
         if name not in ["input_slot_info", "output_slot_info"]:
             error_msg = (
                 "Attribute 'name' must be either 'input_slot_info' "
@@ -175,14 +209,17 @@ class BaseDataSourceModel(BaseModel):
             logger.exception(error_msg)
             raise ValueError(error_msg)
 
-        slot_info_attr = getattr(self, name)
+        # Obtain a reference to the old attribute that will be reassigned
+        old_slot_info = getattr(self, name)
 
-        if len(new_slot_info) != len(slot_info_attr):
+        # Check that the length of the new attribute is the same
+        # as the old
+        if len(new_slot_info) != len(old_slot_info):
             error_msg = (
                 "The number of slots in {} ({}) of the {} model doesn't"
                 " match the expected number of slots ({}). This is"
                 " likely due to a corrupted file.".format(
-                    name, len(slot_info_attr),
+                    name, len(old_slot_info),
                     type(self).__name__,
                     len(new_slot_info))
             )
@@ -191,8 +228,8 @@ class BaseDataSourceModel(BaseModel):
 
         # Check whether each element in new_slot_info has the same class,
         # `type` and `description` attributes as the corresponding element
-        # in slot_info_attr, and if so, synchronize their `name` attributes
-        for new_info, old_info in zip(new_slot_info, slot_info_attr):
+        # in old_slot_info, and if so, synchronize their `name` attributes
+        for new_info, old_info in zip(new_slot_info, old_slot_info):
             sync_trait_with_check(
                 new_info, old_info, 'name',
                 attributes=['__class__', 'type', 'description'],
@@ -202,13 +239,6 @@ class BaseDataSourceModel(BaseModel):
     # -------------------
     #   Public Methods
     # -------------------
-
-    def slot_info_defaults(self):
-        """Provides an access point to return default values of
-        input_slot_info and output_slot_info"""
-
-        return (self._input_slot_info_default(),
-                self._output_slot_info_default())
 
     def verify(self):
         """ Verify the data source model.

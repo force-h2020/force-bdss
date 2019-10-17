@@ -12,6 +12,9 @@ from force_bdss.tests.dummy_classes.data_source import (
 from force_bdss.tests.dummy_classes.extension_plugin import (
     DummyExtensionPlugin
 )
+from force_bdss.tests.probe_classes.probe_extension_plugin import (
+    ProbeExtensionPlugin
+)
 
 
 class ChangesSlotsModel(BaseDataSourceModel):
@@ -164,6 +167,41 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.c = 5
 
+    def test__update_slot_info(self):
+        plugin = ProbeExtensionPlugin()
+        factory = plugin.data_source_factories[0]
+        model = factory.create_model()
+
+        self.assertEqual(1, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+
+        model.input_slot_info[0].name = 'foo'
+        model.output_slot_info[0].name = 'bar'
+
+        model.input_slots_size = 2
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+        self.assertEqual('foo', model.input_slot_info[0].name)
+        self.assertEqual('', model.input_slot_info[1].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+
+        model.output_slots_size = 3
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(3, len(model.output_slot_info))
+        self.assertEqual('foo', model.input_slot_info[0].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+        self.assertEqual('', model.output_slot_info[1].name)
+        self.assertEqual('', model.output_slot_info[2].name)
+
+        # If all list elements are removed, the slot name is not
+        # expected to be retained
+        model.input_slots_size = 0
+        model.input_slots_size = 2
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(3, len(model.output_slot_info))
+        self.assertEqual('', model.input_slot_info[0].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+
     def test_bad_factory(self):
 
         factory = BadDataSourceFactory(self.plugin)
@@ -183,17 +221,6 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             with testfixtures.LogCapture():
                 with self.assertRaises(Exception):
                     model.verify()
-
-    def test_slot_info_defaults(self):
-
-        model = DummyDataSourceModel(self.factory)
-        input_slot_info, output_slot_info = model.slot_info_defaults()
-
-        self.assertEqual(1, len(input_slot_info))
-        self.assertEqual(1, len(output_slot_info))
-
-        self.assertEqual('TYPE1', input_slot_info[0].type)
-        self.assertEqual('TYPE2', output_slot_info[0].type)
 
     def test_verify(self):
 
