@@ -156,6 +156,8 @@ class BaseDataSourceModel(BaseModel):
 
         Raises
         ------
+        ValueError, if `name` argument is not either "input_slot_info",
+        or "output_slot_info"
         RuntimeError, if length of slot_info and name attribute are not equal,
         or if the `type` and `description` attributes on each element do not
         match
@@ -171,7 +173,7 @@ class BaseDataSourceModel(BaseModel):
                 "or 'output_slot_info'."
             )
             logger.exception(error_msg)
-            raise RuntimeError(error_msg)
+            raise ValueError(error_msg)
 
         slot_info_attr = getattr(self, name)
 

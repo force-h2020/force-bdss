@@ -1,3 +1,4 @@
+import testfixtures
 from unittest import TestCase, mock
 
 from traits.api import Int
@@ -28,7 +29,6 @@ class BadDataSourceFactory(DummyDataSourceFactory):
 class BadDataSource(DummyDataSource):
 
     def slots(self, model):
-        print('exception')
         raise Exception("bad slots")
 
 
@@ -39,41 +39,79 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
     def test__assign_slot_info(self):
 
+        # Test normal function
         model = self.factory.create_model()
-
         model._assign_slot_info(
             "input_slot_info",
             [InputSlotInfo(name="bar")]
         )
-
         self.assertEqual("bar", model.input_slot_info[0].name)
         self.assertEqual("TYPE1", model.input_slot_info[0].type)
 
-        with self.assertRaises(RuntimeError):
-            model._assign_slot_info(
-                "wrong_attribute_name",
-                [InputSlotInfo(name="bar")]
+        with testfixtures.LogCapture() as capture:
+            # Test name argument failure
+            with self.assertRaises(ValueError):
+                model._assign_slot_info(
+                    "wrong_argument_name",
+                    [InputSlotInfo(name="bar")]
+                )
+            capture.check(
+                ('force_bdss.data_sources.base_data_source_model',
+                 'ERROR',
+                 "Attribute 'name' must be either "
+                 "'input_slot_info' or 'output_slot_info'.")
             )
+            capture.clear()
 
-        with self.assertRaises(RuntimeError):
-            model._assign_slot_info(
-                "input_slot_info",
-                [InputSlotInfo(name="bar",
-                               type='wrong_type')]
+            # Wrong Slot type attribute
+            with self.assertRaises(RuntimeError):
+                model._assign_slot_info(
+                    "input_slot_info",
+                    [InputSlotInfo(name="bar",
+                                   type='wrong_type')]
+                )
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'The type attribute of source <class '
+                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
+                 "(wrong_type) doesn't match the target <class "
+                 "'force_bdss.core.input_slot_info.InputSlotInfo'> (TYPE1).")
             )
+            capture.clear()
 
-        with self.assertRaises(RuntimeError):
-            model._assign_slot_info(
-                "input_slot_info",
-                [InputSlotInfo(name="bar",
-                               description='wrong_desc')]
+            # Wrong Slot description attribute
+            with self.assertRaises(RuntimeError):
+                model._assign_slot_info(
+                    "input_slot_info",
+                    [InputSlotInfo(name="bar",
+                                   description='wrong_desc')]
+                )
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'The description attribute of source <class '
+                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
+                 "(wrong_desc) doesn't match the target <class "
+                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
+                 "(No description).")
             )
+            capture.clear()
 
-        with self.assertRaises(RuntimeError):
-            model._assign_slot_info(
-                "input_slot_info",
-                [InputSlotInfo(name="bar"),
-                 InputSlotInfo(name='too_long')]
+            # Wrong slot length
+            with self.assertRaises(RuntimeError):
+                model._assign_slot_info(
+                    "input_slot_info",
+                    [InputSlotInfo(name="bar"),
+                     InputSlotInfo(name='too_long')]
+                )
+            capture.check(
+                ('force_bdss.data_sources.base_data_source_model',
+                 'ERROR',
+                 'The number of slots in input_slot_info (1) of the '
+                 "DummyDataSourceModel model doesn't match the "
+                 "expected number of slots (2). This is likely due to "
+                 'a corrupted file.')
             )
 
     def test_getstate(self):
@@ -142,8 +180,9 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                         'DummyDataSourceFactory.create_data_source')\
                 as mock_data_source:
             mock_data_source.return_value = BadDataSource(self.factory)
-            with self.assertRaises(Exception):
-                model.verify()
+            with testfixtures.LogCapture():
+                with self.assertRaises(Exception):
+                    model.verify()
 
     def test_slot_info_defaults(self):
 

@@ -116,8 +116,9 @@ def sync_trait_with_check(source, target, name, attributes=None,
         error_msg = (
             "The {} attribute of source {} ({}) doesn't match the "
             "target {} ({}).".format(
-                attr_name, source, getattr(source, name),
-                target, getattr(target, name)
+                attr_name, source.__class__,
+                getattr(source, attr_name),
+                target.__class__, getattr(target, attr_name)
             )
         )
         logger.exception(error_msg)
