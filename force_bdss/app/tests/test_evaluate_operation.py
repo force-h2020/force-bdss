@@ -175,9 +175,9 @@ class TestEvaluateOperation(TestCase):
             capture.check(
                 ('force_bdss.data_sources.base_data_source_model',
                  'ERROR',
-                 'The number of slots in output_slot_info (2) of the'
+                 'The number of OutputSlotInfo objects (1) of the'
                  " ProbeDataSourceModel model doesn't match the "
-                 "expected number of slots (1). This is likely due to "
+                 "expected number of slots (2). This is likely due to "
                  'a corrupted file.'),
                 ('force_bdss.io.workflow_reader',
                  'ERROR',
