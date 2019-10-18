@@ -5,12 +5,16 @@ from traits.api import Int
 from traits.testing.api import UnittestTools
 
 from force_bdss.core.input_slot_info import InputSlotInfo
+from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import (
     DummyDataSourceFactory, DummyDataSource, DummyDataSourceModel
 )
 from force_bdss.tests.dummy_classes.extension_plugin import (
     DummyExtensionPlugin
+)
+from force_bdss.tests.probe_classes.probe_extension_plugin import (
+    ProbeExtensionPlugin
 )
 
 
@@ -33,89 +37,156 @@ class BadDataSource(DummyDataSource):
 
 
 class TestBaseDataSourceModel(TestCase, UnittestTools):
+
     def setUp(self):
-        self.plugin = DummyExtensionPlugin()
-        self.factory = self.plugin.data_source_factories[0]
+        self.probe_plugin = ProbeExtensionPlugin()
+        self.probe_factory = self.probe_plugin.data_source_factories[0]
+
+        self.dummy_plugin = DummyExtensionPlugin()
+        self.dummy_factory = self.dummy_plugin.data_source_factories[0]
+
+    def test_init(self):
+
+        # Empty initialisation
+        model = self.dummy_factory.create_model()
+
+        self.assertEqual(1, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+
+        self.assertEqual("", model.input_slot_info[0].name)
+        self.assertEqual("TYPE1", model.input_slot_info[0].type)
+        self.assertEqual(
+            "No description", model.input_slot_info[0].description
+        )
+
+        self.assertEqual("", model.output_slot_info[0].name)
+        self.assertEqual("TYPE2", model.output_slot_info[0].type)
+        self.assertEqual(
+            "No description", model.output_slot_info[0].description
+        )
+
+        # Initialise with model_data - In this example the type attribute
+        # must match that returned by DummyDataSource class, but both `name`
+        # and `description` are free to be assigned
+        model_data = {
+            "input_slot_info": [
+                InputSlotInfo(name="foo",
+                              type="TYPE1",
+                              description="A description")
+            ]}
+        model = self.dummy_factory.create_model(model_data=model_data)
+
+        self.assertEqual(1, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+
+        self.assertEqual("foo", model.input_slot_info[0].name)
+        self.assertEqual("TYPE1", model.input_slot_info[0].type)
+        self.assertEqual(
+            "A description", model.input_slot_info[0].description)
+
+        self.assertEqual("", model.output_slot_info[0].name)
+        self.assertEqual("TYPE2", model.output_slot_info[0].type)
+        self.assertEqual(
+            "No description", model.output_slot_info[0].description)
+
+    def test_init_exceptions(self):
+
+        with testfixtures.LogCapture() as capture:
+            # Initialise with incorrect length of input_slot_info
+            with self.assertRaises(RuntimeError):
+                model_data = {
+                    "input_slot_info": [
+                        InputSlotInfo(), InputSlotInfo()
+                    ]}
+                self.probe_factory.create_model(model_data=model_data)
+            capture.check(
+                ('force_bdss.data_sources.base_data_source_model',
+                 'ERROR',
+                 "The number of InputSlotInfo objects (2) "
+                 "of the ProbeDataSourceModel model doesn't match"
+                 " the expected number of slots (1). This is likely "
+                 'due to a corrupted file.')
+            )
+            capture.clear()
+
+            # Initialise with incorrect `type` attribute on
+            # input_slot_info element
+            with self.assertRaises(RuntimeError):
+                model_data = {
+                    "input_slot_info": [
+                        InputSlotInfo(type="WRONG_TYPE")
+                    ]}
+                self.probe_factory.create_model(model_data=model_data)
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'The type attribute of source (WRONG_TYPE) '
+                 "doesn't match the target (PRESSURE).")
+            )
+            capture.clear()
+
+            # Initialise with incorrect `description` attribute on
+            # input_slot_info element
+            with self.assertRaises(RuntimeError):
+                model_data = {
+                    "input_slot_info": [
+                        InputSlotInfo(description="Wrong description")
+                    ]}
+                self.probe_factory.create_model(model_data=model_data)
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'The description attribute of source'
+                 " (Wrong description) doesn't match the "
+                 "target (An input variable).")
+            )
+            capture.clear()
 
     def test__assign_slot_info(self):
 
         # Test normal function
-        model = self.factory.create_model()
-        model._assign_slot_info(
-            "input_slot_info",
-            [InputSlotInfo(name="bar")]
-        )
-        self.assertEqual("bar", model.input_slot_info[0].name)
+        model = self.dummy_factory.create_model()
+        model._assign_slot_info()
+
+        self.assertEqual("", model.input_slot_info[0].name)
         self.assertEqual("TYPE1", model.input_slot_info[0].type)
+        self.assertEqual(
+            "No description", model.input_slot_info[0].description
+        )
 
-        with testfixtures.LogCapture() as capture:
-            # Test name argument failure
-            with self.assertRaises(ValueError):
-                model._assign_slot_info(
-                    "wrong_argument_name",
-                    [InputSlotInfo(name="bar")]
-                )
-            capture.check(
-                ('force_bdss.data_sources.base_data_source_model',
-                 'ERROR',
-                 "Attribute 'name' must be either "
-                 "'input_slot_info' or 'output_slot_info'.")
-            )
-            capture.clear()
+        # Test with new attribute values on InputSlotInfo object
+        model.input_slot_info[0].name = 'foo'
+        model.input_slot_info[0].description = 'A variable'
+        model._assign_slot_info()
 
-            # Wrong Slot type attribute
-            with self.assertRaises(RuntimeError):
-                model._assign_slot_info(
-                    "input_slot_info",
-                    [InputSlotInfo(name="bar",
-                                   type='wrong_type')]
-                )
-            capture.check(
-                ('force_bdss.data_sources.data_source_utilities',
-                 'ERROR',
-                 'The type attribute of source <class '
-                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
-                 "(wrong_type) doesn't match the target <class "
-                 "'force_bdss.core.input_slot_info.InputSlotInfo'> (TYPE1).")
-            )
-            capture.clear()
+        self.assertEqual("foo", model.input_slot_info[0].name)
+        self.assertEqual("TYPE1", model.input_slot_info[0].type)
+        self.assertEqual("A variable", model.input_slot_info[0].description)
 
-            # Wrong Slot description attribute
-            with self.assertRaises(RuntimeError):
-                model._assign_slot_info(
-                    "input_slot_info",
-                    [InputSlotInfo(name="bar",
-                                   description='wrong_desc')]
-                )
-            capture.check(
-                ('force_bdss.data_sources.data_source_utilities',
-                 'ERROR',
-                 'The description attribute of source <class '
-                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
-                 "(wrong_desc) doesn't match the target <class "
-                 "'force_bdss.core.input_slot_info.InputSlotInfo'> "
-                 "(No description).")
-            )
-            capture.clear()
+        # Test with default values on Slot object
+        with mock.patch('force_bdss.data_sources.base_data_source_model.'
+                        'BaseDataSourceModel._return_slots',
+                        return_value=([Slot()], [Slot()])):
+            model._assign_slot_info()
 
-            # Wrong slot length
-            with self.assertRaises(RuntimeError):
-                model._assign_slot_info(
-                    "input_slot_info",
-                    [InputSlotInfo(name="bar"),
-                     InputSlotInfo(name='too_long')]
-                )
-            capture.check(
-                ('force_bdss.data_sources.base_data_source_model',
-                 'ERROR',
-                 'The number of slots in input_slot_info (1) of the '
-                 "DummyDataSourceModel model doesn't match the "
-                 "expected number of slots (2). This is likely due to "
-                 'a corrupted file.')
+            self.assertEqual("foo", model.input_slot_info[0].name)
+            self.assertEqual("TYPE1", model.input_slot_info[0].type)
+            self.assertEqual(
+                "A variable", model.input_slot_info[0].description
             )
+
+        # Test with empty list for output_slot_info attribute
+        model.output_slot_info = []
+        model._assign_slot_info()
+
+        self.assertEqual("", model.output_slot_info[0].name)
+        self.assertEqual("TYPE2", model.output_slot_info[0].type)
+        self.assertEqual(
+            "No description", model.output_slot_info[0].description
+        )
 
     def test_getstate(self):
-        model = self.factory.create_model()
+        model = self.dummy_factory.create_model()
 
         self.assertDictEqual(
             model.__getstate__(),
@@ -153,7 +224,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             })
 
     def test_changes_slots(self):
-        model = ChangesSlotsModel(self.factory)
+        model = ChangesSlotsModel(self.dummy_factory)
 
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.a = 5
@@ -166,30 +237,29 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
     def test_bad_slots(self):
 
-        model = DummyDataSourceModel(self.factory)
+        model = DummyDataSourceModel(self.dummy_factory)
 
         with mock.patch('force_bdss.tests.dummy_classes.data_source.'
                         'DummyDataSourceFactory.create_data_source')\
                 as mock_data_source:
-            mock_data_source.return_value = BadDataSource(self.factory)
+            mock_data_source.return_value = BadDataSource(self.dummy_factory)
             with testfixtures.LogCapture():
                 with self.assertRaises(Exception):
                     model.verify()
 
     def test_slot_info_defaults(self):
 
-        model = DummyDataSourceModel(self.factory)
-        input_slot_info, output_slot_info = model.slot_info_defaults()
+        model = DummyDataSourceModel(self.dummy_factory)
 
-        self.assertEqual(1, len(input_slot_info))
-        self.assertEqual(1, len(output_slot_info))
+        self.assertEqual(1, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
 
-        self.assertEqual('TYPE1', input_slot_info[0].type)
-        self.assertEqual('TYPE2', output_slot_info[0].type)
+        self.assertEqual('TYPE1', model.input_slot_info[0].type)
+        self.assertEqual('TYPE2', model.output_slot_info[0].type)
 
     def test_verify(self):
 
-        model = DummyDataSourceModel(self.factory)
+        model = DummyDataSourceModel(self.dummy_factory)
 
         model.input_slot_info = [
             InputSlotInfo(name="bar"),

@@ -181,13 +181,6 @@ class BaseDataSourceModel(BaseModel):
     #   Public Methods
     # -------------------
 
-    def slot_info_defaults(self):
-        """Provides an access point to return default values of
-        input_slot_info and output_slot_info"""
-
-        return (self._input_slot_info_default(),
-                self._output_slot_info_default())
-
     def verify(self):
         """ Verify the data source model.
 
