@@ -11,7 +11,10 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
-from .data_source_utilities import sync_trait_with_check, retain_list
+from .data_source_utilities import (
+    merge_lists_with_check, merge_lists,
+    retain_list
+)
 
 logger = getLogger(__name__)
 
@@ -47,48 +50,12 @@ class BaseDataSourceModel(BaseModel):
     #: this and adapt the visual entries.
     changes_slots = Event()
 
-    def __init__(self, factory=None, input_slot_info=None,
-                 output_slot_info=None, *args, **kwargs):
+    def __init__(self, factory=None, *args, **kwargs):
         super(BaseDataSourceModel, self).__init__(factory, *args, **kwargs)
-
         # If either input_slot_info or output_slot_info have been passed in
         # as arguments, perform extra checks before assigning to make sure
         # they will be accepted by the BaseDataSource associated with factory
-        if input_slot_info is not None:
-            self._assign_slot_info("input_slot_info", input_slot_info)
-        if output_slot_info is not None:
-            self._assign_slot_info("output_slot_info", output_slot_info)
-
-    # -------------------
-    #      Defaults
-    # -------------------
-
-    def _input_slot_info_default(self):
-        """Default list of InputSlotInfo object, based on length and
-        attributes of Slots tuple returned by slots method on associated
-        BaseDataSource"""
-
-        input_slots, _ = self._generate_slots()
-
-        return [
-            InputSlotInfo(name='',
-                          type=slot.type,
-                          description=slot.description)
-            for slot in input_slots
-        ]
-
-    def _output_slot_info_default(self):
-        """Default list of OutputSlotInfo object, based on length and
-        attributes of Slots tuple returned by slots method on associated
-        BaseDataSource"""
-        _, output_slots = self._generate_slots()
-
-        return [
-            OutputSlotInfo(name='',
-                           type=slot.type,
-                           description=slot.description)
-            for slot in output_slots
-        ]
+        self._assign_slot_info()
 
     # -------------------
     #      Listeners
@@ -109,28 +76,41 @@ class BaseDataSourceModel(BaseModel):
         and output_slot_info defaults, and updates the existing
         attributes with any format changes.
 
-        Retains any InputSlotInfo or OutputSlotInfo elements
-        referring to variables that have been defined before.
-        These are identified as having matching `type` and
-        `description` attributes.
+        A change_slots event can indicate 2 outcomes:
+        1. Changes to the number of input and output Slot objects
+        returned by the corresponding BaseDataSource
+        2. Changes to attributes on each Slot object returned by the
+        corresponding BaseDataSource
+
+        In the first instance, we would like to retain any InputSlotInfo
+        or OutputSlotInfo elements referring to variables that have
+        been defined before. These are identified as having matching
+        `type` and `description` attributes with an element in the
+        new default slot lists.
+
+        In the second instance, expect each element on the existing
+        input_slot_info or output_slot_info lists to refer to the
+        corresponding element on the new default lists returned by
+        the _return_slots method. Therefore we simply update any
+        attribute `type` and `description` values.
         """
-
         # Get new slots, caused by change_slots event
-        new_input_slot_info = self._input_slot_info_default()
-        new_output_slot_info = self._output_slot_info_default()
+        for attr_name, slot_info in self._slot_info_generator():
+            attr = getattr(self, attr_name)
 
-        # Update the input_slot_info and output_slot_info attributes
-        # by retaining any slots that already exist and are named in the
-        # UI
-        self.input_slot_info = retain_list(
-            new_input_slot_info, self.input_slot_info,
-            ['type', 'description']
-        )
-
-        self.output_slot_info = retain_list(
-            new_output_slot_info, self.output_slot_info,
-            ['type', 'description']
-        )
+            if len(slot_info) == len(attr):
+                # If changes_slots event has not altered the length of
+                # each list attribute, update each element with any
+                # changed 'type' and 'description' values
+                merge_lists(slot_info, attr, ['type', 'description'])
+            else:
+                # Otherwise update the list attributes by retaining any
+                # elements that have matching 'type' and 'description'
+                # values
+                new_list = retain_list(
+                    slot_info, attr, ['type', 'description']
+                )
+                setattr(self, attr_name, new_list)
 
     # -------------------
     #  Protected Methods
@@ -151,7 +131,7 @@ class BaseDataSourceModel(BaseModel):
     #   Private Methods
     # -------------------
 
-    def _generate_slots(self):
+    def _return_slots(self):
         """Returns slots generated by the DataSource associated with the
         assigned factory attribute"""
 
@@ -169,72 +149,77 @@ class BaseDataSourceModel(BaseModel):
             )
             raise
 
-        return input_slots, output_slots
+        return list(input_slots), list(output_slots)
 
-    def _assign_slot_info(self, name, new_slot_info):
-        """Assign either input_slot_info or output_slot_info attributes
-        with new values. The argument `new_slot_info` must have the same length
-        as the existing `name` attribute. Each element in new_slot_info must also
-        contain matching `type`, `description` attributes as the corresponding
-        element in the existing `name` attribute.
+    def _slot_info_generator(self):
+        """Generates default lists of InputSlotInfo and
+        OutputSlotInfo objects, based on length and attributes of
+        Slots tuple returned by _return_slots method"""
 
-        Parameters
-        ----------
-        name: str
-            Name of attribute to update, must be either "input_slot_info"
-            or "output_slot_info"
-        new_slot_info: list of type InputSlotInfo of OutputSlotInfo
-            List containing objects to update each element of
-            name attribute with
+        input_slots, output_slots = self._return_slots()
+
+        input_slot_info = [
+            InputSlotInfo(type=slot.type,
+                          description=slot.description)
+            for slot in input_slots
+        ]
+
+        output_slot_info = [
+            OutputSlotInfo(type=slot.type,
+                           description=slot.description)
+            for slot in output_slots
+        ]
+
+        for element in zip(["input_slot_info", "output_slot_info"],
+                           [input_slot_info, output_slot_info]):
+            yield element
+
+    def _assign_slot_info(self):
+        """Assign input_slot_info or output_slot_info attributes
+        with new values, based on the format of return Slot objects
+        from _generate_slot methods.
 
         Raises
         ------
-        ValueError, if `name` argument is not either "input_slot_info",
-        or "output_slot_info"
         RuntimeError, if length of slot_info and name attribute are not equal,
         or if the `type` and `description` attributes on each element do not
-        match
+        pass a `merge_trait_check` call
         """
 
-        # Ignore any changes if new_slot_info list is empty
-        if len(new_slot_info) == 0:
-            return
+        # Get default slot info lists and cycle through each slot_info
+        # attribute
+        for attr_name, slot_info in self._slot_info_generator():
 
-        # Perform a value check on `name` argument
-        if name not in ["input_slot_info", "output_slot_info"]:
-            error_msg = (
-                "Attribute 'name' must be either 'input_slot_info' "
-                "or 'output_slot_info'."
-            )
-            logger.exception(error_msg)
-            raise ValueError(error_msg)
+            attr = getattr(self, attr_name)
 
-        # Obtain a reference to the old attribute that will be reassigned
-        old_slot_info = getattr(self, name)
+            if attr:
+                # Check that the length of attr is same as its
+                # default value
+                if len(attr) != len(slot_info):
+                    error_msg = (
+                        "The number of {} objects ({}) of the"
+                        " {} model doesn't match the expected number "
+                        "of slots ({}). This is likely due to a "
+                        "corrupted file.".format(
+                            type(attr[0]).__name__,
+                            len(attr),
+                            type(self).__name__,
+                            len(slot_info))
+                    )
+                    logger.exception(error_msg)
+                    raise RuntimeError(error_msg)
 
-        # Check that the length of the new attribute is the same
-        # as the old
-        if len(new_slot_info) != len(old_slot_info):
-            error_msg = (
-                "The number of slots in {} ({}) of the {} model doesn't"
-                " match the expected number of slots ({}). This is"
-                " likely due to a corrupted file.".format(
-                    name, len(old_slot_info),
-                    type(self).__name__,
-                    len(new_slot_info))
-            )
-            logger.exception(error_msg)
-            raise RuntimeError(error_msg)
-
-        # Check whether each element in new_slot_info has the same class,
-        # `type` and `description` attributes as the corresponding element
-        # in old_slot_info, and if so, synchronize their `name` attributes
-        for new_info, old_info in zip(new_slot_info, old_slot_info):
-            sync_trait_with_check(
-                new_info, old_info, 'name',
-                attributes=['__class__', 'type', 'description'],
-                ignore_default=True
-            )
+                # Perform a merge of `type` and `description`
+                # attributes between the corresponding
+                # InputSlotInfo/OutputSlotInfo and Slot elements.
+                merge_lists_with_check(
+                    attr, slot_info,
+                    attributes=['type', 'description']
+                )
+            else:
+                # If attribute list is empty, simply assign default
+                # value
+                setattr(self, attr_name, slot_info)
 
     # -------------------
     #   Public Methods
@@ -254,7 +239,7 @@ class BaseDataSourceModel(BaseModel):
             The list of all detected errors in the data source model.
         """
 
-        input_slots, output_slots = self._generate_slots()
+        input_slots, output_slots = self._return_slots()
 
         errors = []
 
