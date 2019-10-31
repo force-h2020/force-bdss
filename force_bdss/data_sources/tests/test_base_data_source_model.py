@@ -285,24 +285,6 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             'A volume variable', model.output_slot_info[0].description
         )
 
-    def test_bad_factory(self):
-
-        factory = BadDataSourceFactory(self.dummy_plugin)
-
-        with testfixtures.LogCapture() as capture:
-            with self.assertRaises(Exception):
-                factory.create_model()
-            capture.check(
-                ('force_bdss.data_sources.base_data_source_factory',
-                 'ERROR',
-                 'Unable to create DataSourceModel from factory '
-                 'force.bdss.enthought.plugin.test.v0.factory'
-                 '.dummy_data_source in plugin '
-                 'force.bdss.enthought.plugin.test.v0. '
-                 'This may indicate a programming error '
-                 'in the plugin')
-            )
-
     def test_bad_slots(self):
 
         model = DummyDataSourceModel(self.dummy_factory)
