@@ -247,16 +247,6 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                 with self.assertRaises(Exception):
                     model.verify()
 
-    def test_slot_info_defaults(self):
-
-        model = DummyDataSourceModel(self.dummy_factory)
-
-        self.assertEqual(1, len(model.input_slot_info))
-        self.assertEqual(1, len(model.output_slot_info))
-
-        self.assertEqual('TYPE1', model.input_slot_info[0].type)
-        self.assertEqual('TYPE2', model.output_slot_info[0].type)
-
     def test_verify(self):
 
         model = DummyDataSourceModel(self.dummy_factory)

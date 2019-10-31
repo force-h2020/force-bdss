@@ -5,7 +5,7 @@ from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
     trait_similarity_check, attr_checker, merge_trait_with_check,
-    merge_lists, merge_lists_with_check, merge_trait
+    merge_lists_with_check, merge_trait
 )
 
 
@@ -159,34 +159,6 @@ class TestDataSourceUtilities(TestCase):
             another_trait, self.old_trait, 'a_string',
             attributes=['an_integer'], ignore_default=True)
         self.assertEqual('new', self.old_trait.a_string)
-
-    def test_merge_lists(self):
-
-        object_1 = DummyTrait()
-        object_2 = DummyTrait(a_string='A string')
-        object_3 = AnotherDummyTrait(a_string='Another string')
-
-        list_1 = [object_1]
-        list_2 = [object_2]
-        merge_lists(list_1, list_2, ['a_string'])
-
-        self.assertEqual('A string', object_1.a_string)
-        self.assertEqual('A string', object_2.a_string)
-
-        list_1 = [object_3]
-        list_2 = [object_2]
-        merge_lists(list_1, list_2, ['a_string'])
-
-        self.assertEqual('Another string', object_2.a_string)
-        self.assertEqual('Another string', object_3.a_string)
-
-        list_1 = [DummyTrait()]
-        list_2 = [object_1, object_2, object_3]
-        merge_lists(list_1, list_2, ['a_string'])
-
-        self.assertEqual('A string', object_1.a_string)
-        self.assertEqual('Another string', object_2.a_string)
-        self.assertEqual('Another string', object_3.a_string)
 
     def test_merge_lists_with_check(self):
 

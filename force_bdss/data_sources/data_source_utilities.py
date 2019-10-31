@@ -158,29 +158,6 @@ def merge_trait_with_check(source, target, name, attributes=None,
     merge_trait(source, target, name)
 
 
-def merge_lists(new_list, old_list, attributes):
-    """Perform a merge_trait of each attribute in `attributes`
-    between the corresponding elements of new_list and old_list.
-    Overwrite priority is given to the values in new_list
-
-    Parameters
-    ----------
-    new_list: list
-        List of new elements
-    old_list: list
-        List of old elements to be retained
-    attributes: str or list of str, optional
-        An attribute or list of attributes to merge on each
-        corresponding element in new_list and old_list
-    """
-
-    # Perform a merge_trait on each corresponding element
-    # of new_list and old_list
-    for new_element, old_element in zip(new_list, old_list):
-        for attr in attributes:
-            merge_trait(new_element, old_element, attr)
-
-
 def merge_lists_with_check(new_list, old_list, attributes):
     """Perform a merge_trait_with_check of each attribute in
     `attributes` between the corresponding elements of new_list
