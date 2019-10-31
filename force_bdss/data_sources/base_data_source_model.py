@@ -11,9 +11,9 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
-
 from .data_source_utilities import (
-    merge_lists_with_check
+    merge_lists_with_check, merge_lists,
+    retain_list
 )
 
 logger = getLogger(__name__)
@@ -67,6 +67,50 @@ class BaseDataSourceModel(BaseModel):
 
         if changes_slots:
             self.changes_slots = True
+
+    @on_trait_change('changes_slots')
+    def _update_slot_info(self):
+        """This method is designed to be performed upon a `change_slots`
+        event to obtain the new format for input_slot_info
+        and output_slot_info lists. It obtains the new input_slot_info
+        and output_slot_info defaults, and updates the existing
+        attributes with any format changes.
+
+        A change_slots event can indicate 2 outcomes:
+        1. Changes to the number of input and output Slot objects
+        returned by the corresponding BaseDataSource
+        2. Changes to attributes on each Slot object returned by the
+        corresponding BaseDataSource
+
+        In the first instance, we would like to retain any InputSlotInfo
+        or OutputSlotInfo elements referring to variables that have
+        been defined before. These are identified as having matching
+        `type` and `description` attributes with an element in the
+        new default slot lists.
+
+        In the second instance, expect each element on the existing
+        input_slot_info or output_slot_info lists to refer to the
+        corresponding element on the new default lists returned by
+        the _return_slots method. Therefore we simply update any
+        attribute `type` and `description` values.
+        """
+        # Get new slots, caused by change_slots event
+        for attr_name, slot_info in self._slot_info_generator():
+            attr = getattr(self, attr_name)
+
+            if len(slot_info) == len(attr):
+                # If changes_slots event has not altered the length of
+                # each list attribute, update each element with any
+                # changed 'type' and 'description' values
+                merge_lists(slot_info, attr, ['type', 'description'])
+            else:
+                # Otherwise update the list attributes by retaining any
+                # elements that have matching 'type' and 'description'
+                # values
+                new_list = retain_list(
+                    slot_info, attr, ['type', 'description']
+                )
+                setattr(self, attr_name, new_list)
 
     # -------------------
     #  Protected Methods

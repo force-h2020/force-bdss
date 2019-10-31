@@ -5,7 +5,7 @@ from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
     trait_similarity_check, attr_checker, merge_trait_with_check,
-    merge_lists_with_check, merge_trait
+    retain_list, merge_lists, merge_lists_with_check, merge_trait
 )
 
 
@@ -83,7 +83,8 @@ class TestDataSourceUtilities(TestCase):
         self.assertTrue(
             trait_similarity_check(
                 self.old_trait, another_trait, 'an_integer',
-                ignore_default=True)
+                ignore_default=True
+            )
         )
 
     def test_attr_checker(self):
@@ -160,6 +161,34 @@ class TestDataSourceUtilities(TestCase):
             attributes=['an_integer'], ignore_default=True)
         self.assertEqual('new', self.old_trait.a_string)
 
+    def test_merge_lists(self):
+
+        object_1 = DummyTrait()
+        object_2 = DummyTrait(a_string='A string')
+        object_3 = AnotherDummyTrait(a_string='Another string')
+
+        list_1 = [object_1]
+        list_2 = [object_2]
+        merge_lists(list_1, list_2, ['a_string'])
+
+        self.assertEqual('A string', object_1.a_string)
+        self.assertEqual('A string', object_2.a_string)
+
+        list_1 = [object_3]
+        list_2 = [object_2]
+        merge_lists(list_1, list_2, ['a_string'])
+
+        self.assertEqual('Another string', object_2.a_string)
+        self.assertEqual('Another string', object_3.a_string)
+
+        list_1 = [DummyTrait()]
+        list_2 = [object_1, object_2, object_3]
+        merge_lists(list_1, list_2, ['a_string'])
+
+        self.assertEqual('A string', object_1.a_string)
+        self.assertEqual('Another string', object_2.a_string)
+        self.assertEqual('Another string', object_3.a_string)
+
     def test_merge_lists_with_check(self):
 
         object_1 = DummyTrait(an_integer=10)
@@ -174,3 +203,21 @@ class TestDataSourceUtilities(TestCase):
 
         self.assertEqual('A string', object_1.a_string)
         self.assertEqual('A string', object_2.a_string)
+
+    def test_retain_list(self):
+
+        object_1 = DummyTrait()
+        object_1.a_string = 'A string'
+
+        object_2 = AnotherDummyTrait()
+        object_2.a_string = 'Another string'
+
+        list_1 = [object_1, object_1, object_2]
+        list_2 = [object_1]
+
+        retained_list = retain_list(list_1, list_2, ['a_string'])
+        self.assertEqual(3, len(retained_list))
+
+        retained_list = retain_list(list_2, list_1, ['a_string'])
+        self.assertEqual(1, len(retained_list))
+        self.assertEqual('A string', retained_list[0].a_string)

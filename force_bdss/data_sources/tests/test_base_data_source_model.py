@@ -235,6 +235,56 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.c = 5
 
+    def test__update_slot_info_length(self):
+        model = self.probe_factory.create_model()
+
+        self.assertEqual(1, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+
+        model.input_slot_info[0].name = 'foo'
+        model.output_slot_info[0].name = 'bar'
+
+        model.input_slots_size = 2
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(1, len(model.output_slot_info))
+        self.assertEqual('foo', model.input_slot_info[0].name)
+        self.assertEqual('', model.input_slot_info[1].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+
+        model.output_slots_size = 3
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(3, len(model.output_slot_info))
+        self.assertEqual('foo', model.input_slot_info[0].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+        self.assertEqual('', model.output_slot_info[1].name)
+        self.assertEqual('', model.output_slot_info[2].name)
+
+        # If all list elements are removed, the slot name is not
+        # expected to be retained
+        model.input_slots_size = 0
+        model.input_slots_size = 2
+        self.assertEqual(2, len(model.input_slot_info))
+        self.assertEqual(3, len(model.output_slot_info))
+        self.assertEqual('', model.input_slot_info[0].name)
+        self.assertEqual('bar', model.output_slot_info[0].name)
+
+    def test__update_slot_info_attr(self):
+
+        model = self.probe_factory.create_model()
+
+        self.assertEqual('PRESSURE', model.input_slot_info[0].type)
+        self.assertEqual('PRESSURE', model.output_slot_info[0].type)
+
+        model.input_slots_type = 'VOLUME'
+
+        self.assertEqual('VOLUME', model.input_slot_info[0].type)
+
+        model.output_slots_desc = 'A volume variable'
+
+        self.assertEqual(
+            'A volume variable', model.output_slot_info[0].description
+        )
+
     def test_bad_slots(self):
 
         model = DummyDataSourceModel(self.dummy_factory)
