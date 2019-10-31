@@ -164,14 +164,6 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         with self.assertTraitDoesNotChange(model, "changes_slots"):
             model.c = 5
 
-    def test_bad_factory(self):
-
-        factory = BadDataSourceFactory(self.plugin)
-        model = DummyDataSourceModel(factory)
-
-        with self.assertRaises(Exception):
-            model.verify()
-
     def test_bad_slots(self):
 
         model = DummyDataSourceModel(self.factory)
