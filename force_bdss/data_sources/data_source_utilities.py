@@ -137,7 +137,7 @@ def merge_trait_with_check(source, target, name, attributes=None,
 
     Raises
     -----
-    RuntimeError, if any attribute checks fail
+    TraitSimilarityError, if any attribute checks fail
     """
 
     # Obtain names of any attributes in `attr_check` on both source and
