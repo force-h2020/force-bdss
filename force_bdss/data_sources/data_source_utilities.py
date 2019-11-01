@@ -144,7 +144,9 @@ def merge_trait_with_check(source, target, name, attributes=None,
     if failed_attr:
         attr_name = failed_attr[0]
         error_msg = (
-            "The {} attribute of source ({}) doesn't match the "
+            "Source object has failed a trait "
+            "similarity check with target: "
+            "The {} attribute of source ({}) doesn't match "
             "target ({}).".format(
                 attr_name,
                 getattr(source, attr_name),

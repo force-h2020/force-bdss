@@ -120,8 +120,9 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             capture.check(
                 ('force_bdss.data_sources.data_source_utilities',
                  'ERROR',
-                 'The type attribute of source (WRONG_TYPE) '
-                 "doesn't match the target (PRESSURE).")
+                 'Source object has failed a trait similarity check '
+                 'with target: The type attribute of source (WRONG_TYPE)'
+                 " doesn't match target (PRESSURE).")
             )
             capture.clear()
 
@@ -136,8 +137,9 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
             capture.check(
                 ('force_bdss.data_sources.data_source_utilities',
                  'ERROR',
-                 'The description attribute of source'
-                 " (Wrong description) doesn't match the "
+                 'Source object has failed a trait similarity check '
+                 'with target: The description attribute of source'
+                 " (Wrong description) doesn't match "
                  "target (An input variable).")
             )
             capture.clear()
