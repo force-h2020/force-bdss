@@ -148,9 +148,9 @@ class BaseDataSourceModel(BaseModel):
 
         Raises
         ------
-        RuntimeError, if length of slot_info and name attribute are not equal,
-        or if the `type` and `description` attributes on each element do not
-        pass a `merge_trait_check` call
+        ValueError, if length of slot_info and name attribute are not equal
+        TraitSimilarityError, if the `type` and `description` attributes
+        on each element do not pass a `merge_trait_check` call
         """
 
         # Get default slot info lists and cycle through each slot_info
@@ -174,7 +174,7 @@ class BaseDataSourceModel(BaseModel):
                             len(slot_info))
                     )
                     logger.exception(error_msg)
-                    raise RuntimeError(error_msg)
+                    raise ValueError(error_msg)
 
                 # Perform a merge of `type` and `description`
                 # attributes between the corresponding

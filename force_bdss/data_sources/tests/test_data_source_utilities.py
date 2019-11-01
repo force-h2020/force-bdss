@@ -5,7 +5,7 @@ from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
     trait_similarity_check, attr_checker, merge_trait_with_check,
-    merge_lists_with_check, merge_trait
+    merge_lists_with_check, merge_trait, TraitSimilarityError
 )
 
 
@@ -143,13 +143,13 @@ class TestDataSourceUtilities(TestCase):
 
         another_trait = AnotherDummyTrait(a_string='new')
         with testfixtures.LogCapture():
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(TraitSimilarityError):
                 merge_trait_with_check(
                     another_trait, self.old_trait,
                     'a_string', attributes=['an_integer']
                 )
 
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(TraitSimilarityError):
                 merge_trait_with_check(
                     another_trait, self.old_trait,
                     'a_string', attributes='__class__'

@@ -3,6 +3,10 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 
+class TraitSimilarityError(Exception):
+    """Reports the failure of a trait_similarity_check."""
+
+
 def merge_trait(source, target, name):
     """Performs a merge of trait `name` between source and target
     HasTrait objects. This is achieved by assigning the source
@@ -154,7 +158,7 @@ def merge_trait_with_check(source, target, name, attributes=None,
             )
         )
         logger.exception(error_msg)
-        raise RuntimeError(error_msg)
+        raise TraitSimilarityError(error_msg)
 
     # Merge attribute `name` between source and target
     merge_trait(source, target, name)

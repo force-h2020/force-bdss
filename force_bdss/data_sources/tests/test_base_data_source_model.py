@@ -7,6 +7,7 @@ from traits.testing.api import UnittestTools
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.data_sources.data_source_utilities import TraitSimilarityError
 from force_bdss.tests.dummy_classes.data_source import (
     DummyDataSourceFactory, DummyDataSource, DummyDataSourceModel
 )
@@ -93,7 +94,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
         with testfixtures.LogCapture() as capture:
             # Initialise with incorrect length of input_slot_info
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(ValueError):
                 model_data = {
                     "input_slot_info": [
                         InputSlotInfo(), InputSlotInfo()
@@ -111,7 +112,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
             # Initialise with incorrect `type` attribute on
             # input_slot_info element
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(TraitSimilarityError):
                 model_data = {
                     "input_slot_info": [
                         InputSlotInfo(type="WRONG_TYPE")
@@ -128,7 +129,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
             # Initialise with incorrect `description` attribute on
             # input_slot_info element
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(TraitSimilarityError):
                 model_data = {
                     "input_slot_info": [
                         InputSlotInfo(description="Wrong description")
