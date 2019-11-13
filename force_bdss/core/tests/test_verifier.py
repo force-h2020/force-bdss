@@ -105,11 +105,11 @@ class TestVerifier(unittest.TestCase):
 
         errors = verify_workflow(wf)
         self.assertEqual(len(errors), 3)
-        self.assertIn("Input slot is not named",
+        self.assertIn("An Input Slot variable has an undefined name",
                       errors[0].local_error)
         self.assertIn("All output variables have undefined names",
                       errors[1].local_error)
-        self.assertIn("An output variable has an undefined name",
+        self.assertIn("An Output Slot variable has an undefined name",
                       errors[2].local_error)
 
         ds_model.input_slot_info[0].name = 'in'

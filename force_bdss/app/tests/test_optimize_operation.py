@@ -297,10 +297,10 @@ class TestOptimizeOperation(TestCase):
                  'The MCO has no defined KPIs'),
                 ('force_bdss.app.optimize_operation',
                  'ERROR',
-                 'Input slot is not named'),
+                 'An Input Slot variable has an undefined name'),
                 ('force_bdss.app.optimize_operation',
                  'ERROR',
                  'All output variables have undefined names.'),
                 ('force_bdss.app.optimize_operation',
                  'ERROR',
-                 'An output variable has an undefined name'))
+                 'An Output Slot variable has an undefined name'))
