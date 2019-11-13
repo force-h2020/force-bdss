@@ -29,6 +29,13 @@ class BaseSlotInfo(HasStrictTraits):
     def _verify_name(self, slot_title="", verification_severity="error"):
         """ Verifies that the `name` trait of the SlotInfo object is defined,
         as it may be required for a later execution layer.
+
+        Parameters
+        --------
+        slot_title: str
+            The SlotInfo title, which specifies the meta-type of the slot
+        verification_severity: str
+            The `severity` of the potential VerifierError
         """
 
         errors = []
