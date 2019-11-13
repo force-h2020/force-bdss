@@ -168,7 +168,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
         # Test with default values on Slot object
         with mock.patch('force_bdss.data_sources.base_data_source_model.'
-                        'BaseDataSourceModel._return_slots',
+                        'BaseDataSourceModel._data_source_slots',
                         return_value=([Slot()], [Slot()])):
             model._assign_slot_info()
 
