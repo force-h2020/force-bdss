@@ -20,3 +20,12 @@ class TestBaseSlotInfo(unittest.TestCase):
              'description': 'A description'},
             self.slot_info.__getstate__()
         )
+
+    def test__verify_name(self):
+        noname_slot_info = BaseSlotInfo(
+            name='',
+            type='VOLUME',
+            description='A description'
+        )
+        errors = noname_slot_info._verify_name()
+        self.assertEqual(1, len(errors))

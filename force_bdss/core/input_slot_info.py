@@ -15,4 +15,5 @@ class InputSlotInfo(BaseSlotInfo):
     #: as ``name``.
     source = Enum("Environment")
 
-    _title = "Input Slot"
+    def verify(self):
+        return self._verify_name("Input Slot")

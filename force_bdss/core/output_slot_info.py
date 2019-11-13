@@ -7,6 +7,5 @@ class OutputSlotInfo(BaseSlotInfo):
     of a data source.
     """
 
-    _verification_severity = "warning"
-
-    _title = "Output Slot"
+    def verify(self):
+        return self._verify_name("Output Slot", "warning")

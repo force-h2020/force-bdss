@@ -23,35 +23,22 @@ class BaseSlotInfo(HasStrictTraits):
     #: A textual description of the slot
     description = Unicode("No description")
 
-    #: Slot Info title
-    _title = ""
-
-    #: Slot state verification severity
-    _verification_severity = "error"
-
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())
 
-    def verify(self):
-        """ BaseSlotInfo may require a non-empty name trait to be used in a
-        later execution layer. However, not all outputs are required to be
-        used in later stages.
-
-        Parameters:
-        title: str
-            Title of the SlotInfo ("Input", "Output")
-        severity: str
-            Severity of the verification error
+    def _verify_name(self, slot_title="", verification_severity="error"):
+        """ Verifies that the `name` trait of the SlotInfo object is defined,
+        as it may be required for a later execution layer.
         """
 
         errors = []
         if not self.name:
             error = VerifierError(
                 subject=self,
-                severity=self._verification_severity,
+                severity=verification_severity,
                 trait_name="name",
                 global_error="An {} variable has an undefined name".format(
-                    self._title
+                    slot_title
                 ),
             )
             errors.append(error)
