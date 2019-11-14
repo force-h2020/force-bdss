@@ -13,7 +13,7 @@ from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 from .data_source_utilities import (
-    merge_lists_with_check
+    merge_trait_with_check
 )
 
 logger = getLogger(__name__)
@@ -128,7 +128,7 @@ class BaseDataSourceModel(BaseModel):
 
         Yields
         ------
-        element: tuple[str, list of InputSlotInfo or OutputSlotInfo]
+        element: tuple[str, list of BaseSlotInfo]
             Tuple containing name of trait as first element and
             an object instance that could be assigned to the trait
             as second element
@@ -154,50 +154,63 @@ class BaseDataSourceModel(BaseModel):
 
     def _assign_slot_info(self):
         """Assign input_slot_info or output_slot_info attributes
-        with new values, based on the format of return Slot objects
-        from _generate_slot methods.
+        with new values, based on the format of return BaseSlotInfo
+        objects from _slot_info_generator method.
+
+        Note: provide an example here
 
         Raises
         ------
-        ValueError, if length of slot_info and name attribute are not equal
-        TraitSimilarityError, if the `type` and `description` attributes
-        on each element do not pass a `merge_trait_check` call
+        ValueError, if length of List(BaseSlotInfo) attributes on this
+        object are not equal to those returned by the associated
+        BaseDataSource `slots` method
+        TraitSimilarityError, if the attributes on each element in the
+        List(BaseSlotInfo) instances do not pass a
+        `merge_trait_with_check` call
         """
 
-        # Get default slot info lists and cycle through each slot_info
-        # attribute
-        for attr_name, slot_info in self._slot_info_generator():
+        # Get InputSlotInfo / OutputSlotInfo lists that are returned
+        # from the associated BaseDataSource subclass
+        for attr_name, data_source_slot_info in self._slot_info_generator():
 
-            attr = getattr(self, attr_name)
+            # Obtain a reference to either input_slot_info or
+            # output_slot_info attributes on this object
+            model_slot_info = getattr(self, attr_name)
 
-            if attr:
-                # Check that the length of attr is same as its
-                # default value
-                if len(attr) != len(slot_info):
+            if model_slot_info:
+                # Check that the length of the assigned attribute is the
+                # same as that returned by the BaseDataSource
+                if len(model_slot_info) != len(data_source_slot_info):
                     error_msg = (
                         "The number of {} objects ({}) of the"
                         " {} model doesn't match the expected number "
                         "of slots ({}). This is likely due to a "
                         "corrupted file.".format(
-                            type(attr[0]).__name__,
-                            len(attr),
+                            type(model_slot_info[0]).__name__,
+                            len(model_slot_info),
                             type(self).__name__,
-                            len(slot_info))
+                            len(data_source_slot_info))
                     )
                     logger.exception(error_msg)
                     raise ValueError(error_msg)
 
-                # Perform a merge of `type` and `description`
-                # attributes between the corresponding
-                # InputSlotInfo/OutputSlotInfo and Slot elements.
-                merge_lists_with_check(
-                    attr, slot_info,
-                    attributes=['type', 'description']
-                )
+                # Perform a merge of all attributes between the corresponding
+                # InputSlotInfo / OutputSlotInfo elements.
+                for slot, data_source_slot in zip(
+                        model_slot_info, data_source_slot_info):
+
+                    # Get all the attributes that need to be merged between
+                    # instances
+                    attributes = list(data_source_slot.__getstate__().keys())
+
+                    # Merge these attributes, whilst raising an exception if
+                    # both values differ and are not set at their defaults
+                    merge_trait_with_check(
+                        slot, data_source_slot, attributes)
             else:
-                # If attribute list is empty, simply assign default
-                # value
-                setattr(self, attr_name, slot_info)
+                # If attribute list is empty, simply assign
+                # data_source_slot_info
+                setattr(self, attr_name, data_source_slot_info)
 
     # -------------------
     #   Public Methods
