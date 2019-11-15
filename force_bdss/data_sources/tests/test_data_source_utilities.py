@@ -4,7 +4,7 @@ from unittest import TestCase
 from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
-    attr_similarity_check, attr_checker, merge_trait_with_check,
+    have_similar_attribute, different_attributes, merge_trait_with_check,
     merge_trait, TraitSimilarityError
 )
 
@@ -44,36 +44,36 @@ class TestDataSourceUtilities(TestCase):
     def test_trait_similarity_check(self):
 
         self.assertFalse(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.old_trait, self.new_trait, 'an_integer'
             )
         )
         self.assertTrue(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.old_trait, self.new_trait, 'an_integer',
                 ignore_default=True
             )
         )
 
         self.assertFalse(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.new_trait, self.old_trait, 'a_string'
             )
         )
         self.assertTrue(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.new_trait, self.old_trait, 'a_string',
                 ignore_default=True
             )
         )
 
         self.assertTrue(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.old_trait, self.new_trait, '__class__'
             )
         )
         self.assertTrue(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.old_trait, self.new_trait, '__class__',
                 ignore_default=True
             )
@@ -81,32 +81,32 @@ class TestDataSourceUtilities(TestCase):
 
         another_trait = AnotherDummyTrait()
         self.assertTrue(
-            attr_similarity_check(
+            have_similar_attribute(
                 self.old_trait, another_trait, 'an_integer',
                 ignore_default=True)
         )
 
     def test_attr_checker(self):
-        failed_attr = attr_checker(
+        failed_attr = different_attributes(
             self.old_trait, self.new_trait,
             '__class__',
         )
         self.assertEqual(0, len(failed_attr))
 
-        failed_attr = attr_checker(
+        failed_attr = different_attributes(
             self.old_trait, self.new_trait,
             '__class__', ignore_default=True
         )
         self.assertEqual(0, len(failed_attr))
 
-        failed_attr = attr_checker(
+        failed_attr = different_attributes(
             self.old_trait, self.new_trait,
             ['__class__', 'an_integer', 'a_string']
         )
         self.assertEqual(2, len(failed_attr))
         self.assertListEqual(['an_integer', 'a_string'], failed_attr)
 
-        failed_attr = attr_checker(
+        failed_attr = different_attributes(
             self.old_trait, self.new_trait,
             ['__class__', 'an_integer', 'a_string'],
             ignore_default=True
@@ -114,7 +114,7 @@ class TestDataSourceUtilities(TestCase):
         self.assertEqual(0, len(failed_attr))
 
         with self.assertRaises(AttributeError):
-            attr_checker(
+            different_attributes(
                 self.old_trait, self.new_trait,
                 ['not_an_attr']
             )
