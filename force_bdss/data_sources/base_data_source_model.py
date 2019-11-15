@@ -160,8 +160,7 @@ class BaseDataSourceModel(BaseModel):
         object are not equal to those returned by the associated
         BaseDataSource `slots` method
         TraitSimilarityError, if the attributes on each element in the
-        List(BaseSlotInfo) instances do not pass a
-        `merge_trait_with_check` call
+        List(BaseSlotInfo) instances do not pass a `merge_trait_with_check`
         """
 
         # Get InputSlotInfo / OutputSlotInfo lists that are returned
@@ -204,8 +203,7 @@ class BaseDataSourceModel(BaseModel):
                     # both values differ and are not set at their defaults
                     merge_trait_with_check(slot, data_source_slot, attributes)
             else:
-                # If attribute list is empty, simply assign
-                # data_source_slot_info
+                # If attribute list is empty, assign data_source_slot_info
                 setattr(self, slot_name, data_source_slot_info)
 
     # -------------------

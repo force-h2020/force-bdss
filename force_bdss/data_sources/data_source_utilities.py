@@ -94,11 +94,10 @@ def merge_trait(source, target, name):
     """ Performs a merge of trait `name` between source and target
     HasTrait objects. This is achieved by assigning the source
     attribute onto the target if it has a non-default value.
-    Otherwise, the target attribute is assigned onto the
-    source.
+    Otherwise, the target attribute is assigned onto the source.
 
-    The result is that both source and target have the
-    same value for their `name` attribute
+    The result is that both source and target have the same value
+    for their `name` attribute
 
     Parameters
     ----------
