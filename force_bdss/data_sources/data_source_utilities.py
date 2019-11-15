@@ -7,14 +7,14 @@ class TraitSimilarityError(Exception):
     """Reports the failure of a attr_similarity_check."""
 
 
-def attr_similarity_check(object_a, object_b, name, ignore_default=False):
-    """Check whether attribute on object_a can be considered similar
-    to the same attribute on object_b.
+def have_similar_attribute(object_a, object_b, name, ignore_default=False):
+    """ Check whether `name` attribute on object_a is similar to the
+    same attribute on object_b.
 
-    This is allowed either if both attributes share the
-    same `name` value, or when ignore_default==True, then it is also
-    allowed if either attribute has not been changed from its default
-    value.
+    Attributes are called similar if:
+    - both attributes share the same `name` value, or
+    - (when ignore_default==True) either attribute has not been changed
+     from its default value.
 
     Parameters
     ----------
@@ -23,9 +23,9 @@ def attr_similarity_check(object_a, object_b, name, ignore_default=False):
     name: str
         Name of an attribute to check
     ignore_default: bool, optional, default: False
-        Whether or not to ignore the attribute on source or target
-        if it is equal to its default value. Note: this will not be
-        performed if attribute does not have a default.
+        Whether or not to ignore if the `name` attribute is equal to
+        its default value. This will not be performed if attribute
+        does not have a default.
     """
 
     attr_a = getattr(object_a, name)
@@ -35,12 +35,8 @@ def attr_similarity_check(object_a, object_b, name, ignore_default=False):
     # either object is its default value, and skip cross check if so
     if ignore_default:
         try:
-            default_check_a = (
-                attr_a == object_a.trait(name).default
-            )
-            default_check_b = (
-                attr_b == object_b.trait(name).default
-            )
+            default_check_a = attr_a == object_a.trait(name).default
+            default_check_b = attr_b == object_b.trait(name).default
             if default_check_a or default_check_b:
                 return True
         except AttributeError:
@@ -52,25 +48,24 @@ def attr_similarity_check(object_a, object_b, name, ignore_default=False):
     return attr_a == attr_b
 
 
-def attr_checker(object_a, object_b, attributes, ignore_default=False):
-    """Performs a `attr_similarity_check` between source and target
-    objects for each attribute listed in `attributes`. Returns a list
-    of attribute names that fail this check.
+def different_attributes(object_a, object_b, attributes, ignore_default=False):
+    """ Given `object_a` and `object_b`, return all attribute in `attributes`
+    that are not similar. The attribute similarity check is provided by
+    `have_similar_attribute`.
 
     Parameters
     ----------
     object_a, object_b: objects
         Object instances to perform attribute checks on
     attributes: str or list of str
-        An attribute or list of attributes used to check merge
-        eligibility of source and target objects
+        An attribute or list of attributes we compare the similarity of
     ignore_default: bool, optional, default: False
         Whether or not to ignore any attributes on source or target
         that are are equal to their default values
 
     Returns
     -------
-    failed_attr: list of str
+    failed_attr: list
         Names of attributes on source and target that fail a
         merge check
     """
@@ -87,23 +82,22 @@ def attr_checker(object_a, object_b, attributes, ignore_default=False):
 
     # Iterate through attributes list
     for attr_name in attributes:
-        if not attr_similarity_check(
-                object_a, object_b,
-                attr_name, ignore_default):
+        if not have_similar_attribute(
+            object_a, object_b, attr_name, ignore_default
+        ):
             failed_attr.append(attr_name)
 
     return failed_attr
 
 
 def merge_trait(source, target, name):
-    """Performs a merge of trait `name` between source and target
+    """ Performs a merge of trait `name` between source and target
     HasTrait objects. This is achieved by assigning the source
     attribute onto the target if it has a non-default value.
-    Otherwise, the target attribute is assigned onto the
-    source.
+    Otherwise, the target attribute is assigned onto the source.
 
-    The result is that both source and target have the
-    same value for their `name` attribute
+    The result is that both source and target have the same value
+    for their `name` attribute
 
     Parameters
     ----------
@@ -120,16 +114,14 @@ def merge_trait(source, target, name):
 
 
 def merge_trait_with_check(source, target, attributes, ignore_default=True):
-    """Performs the same function as `merge_trait` method, but with
-    some extra logic checks on default values and any selected
-    attributes supplied by `attributes` argument. These checks are
-    designed to determine whether both objects possess a similar
-    enough state to merge their attributes.
+    """ Performs `merge_trait` for attribute in `attributes`, with
+    checks on default values. These checks determine whether both `source`
+    and `target` possess a similar enough state to merge their attributes.
 
     Parameters
     ----------
     source, target: HasTraits
-        HasTraits instances to have thier attributes merged
+        HasTraits instances to have their attributes merged
     attributes: str or list of str
         An attribute or list of attributes to merge on both
         source and target objects
@@ -144,8 +136,9 @@ def merge_trait_with_check(source, target, attributes, ignore_default=True):
 
     # Obtain names of any provided attributes on both source and
     # target that fail an `attr_similarity_check`
-    failed_attr = attr_checker(source, target, attributes,
-                               ignore_default=ignore_default)
+    failed_attr = different_attributes(
+        source, target, attributes, ignore_default=ignore_default
+    )
 
     if failed_attr:
         attr_name = failed_attr[0]
@@ -156,7 +149,7 @@ def merge_trait_with_check(source, target, attributes, ignore_default=True):
             "target ({}).".format(
                 attr_name,
                 getattr(source, attr_name),
-                getattr(target, attr_name)
+                getattr(target, attr_name),
             )
         )
         logger.exception(error_msg)
@@ -164,7 +157,7 @@ def merge_trait_with_check(source, target, attributes, ignore_default=True):
 
     # Merge attributes between source and target
     if isinstance(attributes, str):
-        merge_trait(source, target, attributes)
-    else:
-        for attr in attributes:
-            merge_trait(source, target, attr)
+        attributes = [attributes]
+
+    for attr in attributes:
+        merge_trait(source, target, attr)

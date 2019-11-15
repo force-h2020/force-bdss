@@ -1,8 +1,6 @@
 from logging import getLogger
 
-from traits.api import (
-    Instance, List, Event, on_trait_change
-)
+from traits.api import Instance, List, Event, on_trait_change
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core.input_slot_info import InputSlotInfo
@@ -11,10 +9,8 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
+from .data_source_utilities import merge_trait_with_check
 
-from .data_source_utilities import (
-    merge_trait_with_check
-)
 
 logger = getLogger(__name__)
 
@@ -27,6 +23,7 @@ class BaseDataSourceModel(BaseModel):
     In your factory definition, your factory-specific model must reimplement
     this class.
     """
+
     #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
     factory = Instance(IDataSourceFactory, visible=False, transient=True)
@@ -100,8 +97,7 @@ class BaseDataSourceModel(BaseModel):
             logger.exception(
                 "Unable to create data source from factory {}, plugin "
                 "{}. This might indicate a  programming error".format(
-                    self.factory.id,
-                    self.factory.plugin_id
+                    self.factory.id, self.factory.plugin_id
                 )
             )
             raise
@@ -113,8 +109,7 @@ class BaseDataSourceModel(BaseModel):
                 "Unable to retrieve slot information from data source"
                 " created by factory {}, plugin {}. This might "
                 "indicate a programming error.".format(
-                    self.factory.id,
-                    self.factory.plugin_id
+                    self.factory.id, self.factory.plugin_id
                 )
             )
             raise
@@ -137,19 +132,19 @@ class BaseDataSourceModel(BaseModel):
         input_slots, output_slots = self._data_source_slots()
 
         input_slot_info = [
-            InputSlotInfo(type=slot.type,
-                          description=slot.description)
+            InputSlotInfo(type=slot.type, description=slot.description)
             for slot in input_slots
         ]
 
         output_slot_info = [
-            OutputSlotInfo(type=slot.type,
-                           description=slot.description)
+            OutputSlotInfo(type=slot.type, description=slot.description)
             for slot in output_slots
         ]
 
-        for element in zip(["input_slot_info", "output_slot_info"],
-                           [input_slot_info, output_slot_info]):
+        for element in zip(
+            ["input_slot_info", "output_slot_info"],
+            [input_slot_info, output_slot_info],
+        ):
             yield element
 
     def _assign_slot_info(self):
@@ -165,17 +160,16 @@ class BaseDataSourceModel(BaseModel):
         object are not equal to those returned by the associated
         BaseDataSource `slots` method
         TraitSimilarityError, if the attributes on each element in the
-        List(BaseSlotInfo) instances do not pass a
-        `merge_trait_with_check` call
+        List(BaseSlotInfo) instances do not pass a `merge_trait_with_check`
         """
 
         # Get InputSlotInfo / OutputSlotInfo lists that are returned
         # from the associated BaseDataSource subclass
-        for attr_name, data_source_slot_info in self._slot_info_generator():
+        for slot_name, data_source_slot_info in self._slot_info_generator():
 
             # Obtain a reference to either input_slot_info or
             # output_slot_info attributes on this object
-            model_slot_info = getattr(self, attr_name)
+            model_slot_info = getattr(self, slot_name)
 
             if model_slot_info:
                 # Check that the length of the assigned attribute is the
@@ -189,7 +183,8 @@ class BaseDataSourceModel(BaseModel):
                             type(model_slot_info[0]).__name__,
                             len(model_slot_info),
                             type(self).__name__,
-                            len(data_source_slot_info))
+                            len(data_source_slot_info),
+                        )
                     )
                     logger.exception(error_msg)
                     raise ValueError(error_msg)
@@ -197,7 +192,8 @@ class BaseDataSourceModel(BaseModel):
                 # Perform a merge of all attributes between the corresponding
                 # InputSlotInfo / OutputSlotInfo elements.
                 for slot, data_source_slot in zip(
-                        model_slot_info, data_source_slot_info):
+                    model_slot_info, data_source_slot_info
+                ):
 
                     # Get all the attributes that need to be merged between
                     # instances
@@ -205,12 +201,10 @@ class BaseDataSourceModel(BaseModel):
 
                     # Merge these attributes, whilst raising an exception if
                     # both values differ and are not set at their defaults
-                    merge_trait_with_check(
-                        slot, data_source_slot, attributes)
+                    merge_trait_with_check(slot, data_source_slot, attributes)
             else:
-                # If attribute list is empty, simply assign
-                # data_source_slot_info
-                setattr(self, attr_name, data_source_slot_info)
+                # If attribute list is empty, assign data_source_slot_info
+                setattr(self, slot_name, data_source_slot_info)
 
     # -------------------
     #   Public Methods
@@ -262,11 +256,12 @@ class BaseDataSourceModel(BaseModel):
             )
 
         if self.output_slot_info and not any(
-                output_slot.name for output_slot in self.output_slot_info):
+            output_slot.name for output_slot in self.output_slot_info
+        ):
             errors.append(
                 VerifierError(
                     subject=self,
-                    severity='warning',
+                    severity="warning",
                     local_error="All output variables have undefined names.",
                     global_error=(
                         "A data source model has no defined output names."
