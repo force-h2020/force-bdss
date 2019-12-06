@@ -2,6 +2,7 @@ from unittest import TestCase, mock
 
 from traits.api import TraitError
 
+from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.parameters.mco_parameters import (
     FixedMCOParameter,
     FixedMCOParameterFactory,
@@ -16,9 +17,14 @@ from force_bdss.mco.parameters.mco_parameters import (
 
 class TestFixedMCOParameter(TestCase):
     def setUp(self):
-        self.parameter = FixedMCOParameter(
-            mock.Mock(spec=FixedMCOParameterFactory), value=1
+        self.mco_factory = mock.Mock(
+            spec=BaseMCOFactory,
+            plugin_id="pid",
+            plugin_name="Plugin",
+            id="mcoid",
         )
+        self.factory = FixedMCOParameterFactory(self.mco_factory)
+        self.parameter = FixedMCOParameter(self.factory, value=1)
 
     def test_level(self):
         self.assertEqual(1, self.parameter.value)
@@ -28,12 +34,25 @@ class TestFixedMCOParameter(TestCase):
         with self.assertRaises(TraitError):
             self.parameter.value = 1
 
+    def test_factory(self):
+        self.assertEqual("fixed", self.factory.get_identifier())
+        self.assertEqual("Fixed", self.factory.get_name())
+        self.assertEqual(
+            "A parameter with a fixed ReadOnly value.",
+            self.factory.get_description(),
+        )
+
 
 class TestRangedMCOParameter(TestCase):
     def setUp(self):
-        self.parameter = RangedMCOParameter(
-            mock.Mock(spec=RangedMCOParameterFactory)
+        self.mco_factory = mock.Mock(
+            spec=BaseMCOFactory,
+            plugin_id="pid",
+            plugin_name="Plugin",
+            id="mcoid",
         )
+        self.factory = RangedMCOParameterFactory(self.mco_factory)
+        self.parameter = RangedMCOParameter(self.factory)
 
     def test_default(self):
         self.assertEqual(0.1, self.parameter.lower_bound)
@@ -57,14 +76,27 @@ class TestRangedMCOParameter(TestCase):
         ):
             self.assertAlmostEqual(expected, actual)
 
+    def test_factory(self):
+        self.assertEqual("ranged", self.factory.get_identifier())
+        self.assertEqual("Ranged", self.factory.get_name())
+        self.assertEqual(
+            "A parameter with a ranged level in floating point values.",
+            self.factory.get_description(),
+        )
+
 
 class TestListedMCOParameter(TestCase):
     def setUp(self):
-        self.parameter = ListedMCOParameter(
-            mock.Mock(spec=ListedMCOParameterFactory)
+        self.mco_factory = mock.Mock(
+            spec=BaseMCOFactory,
+            plugin_id="pid",
+            plugin_name="Plugin",
+            id="mcoid",
         )
+        self.factory = ListedMCOParameterFactory(self.mco_factory)
+        self.parameter = ListedMCOParameter(self.factory)
         self.filled_parameter = ListedMCOParameter(
-            mock.Mock(spec=ListedMCOParameterFactory), levels=[4, 0.0, 2]
+            self.factory, levels=[4, 0.0, 2]
         )
 
     def test_init(self):
@@ -78,13 +110,28 @@ class TestListedMCOParameter(TestCase):
 
         self.assertListEqual([0.0, 2, 4], self.filled_parameter.sample_values)
 
+    def test_factory(self):
+        self.assertEqual("listed", self.factory.get_identifier())
+        self.assertEqual("Listed", self.factory.get_name())
+        self.assertEqual(
+            "A parameter with a listed set of levels"
+            " in floating point values.",
+            self.factory.get_description(),
+        )
+
 
 class TestCategoricalMCOParameter(TestCase):
     def setUp(self):
+        self.mco_factory = mock.Mock(
+            spec=BaseMCOFactory,
+            plugin_id="pid",
+            plugin_name="Plugin",
+            id="mcoid",
+        )
+        self.factory = CategoricalMCOParameterFactory(self.mco_factory)
         self.default_categories = ["chemical1", "chemical2"]
         self.parameter = CategoricalMCOParameter(
-            mock.Mock(spec=CategoricalMCOParameterFactory),
-            categories=self.default_categories,
+            self.factory, categories=self.default_categories
         )
 
     def test_default(self):
@@ -100,4 +147,12 @@ class TestCategoricalMCOParameter(TestCase):
         self.assertListEqual(
             self.default_categories + ["new_chemical"],
             self.parameter.sample_values,
+        )
+
+    def test_factory(self):
+        self.assertEqual("category", self.factory.get_identifier())
+        self.assertEqual("Categorical", self.factory.get_name())
+        self.assertEqual(
+            "A Categorical parameter defining unordered discrete objects.",
+            self.factory.get_description(),
         )

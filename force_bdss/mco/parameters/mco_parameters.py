@@ -138,7 +138,7 @@ class CategoricalMCOParameterFactory(BaseMCOParameterFactory):
 
     #: A name that will appear in the UI to identify this parameter.
     def get_name(self):
-        return "Categorical Parameter"
+        return "Categorical"
 
     #: Definition of the associated model class.
     def get_model_class(self):
