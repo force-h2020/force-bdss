@@ -23,6 +23,9 @@ PIP_DEPS = [
     "stevedore==1.30.1"
 ]
 
+ADDITIONAL_CORE_DEPS = [
+    "numpy==1.15.4-2"
+]
 
 @click.group()
 def cli():
@@ -50,7 +53,7 @@ def build_env(python_version):
 
     check_call([
         "edm", "install", "-e", env_name,
-        "--yes"] + CORE_DEPS + DEV_DEPS + DOCS_DEPS)
+        "--yes"] + CORE_DEPS + DEV_DEPS + DOCS_DEPS + ADDITIONAL_CORE_DEPS)
 
     if len(PIP_DEPS):
         check_call([
