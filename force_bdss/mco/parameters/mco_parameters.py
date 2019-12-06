@@ -61,7 +61,9 @@ class RangedMCOParameter(BaseMCOParameter):
     )
 
     def _get_sample_values(self):
-        return np.linspace(self.lower_bound, self.upper_bound, self.n_samples)
+        return list(
+            np.linspace(self.lower_bound, self.upper_bound, self.n_samples)
+        )
 
 
 class RangedMCOParameterFactory(BaseMCOParameterFactory):

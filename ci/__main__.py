@@ -27,6 +27,7 @@ ADDITIONAL_CORE_DEPS = [
     "numpy==1.15.4-2"
 ]
 
+
 @click.group()
 def cli():
     pass
