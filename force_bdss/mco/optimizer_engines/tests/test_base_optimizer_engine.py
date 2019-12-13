@@ -1,6 +1,10 @@
 from unittest import TestCase
 
+from force_bdss.api import KPISpecification
 from force_bdss.app.workflow_evaluator import WorkflowEvaluator
+from force_bdss.mco.optimizer_engines.base_optimizer_engine import (
+    convert_by_mask,
+)
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     DummyOptimizerEngine,
 )
@@ -35,7 +39,34 @@ class TestBaseOptimizerEngine(TestCase):
             self.evaluator.evaluate(point), self.optimizer_engine._score(point)
         )
 
+    def test__minimization_score(self):
+        temp_kpis = [
+            KPISpecification(),
+            KPISpecification(objective="MAXIMISE"),
+        ]
+        self.optimizer_engine.kpis = temp_kpis
+        score = [10.0, 20.0]
+        inv_values = self.optimizer_engine._minimization_score(score)
+        self.assertListEqual(list(inv_values), [10.0, -20.0])
+
     def test___getstate__(self):
         self.assertDictEqual(
             self.optimizer_engine.__getstate__(), {"verbose_run": False}
         )
+
+
+class TestUtils(TestCase):
+    def test_convert_by_mask(self):
+        kpi_specs = ["MINIMISE", "MAXIMISE"]
+        values = [10.0, 20.0]
+        inv_values = convert_by_mask(values, kpi_specs)
+        self.assertListEqual(list(inv_values), [10.0, -20.0])
+
+        inv_values = convert_by_mask(values, kpi_specs, "MINIMISE")
+        self.assertListEqual(list(inv_values), [10.0, -20.0])
+
+        inv_values = convert_by_mask(values, kpi_specs, "MAXIMISE")
+        self.assertListEqual(list(inv_values), [-10.0, 20.0])
+
+        inv_values = convert_by_mask(values, kpi_specs, "SOMETHING")
+        self.assertListEqual(list(inv_values), [-10.0, -20.0])
