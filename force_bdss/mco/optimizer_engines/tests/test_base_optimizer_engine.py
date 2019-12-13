@@ -47,6 +47,6 @@ class TestBaseOptimizerEngine(TestCase):
         self.assertListEqual(list(inv_values), [10.0, -20.0])
 
     def test___getstate__(self):
-        self.assertDictEqual(
-            self.optimizer_engine.__getstate__(), {"verbose_run": False}
-        )
+        state_dict = self.optimizer_engine.__getstate__()
+        self.assertEqual(5, len(state_dict))
+        self.assertEqual(False, state_dict["verbose_run"])
