@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 
-from traits.api import Enum, Unicode
+from traits.api import Enum, Unicode, Function
 
 from force_bdss.api import PositiveInt
 from .base_optimizer_engine import BaseOptimizerEngine
@@ -49,9 +49,9 @@ def sen_scaling_method(dimension, weighted_optimize):
 
 
 class WeightedOptimizer(BaseOptimizerEngine):
-    """Performs local optimization using scipy of multiobjective
-    function. The multiobjective function is converted to scalar
-    by dot product with appropriate weights vector.
+    """Performs local optimization of multiobjective function
+    using scipy. The multiobjective function is converted to a
+    scalar by dot product with a weights vector.
     """
 
     #: Optimizer name
@@ -63,7 +63,13 @@ class WeightedOptimizer(BaseOptimizerEngine):
     #: Algorithms available to work with
     algorithms = Enum("SLSQP", "TNC")
 
-    scaling_method = staticmethod(sen_scaling_method)
+    #: Method to calculate KPIs normalization coefficients
+    scaling_method = Function(default_value=sen_scaling_method)
+
+    def _score(self, input_point, weights):
+        score = np.dot(weights, super()._score(input_point))
+        log.info("Weighted score: {}".format(score))
+        return score
 
     def optimize(self):
         pass
