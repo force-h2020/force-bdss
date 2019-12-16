@@ -71,6 +71,20 @@ class TestWeightedOptimizer(TestCase):
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
 
+    def test___getstate__(self):
+        state = self.optimizer.__getstate__()
+        self.assertDictEqual(
+            {
+                "name": "Weighted_Optimizer",
+                "algorithms": "SLSQP",
+                "num_points": 7,
+                "space_search_mode": "Uniform",
+                "verbose_run": False,
+                "scaling_method": "sen_scaling_method",
+            },
+            state,
+        )
+
     def test__space_search_distribution(self):
         for strategy, klass in (
             ("Uniform", UniformSpaceSampler),
@@ -125,16 +139,14 @@ class TestWeightedOptimizer(TestCase):
         self.assertAlmostEqual(0.33, optimal_point[0])
         self.assertAlmostEqual(0.67, optimal_point[1])
 
-    def test___getstate__(self):
-        state = self.optimizer.__getstate__()
-        self.assertDictEqual(
-            {
-                "name": "Weighted_Optimizer",
-                "algorithms": "SLSQP",
-                "num_points": 7,
-                "space_search_mode": "Uniform",
-                "verbose_run": False,
-                "scaling_method": "sen_scaling_method",
-            },
-            state,
-        )
+    def test_weights_samples(self):
+        samples_default = list(self.optimizer.weights_samples())
+        for sample in samples_default:
+            self.assertAlmostEqual(1.0, sum(sample))
+
+        self.optimizer.space_search_mode = "Dirichlet"
+        samples_dirichlet = list(self.optimizer.weights_samples())
+        for sample in samples_dirichlet:
+            self.assertAlmostEqual(1.0, sum(sample))
+
+        self.assertEqual(len(samples_default), len(samples_default))
