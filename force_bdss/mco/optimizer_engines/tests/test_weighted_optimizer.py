@@ -150,3 +150,10 @@ class TestWeightedOptimizer(TestCase):
             self.assertAlmostEqual(1.0, sum(sample))
 
         self.assertEqual(len(samples_default), len(samples_default))
+
+    def test_optimize(self):
+        for optimal_point, optimal_kpis, _ in self.mocked_optimizer.optimize():
+            self.assertAlmostEqual(0.33, optimal_point[0])
+            self.assertAlmostEqual(0.67, optimal_point[1])
+            for kpi in optimal_kpis:
+                self.assertAlmostEqual(0.0, kpi)
