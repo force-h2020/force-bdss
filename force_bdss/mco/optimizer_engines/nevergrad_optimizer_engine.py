@@ -15,7 +15,7 @@ class NevergradTypeError(Exception):
     pass
 
 
-class NevergradOptimizer(BaseOptimizerEngine):
+class NevergradOptimizerEngine(BaseOptimizerEngine):
 
     #: Optimizer name
     name = Unicode("Nevergrad")
@@ -93,7 +93,7 @@ class NevergradOptimizer(BaseOptimizerEngine):
         ]
         return ng.Instrumentation(*instrumentation)
 
-    def _get_kpi_bounds(self, kpis=None):
+    def _get_kpi_bounds(self):
         """ Assemble optimization bounds on KPIs, provided by
         the `scale_factor` attributes.
         Note: Ideally, an `upper_bound` kpi attribute should be
@@ -109,10 +109,8 @@ class NevergradOptimizer(BaseOptimizerEngine):
         upper_bounds: np.array
             kpis upper bounds
         """
-        if kpis is None:
-            kpis = self.kpis
-        upper_bounds = np.zeros(len(kpis))
-        for i, kpi in enumerate(kpis):
+        upper_bounds = np.zeros(len(self.kpis))
+        for i, kpi in enumerate(self.kpis):
             try:
                 upper_bounds[i] = kpi.scale_factor
             except AttributeError:
