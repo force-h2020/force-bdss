@@ -3,7 +3,7 @@ from functools import partial
 import numpy as np
 from scipy import optimize as scipy_optimize
 
-from traits.api import Enum, Unicode
+from traits.api import Enum, Unicode, Property
 
 from force_bdss.api import PositiveInt
 from .base_optimizer_engine import BaseOptimizerEngine
@@ -72,10 +72,24 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
 
+    initial_parameter_value = Property(
+        depends_on="parameters.[initial_value]", visible=False
+    )
+
+    parameter_bounds = Property(
+        depends_on="parameters.[lower_bound, upper_bound]", visible=False
+    )
+
+    def _get_initial_parameter_value(self):
+        return [p.initial_value for p in self.parameters]
+
+    def _get_parameter_bounds(self):
+        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
+
     def weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
         by taking dot product with a vector of `weights`."""
-        score = np.dot(weights, super()._score(input_point))
+        score = np.dot(weights, self._score(input_point))
         log.info("Weighted score: {}".format(score))
         return score
 
@@ -103,7 +117,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             yield optimal_point, optimal_kpis, scaled_weights
 
     def _weighted_optimize(self, weights):
-        """ Performs single scipy.minimize operation on the convolution of
+        """ Performs single scipy.minimize operation on the dot product of
         the multiobjective function with `weights`.
 
         Parameters
@@ -116,25 +130,22 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         optimization result: tuple(np.array, np.array)
             Point of evaluation, and objective values
         """
-        initial_point = [p.initial_value for p in self.parameters]
-        bounds = [(p.lower_bound, p.upper_bound) for p in self.parameters]
-
         log.info(
             "Running optimisation."
-            + "Initial point: {}".format(initial_point)
-            + "Bounds: {}".format(bounds)
+            + "Initial point: {}".format(self.initial_parameter_value)
+            + "Bounds: {}".format(self.parameter_bounds)
         )
 
         weighted_score_func = partial(self.weighted_score, weights=weights)
 
         optimization_result = scipy_optimize.minimize(
             weighted_score_func,
-            initial_point,
+            self.initial_parameter_value,
             method=self.algorithms,
-            bounds=bounds,
+            bounds=self.parameter_bounds,
         )
         optimal_point = optimization_result.x
-        optimal_kpis = self.single_point_evaluator.evaluate(optimal_point)
+        optimal_kpis = self._score(optimal_point)
 
         log.info(
             "Optimal point : {}".format(optimal_point)
