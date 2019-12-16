@@ -20,8 +20,11 @@ DEV_DEPS = [
     "testfixtures==4.10.0-1",
 ]
 
+_nevergrad_stable_commit = "ba2c0217a043178adf9fe9f4bd52bbbfce97bfaa"
 PIP_DEPS = [
-    "stevedore==1.30.1"
+    "stevedore==1.30.1",
+    "git+https://github.com/facebookresearch/nevergrad.git@" +
+    _nevergrad_stable_commit
 ]
 
 ADDITIONAL_CORE_DEPS = [
