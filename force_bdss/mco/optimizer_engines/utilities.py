@@ -51,8 +51,7 @@ def resolution_to_sample_size(space_dimension, n_points):
 
 
 class SpaceSampler(ABCHasStrictTraits):
-    """ Base class for search space sampling from various
-    distributions.
+    """ Base class for search space sampling from various distributions.
 
     Given the dimension of the sample vectors, and the
     sampling resolution along each of the dimensions,
@@ -73,19 +72,22 @@ class SpaceSampler(ABCHasStrictTraits):
 
     @abc.abstractmethod
     def _get_sample_point(self):
-        pass
+        """ Internal generator of sample points from the distribution.
+        Returns or yields a sampled point.
+        """
 
     @abc.abstractmethod
     def generate_space_sample(self, *args, **kwargs):
-        """ Generates specified number of search space samples
+        """ Generates search space samples. The number of returned points
+        is calculated here, if `_get_sample_point` method is a random
+        sampler.
 
         Yields
         -------
         generator
-            random samples of vector satisfying the
-
+            random samples of vector satisfying the sum(p) = 1 and
+            distribution constraints
         """
-        pass
 
 
 class DirichletSpaceSampler(SpaceSampler):
