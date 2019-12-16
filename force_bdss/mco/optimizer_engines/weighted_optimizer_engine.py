@@ -128,7 +128,10 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         weighted_score_func = partial(self.weighted_score, weights=weights)
 
         optimization_result = scipy_optimize.minimize(
-            weighted_score_func, initial_point, method="SLSQP", bounds=bounds
+            weighted_score_func,
+            initial_point,
+            method=self.algorithms,
+            bounds=bounds,
         )
         optimal_point = optimization_result.x
         optimal_kpis = self.single_point_evaluator.evaluate(optimal_point)

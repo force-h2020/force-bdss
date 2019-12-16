@@ -25,7 +25,8 @@ PIP_DEPS = [
 ]
 
 ADDITIONAL_CORE_DEPS = [
-    "numpy==1.15.4-2"
+    "numpy==1.15.4-2",
+    "scipy>=1.2.1"
 ]
 
 
