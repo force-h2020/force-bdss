@@ -138,7 +138,7 @@ class NevergradOptimizerEngine(BaseOptimizerEngine):
             x = ng_optimizer.ask()
             value = f.multiobjective_function(x.args)
             volume = f.compute_aggregate_loss(
-                self._swap_minmax_kpivalues(value), *x.args, **x.kwargs
+                self._minimization_score(value), *x.args, **x.kwargs
             )
             ng_optimizer.tell(x, volume)
 
@@ -147,5 +147,5 @@ class NevergradOptimizerEngine(BaseOptimizerEngine):
 
         if not self.verbose_run:
             for point, value in f._points:
-                value = self._swap_minmax_kpivalues(value)
+                value = self._minimization_score(value)
                 yield point[0], value, [1] * len(self.kpis)

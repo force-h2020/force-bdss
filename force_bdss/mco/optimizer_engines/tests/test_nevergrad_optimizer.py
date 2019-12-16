@@ -5,7 +5,7 @@ from nevergrad.instrumentation.transforms import ArctanBound
 from force_bdss.api import KPISpecification
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
-    DummyOptimizerEngine,
+    MixinDummyOptimizerEngine,
 )
 from force_bdss.mco.optimizer_engines.nevergrad_optimizer_engine import (
     NevergradOptimizerEngine,
@@ -17,6 +17,12 @@ from force_bdss.mco.parameters.mco_parameters import (
     ListedMCOParameterFactory,
     CategoricalMCOParameterFactory,
 )
+
+
+class DummyOptimizerEngine(
+    MixinDummyOptimizerEngine, NevergradOptimizerEngine
+):
+    pass
 
 
 class TestNevergradOptimizerEngine(TestCase):
@@ -37,6 +43,9 @@ class TestNevergradOptimizerEngine(TestCase):
         ]
 
         self.optimizer = NevergradOptimizerEngine(
+            parameters=self.parameters, kpis=self.kpis
+        )
+        self.mocked_optimizer = DummyOptimizerEngine(
             parameters=self.parameters, kpis=self.kpis
         )
 
@@ -120,3 +129,12 @@ class TestNevergradOptimizerEngine(TestCase):
         self.assertEqual(len(self.optimizer.kpis), len(bounds))
         for kpi, kpi_bound in zip(self.optimizer.kpis, bounds):
             self.assertEqual(kpi.scale_factor, kpi_bound)
+
+    def test_optimize(self):
+        self.mocked_optimizer.verbose_run = True
+        optimized_data = list(self.mocked_optimizer.optimize())
+        self.assertEqual(self.mocked_optimizer.budget, len(optimized_data))
+
+        self.mocked_optimizer.verbose_run = False
+        optimized_data = list(self.mocked_optimizer.optimize())
+        self.assertEqual(7, len(optimized_data))

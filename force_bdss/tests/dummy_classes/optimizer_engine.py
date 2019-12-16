@@ -1,13 +1,10 @@
 import numpy as np
 
-from traits.api import Array
+from traits.api import Array, HasStrictTraits
 
 from force_bdss.api import PositiveInt
 from force_bdss.mco.optimizer_engines.base_optimizer_engine import (
     BaseOptimizerEngine,
-)
-from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
-    WeightedOptimizerEngine,
 )
 
 
@@ -16,7 +13,7 @@ class EmptyOptimizerEngine(BaseOptimizerEngine):
         return [0.0]
 
 
-class DummyOptimizerEngine(WeightedOptimizerEngine):
+class MixinDummyOptimizerEngine(HasStrictTraits):
     #: dummy KPI dimension
     dimension = PositiveInt(2)
 
