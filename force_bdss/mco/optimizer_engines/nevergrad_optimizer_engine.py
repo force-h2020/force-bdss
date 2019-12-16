@@ -31,7 +31,8 @@ class NevergradOptimizerEngine(BaseOptimizerEngine):
     def _algorithms_default(self):
         return "TwoPointsDE"
 
-    def _create_instrumentation_variable(self, parameter):
+    @staticmethod
+    def _create_instrumentation_variable(parameter):
         """ Create nevergrad.variable from `MCOParameter`. Different
         MCOParameter subclasses have different signature attributes.
         The mapping between MCOParameters and nevergrad types is bijective.
@@ -43,7 +44,7 @@ class NevergradOptimizerEngine(BaseOptimizerEngine):
 
         Returns
         ----------
-        nevergrad_parameter: nevergrad.Variable
+        nevergrad.Variable
             nevergrad variable of corresponding type
         """
         if hasattr(parameter, "lower_bound") and hasattr(
@@ -111,10 +112,7 @@ class NevergradOptimizerEngine(BaseOptimizerEngine):
         """
         upper_bounds = np.zeros(len(self.kpis))
         for i, kpi in enumerate(self.kpis):
-            try:
-                upper_bounds[i] = kpi.scale_factor
-            except AttributeError:
-                upper_bounds[i] = 100
+            upper_bounds[i] = kpi.scale_factor
         return upper_bounds
 
     def optimize(self):

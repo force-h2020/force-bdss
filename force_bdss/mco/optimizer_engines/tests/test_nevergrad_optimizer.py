@@ -123,6 +123,17 @@ class TestNevergradOptimizerEngine(TestCase):
                 list(instrumentation.args[i].transforms[0].a_min),
             )
 
+        # Create instrumentation from unbound parameters
+        parameter = self.optimizer.parameters[0]
+        instrumentation = self.optimizer._assemble_instrumentation([parameter])
+        args = [
+            instrumentation.args[i] for i in range(len(instrumentation.args))
+        ]
+        self.assertEqual(1, len(args))
+        self.assertListEqual(
+            [parameter.upper_bound], list(args[0].transforms[0].a_max)
+        )
+
     def test__create_kpi_bounds(self):
         self.optimizer.kpis[0].scale_factor = 10
         bounds = self.optimizer.kpi_bounds
