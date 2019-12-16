@@ -3,7 +3,7 @@ from unittest import TestCase
 from force_bdss.api import KPISpecification
 from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 from force_bdss.tests.dummy_classes.optimizer_engine import (
-    DummyOptimizerEngine,
+    EmptyOptimizerEngine,
 )
 from force_bdss.tests.probe_classes.workflow_file import ProbeWorkflowFile
 from force_bdss.tests import fixtures
@@ -17,7 +17,7 @@ class TestBaseOptimizerEngine(TestCase):
         self.evaluator = WorkflowEvaluator(
             workflow=workflow_file.workflow, workflow_filepath=file_path
         )
-        self.optimizer_engine = DummyOptimizerEngine(
+        self.optimizer_engine = EmptyOptimizerEngine(
             single_point_evaluator=self.evaluator
         )
 
@@ -48,5 +48,5 @@ class TestBaseOptimizerEngine(TestCase):
 
     def test___getstate__(self):
         state_dict = self.optimizer_engine.__getstate__()
-        self.assertEqual(4, len(state_dict))
+        self.assertEqual(1, len(state_dict))
         self.assertEqual(False, state_dict["verbose_run"])

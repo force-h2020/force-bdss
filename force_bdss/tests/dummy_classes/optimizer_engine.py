@@ -11,27 +11,12 @@ from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
 )
 
 
-class DummyOptimizerEngine(BaseOptimizerEngine):
-
-    #: dummy KPI dimension
-    dimension = PositiveInt(2)
-
-    #: dispersion of the KPIs
-    margins = Array
-
-    #: known scaling factors to compare with
-    scaling_values = Array
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.margins = np.array([10.0 for _ in range(self.dimension)])
-        self.scaling_values = np.reciprocal(self.margins)
-
+class EmptyOptimizerEngine(BaseOptimizerEngine):
     def optimize(self):
         return [0.0]
 
 
-class DummyWeightedOptimizerEngine(WeightedOptimizerEngine):
+class DummyOptimizerEngine(WeightedOptimizerEngine):
     #: dummy KPI dimension
     dimension = PositiveInt(2)
 

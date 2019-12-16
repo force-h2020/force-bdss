@@ -3,7 +3,7 @@ from unittest import TestCase
 from force_bdss.api import KPISpecification
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
-    DummyWeightedOptimizerEngine,
+    DummyOptimizerEngine,
 )
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     sen_scaling_method,
@@ -26,7 +26,7 @@ class TestSenScaling(TestCase):
             )
             for _ in range(4)
         ]
-        self.optimizer = DummyWeightedOptimizerEngine(
+        self.optimizer = DummyOptimizerEngine(
             parameters=self.parameters
         )
         self.scaling_values = self.optimizer.scaling_values.tolist()
@@ -59,7 +59,7 @@ class TestWeightedOptimizer(TestCase):
         self.optimizer = WeightedOptimizerEngine(
             parameters=self.parameters, kpis=self.kpis
         )
-        self.mocked_optimizer = DummyWeightedOptimizerEngine(
+        self.mocked_optimizer = DummyOptimizerEngine(
             parameters=self.parameters, kpis=self.kpis
         )
 
