@@ -13,8 +13,9 @@ log = logging.getLogger(__name__)
 class BaseOptimizerEngine(ABCHasStrictTraits):
     """
     Optimizer Engine performs black-box optimization (minimization) of
-    the KPI values by exploring the space of input parameters. The way
-    the input space is explored is subject to the developer to implement.
+    the KPI values by exploring the space of input parameters. Developer
+    implements the input space search strategy, and how the minimization
+    is performed.
     Users should be able to choose an Optimizer Engine, setup the optimization
     parameters, and get optimized data from the OptimizerEngine.optimize
     method.
@@ -23,27 +24,27 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
     #: A list of the input parameters representing the search space
     parameters = List(BaseMCOParameter, visible=False, transient=True)
 
-    #: A list of the output KPI parameters representing
-    #: the optimization objective(s)
+    #: A list of the output KPI parameters representing the objective(s)
     kpis = List(KPISpecification, visible=False, transient=True)
 
-    #: Executes the workflow with given input parameters and returns
-    #: the KPIs of the workflow
+    #: Object that Executes the workflow with given input parameters
+    #: and returns the KPI values of the workflow.
     #: Note: rename to `evaluator`. This will break existing API
     single_point_evaluator = Instance(
         IEvaluator, visible=False, transient=True
     )
 
-    #: Yield data points on each workflow evaluation
+    #: Yield data points on each workflow evaluation, or return filtered
+    #: data, e.g. Pareto front only
     verbose_run = Bool(False)
 
     @abc.abstractmethod
     def optimize(self):
-        """ Main entry point to the OptimizerEngine. This is an general
-        iterator over [explored input space, objective space, **kwargs].
-        It can yield data as a single workflow evaluation has been completed,
-        or return the optimization data after all required computations
-        have finished.
+        """ Main entry point to the OptimizerEngine. This is a general
+        iterator. It yields [explored input space, objective space, **kwargs].
+        It can yield data as a single workflow evaluation has been completed
+        (if `verbose_run` is True), or return the optimization data after all
+        required computations have finished (if `verbose_run` is False).
         """
 
     def _score(self, input_point):
