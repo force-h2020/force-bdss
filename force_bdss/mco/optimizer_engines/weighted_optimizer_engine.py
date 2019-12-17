@@ -52,9 +52,9 @@ def sen_scaling_method(dimension, weighted_optimize):
 
 
 class WeightedOptimizerEngine(BaseOptimizerEngine):
-    """Performs local optimization of multiobjective function
-    using scipy. The multiobjective function is converted to a
-    scalar by dot product with a weights vector.
+    """ Performs local optimization of multiobjective function using scipy.
+    The multiobjective function is converted to a scalar by dot product
+    with a weights vector (`weighted_score`).
     """
 
     #: Optimizer name
@@ -72,10 +72,12 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
 
+    #: Default (initial) guess on input parameter values
     initial_parameter_value = Property(
         depends_on="parameters.[initial_value]", visible=False
     )
 
+    #: Input parameter bounds. Defines the search space.
     parameter_bounds = Property(
         depends_on="parameters.[lower_bound, upper_bound]", visible=False
     )
@@ -193,7 +195,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
     def _space_search_distribution(self, **kwargs):
         """ Generates space search distribution object, based on
-        the user settings of the `space_search_strategy` trait."""
+        the user settings of the `space_search_mode` attribute."""
 
         if self.space_search_mode == "Uniform":
             distribution = UniformSpaceSampler
@@ -205,7 +207,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
     def weights_samples(self, **kwargs):
         """ Generates necessary number of search space sample points
-        from the internal search strategy."""
+        from the `space_search_mode` search strategy."""
         return self._space_search_distribution(
             **kwargs
         ).generate_space_sample()

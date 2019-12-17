@@ -73,6 +73,15 @@ class TestWeightedOptimizer(TestCase):
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
 
+        self.assertListEqual(
+            self.optimizer.initial_parameter_value,
+            [0.5] * len(self.parameters),
+        )
+        self.assertListEqual(
+            self.optimizer.parameter_bounds,
+            [(0.0, 1.0)] * len(self.parameters),
+        )
+
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
         self.assertDictEqual(
