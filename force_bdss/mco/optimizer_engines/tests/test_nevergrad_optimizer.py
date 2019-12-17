@@ -2,20 +2,20 @@ from unittest import TestCase, mock
 import nevergrad as ng
 from nevergrad.instrumentation.transforms import ArctanBound
 
-from force_bdss.api import KPISpecification
+from force_bdss.api import (
+    KPISpecification,
+    NevergradOptimizerEngine,
+    FixedMCOParameterFactory,
+    RangedMCOParameterFactory,
+    ListedMCOParameterFactory,
+    CategoricalMCOParameterFactory,
+)
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     MixinDummyOptimizerEngine,
 )
 from force_bdss.mco.optimizer_engines.nevergrad_optimizer_engine import (
-    NevergradOptimizerEngine,
     NevergradTypeError,
-)
-from force_bdss.mco.parameters.mco_parameters import (
-    FixedMCOParameterFactory,
-    RangedMCOParameterFactory,
-    ListedMCOParameterFactory,
-    CategoricalMCOParameterFactory,
 )
 
 

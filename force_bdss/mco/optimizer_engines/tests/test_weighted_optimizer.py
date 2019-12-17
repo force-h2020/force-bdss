@@ -1,19 +1,21 @@
 from unittest import TestCase
 
-from force_bdss.api import KPISpecification
+from force_bdss.api import (
+    KPISpecification,
+    WeightedOptimizerEngine,
+    RangedMCOParameterFactory,
+)
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     MixinDummyOptimizerEngine,
 )
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     sen_scaling_method,
-    WeightedOptimizerEngine,
 )
 from force_bdss.mco.optimizer_engines.utilities import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
 )
-from force_bdss.mco.parameters.mco_parameters import RangedMCOParameterFactory
 
 
 class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedOptimizerEngine):

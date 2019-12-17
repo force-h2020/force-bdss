@@ -2,10 +2,7 @@ import numpy as np
 
 from traits.api import Array, HasStrictTraits
 
-from force_bdss.api import PositiveInt
-from force_bdss.mco.optimizer_engines.base_optimizer_engine import (
-    BaseOptimizerEngine,
-)
+from force_bdss.api import PositiveInt, BaseOptimizerEngine
 
 
 class EmptyOptimizerEngine(BaseOptimizerEngine):
