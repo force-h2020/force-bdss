@@ -48,3 +48,5 @@ from .ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory  # noqa
 from .ui_hooks.base_ui_hooks_manager import BaseUIHooksManager  # noqa
 
 from .local_traits import Identifier, PositiveInt  # noqa
+
+from .io.base_csv_writer import BaseCSVWriterFactory  # noqa
