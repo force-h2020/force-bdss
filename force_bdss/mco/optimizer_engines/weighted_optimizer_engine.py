@@ -162,7 +162,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         method. In general, this provides normalization values for the possible
         range of each KPI.
         Performs scaling for all KPIs that have `auto_scale == True`.
-        Otherwise, keeps the default scale factor.
+        Otherwise, keeps the default `scale_factor`.
         """
         if self.scaling_method == "sen_scaling_method":
             scaling_method = sen_scaling_method
@@ -194,7 +194,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         return default_scaling_factors.tolist()
 
     def _space_search_distribution(self, **kwargs):
-        """ Generates space search distribution object, based on
+        """ Creates a space search distribution object, based on
         the user settings of the `space_search_mode` attribute."""
 
         if self.space_search_mode == "Uniform":
