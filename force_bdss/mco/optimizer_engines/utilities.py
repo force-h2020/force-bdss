@@ -53,12 +53,11 @@ def resolution_to_sample_size(space_dimension, n_points):
 class SpaceSampler(ABCHasStrictTraits):
     """ Base class for search space sampling from various distributions.
 
-    Given the dimension of the sample vectors, and the
-    sampling resolution along each of the dimensions,
-    it provides a public method to generate a number of
-    search space samples.
-    The space search satisfies the requirement that the
-    l1-norm of all samples always equals 1.0.
+    Given the dimension of the sample vectors and the sampling resolution
+    along each of the dimensions, SpaceSampler can generate sampling points
+    with `generate_space_sample`.
+    The space search satisfies the requirement that the l1-norm of all sample
+    points always equals 1.0.
     """
 
     #: the dimension of the sample vectors
@@ -91,21 +90,18 @@ class SpaceSampler(ABCHasStrictTraits):
 
 
 class DirichletSpaceSampler(SpaceSampler):
-    """ Search space sampler class with probability
-    distribution function defined by the Dirichlet
-    distribution [1].
+    """ Search space sampler class with probability distribution function
+    defined by the Dirichlet distribution [1].
 
-    The distribution is "fair", providing equal statistics
-    for each component of the sample vector. The user can
-    control how centered the distribution is, by changing
-    `alpha`:
+    The distribution is "fair": it provides equal probability for each
+    component of the sample vector. The user can control the distribution shape
+    by changing `alpha`:
         - Samples are closer to bounds for alpha < 1,
         - Samples are concentrated in the middle of the
         search space for alpha > 1,
         - All samples have equal probability for alpha = 1
 
-    A nice visualization of the Dirichlet distribution can be
-    found at [2].
+    A nice visualization of the Dirichlet distribution can be found at [2].
 
     References
     -------
@@ -114,8 +110,10 @@ class DirichletSpaceSampler(SpaceSampler):
         2014/02/02/visualizing-dirichlet-distributions/
     """
 
+    #: Dirichlet distribution parameter
     alpha = ListFloat()
 
+    #: Distribution generation function
     _distribution_function = np.random.dirichlet
 
     def __init__(self, dimension, resolution, alpha=None, **kwargs):
@@ -138,10 +136,10 @@ class DirichletSpaceSampler(SpaceSampler):
 
 
 class UniformSpaceSampler(SpaceSampler):
-    """ Search space sampler class provides all possible combinations
-    of weights adding to 1, such that the sampling points are uniformly
-    distributed along each axis. For example, a dimension 3 will give
-    all combinations (x, y, z), where
+    """ UniformSpaceSampler provides all possible combinations of weights
+    adding to 1, such that the sampling points are uniformly distributed along
+    each axis. For example, a dimension 3 will give all combinations (x, y, z),
+    where
         x + y + z = 1.0,
     and (x, y, z) can realise only specified equidistant values.
 
@@ -149,11 +147,12 @@ class UniformSpaceSampler(SpaceSampler):
     dimension will be performed. For example `resolution = 3` will evaluate
     for x being 0.0, 0.5 and 1.0.
 
-    Parameter `with_zero_values` defines whether to include zero valued
-    weights. If `with_zero_values` parameter is set to False, then ensure
+    Parameter `with_zero_values` controls the presence of zero valued entries.
+    If `with_zero_values` parameter is set to False, then ensure
     `resolution > dimension` in order for the generator to return any values.
     """
 
+    #: Controls whether zero entries can appear in sample vector
     with_zero_values = Bool(False)
 
     def generate_space_sample(self, **kwargs):
@@ -161,11 +160,10 @@ class UniformSpaceSampler(SpaceSampler):
 
     def _get_sample_point(self):
         """
-        Returns
-        -------
-        generator
-            A generator returning all the possible combinations satisfying the
-            requirement that the sum of all the weights must always be 1.0
+        Yields
+        ----------
+            Yields all the possible combinations satisfying the requirement
+            that the sum of all the weights must always be 1.0
         """
 
         scaling = 1.0 / (self.resolution - 1)
