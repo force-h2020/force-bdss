@@ -33,8 +33,6 @@ class TestNevergradOptimizerEngine(TestCase):
         self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
 
-        self.kpis = self.kpis
-
         self.parameters = [
             RangedMCOParameterFactory(self.factory).create_model(
                 {"lower_bound": 0.0, "upper_bound": 1.0}
