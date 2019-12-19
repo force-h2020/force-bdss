@@ -1,4 +1,5 @@
 import click
+import subprocess
 from subprocess import check_call
 
 DEFAULT_PYTHON_VERSION = "3.6"
@@ -101,8 +102,18 @@ def flake8(python_version):
 def coverage(python_version):
     env_name = get_env_name(python_version)
 
-    check_call(["edm", "run", "-e", env_name, "--",
-                "coverage", "run", "-m", "unittest", "discover"])
+    returncode = edm_run(
+        env_name, ["coverage", "run", "-m", "unittest", "discover"])
+    if returncode:
+        raise click.ClickException("There were test failures.")
+
+    returncode = edm_run(env_name, ["pip", "install", "codecov"])
+    if not returncode:
+        returncode = edm_run(env_name, ["codecov"])
+
+    if returncode:
+        raise click.ClickException(
+            "There were errors while installing and running codecov.")
 
 
 @cli.command(help="Builds the documentation")
@@ -119,6 +130,10 @@ def get_env_name(python_version):
 
 def remove_dot(python_version):
     return "".join(python_version.split('.'))
+
+
+def edm_run(env_name, cmd, cwd=None):
+    return subprocess.call(["edm", "run", "-e", env_name, "--"]+cmd, cwd=cwd)
 
 
 if __name__ == "__main__":
