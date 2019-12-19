@@ -6,12 +6,26 @@ from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 class BaseDriverEvent(HasStrictTraits):
     """ Base event for the MCO driver."""
+
     def __getstate__(self):
-        return pop_dunder_recursive(super().__getstate__())
+        state = pop_dunder_recursive(super().__getstate__())
+        for key in state:
+            # We safely attempt to get state of the zero and first
+            # level objects of the object state dictionary
+            try:
+                if isinstance(state[key], (tuple, list)):
+                    state[key] = [el.__getstate__() for el in state[key]]
+                else:
+                    state[key] = state[key].__getstate__()
+            except AttributeError:
+                pass
+
+        return state
 
 
 class MCOStartEvent(BaseDriverEvent):
     """ The MCO driver should emit this event when the evaluation starts."""
+
     #: The names assigned to the parameters.
     parameter_names = List(Unicode())
 
@@ -24,9 +38,10 @@ class MCOFinishEvent(BaseDriverEvent):
 
 
 class MCOProgressEvent(BaseDriverEvent):
-    """ The MCO driver should emit this event for every new optimal point
-    that is found during the evaluation.
+    """ The MCO driver should emit this event for every new point that is
+    evaluated during the MCO run.
     """
+
     #: The point in parameter space resulting from the pareto
     #: front optimization
     optimal_point = List(Instance(DataValue))
@@ -36,9 +51,3 @@ class MCOProgressEvent(BaseDriverEvent):
 
     #: The weights assigned to the KPIs
     weights = List(Float())
-
-    def __getstate__(self):
-        d = pop_dunder_recursive(super().__getstate__())
-        d["optimal_point"] = [dv.__getstate__() for dv in d["optimal_point"]]
-        d["optimal_kpis"] = [dv.__getstate__() for dv in d["optimal_kpis"]]
-        return d
