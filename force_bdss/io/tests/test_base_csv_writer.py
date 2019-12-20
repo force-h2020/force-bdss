@@ -47,7 +47,7 @@ class TestCSVWriter(TestCase, UnittestTools):
         new_model = self.factory.create_model()
         self.notification_listener.initialize(new_model)
         self.assertEqual(new_model, self.notification_listener.model)
-        self.assertEqual([], self.notification_listener.row_data)
+        self.assertEqual({}, self.notification_listener.row_data)
         self.assertEqual([], self.notification_listener.header)
 
     def test_deliver_start_event(self):
@@ -68,6 +68,10 @@ class TestCSVWriter(TestCase, UnittestTools):
             self.assertListEqual(
                 ["p1", "p2", "kpi1", "kpi2"], self.notification_listener.header
             )
+            self.assertDictEqual(
+                {"p1": None, "p2": None, "kpi1": None, "kpi2": None},
+                self.notification_listener.row_data,
+            )
 
             mock_open.assert_called_once()
 
@@ -83,6 +87,33 @@ class TestCSVWriter(TestCase, UnittestTools):
                 self.notification_listener.parse_progress_event(event),
             )
             self.notification_listener.deliver(event)
-            self.assertListEqual([], self.notification_listener.row_data)
+            self.assertDictEqual({}, self.notification_listener.row_data)
 
             mock_open.assert_called_once()
+
+        mock_open.reset_mock()
+
+        mock_open = mock.mock_open()
+
+        with mock.patch(_CSVWRITER_OPEN, mock_open, create=True):
+            event = MCOStartEvent(
+                parameter_names=[p.name for p in self.parameters],
+                kpi_names=[k.name for k in self.kpis],
+            )
+
+            self.notification_listener.deliver(event)
+
+            event = MCOProgressEvent(
+                optimal_point=self.parameters, optimal_kpis=self.kpis
+            )
+            self.assertListEqual(
+                [1.0, 5.0, 5.7, 10],
+                self.notification_listener.parse_progress_event(event),
+            )
+            self.notification_listener.deliver(event)
+            self.assertDictEqual(
+                {"p1": None, "p2": None, "kpi1": None, "kpi2": None},
+                self.notification_listener.row_data,
+            )
+
+        mock_open.reset_mock()

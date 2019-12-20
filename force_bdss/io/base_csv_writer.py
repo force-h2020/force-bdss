@@ -1,6 +1,6 @@
 import csv
 
-from traits.api import Unicode, Instance, List
+from traits.api import Unicode, Instance, List, Dict
 
 from force_bdss.api import (
     BaseNotificationListenerFactory,
@@ -24,14 +24,16 @@ class BaseCSVWriter(BaseNotificationListener):
     header = List(Unicode)
 
     # Data entries in CSV rows
-    row_data = List
+    row_data = Dict(key_trait=Unicode)
 
     def _row_data_default(self):
-        return []
+        return dict.fromkeys(self.header)
 
     def parse_progress_event(self, event):
         """ Basic implementation of MCOProgressEvent event to row parser.
         Extracts .value attributes from `optimal_point` and `optimal_kpi`
+        The MCOProgressEvent event data **MUST BE ordered** in the same way
+        as the MCOStartEvent data.
 
         Note: this code duplicates the MCOProgressEvent handler in
         `force_wfmanager.wfmanager_setup_task._server_event_mainthread`
@@ -53,10 +55,19 @@ class BaseCSVWriter(BaseNotificationListener):
 
     def deliver(self, event):
         if isinstance(event, MCOStartEvent):
+            # MCOStartEvent is considered to be an "initialization" event
+            # for CSVWriter. Here the header is defined, and the row_data
+            # dict is instantiated with new header keys
             self.header = self.parse_start_event(event)
             self.write_to_file(self.header, mode="w")
+            self.row_data = self._row_data_default()
         elif isinstance(event, MCOProgressEvent):
-            self.row_data = self.parse_progress_event(event)
+            # MCOProgressEvent is considered to output the row data to
+            # file, therefore the current row is finished and no additional
+            # data will be accepted after this event.
+            progress_data = self.parse_progress_event(event)
+            for i, column_name in enumerate(self.header):
+                self.row_data[column_name] = progress_data[i]
             self.write_to_file(self.row_data, mode="a")
             self.row_data = self._row_data_default()
 
