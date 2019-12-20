@@ -68,7 +68,9 @@ class BaseCSVWriter(BaseNotificationListener):
             progress_data = self.parse_progress_event(event)
             for i, column_name in enumerate(self.header):
                 self.row_data[column_name] = progress_data[i]
-            self.write_to_file(self.row_data, mode="a")
+            self.write_to_file(
+                [self.row_data[el] for el in self.header], mode="a"
+            )
             self.row_data = self._row_data_default()
 
     def initialize(self, model):
