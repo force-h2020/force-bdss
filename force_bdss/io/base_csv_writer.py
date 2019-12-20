@@ -66,8 +66,8 @@ class BaseCSVWriter(BaseNotificationListener):
             # file, therefore the current row is finished and no additional
             # data will be accepted after this event.
             progress_data = self.parse_progress_event(event)
-            for i, column_name in enumerate(self.header):
-                self.row_data[column_name] = progress_data[i]
+            for column, value in zip(self.header, progress_data):
+                self.row_data[column] = value
             self.write_to_file(
                 [self.row_data[el] for el in self.header], mode="a"
             )
