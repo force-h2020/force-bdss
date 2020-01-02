@@ -30,23 +30,16 @@ class BaseCSVWriter(BaseNotificationListener):
         return dict.fromkeys(self.header)
 
     def parse_progress_event(self, event):
-        """ Basic implementation of MCOProgressEvent event to row parser.
-        Extracts .value attributes from `optimal_point` and `optimal_kpi`
+        """ Adapter to extract serialized data from the MCOProgressEvent event.
         The MCOProgressEvent event data **MUST BE ordered** in the same way
         as the MCOStartEvent data.
-
-        Note: this code duplicates the MCOProgressEvent handler in
-        `force_wfmanager.wfmanager_setup_task._server_event_mainthread`
-        Can we refactor this?
         """
-        event_datavalues = event.optimal_point + event.optimal_kpis
-        return [entry.value for entry in event_datavalues]
+        return event.serialize()
 
     def parse_start_event(self, event):
-        """ Basic implementation of MCOStartEvent event to row parser.
-        Merges the parameters' and kpis' names
+        """ Adapter to extract data from the MCOStartEvent event.
         """
-        return event.parameter_names + event.kpi_names
+        return event.serialize()
 
     def write_to_file(self, data, *, mode):
         with open(self.model.path, mode) as f:

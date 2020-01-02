@@ -32,6 +32,15 @@ class MCOStartEvent(BaseDriverEvent):
     #: The names associated to the KPIs
     kpi_names = List(Unicode())
 
+    def serialize(self):
+        """ Provides serialized form of MCOStartEvent for further data storage
+        (e.g. in csv format) or processing.
+
+        Returns:
+            List(Unicode): event parameters names and kpi names
+        """
+        return self.parameter_names + self.kpi_names
+
 
 class MCOFinishEvent(BaseDriverEvent):
     """ The MCO driver should emit this event when the evaluation ends."""
@@ -51,3 +60,20 @@ class MCOProgressEvent(BaseDriverEvent):
 
     #: The weights assigned to the KPIs
     weights = List(Float())
+
+    def serialize(self):
+        """ Provides serialized form of MCOProgressEvent for further data storage
+        (e.g. in csv format) or processing.
+
+        Note: this code duplicates the MCOProgressEvent handler in
+        `force_wfmanager.wfmanager_setup_task._server_event_mainthread`
+        Can we refactor this?
+
+        Warning: `weights` attribute is NOT serialized here. We expect it to be
+        refactored to custom MCOProgressEvent class.
+
+        Returns:
+            List(Datavalue.value): values of the event optimal points and kpis
+        """
+        event_datavalues = self.optimal_point + self.optimal_kpis
+        return [entry.value for entry in event_datavalues]

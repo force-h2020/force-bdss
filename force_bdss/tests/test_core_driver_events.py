@@ -87,3 +87,18 @@ class TestCoreDriverEvents(unittest.TestCase):
                 },
             },
         )
+
+    def test_serialize_start_event(self):
+        event = MCOStartEvent(
+            parameter_names=["p1", "p2"], kpi_names=["k1", "k2", "k3"]
+        )
+        self.assertListEqual(event.serialize(), ["p1", "p2", "k1", "k2", "k3"])
+
+    def test_serialize_progress_event(self):
+        event = MCOProgressEvent(
+            optimal_kpis=[DataValue(value=10)],
+            optimal_point=[DataValue(value=12), DataValue(value=13)],
+            weights=[1.0],
+        )
+
+        self.assertListEqual(event.serialize(), [12, 13, 10])
