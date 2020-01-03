@@ -6,7 +6,6 @@ from traits.api import (
 
 from force_bdss.mco.i_evaluator import IEvaluator
 from force_bdss.app.workflow_evaluator import WorkflowEvaluator
-from force_bdss.core_driver_events import MCOFinishEvent, MCOStartEvent
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener
@@ -58,7 +57,6 @@ class OptimizeOperation(HasStrictTraits):
             raise RuntimeError("Workflow file has errors.")
 
         self.create_mco()
-
         self._deliver_start_event()
 
         try:
@@ -101,14 +99,10 @@ class OptimizeOperation(HasStrictTraits):
         self.mco = None
 
     def _deliver_start_event(self):
-        mco_model = self.workflow.mco
-        self._deliver_event(MCOStartEvent(
-            parameter_names=list(p.name for p in mco_model.parameters),
-            kpi_names=list(kpi.name for kpi in mco_model.kpis)
-        ))
+        self._deliver_event(self.workflow.mco.create_start_event())
 
     def _deliver_finish_event(self):
-        self._deliver_event(MCOFinishEvent())
+        self._deliver_event(self.workflow.mco.create_finish_event())
 
     @on_trait_change('mco:event')
     def _deliver_event(self, event):
