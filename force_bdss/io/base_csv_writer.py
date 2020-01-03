@@ -12,10 +12,17 @@ from force_bdss.api import (
 
 
 class BaseCSVWriterModel(BaseNotificationListenerModel):
+    """ Base Model class for CSV writer."""
+
+    #: CSV file path for data storage and output
     path = Unicode("output.csv")
 
 
 class BaseCSVWriter(BaseNotificationListener):
+    """ Base class of core CSVWriter functionality.
+    BaseCSVWriter implements basic MCOStartEvent and MCOProgressEvent
+    parsers, write_to_file method, and `row_data` structure for CSV header.
+    """
 
     # A reference to the associated CSVWriterModel
     model = Instance(BaseCSVWriterModel)
