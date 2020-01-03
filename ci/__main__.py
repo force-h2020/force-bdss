@@ -1,4 +1,6 @@
 import click
+import os
+import shutil
 import subprocess
 from subprocess import check_call
 
@@ -91,20 +93,11 @@ def test(python_version, verbose):
 
     verbosity_args = ["--verbose"] if verbose else []
 
-    check_call(
-        [
-            "edm",
-            "run",
-            "-e",
-            env_name,
-            "--",
-            "python",
-            "-m",
-            "unittest",
-            "discover",
-        ]
-        + verbosity_args
-    )
+    returncode = edm_run(
+        env_name, ["python", "-m", "unittest", "discover"] + verbosity_args)
+
+    if returncode:
+        raise click.ClickException("There were test failures.")
 
 
 @cli.command(help="Run flake")
@@ -112,7 +105,10 @@ def test(python_version, verbose):
 def flake8(python_version):
     env_name = get_env_name(python_version)
 
-    check_call(["edm", "run", "-e", env_name, "--", "flake8", "."])
+    returncode = edm_run(env_name, ["flake8", "."])
+    if returncode:
+        raise click.ClickException(
+            "Flake8 exited with exit status {}".format(returncode))
 
 
 @cli.command(help="Runs the coverage")
@@ -138,10 +134,35 @@ def coverage(python_version):
 
 @cli.command(help="Builds the documentation")
 @python_version_option
-def docs(python_version):
-    env_name = get_env_name(python_version)
+@click.option('--apidoc-only', is_flag=True, help="Only generate API docs.")
+@click.option(
+    '--html-only', is_flag=True,
+    help="Only generate HTML documentation (requires API docs in source/api)."
+)
+def docs(python_version, apidoc_only, html_only):
+    if apidoc_only and html_only:
+        raise click.ClickException("Conflicting request in the invocation.")
 
-    check_call(["edm", "run", "-e", env_name, "--", "make", "html"], cwd="doc")
+    env_name = get_env_name(python_version)
+    doc_api = os.path.abspath(os.path.join("doc", "source", "api"))
+    package = os.path.abspath("force_bdss")
+
+    if not html_only:
+        click.echo("Generating API doc")
+        if os.path.exists(doc_api):
+            shutil.rmtree(doc_api)
+        returncode = edm_run(
+            env_name, ['sphinx-apidoc', '-o', doc_api, package, '*tests*'])
+        if returncode:
+            raise click.ClickException(
+                "There were errors while building the API doc.")
+
+    if not apidoc_only:
+        click.echo("Generating HTML")
+        returncode = edm_run(env_name, ["make", "html"], cwd="doc")
+        if returncode:
+            raise click.ClickException(
+                "There were errors while building HTML documentation.")
 
 
 def get_env_name(python_version):
