@@ -22,6 +22,10 @@ class BaseCSVWriter(BaseNotificationListener):
     """ Base class of core CSVWriter functionality.
     BaseCSVWriter implements basic MCOStartEvent and MCOProgressEvent
     parsers, write_to_file method, and `row_data` structure for CSV header.
+
+    Custom implementation of the existing MCOEvent parsers should consider
+    overloading only the `parse_event` adapter methods, and leave the
+    `deliver` method as it is.
     """
 
     # A reference to the associated CSVWriterModel
