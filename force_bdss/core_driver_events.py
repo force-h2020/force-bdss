@@ -46,6 +46,17 @@ class MCOStartEvent(BaseDriverEvent):
         """ Provides serialized form of MCOStartEvent for further data storage
         (e.g. in csv format) or processing.
 
+
+        Usage example:
+        For a custom MCOStartEvent subclass, this method can be overloaded.
+        An example of a custom `serialize` method would be:
+        >>> class CustomMCOStartEvent(MCOStartEvent):
+        >>>     weights = List(Float())
+        >>>     def serialize(self):
+        >>>         custom_data = [f"{name}_weight" for name in self.kpi_names]
+        >>>         return super().serialize() + custom_data
+        >>>
+
         Returns:
             List(Unicode): event parameters names and kpi names
         """
@@ -81,6 +92,15 @@ class MCOProgressEvent(BaseDriverEvent):
 
         Warning: `weights` attribute is NOT serialized here. We expect it to be
         refactored to custom MCOProgressEvent class.
+
+        Usage example:
+        For a custom MCOProgressEvent subclass, this method can be overloaded.
+        An example of a custom `serialize` method would be:
+        >>> class CustomMCOProgressEvent(MCOProgressEvent):
+        >>>     weights = List(Float())
+        >>>     def serialize(self):
+        >>>         return super().serialize() + self.weights
+        >>>
 
         Returns:
             List(Datavalue.value): values of the event optimal points and kpis
