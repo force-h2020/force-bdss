@@ -109,7 +109,7 @@ def flake8(python_version):
     returncode = edm_run(env_name, ["flake8", "."])
     if returncode:
         raise click.ClickException(
-            f"Flake8 exited with exit status {returncode}"
+            "Flake8 exited with exit status {}".format(returncode)
         )
 
 

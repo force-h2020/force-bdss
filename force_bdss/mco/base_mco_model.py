@@ -3,6 +3,7 @@ import logging
 from traits.api import Instance, List
 
 from force_bdss.core.base_model import BaseModel
+from force_bdss.core_driver_events import MCOStartEvent, MCOFinishEvent
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.verifier import VerifierError
 from .parameters.base_mco_parameter import BaseMCOParameter
@@ -19,6 +20,7 @@ class BaseMCOModel(BaseModel):
 
     In your definition, your specific model must reimplement this class.
     """
+
     #: A reference to the creating factory, so that we can
     #: retrieve it as the originating factory.
     factory = Instance(IMCOFactory, visible=False, transient=True)
@@ -52,10 +54,7 @@ class BaseMCOModel(BaseModel):
                 " number of parameters specified ({} values)."
                 " This is either a MCO plugin error or the workflow"
                 " file is corrupted."
-            ).format(
-                len(data_values),
-                len(self.parameters)
-            )
+            ).format(len(data_values), len(self.parameters))
             log.error(error_txt)
             raise RuntimeError(error_txt)
 
@@ -119,8 +118,7 @@ class BaseMCOModel(BaseModel):
         if not self.kpis:
             errors.append(
                 VerifierError(
-                    subject=self,
-                    global_error="The MCO has no defined KPIs",
+                    subject=self, global_error="The MCO has no defined KPIs"
                 )
             )
 
@@ -131,3 +129,14 @@ class BaseMCOModel(BaseModel):
             errors += kpi.verify()
 
         return errors
+
+    def create_start_event(self):
+        """ Creates base event indicating the start of the MCO."""
+        return MCOStartEvent(
+            parameter_names=list(p.name for p in self.parameters),
+            kpi_names=list(kpi.name for kpi in self.kpis),
+        )
+
+    def create_finish_event(self):
+        """ Creates base event indicating the finished MCO."""
+        return MCOFinishEvent()
