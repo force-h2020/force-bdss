@@ -16,12 +16,6 @@ def sen_scaling_method(dimension, weighted_optimize):
     """ Calculate the default Sen's scaling factors for the
     "Multi-Objective Programming Method" [1].
 
-    References
-    ----------
-    .. [1] Chandra Sen, "Sen's Multi-Objective Programming Method and Its
-       Comparison with Other Techniques", American Journal of Operational
-       Research, vol. 8, pp. 10-13, 2018
-
     Parameters
     ----------
     dimension: int
@@ -35,6 +29,12 @@ def sen_scaling_method(dimension, weighted_optimize):
     -------
     scaling_factors: np.array
         Sen's scaling factors
+
+    References
+    ----------
+    [1] Chandra Sen, "Sen's Multi-Objective Programming Method and Its
+       Comparison with Other Techniques", American Journal of Operational
+       Research, vol. 8, pp. 10-13, 2018
     """
     extrema = np.zeros((dimension, dimension))
 

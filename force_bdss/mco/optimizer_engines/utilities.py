@@ -96,18 +96,18 @@ class DirichletSpaceSampler(SpaceSampler):
     The distribution is "fair": it provides equal probability for each
     component of the sample vector. The user can control the distribution shape
     by changing `alpha`:
-        - Samples are closer to bounds for alpha < 1,
-        - Samples are concentrated in the middle of the
-        search space for alpha > 1,
-        - All samples have equal probability for alpha = 1
+    - Samples are closer to bounds for alpha < 1,
+    - Samples are concentrated in the middle of the
+    search space for alpha > 1,
+    - All samples have equal probability for alpha = 1
 
     A nice visualization of the Dirichlet distribution can be found at [2].
 
     References
     -------
     [1] https://en.wikipedia.org/wiki/Dirichlet_distribution
-    [2] http://blog.bogatron.net/blog/
-        2014/02/02/visualizing-dirichlet-distributions/
+    [2] http://blog.bogatron.net/blog/2014/02/02/visualizing-dirichlet-\
+    distributions/
     """
 
     #: Dirichlet distribution parameter
@@ -140,7 +140,7 @@ class UniformSpaceSampler(SpaceSampler):
     adding to 1, such that the sampling points are uniformly distributed along
     each axis. For example, a dimension 3 will give all combinations (x, y, z),
     where
-        x + y + z = 1.0,
+    $ x + y + z = 1.0,
     and (x, y, z) can realise only specified equidistant values.
 
     The `resolution` parameter indicates how many divisions along a single

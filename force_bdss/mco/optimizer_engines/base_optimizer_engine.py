@@ -41,7 +41,7 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
     @abc.abstractmethod
     def optimize(self):
         """ Main entry point to the OptimizerEngine. This is a general
-        iterator. It yields [explored input space, objective space, **kwargs].
+        iterator. It yields [explored input space, objective space, kwargs].
         It can yield data as a single workflow evaluation has been completed
         (if `verbose_run` is True), or return the optimization data after all
         required computations have finished (if `verbose_run` is False).
