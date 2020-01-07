@@ -13,12 +13,7 @@ DOCS_DEPS = ["sphinx==1.8.5-3"]
 
 DEV_DEPS = ["flake8==3.7.7-1", "coverage==4.3.4-1", "testfixtures==4.10.0-1"]
 
-_nevergrad_stable_commit = "ba2c0217a043178adf9fe9f4bd52bbbfce97bfaa"
-PIP_DEPS = [
-    "stevedore==1.30.1",
-    "git+https://github.com/facebookresearch/nevergrad.git@"
-    + _nevergrad_stable_commit,
-]
+PIP_DEPS = ["stevedore==1.30.1"]
 
 ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2", "scipy>=1.2.1"]
 

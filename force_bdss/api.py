@@ -43,7 +43,6 @@ from .mco.parameters.mco_parameters import FixedMCOParameterFactory, RangedMCOPa
 from .mco.parameters.mco_parameters import FixedMCOParameter, RangedMCOParameter, ListedMCOParameter, CategoricalMCOParameter  # noqa
 from .mco.optimizer_engines.base_optimizer_engine import BaseOptimizerEngine  # noqa
 from .mco.optimizer_engines.weighted_optimizer_engine import WeightedOptimizerEngine  # noqa
-from .mco.optimizer_engines.nevergrad_optimizer_engine import NevergradOptimizerEngine  # noqa
 
 from .notification_listeners.i_notification_listener_factory import INotificationListenerFactory  # noqa
 from .notification_listeners.base_notification_listener import BaseNotificationListener  # noqa
