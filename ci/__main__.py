@@ -16,14 +16,11 @@ DEV_DEPS = ["flake8==3.7.7-1", "coverage==4.3.4-1", "testfixtures==4.10.0-1"]
 _nevergrad_stable_commit = "ba2c0217a043178adf9fe9f4bd52bbbfce97bfaa"
 PIP_DEPS = [
     "stevedore==1.30.1",
-    "git+https://github.com/facebookresearch/nevergrad.git@" +
-    _nevergrad_stable_commit
+    "git+https://github.com/facebookresearch/nevergrad.git@"
+    + _nevergrad_stable_commit,
 ]
 
-ADDITIONAL_CORE_DEPS = [
-    "numpy==1.15.4-2",
-    "scipy>=1.2.1"
-]
+ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2", "scipy>=1.2.1"]
 
 
 @click.group()
@@ -189,10 +186,6 @@ def remove_dot(python_version):
 
 def edm_run(env_name, cmd, cwd=None):
     return subprocess.call(["edm", "run", "-e", env_name, "--"] + cmd, cwd=cwd)
-
-
-def edm_run(env_name, cmd, cwd=None):
-    return subprocess.call(["edm", "run", "-e", env_name, "--"]+cmd, cwd=cwd)
 
 
 if __name__ == "__main__":
