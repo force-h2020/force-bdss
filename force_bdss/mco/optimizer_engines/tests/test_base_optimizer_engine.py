@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from force_bdss.api import KPISpecification
+from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     EmptyOptimizerEngine,
