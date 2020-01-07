@@ -1,11 +1,11 @@
 from unittest import TestCase
-from force_bdss.mco.optimizer_engines.utilities import (
-    convert_by_mask,
+from force_bdss.mco.optimizer_engines.space_sampling import (
     SpaceSampler,
     DirichletSpaceSampler,
     UniformSpaceSampler,
     resolution_to_sample_size,
 )
+from force_bdss.mco.optimizer_engines.utilities import convert_by_mask
 
 
 class TestConvertUtil(TestCase):

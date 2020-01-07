@@ -7,7 +7,10 @@ from traits.api import Enum, Unicode, Property
 
 from force_bdss.api import PositiveInt
 from .base_optimizer_engine import BaseOptimizerEngine
-from .utilities import UniformSpaceSampler, DirichletSpaceSampler
+from force_bdss.mco.optimizer_engines.space_sampling import (
+    UniformSpaceSampler,
+    DirichletSpaceSampler,
+)
 
 log = logging.getLogger(__name__)
 

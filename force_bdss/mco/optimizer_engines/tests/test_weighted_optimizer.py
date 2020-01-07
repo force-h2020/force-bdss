@@ -12,7 +12,7 @@ from force_bdss.tests.dummy_classes.optimizer_engine import (
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     sen_scaling_method,
 )
-from force_bdss.mco.optimizer_engines.utilities import (
+from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
 )
