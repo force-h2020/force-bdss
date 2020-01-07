@@ -5,10 +5,10 @@ from force_bdss.api import BaseMCOCommunicator, DataValue
 
 class StdIOMCOCommunicator(BaseMCOCommunicator):
     """ The StdIOMCOCommunicator is responsible for handing the communication
-    protocol between the MCO executable (for example, the dakota executable) and
-    the single point evaluation (our BDSS in --evaluate mode).
+    protocol between the MCO executable (for example, the dakota executable)
+    and the single point evaluation (our BDSS in --evaluate mode).
 
-    The StdIOMCOCommunicator implements the communication using stdin and stdout.
+    The StdIOMCOCommunicator communicates with stdin and stdout.
     """
 
     def receive_from_mco(self, model):
