@@ -26,7 +26,7 @@ class TestWorkflowReader(unittest.TestCase):
         self.working_data = {
             "version": "1",
             "workflow": {
-                "mco": {
+                "mco_model": {
                     "id": "force.bdss.enthought.plugin.test.v0"
                           ".factory.dummy_mco",
                     "model_data": {
@@ -101,14 +101,14 @@ class TestWorkflowReader(unittest.TestCase):
 
     def test_missing_plugin_mco(self):
         data = self.working_data
-        data["workflow"]["mco"]["id"] = "missing_mco"
+        data["workflow"]["mco_model"]["id"] = "missing_mco"
 
         with self.assertRaises(MissingPluginException):
             self.wfreader.read(_as_json_stringio(data))
 
     def test_missing_plugin_mco_parameter(self):
         data = self.working_data
-        data["workflow"]["mco"]["model_data"]["parameters"][0]["id"] = \
+        data["workflow"]["mco_model"]["model_data"]["parameters"][0]["id"] = \
             "missing_parameter"
 
         with self.assertRaises(MissingPluginException):
@@ -139,7 +139,7 @@ class TestModelCreationFailure(unittest.TestCase):
         self.working_data = {
             "version": "1",
             "workflow": {
-                "mco": {
+                "mco_model": {
                     "id": "force.bdss.enthought.plugin.test.v0"
                           ".factory.probe_mco",
                     "model_data": {

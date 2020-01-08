@@ -137,7 +137,7 @@ class WorkflowReader(HasStrictTraits):
         """
         wf = Workflow()
 
-        wf.mco = self._extract_mco(wf_data)
+        wf.mco_model = self._extract_mco(wf_data)
         wf.execution_layers[:] = self._extract_execution_layers(wf_data)
         wf.notification_listeners[:] = (
             self._extract_notification_listeners(wf_data)
@@ -160,7 +160,7 @@ class WorkflowReader(HasStrictTraits):
         """
         registry = self.factory_registry
 
-        mco_data = wf_data.get("mco")
+        mco_data = wf_data.get("mco_model")
         if mco_data is None:
             # The file was saved without setting an MCO.
             # The file is valid, we simply can't run any optimization yet.
@@ -175,7 +175,7 @@ class WorkflowReader(HasStrictTraits):
                 "The plugin responsible for the missing "
                 "key '{}' may be missing or broken.".format(mco_id)
             )
-        model_data = wf_data["mco"]["model_data"]
+        model_data = wf_data["mco_model"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id,
             model_data["parameters"])
