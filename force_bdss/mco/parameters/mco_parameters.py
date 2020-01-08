@@ -1,6 +1,6 @@
 import numpy as np
 
-from traits.api import List, Unicode, Property, Float, ReadOnly, Int, Either
+from traits.api import List, Unicode, Property, Float, Any, Int
 from traitsui.api import ListEditor
 
 from .base_mco_parameter import BaseMCOParameter
@@ -12,7 +12,7 @@ class FixedMCOParameter(BaseMCOParameter):
     must be specified before use: the value is <undefined> by default."""
 
     #: Fixed parameter value
-    value = ReadOnly
+    value = Any
 
     sample_values = Property(depends_on="value", visible=False)
 
@@ -95,7 +95,7 @@ class ListedMCOParameter(BaseMCOParameter):
     """ Listed MCO parameter that has discrete numerical values."""
 
     #: Discrete set of available numerical values
-    levels = List(Either(Int, Float), value=[0.0])
+    levels = List(Float, value=[0.0])
 
     sample_values = Property(depends_on="levels", visible=False)
 

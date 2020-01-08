@@ -1,7 +1,5 @@
 from unittest import TestCase, mock
 
-from traits.api import TraitError
-
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.parameters.mco_parameters import (
     FixedMCOParameter,
@@ -31,8 +29,8 @@ class TestFixedMCOParameter(TestCase):
 
     def test_sample_values(self):
         self.assertEqual([1], self.parameter.sample_values)
-        with self.assertRaises(TraitError):
-            self.parameter.value = 1
+        self.parameter.value = "something different"
+        self.assertEqual(["something different"], self.parameter.sample_values)
 
     def test_factory(self):
         self.assertEqual("fixed", self.factory.get_identifier())
