@@ -56,6 +56,7 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(0.1, self.parameter.lower_bound)
         self.assertEqual(100.0, self.parameter.upper_bound)
         self.assertEqual(5, self.parameter.n_samples)
+        self.assertEqual(50.05, self.parameter.initial_value)
 
     def test_sample_values(self):
         for expected, actual in zip(
@@ -81,6 +82,21 @@ class TestRangedMCOParameter(TestCase):
             "A parameter with a ranged level in floating point values.",
             self.factory.get_description(),
         )
+
+    def test_custom_ranged_parameter(self):
+        parameter = RangedMCOParameter(self.factory, lower_bound=10)
+        self.assertEqual(10, parameter.lower_bound)
+        self.assertEqual(100.0, parameter.upper_bound)
+        self.assertEqual(5, parameter.n_samples)
+        self.assertEqual(55.0, parameter.initial_value)
+
+        parameter = RangedMCOParameter(
+            self.factory, lower_bound=10, initial_value=100
+        )
+        self.assertEqual(10, parameter.lower_bound)
+        self.assertEqual(100.0, parameter.upper_bound)
+        self.assertEqual(5, parameter.n_samples)
+        self.assertEqual(100.0, parameter.initial_value)
 
 
 class TestListedMCOParameter(TestCase):

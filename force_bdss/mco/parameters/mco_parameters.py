@@ -54,11 +54,17 @@ class RangedMCOParameter(BaseMCOParameter):
     #: Upper bound for parameter values range
     upper_bound = Float(100.0)
 
+    #: Initial value. Defines the parameter bias
+    initial_value = Float
+
     n_samples = Int(5)
 
     sample_values = Property(
         depends_on="lower_bound,upper_bound,n_samples", visible=False
     )
+
+    def _initial_value_default(self):
+        return 0.5 * (self.lower_bound + self.upper_bound)
 
     def _get_sample_values(self):
         return list(
