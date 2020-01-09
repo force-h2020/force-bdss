@@ -1,3 +1,4 @@
+from functools import wraps
 import json
 import logging
 
@@ -8,7 +9,7 @@ from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.workflow import Workflow
+from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 
 logger = logging.getLogger(__name__)
 
@@ -38,18 +39,28 @@ class ModelInstantiationFailedException(BaseWorkflowReaderException):
     """Raised if we can't instantiate the model from a plugin"""
 
 
+def deprecated_wf_format(mco_reader):
+
+    @wraps(mco_reader)
+    def inner(self, wf_data):
+        if "mco" in wf_data and "mco_model" not in wf_data:
+            wf_data["mco_model"] = wf_data.pop("mco")
+            WorkflowAttributeWarning.warn()
+        return mco_reader(self, wf_data)
+
+    return inner
+
+
 class WorkflowReader(HasStrictTraits):
     """
     Reads the workflow from a file.
     """
+
     #: The Factory registry. The reader needs it to create the
     #: specific model objects.
     factory_registry = Instance(IFactoryRegistry)
 
-    def __init__(self,
-                 factory_registry,
-                 *args,
-                 **kwargs):
+    def __init__(self, factory_registry, *args, **kwargs):
         """Initializes the reader.
 
         Parameters
@@ -101,26 +112,29 @@ class WorkflowReader(HasStrictTraits):
             version = json_data["version"]
         except KeyError:
             logger.error("File missing version information")
-            raise InvalidFileException("Corrupted input file, no version"
-                                       " specified")
+            raise InvalidFileException(
+                "Corrupted input file, no version specified"
+            )
 
         if version not in SUPPORTED_FILE_VERSIONS:
             logger.error(
                 "File contains version {} that is not in the "
                 "list of supported versions {}".format(
-                    version, SUPPORTED_FILE_VERSIONS)
+                    version, SUPPORTED_FILE_VERSIONS
+                )
             )
             raise InvalidVersionException(
-                "File version {} not supported".format(json_data["version"]))
+                "File version {} not supported".format(json_data["version"])
+            )
 
         try:
             wf_data = json_data["workflow"]
             wf = self.read_dict(wf_data)
         except KeyError as e:
             msg = (
-                "Could not read file {}. "
-                "Unable to find key {}. "
-                "The file might be corrupted or unsupported.".format(file, e))
+                "Could not read file {}. Unable to find key {}. "
+                "The file might be corrupted or unsupported.".format(file, e)
+            )
             logger.exception(msg)
             raise InvalidFileException(msg)
 
@@ -139,11 +153,12 @@ class WorkflowReader(HasStrictTraits):
 
         wf.mco_model = self._extract_mco(wf_data)
         wf.execution_layers[:] = self._extract_execution_layers(wf_data)
-        wf.notification_listeners[:] = (
-            self._extract_notification_listeners(wf_data)
+        wf.notification_listeners[:] = self._extract_notification_listeners(
+            wf_data
         )
         return wf
 
+    @deprecated_wf_format
     def _extract_mco(self, wf_data):
         """Extracts the MCO from the workflow dictionary data.
 
@@ -177,8 +192,8 @@ class WorkflowReader(HasStrictTraits):
             )
         model_data = wf_data["mco_model"]["model_data"]
         model_data["parameters"] = self._extract_mco_parameters(
-            mco_id,
-            model_data["parameters"])
+            mco_id, model_data["parameters"]
+        )
         model_data["kpis"] = self._extract_kpi_specifications(
             model_data["kpis"]
         )
@@ -189,8 +204,8 @@ class WorkflowReader(HasStrictTraits):
             msg = (
                 "Unable to create model for MCO {}: {}. "
                 "This is likely due to a coding error in the plugin. "
-                "Check the logs for more information.".format(
-                    mco_id, e))
+                "Check the logs for more information.".format(mco_id, e)
+            )
 
             logger.exception(msg)
             raise ModelInstantiationFailedException(msg)
@@ -231,10 +246,11 @@ class WorkflowReader(HasStrictTraits):
                 model_data["input_slot_info"] = self._extract_input_slot_info(
                     model_data["input_slot_info"]
                 )
-                model_data["output_slot_info"] = \
-                    self._extract_output_slot_info(
-                        model_data["output_slot_info"]
-                    )
+                model_data[
+                    "output_slot_info"
+                ] = self._extract_output_slot_info(
+                    model_data["output_slot_info"]
+                )
 
                 try:
                     ds_model = ds_factory.create_model(model_data)
@@ -274,13 +290,15 @@ class WorkflowReader(HasStrictTraits):
             parameter_id = p["id"]
             try:
                 factory = registry.mco_parameter_factory_by_id(
-                    mco_id, parameter_id)
+                    mco_id, parameter_id
+                )
             except KeyError:
                 raise MissingPluginException(
                     "Could not read file. "
                     "The plugin responsible for the missing MCO '{}' "
                     "parameter key '{}' may be missing or broken.".format(
-                        mco_id, parameter_id)
+                        mco_id, parameter_id
+                    )
                 )
 
             try:
@@ -290,7 +308,9 @@ class WorkflowReader(HasStrictTraits):
                     "Unable to create model for MCO {} parameter {} : {}. "
                     "This is likely due to an error in the plugin. "
                     "Check the logs for more information.".format(
-                        mco_id, parameter_id, e))
+                        mco_id, parameter_id, e
+                    )
+                )
                 logger.exception(msg)
                 raise ModelInstantiationFailedException(msg)
 
@@ -314,7 +334,8 @@ class WorkflowReader(HasStrictTraits):
             nl_id = nl_entry["id"]
             try:
                 nl_factory = registry.notification_listener_factory_by_id(
-                    nl_id)
+                    nl_id
+                )
             except KeyError:
                 raise MissingPluginException(
                     "Could not read file. "
@@ -331,7 +352,8 @@ class WorkflowReader(HasStrictTraits):
                 msg = (
                     "Unable to create model for Notification Listener "
                     "{} : {}. This is likely due to an error in the plugin. "
-                    "Check the logs for more information.".format(nl_id, e))
+                    "Check the logs for more information.".format(nl_id, e)
+                )
                 logger.exception(msg)
                 raise ModelInstantiationFailedException(msg)
 
