@@ -12,7 +12,7 @@ from force_bdss.io.workflow_reader import (
     InvalidFileException,
     MissingPluginException,
     ModelInstantiationFailedException,
-    deprecated_wf_format
+    deprecated_wf_format,
 )
 from force_bdss.tests.dummy_classes.factory_registry import (
     DummyFactoryRegistry,
@@ -228,15 +228,21 @@ class TestDeprecationWrapper(unittest.TestCase):
         mco_model_dict = {"mco_model": 1}
         mixed_dict = {"mco": 1, "mco_model": 1}
         with testfixtures.LogCapture() as capture:
-            self.assertDictEqual(decorated_method(None, mco_dict), mco_model_dict)
+            self.assertDictEqual(
+                decorated_method(None, mco_dict), mco_model_dict
+            )
             capture.check(expected_log)
 
         with testfixtures.LogCapture() as capture:
-            self.assertDictEqual(decorated_method(None, mco_model_dict), mco_model_dict)
+            self.assertDictEqual(
+                decorated_method(None, mco_model_dict), mco_model_dict
+            )
             capture.check()
 
         with testfixtures.LogCapture() as capture:
-            self.assertDictEqual(decorated_method(None, mixed_dict), mixed_dict)
+            self.assertDictEqual(
+                decorated_method(None, mixed_dict), mixed_dict
+            )
             capture.check()
 
 
