@@ -1,6 +1,6 @@
 import logging
 
-from traits.api import HasStrictTraits, Instance, List
+from traits.api import HasStrictTraits, Instance, List, Property
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
@@ -12,11 +12,27 @@ from force_bdss.notification_listeners.base_notification_listener_model \
 log = logging.getLogger(__name__)
 
 
+class WorkflowAttributeWarning:
+    warning_message = (
+        "The Workflow object format with 'mco' attribute is now"
+        " deprecated. Please use 'mco_model' attribute instead."
+    )
+
+    @classmethod
+    def warn(cls):
+        log.warning(cls.warning_message)
+
+
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
+
     #: The factory-specific MCOModel object.
     #: Can be None if no MCOModel has been specified yet.
     mco_model = Instance(BaseMCOModel, allow_none=True)
+
+    #: Deprecated MCO attribute references to the mco_model attribute.
+    #: It is present to prevent possible dependencies API breaks.
+    mco = Property(depends_on="mco_model", transient=True, visible=False)
 
     #: The execution layers. Execution starts from the first layer,
     #: where all data sources are executed in sequence. It then passes all
@@ -25,6 +41,10 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
+
+    def _get_mco(self):
+        WorkflowAttributeWarning.warn()
+        return self.mco_model
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
@@ -69,10 +89,7 @@ class Workflow(HasStrictTraits):
 
         if not self.mco_model:
             errors.append(
-                VerifierError(
-                    subject=self,
-                    global_error="Workflow has no MCO",
-                )
+                VerifierError(subject=self, global_error="Workflow has no MCO")
             )
         else:
             errors += self.mco_model.verify()

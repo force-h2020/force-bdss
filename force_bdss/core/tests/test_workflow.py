@@ -1,9 +1,10 @@
 import unittest
+import testfixtures
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.workflow import Workflow
+from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 
 from force_bdss.core.input_slot_info import InputSlotInfo
@@ -14,10 +15,37 @@ from force_bdss.tests.probe_classes.factory_registry import (
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
 
+class TestWorkflowAttributeWarning(unittest.TestCase):
+    def test_warn(self):
+        with testfixtures.LogCapture() as capture:
+            WorkflowAttributeWarning.warn()
+            expected_log = (
+                "force_bdss.core.workflow",
+                "WARNING",
+                "The Workflow object format with 'mco' attribute is "
+                "now deprecated. Please use 'mco_model' attribute instead.",
+            )
+            capture.check(expected_log)
+
+
 class TestWorkflow(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
+
+    def test_deprecated_mco_attribute(self):
+        mco_factory = ProbeMCOFactory(self.plugin)
+        mco_model = mco_factory.create_model()
+        wf = Workflow(mco_model=mco_model, execution_layers=[])
+        with testfixtures.LogCapture() as capture:
+            self.assertIs(wf.mco_model, wf.mco)
+            expected_log = (
+                "force_bdss.core.workflow",
+                "WARNING",
+                "The Workflow object format with 'mco' attribute is "
+                "now deprecated. Please use 'mco_model' attribute instead.",
+            )
+            capture.check(expected_log)
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution
