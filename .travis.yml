@@ -3,24 +3,28 @@ sudo: false
 
 env:
   global:
-    - EDM_FULL=1.11.0
-      EDM_X_Y=1.11
+    - EDM_FULL=2.1.0
+      EDM_X_Y=2.1
 
 matrix:
   include:
   - os: linux
-    env: 
-      - EDM_OS="rh5_x86_64"
+    dist: bionic
+    env:
+      - EDM_OS="rh6_x86_64"
+      - EDM_INSTALLER_PREFIX="edm_cli_"
         EDM_INSTALLER_SUFFIX="_linux_x86_64.sh"
   - os: osx
     env:
       - EDM_OS="osx_x86_64"
+      - EDM_INSTALLER_PREFIX="edm_"
         EDM_INSTALLER_SUFFIX=".pkg"
 
 before_install:
-    - wget https://package-data.enthought.com/edm/${EDM_OS}/${EDM_X_Y}/edm_${EDM_FULL}${EDM_INSTALLER_SUFFIX}
-    - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then bash ./edm_${EDM_FULL}${EDM_INSTALLER_SUFFIX} -b -f -p $HOME ; fi
-    - if [[ ${TRAVIS_OS_NAME} == "osx" ]] ; then sudo installer -pkg ./edm_${EDM_FULL}${EDM_INSTALLER_SUFFIX} -target / ; fi
+    - export EDM_INSTALLER=${EDM_INSTALLER_PREFIX}${EDM_FULL}${EDM_INSTALLER_SUFFIX}
+    - wget https://package-data.enthought.com/edm/${EDM_OS}/${EDM_X_Y}/${EDM_INSTALLER}
+    - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then bash ./${EDM_INSTALLER} -b -f -p $HOME ; fi
+    - if [[ ${TRAVIS_OS_NAME} == "osx" ]] ; then sudo installer -pkg ./${EDM_INSTALLER} -target / ; fi
     - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then export PATH=${HOME}/edm/bin:${PATH} ; fi
     - if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then export PATH="${PATH}:/usr/local/bin" ; fi
     - edm install --version 3.6 -y click setuptools
