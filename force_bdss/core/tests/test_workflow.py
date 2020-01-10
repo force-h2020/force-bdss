@@ -34,27 +34,6 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
 
-    def test_deprecated_mco_attribute(self):
-        mco_factory = ProbeMCOFactory(self.plugin)
-        mco_model = mco_factory.create_model()
-        wf = Workflow(mco_model=mco_model, execution_layers=[])
-        warning_log = (
-            "force_bdss.core.workflow",
-            "WARNING",
-            "The Workflow object format with 'mco' attribute is "
-            "now deprecated. Please use 'mco_model' attribute instead.",
-        )
-
-        with testfixtures.LogCapture() as capture:
-            self.assertIs(wf.mco_model, wf.mco)
-            capture.check(warning_log)
-
-        with self.assertTraitChanges(wf, "_mco_model"):
-            with testfixtures.LogCapture() as capture:
-                new_model = mco_factory.create_model()
-                wf.mco = new_model
-                capture.check(warning_log)
-
     def test_public_mco_model(self):
         mco_factory = ProbeMCOFactory(self.plugin)
         mco_model = mco_factory.create_model()

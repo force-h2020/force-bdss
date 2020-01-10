@@ -26,14 +26,12 @@ class WorkflowAttributeWarning:
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
-    #: The factory-specific MCOModel object.
+    #: The Workflow provate MCOModel object.
     #: Can be None if no MCOModel has been specified yet.
     _mco_model = Instance(BaseMCOModel, allow_none=True)
 
-    #: Deprecated MCO attribute references to the mco_model attribute.
-    #: It is present to prevent possible dependencies API breaks.
-    mco = Property(depends_on="mco_model")
-
+    #: The Workflow public MCOModel property.
+    #: Implement getter and setter methods for data verification.
     mco_model = Property(depends_on="_mco_model")
 
     #: The execution layers. Execution starts from the first layer,
@@ -43,18 +41,6 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
-
-    def _get_mco(self):
-        """ Deprecated method getter. Redirects the call to the public
-        `self.mco_model` attribute."""
-        WorkflowAttributeWarning.warn()
-        return self.mco_model
-
-    def _set_mco(self, mco_model):
-        """ Deprecated method setter. Redirects the call to the public
-        `self.mco_model` attribute."""
-        WorkflowAttributeWarning.warn()
-        self.mco_model = mco_model
 
     def _get_mco_model(self):
         """ This is a public method to get the Workflow MCOModel attribute.
