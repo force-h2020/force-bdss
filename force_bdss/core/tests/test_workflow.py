@@ -1,12 +1,13 @@
 import unittest
 import testfixtures
 
+from traits.testing.api import UnittestTools
+
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
-
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
 from force_bdss.tests.probe_classes.factory_registry import (
@@ -28,7 +29,7 @@ class TestWorkflowAttributeWarning(unittest.TestCase):
             capture.check(expected_log)
 
 
-class TestWorkflow(unittest.TestCase):
+class TestWorkflow(unittest.TestCase, UnittestTools):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
@@ -37,15 +38,37 @@ class TestWorkflow(unittest.TestCase):
         mco_factory = ProbeMCOFactory(self.plugin)
         mco_model = mco_factory.create_model()
         wf = Workflow(mco_model=mco_model, execution_layers=[])
+        warning_log = (
+            "force_bdss.core.workflow",
+            "WARNING",
+            "The Workflow object format with 'mco' attribute is "
+            "now deprecated. Please use 'mco_model' attribute instead.",
+        )
+
         with testfixtures.LogCapture() as capture:
             self.assertIs(wf.mco_model, wf.mco)
-            expected_log = (
-                "force_bdss.core.workflow",
-                "WARNING",
-                "The Workflow object format with 'mco' attribute is "
-                "now deprecated. Please use 'mco_model' attribute instead.",
-            )
-            capture.check(expected_log)
+            capture.check(warning_log)
+
+        with self.assertTraitChanges(wf, "_mco_model"):
+            with testfixtures.LogCapture() as capture:
+                new_model = mco_factory.create_model()
+                wf.mco = new_model
+                capture.check(warning_log)
+
+    def test_public_mco_model(self):
+        mco_factory = ProbeMCOFactory(self.plugin)
+        mco_model = mco_factory.create_model()
+        wf = Workflow(mco_model=mco_model, execution_layers=[])
+
+        with testfixtures.LogCapture() as capture:
+            self.assertIs(wf.mco_model, wf._mco_model)
+            capture.check()
+
+        with testfixtures.LogCapture() as capture:
+            with self.assertTraitChanges(wf, "_mco_model"):
+                new_model = mco_factory.create_model()
+                wf.mco_model = new_model
+                capture.check()
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution

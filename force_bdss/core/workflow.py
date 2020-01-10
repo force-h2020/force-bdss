@@ -28,15 +28,13 @@ class Workflow(HasStrictTraits):
 
     #: The factory-specific MCOModel object.
     #: Can be None if no MCOModel has been specified yet.
-    _mco_model = Instance(
-        BaseMCOModel, allow_none=True  # , transient=True, visible=False
-    )
+    _mco_model = Instance(BaseMCOModel, allow_none=True)
 
     #: Deprecated MCO attribute references to the mco_model attribute.
     #: It is present to prevent possible dependencies API breaks.
-    mco = Property(depends_on="mco_model")  # , transient=True, visible=False)
+    mco = Property(depends_on="mco_model")
 
-    mco_model = Property(depends_on="mco_model")
+    mco_model = Property(depends_on="_mco_model")
 
     #: The execution layers. Execution starts from the first layer,
     #: where all data sources are executed in sequence. It then passes all
@@ -47,14 +45,23 @@ class Workflow(HasStrictTraits):
     notification_listeners = List(BaseNotificationListenerModel)
 
     def _get_mco(self):
+        """ Deprecated method getter. Redirects the call to the public
+        `self.mco_model` attribute."""
         WorkflowAttributeWarning.warn()
         return self.mco_model
 
     def _set_mco(self, mco_model):
+        """ Deprecated method setter. Redirects the call to the public
+        `self.mco_model` attribute."""
         WorkflowAttributeWarning.warn()
         self.mco_model = mco_model
 
     def _get_mco_model(self):
+        """ This is a public method to get the Workflow MCOModel attribute.
+        Direct access to `self._mco_model` for assignment is unsafe.
+        This method is safe and includes necessary verification steps prior
+        to assigning the `mco_model` to `self._mco_model`.
+        """
         return self._mco_model
 
     def _set_mco_model(self, mco_model):
