@@ -1,6 +1,6 @@
 import logging
 
-from traits.api import HasStrictTraits, Instance, List, Property
+from traits.api import HasStrictTraits, Instance, List
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
@@ -26,13 +26,9 @@ class WorkflowAttributeWarning:
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
-    #: The Workflow provate MCOModel object.
+    #: The Workflow MCOModel object.
     #: Can be None if no MCOModel has been specified yet.
-    _mco_model = Instance(BaseMCOModel, allow_none=True)
-
-    #: The Workflow public MCOModel property.
-    #: Implement getter and setter methods for data verification.
-    mco_model = Property(depends_on="_mco_model")
+    mco_model = Instance(BaseMCOModel, allow_none=True)
 
     #: The execution layers. Execution starts from the first layer,
     #: where all data sources are executed in sequence. It then passes all
@@ -41,22 +37,6 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
-
-    def _get_mco_model(self):
-        """ This is a public method to get the Workflow MCOModel attribute.
-        Direct access to `self._mco_model` for assignment is unsafe.
-        This method is safe and includes necessary verification steps prior
-        to assigning the `mco_model` to `self._mco_model`.
-        """
-        return self._mco_model
-
-    def _set_mco_model(self, mco_model):
-        """ This is a public method to set the Workflow MCOModel attribute.
-        Direct access to `self._mco_model` for assignment is unsafe.
-        This method is safe and includes necessary verification steps prior
-        to assigning the `mco_model` to `self._mco_model`.
-        """
-        self._mco_model = mco_model
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
