@@ -28,11 +28,15 @@ class Workflow(HasStrictTraits):
 
     #: The factory-specific MCOModel object.
     #: Can be None if no MCOModel has been specified yet.
-    mco_model = Instance(BaseMCOModel, allow_none=True)
+    _mco_model = Instance(
+        BaseMCOModel, allow_none=True  # , transient=True, visible=False
+    )
 
     #: Deprecated MCO attribute references to the mco_model attribute.
     #: It is present to prevent possible dependencies API breaks.
-    mco = Property(depends_on="mco_model", transient=True, visible=False)
+    mco = Property(depends_on="mco_model")  # , transient=True, visible=False)
+
+    mco_model = Property(depends_on="mco_model")
 
     #: The execution layers. Execution starts from the first layer,
     #: where all data sources are executed in sequence. It then passes all
@@ -45,6 +49,21 @@ class Workflow(HasStrictTraits):
     def _get_mco(self):
         WorkflowAttributeWarning.warn()
         return self.mco_model
+
+    def _set_mco(self, mco_model):
+        WorkflowAttributeWarning.warn()
+        self.mco_model = mco_model
+
+    def _get_mco_model(self):
+        return self._mco_model
+
+    def _set_mco_model(self, mco_model):
+        """ This is a public method to set the Workflow MCOModel attribute.
+        Direct access to `self._mco_model` for assignment is unsafe.
+        This method is safe and includes necessary verification steps prior
+        to assigning the `mco_model` to `self._mco_model`.
+        """
+        self._mco_model = mco_model
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
