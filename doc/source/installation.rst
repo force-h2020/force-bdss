@@ -57,8 +57,10 @@ and (optional, but recommended), the example plugins::
 Now you can enter the deployed environment and invoke the programs::
 
     ~/Force-Project (edm)$ edm shell -e force-py36
+
     # Invokes the CLI BDSS evaluator (requires a workflow file)
     ~/Force-Project (force-py36)$ force_bdss workflow.json
+
     # Invokes the workflow manager UI - an optional workflow file can also be specified 
     ~/Force-Project (force-py36)$ force_wfmanager
     ~/Force-Project (force-py36)$ force_wfmanager workflow.json
