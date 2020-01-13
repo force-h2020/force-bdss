@@ -30,7 +30,7 @@ class WorkflowWriter(HasStrictTraits):
 
     def _workflow_data(self, workflow):
         workflow_data = {
-            "mco": self._mco_data(workflow.mco),
+            "mco_model": self._mco_data(workflow.mco_model),
             "execution_layers": [
                 self._execution_layer_data(el)
                 for el in workflow.execution_layers],

@@ -32,7 +32,7 @@ class TestWorkflowWriter(unittest.TestCase):
         result = json.loads(fp.getvalue())
         self.assertIn("version", result)
         self.assertIn("workflow", result)
-        self.assertIn("mco", result["workflow"])
+        self.assertIn("mco_model", result["workflow"])
         self.assertIn("execution_layers", result["workflow"])
 
     def test_write_and_read(self):
@@ -43,8 +43,8 @@ class TestWorkflowWriter(unittest.TestCase):
         fp.seek(0)
         wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(fp)
-        self.assertEqual(wf_result.mco.factory.id,
-                         wf.mco.factory.id)
+        self.assertEqual(wf_result.mco_model.factory.id,
+                         wf.mco_model.factory.id)
         self.assertEqual(len(wf_result.execution_layers), 2)
         self.assertEqual(
             len(wf_result.execution_layers[0].data_sources), 2)
@@ -54,11 +54,11 @@ class TestWorkflowWriter(unittest.TestCase):
     def _create_workflow(self):
         wf = Workflow()
 
-        wf.mco = self.mco_factory.create_model()
-        wf.mco.parameters = [
+        wf.mco_model = self.mco_factory.create_model()
+        wf.mco_model.parameters = [
             self.mco_parameter_factory.create_model()
         ]
-        wf.mco.kpis = [
+        wf.mco_model.kpis = [
             KPISpecification()
         ]
         wf.execution_layers = [
@@ -80,7 +80,7 @@ class TestWorkflowWriter(unittest.TestCase):
         fp.seek(0)
         wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(fp)
-        self.assertIsNone(wf_result.mco)
+        self.assertIsNone(wf_result.mco_model)
 
     def test_traits_to_dict_no_version(self):
         mock_traits = mock.Mock()

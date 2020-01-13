@@ -23,7 +23,7 @@ class EvaluateOperation(HasStrictTraits):
 
     def run(self):
         """ Evaluate the workflow. """
-        mco_model = self.workflow.mco
+        mco_model = self.workflow.mco_model
         if mco_model is None:
             log.info("No MCO defined. Nothing to do. Exiting.")
             return
