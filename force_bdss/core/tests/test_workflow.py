@@ -1,22 +1,35 @@
 import unittest
+import testfixtures
+
+from traits.testing.api import UnittestTools
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.workflow import Workflow
+from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
-
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
-from force_bdss.tests.probe_classes.factory_registry import \
-    ProbeFactoryRegistry
-from force_bdss.tests.probe_classes.mco import (
-    ProbeMCOFactory
+from force_bdss.tests.probe_classes.factory_registry import (
+    ProbeFactoryRegistry,
 )
+from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 
 
-class TestWorkflow(unittest.TestCase):
+class TestWorkflowAttributeWarning(unittest.TestCase):
+    def test_warn(self):
+        with testfixtures.LogCapture() as capture:
+            WorkflowAttributeWarning.warn()
+            expected_log = (
+                "force_bdss.core.workflow",
+                "WARNING",
+                "The Workflow object format with 'mco' attribute is "
+                "now deprecated. Please use 'mco_model' attribute instead.",
+            )
+            capture.check(expected_log)
 
+
+class TestWorkflow(unittest.TestCase, UnittestTools):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
@@ -38,7 +51,7 @@ class TestWorkflow(unittest.TestCase):
             DataValue(value=10, name="in1"),
             DataValue(value=15, name="in2"),
             DataValue(value=3, name="in3"),
-            DataValue(value=7, name="in4")
+            DataValue(value=7, name="in4"),
         ]
 
         def adder(model, parameters):
@@ -51,7 +64,8 @@ class TestWorkflow(unittest.TestCase):
             self.plugin,
             input_slots_size=2,
             output_slots_size=1,
-            run_function=adder)
+            run_function=adder,
+        )
 
         def multiplier(model, parameters):
             first = parameters[0].value
@@ -62,83 +76,72 @@ class TestWorkflow(unittest.TestCase):
             self.plugin,
             input_slots_size=2,
             output_slots_size=1,
-            run_function=multiplier)
+            run_function=multiplier,
+        )
 
         mco_factory = ProbeMCOFactory(self.plugin)
         mco_model = mco_factory.create_model()
         parameter_factory = mco_factory.parameter_factories[0]
 
         mco_model.parameters = [
-            parameter_factory.create_model({'name': "in1"}),
-            parameter_factory.create_model({'name': "in2"}),
-            parameter_factory.create_model({'name': "in3"}),
-            parameter_factory.create_model({'name': "in4"})
+            parameter_factory.create_model({"name": "in1"}),
+            parameter_factory.create_model({"name": "in2"}),
+            parameter_factory.create_model({"name": "in3"}),
+            parameter_factory.create_model({"name": "in4"}),
         ]
-        mco_model.kpis = [
-            KPISpecification(name="out1")
-        ]
+        mco_model.kpis = [KPISpecification(name="out1")]
 
         wf = Workflow(
-            mco=mco_model,
+            mco_model=mco_model,
             execution_layers=[
                 ExecutionLayer(),
                 ExecutionLayer(),
                 ExecutionLayer(),
-                ExecutionLayer()
-            ]
+                ExecutionLayer(),
+            ],
         )
         # Layer 0
         model = adder_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="in1"),
-            InputSlotInfo(name="in2")
+            InputSlotInfo(name="in2"),
         ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="res1")
-        ]
+        model.output_slot_info = [OutputSlotInfo(name="res1")]
         wf.execution_layers[0].data_sources.append(model)
 
         model = adder_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="in3"),
-            InputSlotInfo(name="in4")
+            InputSlotInfo(name="in4"),
         ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="res2")
-        ]
+        model.output_slot_info = [OutputSlotInfo(name="res2")]
         wf.execution_layers[0].data_sources.append(model)
 
         # layer 1
         model = adder_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="res1"),
-            InputSlotInfo(name="res2")
+            InputSlotInfo(name="res2"),
         ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="res3")
-        ]
+        model.output_slot_info = [OutputSlotInfo(name="res3")]
         wf.execution_layers[1].data_sources.append(model)
 
         # layer 2
         model = multiplier_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="res3"),
-            InputSlotInfo(name="res1")
+            InputSlotInfo(name="res1"),
         ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="res4")
-        ]
+        model.output_slot_info = [OutputSlotInfo(name="res4")]
         wf.execution_layers[2].data_sources.append(model)
 
         # layer 3
         model = multiplier_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="res4"),
-            InputSlotInfo(name="res2")
+            InputSlotInfo(name="res2"),
         ]
-        model.output_slot_info = [
-            OutputSlotInfo(name="out1")
-        ]
+        model.output_slot_info = [OutputSlotInfo(name="out1")]
         wf.execution_layers[3].data_sources.append(model)
 
         kpi_results = wf.execute(data_values)
@@ -153,7 +156,7 @@ class TestWorkflow(unittest.TestCase):
         # keep input DataValues constant
         data_values = [
             DataValue(value=99, name="in1"),
-            DataValue(value=1, name="in2")
+            DataValue(value=1, name="in2"),
         ]
 
         # dummy addition DataSource(a, b) that also returns its inputs
@@ -164,14 +167,15 @@ class TestWorkflow(unittest.TestCase):
             return [
                 DataValue(value=first),
                 DataValue(value=second),
-                DataValue(value=(first + second))
+                DataValue(value=(first + second)),
             ]
 
         adder_factory = ProbeDataSourceFactory(
             self.plugin,
             input_slots_size=2,
             output_slots_size=3,
-            run_function=adder)
+            run_function=adder,
+        )
 
         mco_factory = ProbeMCOFactory(self.plugin)
         parameter_factory = mco_factory.parameter_factories[0]
@@ -181,56 +185,50 @@ class TestWorkflow(unittest.TestCase):
         model = adder_factory.create_model()
         model.input_slot_info = [
             InputSlotInfo(name="in1"),
-            InputSlotInfo(name="in2")
+            InputSlotInfo(name="in2"),
         ]
         model.output_slot_info = [
             OutputSlotInfo(name="out1"),
             OutputSlotInfo(name="out2"),
-            OutputSlotInfo(name="out3")
+            OutputSlotInfo(name="out3"),
         ]
 
         # test Parameter and KPI spec that follows DataSource slots
         # exactly
         mco_model.parameters = [
-            parameter_factory.create_model({'name': "in1"}),
-            parameter_factory.create_model({'name': "in2"})
+            parameter_factory.create_model({"name": "in1"}),
+            parameter_factory.create_model({"name": "in2"}),
         ]
         mco_model.kpis = [
             KPISpecification(name="out1"),
             KPISpecification(name="out2"),
-            KPISpecification(name="out3")
+            KPISpecification(name="out3"),
         ]
         # need to make a new workflow for each KPISpecification
-        wf = Workflow(
-            mco=mco_model,
-            execution_layers=[
-                ExecutionLayer()
-            ]
-        )
+        wf = Workflow(mco_model=mco_model, execution_layers=[ExecutionLayer()])
         wf.execution_layers[0].data_sources.append(model)
         kpi_results = wf.execute(data_values)
         self.assertEqual(len(kpi_results), 3)
         self.assertEqual(kpi_results[0].value, 99)
         self.assertEqual(kpi_results[1].value, 1)
         self.assertEqual(kpi_results[2].value, 100)
-        self.assertEqual(kpi_results[0].name, 'out1')
-        self.assertEqual(kpi_results[1].name, 'out2')
-        self.assertEqual(kpi_results[2].name, 'out3')
+        self.assertEqual(kpi_results[0].name, "out1")
+        self.assertEqual(kpi_results[1].name, "out2")
+        self.assertEqual(kpi_results[2].name, "out3")
 
         # now test all possible combinations of KPISpecification, including
         # those with KPIs repeated, and empty KPI specification
         import itertools
-        out_options = [('out1', 99), ('out2', 1), ('out3', 100)]
+
+        out_options = [("out1", 99), ("out2", 1), ("out3", 100)]
         for num_outputs in range(len(out_options) + 2, 0, -1):
             for spec in itertools.permutations(out_options, r=num_outputs):
-                mco_model.kpis = [KPISpecification(name=opt[0])
-                                  for opt in spec]
+                mco_model.kpis = [
+                    KPISpecification(name=opt[0]) for opt in spec
+                ]
 
                 wf = Workflow(
-                    mco=mco_model,
-                    execution_layers=[
-                        ExecutionLayer()
-                    ]
+                    mco_model=mco_model, execution_layers=[ExecutionLayer()]
                 )
                 wf.execution_layers[0].data_sources.append(model)
                 kpi_results = wf.execute(data_values)

@@ -66,7 +66,7 @@ class TestEvaluateOperation(TestCase):
 
     def test_run_missing_mco(self):
         # Test for missing MCO
-        self.operation.workflow.mco = None
+        self.operation.workflow.mco_model = None
         with testfixtures.LogCapture() as capture:
             self.operation.run()
             capture.check(
@@ -97,7 +97,7 @@ class TestEvaluateOperation(TestCase):
     def test_error_for_non_matching_mco_parameters(self):
         # Test for missing MCO parameter
         factory = self.registry.mco_factories[0]
-        self.operation.workflow.mco = factory.create_model()
+        self.operation.workflow.mco_model = factory.create_model()
 
         with testfixtures.LogCapture():
             with self.assertRaisesRegex(

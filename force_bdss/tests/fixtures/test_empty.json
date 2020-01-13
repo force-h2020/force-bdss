@@ -1,7 +1,7 @@
 {
   "version": "1",
   "workflow": {
-    "mco": null,
+    "mco_model": null,
     "execution_layers": [
     ],
     "notification_listeners": [

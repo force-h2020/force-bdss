@@ -1,7 +1,7 @@
 {
     "version": "1",
     "workflow": {
-        "mco": {
+        "mco_model": {
             "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
             "model_data": {
                 "parameters": [
