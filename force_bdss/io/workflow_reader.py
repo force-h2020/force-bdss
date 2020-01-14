@@ -193,8 +193,8 @@ class WorkflowReader(HasStrictTraits):
                 "The plugin responsible for the missing "
                 "key '{}' may be missing or broken.".format(mco_id)
             )
-        # Deepcopy is required because we deserialize the mco_parameters and
-        # kpis here inplace.
+        # `deepcopy` is required because we deserialize the mco_parameters
+        # and kpis inplace.
         model_data = deepcopy(wf_data["mco_model"]["model_data"])
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id, model_data["parameters"]
