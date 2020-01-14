@@ -7,16 +7,24 @@ from subprocess import check_call
 DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
 
-CORE_DEPS = ["envisage==4.7.2-1", "click==7.0-1"]
+CORE_DEPS = ["envisage==4.7.2-1",
+             "click==7.0-1"]
 
 DOCS_DEPS = ["sphinx==1.8.5-3"]
 
-DEV_DEPS = ["flake8==3.7.7-1", "coverage==4.3.4-1", "testfixtures==4.10.0-1"]
+DEV_DEPS = ["flake8==3.7.7-1",
+            "coverage==4.3.4-1",
+            "testfixtures==4.10.0-1"]
 
 PIP_DEPS = ["stevedore==1.30.1"]
 
-ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2", "scipy>=1.2.1"]
+ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
+                        "scipy>=1.2.1"]
 
+ADDITIONAL_PIP_DEPS = [
+    "Cython==0.29.14",
+    "EMMO==1.0.0a0"
+]
 
 @click.group()
 def cli():
@@ -63,7 +71,6 @@ def build_env(python_version):
         + CORE_DEPS
         + DEV_DEPS
         + DOCS_DEPS
-        + ADDITIONAL_CORE_DEPS
     )
 
     if len(PIP_DEPS):
@@ -76,6 +83,18 @@ def build_env(python_version):
 @python_version_option
 def install(python_version):
     env_name = get_env_name(python_version)
+
+    returncode = subprocess.call(
+        ["edm", "install", "-e", env_name, "--yes"] + ADDITIONAL_CORE_DEPS)
+    if returncode:
+        raise click.ClickException("Error while installing EDM dependencies.")
+
+    for dep in ADDITIONAL_PIP_DEPS:
+        returncode = edm_run(env_name, ["pip", "install", dep])
+        if returncode:
+            raise click.ClickException(
+                "Error while installing {!r} through pip.".format(dep))
+
     check_call(
         ["edm", "run", "-e", env_name, "--", "pip", "install", "-e", "."]
     )
