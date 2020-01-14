@@ -1,6 +1,8 @@
 import unittest
 import testfixtures
 
+from emmo.ontology import Ontology
+
 from traits.testing.api import UnittestTools
 
 from force_bdss.core.execution_layer import ExecutionLayer
@@ -33,6 +35,25 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
+
+    def test_ontology(self):
+        mco_factory = ProbeMCOFactory(self.plugin)
+        mco_model = mco_factory.create_model()
+        parameter_factory = mco_factory.parameter_factories[0]
+
+        mco_model.parameters = [
+            parameter_factory.create_model({"name": "in1"}),
+        ]
+        mco_model.kpis = [KPISpecification(name="out1")]
+
+        workflow = Workflow(
+            mco_model=mco_model,
+            execution_layers=[
+                ExecutionLayer()
+            ],
+        )
+
+        self.assertIsInstance(workflow.ontology, Ontology)
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution

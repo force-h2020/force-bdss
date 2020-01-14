@@ -1,5 +1,8 @@
 import logging
 
+from emmo import get_ontology
+from owlready2 import Ontology
+
 from traits.api import HasStrictTraits, Instance, List
 
 from force_bdss.core.execution_layer import ExecutionLayer
@@ -37,6 +40,18 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
+
+    #: Ontology for DataValue types
+    ontology = Instance(Ontology)
+
+    def _ontology_default(self):
+
+        # NOTE: This functionality requires a local installation of JDK
+        ontology = get_ontology("http://emmo.info/emmo.owl#")
+        ontology.load()
+        ontology.sync_reasoner('Pellet')
+
+        return ontology
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
