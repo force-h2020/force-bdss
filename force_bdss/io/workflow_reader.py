@@ -110,13 +110,20 @@ class WorkflowReader(HasStrictTraits):
 
         _ = self._extract_version(json_data)
 
-        wf_data = json_data["workflow"]
         try:
-            wf = self.extract_workflow(wf_data)
+            wf_data = json_data["workflow"]
+            wf = Workflow()
+
+            wf.mco_model = self._extract_mco_model(wf_data)
+            wf.execution_layers[:] = self._extract_execution_layers(wf_data)
+
+            listeners = self._extract_notification_listeners(wf_data)
+            wf.notification_listeners[:] = listeners
         except KeyError as e:
             msg = (
-                "Could not read file {}. Unable to find key {}. "
-                "The file might be corrupted or unsupported.".format(file, e)
+                "Invalid input file format: "
+                f"unable to find key {e}. "
+                "The file might be corrupted or unsupported."
             )
             logger.exception(msg)
             raise InvalidFileException(msg)
@@ -124,7 +131,10 @@ class WorkflowReader(HasStrictTraits):
         return wf
 
     def _extract_version(self, json_data):
-        error_prefix = "Invalid input file: "
+        """ Verifies the workflow.json version. Checks if it is
+        supported by the current version of BDSS.
+        """
+        error_prefix = "Invalid input file format: "
         try:
             version = json_data["version"]
         except KeyError:
@@ -143,31 +153,8 @@ class WorkflowReader(HasStrictTraits):
 
         return version
 
-    def extract_workflow(self, wf_data):
-        """ Extracts the workflow data from the `wf_data` dictionary
-        and instantiates a Workflow object
-
-        Parameters
-        ----------
-        wf_data: dict
-            The dictionary containing the workflow data.
-
-        Returns
-        ----------
-        wf: Workflow
-            Workflow object with attributes based on wf_data
-        """
-        wf = Workflow()
-
-        wf.mco_model = self._extract_mco(wf_data)
-        wf.execution_layers[:] = self._extract_execution_layers(wf_data)
-        wf.notification_listeners[:] = self._extract_notification_listeners(
-            wf_data
-        )
-        return wf
-
     @deprecated_wf_format
-    def _extract_mco(self, wf_data):
+    def _extract_mco_model(self, wf_data):
         """Extracts the MCO from the workflow dictionary data.
 
         Parameters
@@ -350,8 +337,8 @@ class WorkflowReader(HasStrictTraits):
                 raise MissingPluginException(
                     "Could not read file. "
                     "The plugin responsible for the missing "
-                    "notification listener key '{}' may be missing "
-                    "or broken.".format(nl_id)
+                    f"notification listener key '{nl_id}' may be missing "
+                    "or broken."
                 )
 
             model_data = nl_entry["model_data"]

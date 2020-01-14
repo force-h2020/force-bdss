@@ -95,7 +95,7 @@ class TestWorkflowReader(unittest.TestCase):
                 (
                     "force_bdss.io.workflow_reader",
                     "ERROR",
-                    "Invalid input file: "
+                    "Invalid input file format: "
                     " version 2 is not in the "
                     "list of supported versions ['1']",
                 )
@@ -109,7 +109,8 @@ class TestWorkflowReader(unittest.TestCase):
                 (
                     "force_bdss.io.workflow_reader",
                     "ERROR",
-                    "Invalid input file: no version specified",
+                    "Invalid input file format: "
+                    "no version specified",
                 )
             )
 
@@ -163,7 +164,7 @@ class TestWorkflowReader(unittest.TestCase):
         ].pop("mco_model")
 
         with testfixtures.LogCapture() as capture:
-            self.wfreader._extract_mco(self.working_data["workflow"])
+            self.wfreader._extract_mco_model(self.working_data["workflow"])
             expected_log = (
                 "force_bdss.core.workflow",
                 "WARNING",
@@ -174,9 +175,9 @@ class TestWorkflowReader(unittest.TestCase):
 
     def test_persistent_wfdata(self):
         copied_data = deepcopy(self.working_data["workflow"])
-        self.wfreader._extract_mco(self.working_data["workflow"])
+        self.wfreader._extract_mco_model(self.working_data["workflow"])
         self.assertDictEqual(copied_data, self.working_data["workflow"])
-        self.wfreader._extract_mco(self.working_data["workflow"])
+        self.wfreader._extract_mco_model(self.working_data["workflow"])
 
         self.wfreader._extract_execution_layers(self.working_data["workflow"])
         self.assertDictEqual(copied_data, self.working_data["workflow"])
