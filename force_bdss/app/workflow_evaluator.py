@@ -1,8 +1,11 @@
 import logging
 
 from traits.api import (
-    HasStrictTraits, Instance, Unicode, provides,
-    DelegatesTo
+    HasStrictTraits,
+    Instance,
+    Unicode,
+    provides,
+    DelegatesTo,
 )
 
 from force_bdss.core.data_value import DataValue
@@ -22,7 +25,7 @@ class WorkflowEvaluator(HasStrictTraits):
     workflow = Instance(Workflow)
 
     #: A reference to the mco model of the workflow instance.
-    mco_model = DelegatesTo('workflow', prefix='mco')
+    mco_model = DelegatesTo("workflow", prefix="mco_model")
 
     #: The path to the workflow file.
     workflow_filepath = Unicode()
@@ -32,11 +35,11 @@ class WorkflowEvaluator(HasStrictTraits):
         running on the internal process"""
 
         data_values = [
-            DataValue(type=parameter.type,
-                      name=parameter.name,
-                      value=value)
+            DataValue(type=parameter.type, name=parameter.name, value=value)
             for parameter, value in zip(
-                self.mco_model.parameters, parameter_values)]
+                self.mco_model.parameters, parameter_values
+            )
+        ]
 
         kpi_results = self.workflow.execute(data_values)
 

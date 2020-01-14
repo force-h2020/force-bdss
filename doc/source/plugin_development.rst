@@ -6,8 +6,8 @@ provided as a separate python package that makes available some new classes.
 Force BDSS will find these classes from the plugin at startup.
 
 A single Plugin can provide one or more of the following entities:
-MCO, DataSources, NotificationListeners, UIHooks. It can optionally
-provide data_views to be used by the wfmanager GUI.
+``MCO``, ``DataSources``, ``NotificationListeners``, ``UIHooks``. It can optionally
+provide ``DataViews`` to be used by the ``force_wfmanager`` GUI.
 
 An example plugin implementation is available at:
 
@@ -15,19 +15,19 @@ https://github.com/force-h2020/force-bdss-plugin-enthought-example
 
 To implement a new plugin, you must define at least four classes:
 
-- The plugin class itself.
-- One of the entities you want to implement: a DataSource,
-  NotificationListener, MCO, or UIHook.
-- A Factory class for the entity above: it is responsible for creating the
-  specific entity, for example, a DataSource
-- A Model class which contains configuration options for the entity.
+- The ``Plugin`` class itself.
+- One of the entities you want to implement: a ``DataSource``,
+  ``NotificationListener``, ``MCO``, or ``UIHook``.
+- A ``Factory`` class for the entity above: it is responsible for creating the
+  specific entity, for example, a ``DataSource``
+- A ``Model`` class which contains configuration options for the entity.
   For example, it can contain login and password information so that its data
-  source knows how to connect to a service. The Model is also shown visually
-  in the force_wfmanager UI, so some visual aspects need to be configured as
+  source knows how to connect to a service. The ``Model`` is also shown visually
+  in the ``force_wfmanager`` UI, so some visual aspects need to be configured as
   well.
 
-The plugin is made available by having it defined in the setup.py
-entry_point, under the namespace ``force.bdss.extensions``. For example::
+The plugin is made available by having it defined in the ``setup.py`` file
+``entry_points`` section, under the namespace ``force.bdss.extensions``. For example::
 
     entry_points={
         "force.bdss.extensions": [
@@ -44,7 +44,7 @@ The plugin class must be
 
 - Inheriting from ``force_bdss.api.BaseExtensionPlugin``
 - Implement a ``id`` class member, that must be set to the result of
-  calling the function plugin_id(). For example::
+  calling the function ``plugin_id()``. For example::
 
     id = plugin_id("enthought", "example", 0)
 

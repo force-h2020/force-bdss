@@ -12,11 +12,23 @@ from force_bdss.notification_listeners.base_notification_listener_model \
 log = logging.getLogger(__name__)
 
 
+class WorkflowAttributeWarning:
+    warning_message = (
+        "The Workflow object format with 'mco' attribute is now"
+        " deprecated. Please use 'mco_model' attribute instead."
+    )
+
+    @classmethod
+    def warn(cls):
+        log.warning(cls.warning_message)
+
+
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
-    #: Contains the factory-specific MCO Model object.
-    #: Can be None if no MCO has been specified yet.
-    mco = Instance(BaseMCOModel, allow_none=True)
+
+    #: The Workflow MCOModel object.
+    #: Can be None if no MCOModel has been specified yet.
+    mco_model = Instance(BaseMCOModel, allow_none=True)
 
     #: The execution layers. Execution starts from the first layer,
     #: where all data sources are executed in sequence. It then passes all
@@ -40,7 +52,7 @@ class Workflow(HasStrictTraits):
         kpis : list of DataValues
             The DataValues containing the KPI results.
         """
-        available_data_values = self.mco.bind_parameters(data_values)
+        available_data_values = self.mco_model.bind_parameters(data_values)
 
         for index, layer in enumerate(self.execution_layers):
             log.info("Computing data layer {}".format(index))
@@ -48,7 +60,7 @@ class Workflow(HasStrictTraits):
             available_data_values += ds_results
 
         log.info("Aggregating KPI data")
-        kpi_results = self.mco.bind_kpis(available_data_values)
+        kpi_results = self.mco_model.bind_kpis(available_data_values)
 
         return kpi_results
 
@@ -67,15 +79,12 @@ class Workflow(HasStrictTraits):
         """
         errors = []
 
-        if not self.mco:
+        if not self.mco_model:
             errors.append(
-                VerifierError(
-                    subject=self,
-                    global_error="Workflow has no MCO",
-                )
+                VerifierError(subject=self, global_error="Workflow has no MCO")
             )
         else:
-            errors += self.mco.verify()
+            errors += self.mco_model.verify()
 
         if not self.execution_layers:
             errors.append(

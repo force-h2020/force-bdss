@@ -53,7 +53,7 @@ class TestOptimizeOperation(TestCase):
 
     def test_run_missing_mco(self):
         # Test for missing MCO
-        self.operation.workflow.mco = None
+        self.operation.workflow.mco_model = None
         with testfixtures.LogCapture() as capture:
             with self.assertRaisesRegex(
                     RuntimeError,
