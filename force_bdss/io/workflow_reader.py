@@ -110,9 +110,9 @@ class WorkflowReader(HasStrictTraits):
 
         _ = self._extract_version(json_data)
 
+        wf_data = json_data["workflow"]
         try:
-            wf_data = json_data["workflow"]
-            wf = self.read_dict(wf_data)
+            wf = self.extract_workflow(wf_data)
         except KeyError as e:
             msg = (
                 "Could not read file {}. Unable to find key {}. "
@@ -143,14 +143,19 @@ class WorkflowReader(HasStrictTraits):
 
         return version
 
-    def read_dict(self, wf_data):
-        """Read a dictionary containing workflow data and return a Workflow
-        object
+    def extract_workflow(self, wf_data):
+        """ Extracts the workflow data from the `wf_data` dictionary
+        and instantiates a Workflow object
 
         Parameters
         ----------
-        wf_data: Data
+        wf_data: dict
             The dictionary containing the workflow data.
+
+        Returns
+        ----------
+        wf: Workflow
+            Workflow object with attributes based on wf_data
         """
         wf = Workflow()
 
