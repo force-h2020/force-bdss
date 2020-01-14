@@ -307,7 +307,7 @@ class WorkflowReader(HasStrictTraits):
                 model = factory.create_model(p["model_data"])
             except Exception as e:
                 msg = (
-                    "Unable to create model for MCO {} parameter {} : {}. "
+                    "Unable to create model for MCO {} parameter {} : {} "
                     "This is likely due to an error in the plugin. "
                     "Check the logs for more information.".format(
                         mco_id, parameter_id, e

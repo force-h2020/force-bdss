@@ -237,9 +237,22 @@ class TestModelCreationFailure(unittest.TestCase):
     def test__extract_mco_parameters_throws(self):
         model_data = self.working_data["workflow"]["mco_model"]["model_data"]
         model_data["parameters"][0]["model_data"] = {"bad": "data"}
-        with testfixtures.LogCapture():
+        with testfixtures.LogCapture() as capture:
             with self.assertRaises(ModelInstantiationFailedException):
                 self.wfreader.read(_as_json_stringio(self.working_data))
+            capture.check(
+                (
+                    "force_bdss.io.workflow_reader",
+                    "ERROR",
+                    "Unable to create model for MCO force.bdss.enthought."
+                    "plugin.test.v0.factory.probe_mco parameter force."
+                    "bdss.enthought.plugin.test.v0.factory.probe_mco."
+                    "parameter.probe_mco_parameter : Cannot set the undefined "
+                    "'bad' attribute of a 'ProbeParameter' object. This is "
+                    "likely due to an error "
+                    "in the plugin. Check the logs for more information.",
+                )
+            )
 
 
 class TestDeprecationWrapper(unittest.TestCase):
