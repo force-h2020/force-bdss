@@ -125,13 +125,14 @@ class TestVerifier(unittest.TestCase):
         )
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("The number of input slots is incorrect.",
+        self.assertIn("The format of a *slot_info attribute is incorrect.",
                       errors[0].local_error)
 
+        ds_model.input_slot_info = ds_model.input_slot_info[:-1]
         ds_model.output_slot_info.append(
-            OutputSlotInfo(name="name")
+            OutputSlotInfo()
         )
         errors = verify_workflow(wf)
-        self.assertEqual(errors[1].subject, ds_model)
-        self.assertIn("The number of output slots is incorrect.",
-                      errors[1].local_error)
+        self.assertEqual(errors[0].subject, ds_model)
+        self.assertIn("The format of a *slot_info attribute is incorrect.",
+                      errors[0].local_error)

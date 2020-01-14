@@ -53,8 +53,8 @@ class BaseDataSourceModel(BaseModel):
         super(BaseDataSourceModel, self).__init__(factory, *args, **kwargs)
         # Perform extra checks on input_slot_info and output_slot_info
         # to make sure they will be accepted by the BaseDataSource associated
-        # with factory
-        self._assign_slot_info()
+        # with factory during an MCO run
+        self.merge_slot_info()
 
     # -------------------
     #      Listeners
@@ -149,20 +149,22 @@ class BaseDataSourceModel(BaseModel):
         ):
             yield element
 
-    def _assign_slot_info(self):
+    # -------------------
+    #   Public Methods
+    # -------------------
+
+    def merge_slot_info(self):
         """Assign input_slot_info or output_slot_info attributes
         with new values, based on the format of return BaseSlotInfo
         objects from _slot_info_generator method.
 
-        Note: provide an example here
-
         Raises
         ------
-        ValueError, if length of List(BaseSlotInfo) attributes on this
-        object are not equal to those returned by the associated
-        BaseDataSource `slots` method
-        TraitSimilarityError, if the attributes on each element in the
-        List(BaseSlotInfo) instances do not pass a `merge_trait_with_check`
+        TraitSimilarityError, if length of List(BaseSlotInfo) attributes
+        on this object are not equal to those returned by the associated
+        BaseDataSource `slots` method or if the attributes on each
+        element in the List(BaseSlotInfo) instances do not pass a
+        `check_attributes_are_similar` call
         """
 
         # Get InputSlotInfo / OutputSlotInfo lists that are returned
@@ -189,7 +191,7 @@ class BaseDataSourceModel(BaseModel):
                         )
                     )
                     logger.exception(error_msg)
-                    raise ValueError(error_msg)
+                    raise TraitSimilarityError(error_msg)
 
                 # Perform a merge of all attributes between the corresponding
                 # InputSlotInfo / OutputSlotInfo elements.
@@ -214,10 +216,6 @@ class BaseDataSourceModel(BaseModel):
                 # If attribute list is empty, assign data_source_slot_info
                 setattr(self, slot_name, data_source_slot_info)
 
-    # -------------------
-    #   Public Methods
-    # -------------------
-
     def verify(self):
         """ Verify the data source model.
 
@@ -232,36 +230,25 @@ class BaseDataSourceModel(BaseModel):
             The list of all detected errors in the data source model.
         """
 
-        input_slots, output_slots = self._data_source_slots()
-
         errors = []
 
-        if len(input_slots) != len(self.input_slot_info):
+        try:
+            self.merge_slot_info()
+        except TraitSimilarityError:
             errors.append(
                 VerifierError(
                     subject=self,
-                    local_error="The number of input slots is incorrect.",
+                    local_error="The format of a *slot_info attribute "
+                                "is incorrect.",
                     global_error=(
-                        "A data source model has incorrect number "
-                        "of input slots."
+                        "A data source model is incompatible with its"
+                        "corresponding data source."
                     ),
                 )
             )
 
         for input_slot in self.input_slot_info:
             errors += input_slot.verify()
-
-        if len(output_slots) != len(self.output_slot_info):
-            errors.append(
-                VerifierError(
-                    subject=self,
-                    local_error="The number of output slots is incorrect.",
-                    global_error=(
-                        "A data source model has incorrect number "
-                        "of output slots."
-                    ),
-                )
-            )
 
         if self.output_slot_info and not any(
             output_slot.name for output_slot in self.output_slot_info

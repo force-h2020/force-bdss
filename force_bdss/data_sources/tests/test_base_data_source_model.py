@@ -94,7 +94,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
         with testfixtures.LogCapture() as capture:
             # Initialise with incorrect length of input_slot_info
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TraitSimilarityError):
                 model_data = {
                     "input_slot_info": [
                         InputSlotInfo(), InputSlotInfo()
@@ -122,7 +122,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                 ('force_bdss.data_sources.data_source_utilities',
                  'ERROR',
                  'Source object has failed a trait similarity check '
-                 'with target: The type attribute of source (WRONG_TYPE)'
+                 'with target:\nThe type attribute of source (WRONG_TYPE)'
                  " doesn't match target (PRESSURE).")
             )
             capture.clear()
@@ -139,17 +139,17 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
                 ('force_bdss.data_sources.data_source_utilities',
                  'ERROR',
                  'Source object has failed a trait similarity check '
-                 'with target: The description attribute of source'
+                 'with target:\nThe description attribute of source'
                  " (Wrong description) doesn't match "
                  "target (An input variable).")
             )
             capture.clear()
 
-    def test__assign_slot_info(self):
+    def test_merge_slot_info(self):
 
         # Test normal function
         model = self.dummy_factory.create_model()
-        model._assign_slot_info()
+        model.merge_slot_info()
 
         self.assertEqual("", model.input_slot_info[0].name)
         self.assertEqual("TYPE1", model.input_slot_info[0].type)
@@ -160,7 +160,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         # Test with new attribute values on InputSlotInfo object
         model.input_slot_info[0].name = 'foo'
         model.input_slot_info[0].description = 'A variable'
-        model._assign_slot_info()
+        model.merge_slot_info()
 
         self.assertEqual("foo", model.input_slot_info[0].name)
         self.assertEqual("TYPE1", model.input_slot_info[0].type)
@@ -170,7 +170,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         with mock.patch('force_bdss.data_sources.base_data_source_model.'
                         'BaseDataSourceModel._data_source_slots',
                         return_value=([Slot()], [Slot()])):
-            model._assign_slot_info()
+            model.merge_slot_info()
 
             self.assertEqual("foo", model.input_slot_info[0].name)
             self.assertEqual("TYPE1", model.input_slot_info[0].type)
@@ -180,7 +180,7 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
 
         # Test with empty list for output_slot_info attribute
         model.output_slot_info = []
-        model._assign_slot_info()
+        model.merge_slot_info()
 
         self.assertEqual("", model.output_slot_info[0].name)
         self.assertEqual("TYPE2", model.output_slot_info[0].type)
@@ -262,16 +262,20 @@ class TestBaseDataSourceModel(TestCase, UnittestTools):
         errors = model.verify()
         messages = [error.local_error for error in errors]
 
-        self.assertIn("The number of input slots is incorrect.",
-                      messages)
-        self.assertIn("All output variables have undefined names.",
-                      messages)
+        self.assertIn(
+            "The format of a *slot_info attribute is incorrect.",
+            messages)
+        self.assertIn(
+            "All output variables have undefined names.",
+            messages)
 
         model.output_slot_info = []
 
         errors = model.verify()
         messages = [error.local_error for error in errors]
-        self.assertIn("The number of output slots is incorrect.",
-                      messages)
-        self.assertNotIn("All output variables have undefined names.",
-                         messages)
+        self.assertIn(
+            "The format of a *slot_info attribute is incorrect.",
+            messages)
+        self.assertNotIn(
+            "All output variables have undefined names.",
+            messages)
