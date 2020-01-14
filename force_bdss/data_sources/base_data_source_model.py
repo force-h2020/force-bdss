@@ -9,7 +9,9 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.io.workflow_writer import pop_dunder_recursive
 
-from .data_source_utilities import merge_trait_with_check
+from .data_source_utilities import (
+    check_attributes_are_similar, TraitSimilarityError, merge_trait
+)
 
 
 logger = getLogger(__name__)
@@ -199,9 +201,15 @@ class BaseDataSourceModel(BaseModel):
                     # instances
                     attributes = list(data_source_slot.__getstate__().keys())
 
-                    # Merge these attributes, whilst raising an exception if
-                    # both values differ and are not set at their defaults
-                    merge_trait_with_check(slot, data_source_slot, attributes)
+                    # Raise an exception if any attribute values differ and
+                    # are not set at their defaults
+                    check_attributes_are_similar(
+                        slot, data_source_slot, attributes,
+                        ignore_default=True)
+
+                    # Merge these attributes
+                    for attr in attributes:
+                        merge_trait(slot, data_source_slot, attr)
             else:
                 # If attribute list is empty, assign data_source_slot_info
                 setattr(self, slot_name, data_source_slot_info)

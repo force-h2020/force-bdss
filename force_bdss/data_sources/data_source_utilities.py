@@ -8,13 +8,13 @@ class TraitSimilarityError(Exception):
 
 
 def have_similar_attribute(object_a, object_b, name, ignore_default=False):
-    """ Check whether `name` attribute on object_a is similar to the
+    """Check whether `name` attribute on object_a is similar to the
     same attribute on object_b.
 
     Attributes are called similar if:
     - both attributes share the same `name` value, or
     - (when ignore_default==True) either attribute has not been changed
-     from its default value.
+    from its default value.
 
     Parameters
     ----------
@@ -113,10 +113,11 @@ def merge_trait(source, target, name):
         setattr(target, name, getattr(source, name))
 
 
-def merge_trait_with_check(source, target, attributes, ignore_default=True):
-    """ Performs `merge_trait` for attribute in `attributes`, with
-    checks on default values. These checks determine whether both `source`
-    and `target` possess a similar enough state to merge their attributes.
+def check_attributes_are_similar(source, target, attributes,
+                                 ignore_default=False):
+    """Ensures all attributes in `attributes` on both `source`
+    and `target` possess a similar enough state pass
+    `attr_similarity_check`.
 
     Parameters
     ----------
@@ -137,27 +138,23 @@ def merge_trait_with_check(source, target, attributes, ignore_default=True):
     # Obtain names of any provided attributes on both source and
     # target that fail an `attr_similarity_check`
     failed_attr = different_attributes(
-        source, target, attributes, ignore_default=ignore_default
+        source, target, attributes,
+        ignore_default=ignore_default
     )
 
     if failed_attr:
-        attr_name = failed_attr[0]
         error_msg = (
             "Source object has failed a trait "
-            "similarity check with target: "
-            "The {} attribute of source ({}) doesn't match "
-            "target ({}).".format(
-                attr_name,
-                getattr(source, attr_name),
-                getattr(target, attr_name),
-            )
+            "similarity check with target:"
         )
+        for attr_name in failed_attr:
+            error_msg += (
+                "\nThe {} attribute of source ({})"
+                " doesn't match target ({}).".format(
+                    attr_name,
+                    getattr(source, attr_name),
+                    getattr(target, attr_name),
+                )
+            )
         logger.exception(error_msg)
         raise TraitSimilarityError(error_msg)
-
-    # Merge attributes between source and target
-    if isinstance(attributes, str):
-        attributes = [attributes]
-
-    for attr in attributes:
-        merge_trait(source, target, attr)

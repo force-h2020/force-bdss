@@ -4,7 +4,7 @@ from unittest import TestCase
 from traits.api import HasTraits, Int, Unicode
 
 from force_bdss.data_sources.data_source_utilities import (
-    have_similar_attribute, different_attributes, merge_trait_with_check,
+    have_similar_attribute, different_attributes, check_attributes_are_similar,
     merge_trait, TraitSimilarityError
 )
 
@@ -119,39 +119,55 @@ class TestDataSourceUtilities(TestCase):
                 ['not_an_attr']
             )
 
-    def test_merge_trait_with_check(self):
+    def test_check_attributes_are_similar(self):
 
-        merge_trait_with_check(
-            self.new_trait, self.old_trait, 'an_integer'
-        )
-        self.assertEqual(10, self.old_trait.an_integer)
-        merge_trait_with_check(
-            self.old_trait, self.new_trait, 'an_integer'
-        )
-        self.assertEqual(10, self.old_trait.an_integer)
+        another_trait = AnotherDummyTrait(an_integer=5)
 
-        merge_trait_with_check(
-            self.new_trait, self.old_trait,
+        # Test successful checking single attribute
+        check_attributes_are_similar(
+            another_trait, self.old_trait, 'an_integer'
+        )
+
+        # Test unsuccessful checking single attribute
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(TraitSimilarityError):
+                check_attributes_are_similar(
+                    self.new_trait, self.old_trait, 'an_integer'
+                )
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'Source object has failed a trait similarity'
+                 ' check with target:\nThe an_integer attribute '
+                 "of source (10) doesn't match target (5).")
+            )
+
+        # Test checking list of attributes
+        check_attributes_are_similar(
+            another_trait, self.old_trait,
             attributes=['a_string', 'an_integer']
         )
-        self.assertEqual('new', self.old_trait.a_string)
-        merge_trait_with_check(
-            self.new_trait, self.old_trait,
-            attributes='a_string'
-        )
-        self.assertEqual('new', self.old_trait.a_string)
 
-        another_trait = AnotherDummyTrait(a_string='new')
-        with testfixtures.LogCapture():
-            with self.assertRaises(TraitSimilarityError):
-                merge_trait_with_check(
-                    another_trait, self.old_trait,
-                    attributes=['a_string', 'an_integer'],
-                    ignore_default=False
-                )
-
-        merge_trait_with_check(
+        # Test checking list whilst ignoring default values
+        check_attributes_are_similar(
             another_trait, self.old_trait,
             attributes=['a_string', 'an_integer'],
             ignore_default=True)
-        self.assertEqual('new', self.old_trait.a_string)
+
+        # Test unsuccessful checking list of attributes
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(TraitSimilarityError):
+                check_attributes_are_similar(
+                    self.new_trait, self.old_trait,
+                    attributes=['a_string', 'an_integer'],
+                    ignore_default=False
+                )
+            capture.check(
+                ('force_bdss.data_sources.data_source_utilities',
+                 'ERROR',
+                 'Source object has failed a trait similarity '
+                 'check with target:\nThe a_string attribute of '
+                 "source (new) doesn't match target (default).\n"
+                 "The an_integer attribute of source (10) "
+                 "doesn't match target (5).")
+            )
