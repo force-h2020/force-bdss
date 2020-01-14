@@ -1,3 +1,4 @@
+from copy import deepcopy
 from functools import wraps
 import json
 import logging
@@ -40,7 +41,6 @@ class ModelInstantiationFailedException(BaseWorkflowReaderException):
 
 
 def deprecated_wf_format(mco_reader):
-
     @wraps(mco_reader)
     def inner(self, wf_data):
         if "mco" in wf_data and "mco_model" not in wf_data:
@@ -190,7 +190,9 @@ class WorkflowReader(HasStrictTraits):
                 "The plugin responsible for the missing "
                 "key '{}' may be missing or broken.".format(mco_id)
             )
-        model_data = wf_data["mco_model"]["model_data"]
+        # Deepcopy is required because we deserialize the mco_parameters and
+        # kpis here inplace.
+        model_data = deepcopy(wf_data["mco_model"]["model_data"])
         model_data["parameters"] = self._extract_mco_parameters(
             mco_id, model_data["parameters"]
         )
@@ -227,7 +229,7 @@ class WorkflowReader(HasStrictTraits):
         registry = self.factory_registry
 
         layers = []
-        for el_entry in wf_data["execution_layers"]:
+        for el_entry in deepcopy(wf_data["execution_layers"]):
             layer = ExecutionLayer()
 
             for ds_entry in el_entry:
@@ -330,7 +332,7 @@ class WorkflowReader(HasStrictTraits):
     def _extract_notification_listeners(self, wf_data):
         registry = self.factory_registry
         listeners = []
-        for nl_entry in wf_data["notification_listeners"]:
+        for nl_entry in deepcopy(wf_data["notification_listeners"]):
             nl_id = nl_entry["id"]
             try:
                 nl_factory = registry.notification_listener_factory_by_id(

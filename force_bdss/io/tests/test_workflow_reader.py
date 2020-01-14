@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import unittest
 from io import StringIO
@@ -53,8 +54,12 @@ class TestWorkflowReader(unittest.TestCase):
                             "id": "force.bdss.enthought.plugin.test.v0"
                             ".factory.dummy_data_source",
                             "model_data": {
-                                "input_slot_info": [],
-                                "output_slot_info": [],
+                                "input_slot_info": [
+                                    {"name": "input_slot_name"}
+                                ],
+                                "output_slot_info": [
+                                    {"name": "output_slot_name"}
+                                ],
                             },
                         }
                     ]
@@ -142,6 +147,24 @@ class TestWorkflowReader(unittest.TestCase):
             )
             capture.check(expected_log)
 
+    def test_persistent_wfdata(self):
+        copied_data = deepcopy(self.working_data["workflow"])
+        self.wfreader._extract_mco(self.working_data["workflow"])
+        self.assertDictEqual(copied_data, self.working_data["workflow"])
+        self.wfreader._extract_mco(self.working_data["workflow"])
+
+        self.wfreader._extract_execution_layers(self.working_data["workflow"])
+        self.assertDictEqual(copied_data, self.working_data["workflow"])
+        self.wfreader._extract_execution_layers(self.working_data["workflow"])
+
+        self.wfreader._extract_notification_listeners(
+            self.working_data["workflow"]
+        )
+        self.assertDictEqual(copied_data, self.working_data["workflow"])
+        self.wfreader._extract_notification_listeners(
+            self.working_data["workflow"]
+        )
+
 
 class TestModelCreationFailure(unittest.TestCase):
     def setUp(self):
@@ -207,6 +230,13 @@ class TestModelCreationFailure(unittest.TestCase):
         factory = self.registry.notification_listener_factories[0]
         factory.raises_on_create_model = True
 
+        with testfixtures.LogCapture():
+            with self.assertRaises(ModelInstantiationFailedException):
+                self.wfreader.read(_as_json_stringio(self.working_data))
+
+    def test__extract_mco_parameters_throws(self):
+        model_data = self.working_data["workflow"]["mco_model"]["model_data"]
+        model_data["parameters"][0]["model_data"] = {"bad": "data"}
         with testfixtures.LogCapture():
             with self.assertRaises(ModelInstantiationFailedException):
                 self.wfreader.read(_as_json_stringio(self.working_data))
