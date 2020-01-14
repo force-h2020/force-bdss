@@ -181,9 +181,9 @@ class WorkflowReader(HasStrictTraits):
             mco_factory = registry.mco_factory_by_id(mco_id)
         except KeyError:
             raise MissingPluginException(
-                "Could not read file. "
-                "The plugin responsible for the missing "
-                "key '{}' may be missing or broken.".format(mco_id)
+                "Invalid input file format: "
+                f"the plugin responsible for the key '{mco_id}'"
+                " may be missing or broken."
             )
         # `deepcopy` is required because we deserialize the mco_parameters
         # and kpis inplace.
@@ -199,9 +199,9 @@ class WorkflowReader(HasStrictTraits):
             model = mco_factory.create_model(model_data)
         except Exception as e:
             msg = (
-                "Unable to create model for MCO {}: {}. "
+                f"Unable to create model for MCO {mco_id}: {e}. "
                 "This is likely due to a coding error in the plugin. "
-                "Check the logs for more information.".format(mco_id, e)
+                "Check the logs for more information."
             )
 
             logger.exception(msg)
@@ -234,9 +234,9 @@ class WorkflowReader(HasStrictTraits):
                     ds_factory = registry.data_source_factory_by_id(ds_id)
                 except KeyError:
                     raise MissingPluginException(
-                        "Could not read file. "
-                        "The plugin responsible for the missing data source "
-                        "key '{}' may be missing or broken.".format(ds_id)
+                        "Invalid input file format: "
+                        "the plugin responsible for the data source "
+                        f"key '{ds_id}' may be missing or broken."
                     )
 
                 model_data = ds_entry["model_data"]
@@ -253,10 +253,10 @@ class WorkflowReader(HasStrictTraits):
                     ds_model = ds_factory.create_model(model_data)
                 except Exception as e:
                     msg = (
-                        "Unable to create model for DataSource {} : {}. "
+                        f"Unable to create model for DataSource {ds_id}: {e}. "
                         "This is likely due to a coding "
                         "error in the plugin. Check the logs for more "
-                        "information.".format(ds_id, e)
+                        "information."
                     )
                     logger.exception(msg)
                     raise ModelInstantiationFailedException(msg)
@@ -291,22 +291,19 @@ class WorkflowReader(HasStrictTraits):
                 )
             except KeyError:
                 raise MissingPluginException(
-                    "Could not read file. "
-                    "The plugin responsible for the missing MCO '{}' "
-                    "parameter key '{}' may be missing or broken.".format(
-                        mco_id, parameter_id
-                    )
+                    "Invalid input file format:  "
+                    f"the plugin responsible for the MCO '{mco_id}' "
+                    f"parameter key '{parameter_id}' may be missing or broken."
                 )
 
             try:
                 model = factory.create_model(p["model_data"])
             except Exception as e:
                 msg = (
-                    "Unable to create model for MCO {} parameter {} : {} "
+                    f"Unable to create model for MCO {mco_id} parameter "
+                    f"{parameter_id}: {e} "
                     "This is likely due to an error in the plugin. "
-                    "Check the logs for more information.".format(
-                        mco_id, parameter_id, e
-                    )
+                    "Check the logs for more information."
                 )
                 logger.exception(msg)
                 raise ModelInstantiationFailedException(msg)
@@ -335,8 +332,8 @@ class WorkflowReader(HasStrictTraits):
                 )
             except KeyError:
                 raise MissingPluginException(
-                    "Could not read file. "
-                    "The plugin responsible for the missing "
+                    "Invalid input file format: "
+                    "the plugin responsible for the "
                     f"notification listener key '{nl_id}' may be missing "
                     "or broken."
                 )
@@ -348,8 +345,9 @@ class WorkflowReader(HasStrictTraits):
             except Exception as e:
                 msg = (
                     "Unable to create model for Notification Listener "
-                    "{} : {}. This is likely due to an error in the plugin. "
-                    "Check the logs for more information.".format(nl_id, e)
+                    f"{nl_id}: {e}. "
+                    "This is likely due to an error in the plugin. "
+                    "Check the logs for more information."
                 )
                 logger.exception(msg)
                 raise ModelInstantiationFailedException(msg)

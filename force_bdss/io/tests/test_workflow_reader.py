@@ -273,7 +273,7 @@ class TestModelCreationFailure(unittest.TestCase):
                     "Unable to create model for MCO force.bdss.enthought."
                     "plugin.test.v0.factory.probe_mco parameter force."
                     "bdss.enthought.plugin.test.v0.factory.probe_mco."
-                    "parameter.probe_mco_parameter : Cannot set the undefined "
+                    "parameter.probe_mco_parameter: Cannot set the undefined "
                     "'bad' attribute of a 'ProbeParameter' object. This is "
                     "likely due to an error "
                     "in the plugin. Check the logs for more information.",
