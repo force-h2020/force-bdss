@@ -104,36 +104,35 @@ class TestVerifier(unittest.TestCase):
         layer.data_sources.append(ds_model)
 
         errors = verify_workflow(wf)
-        self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("The number of input slots is incorrect.",
+        self.assertEqual(len(errors), 3)
+        self.assertIn("An Input Slot variable has an undefined name",
                       errors[0].local_error)
+        self.assertIn("All output variables have undefined names",
+                      errors[1].local_error)
+        self.assertIn("An Output Slot variable has an undefined name",
+                      errors[2].local_error)
+
+        ds_model.input_slot_info[0].name = 'in'
+        errors = verify_workflow(wf)
+        self.assertEqual(len(errors), 2)
+
+        ds_model.output_slot_info[0].name = 'out'
+        errors = verify_workflow(wf)
+        self.assertEqual(len(errors), 0)
 
         ds_model.input_slot_info.append(
             InputSlotInfo(name="name")
         )
-
         errors = verify_workflow(wf)
         self.assertEqual(errors[0].subject, ds_model)
-        self.assertIn("The number of output slots is incorrect.",
+        self.assertIn("The format of a *slot_info attribute is incorrect.",
                       errors[0].local_error)
 
+        ds_model.input_slot_info = ds_model.input_slot_info[:-1]
         ds_model.output_slot_info.append(
-            OutputSlotInfo(name="name")
+            OutputSlotInfo()
         )
-
         errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 0)
-
-        ds_model.input_slot_info[0].name = ''
-        errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 1)
-        self.assertIn("Input slot is not named",
+        self.assertEqual(errors[0].subject, ds_model)
+        self.assertIn("The format of a *slot_info attribute is incorrect.",
                       errors[0].local_error)
-
-        ds_model.output_slot_info[0].name = ''
-        errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 3)
-        self.assertIn("All output variables have undefined names",
-                      errors[1].local_error)
-        self.assertIn("An output variable has an undefined name",
-                      errors[2].local_error)

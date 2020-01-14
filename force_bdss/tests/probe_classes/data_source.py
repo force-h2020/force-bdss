@@ -28,10 +28,12 @@ class ProbeDataSource(BaseDataSource):
     def slots(self, model):
         self.slots_called = True
         return (
-            tuple(Slot(type=model.input_slots_type)
+            tuple(Slot(type=model.input_slots_type,
+                       description=model.input_slots_desc)
                   for _ in range(model.input_slots_size))
         ), (
-            tuple(Slot(type=model.output_slots_type)
+            tuple(Slot(type=model.output_slots_type,
+                       description=model.output_slots_desc)
                   for _ in range(model.output_slots_size))
         )
 
@@ -43,7 +45,11 @@ class ProbeDataSourceModel(BaseDataSourceModel):
     input_slots_size = Int(1)
     output_slots_size = Int(1)
 
+    input_slots_desc = Unicode('An input variable')
+    output_slots_desc = Unicode('An output variable')
+
     @on_trait_change('input_slots_type,output_slots_type,'
+                     'input_slots_desc,output_slots_desc,'
                      'input_slots_size,output_slots_size')
     def update_slots(self):
         self.changes_slots = True

@@ -33,10 +33,12 @@ class TestExecutionLayer(TestCase):
         errors = self.layer.verify()
         messages = [error.local_error for error in errors]
 
-        self.assertEqual(4, len(messages))
-        self.assertIn('The number of input slots is incorrect.',
+        self.assertEqual(6, len(messages))
+        self.assertIn('An Input Slot variable has an undefined name',
                       messages)
-        self.assertIn('The number of output slots is incorrect.',
+        self.assertIn('All output variables have undefined names.',
+                      messages)
+        self.assertIn('An Output Slot variable has an undefined name',
                       messages)
 
         self.layer.data_sources = []

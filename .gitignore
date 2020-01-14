@@ -5,3 +5,4 @@ doc/source/api
 *.pyc
 force_bdss/version.py
 .DS_Store
+.idea

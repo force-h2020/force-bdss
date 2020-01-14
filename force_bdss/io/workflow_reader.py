@@ -256,12 +256,12 @@ class WorkflowReader(HasStrictTraits):
 
                 try:
                     ds_model = ds_factory.create_model(model_data)
-                except Exception as e:
+                except Exception:
                     msg = (
-                        "Unable to create model for DataSource {} : {}. "
+                        "Unable to create model for DataSource {}. "
                         "This is likely due to a coding "
                         "error in the plugin. Check the logs for more "
-                        "information.".format(ds_id, e)
+                        "information.".format(ds_id)
                     )
                     logger.exception(msg)
                     raise ModelInstantiationFailedException(msg)

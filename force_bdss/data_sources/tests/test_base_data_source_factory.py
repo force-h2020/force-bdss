@@ -1,16 +1,16 @@
-import unittest
-
+from unittest import TestCase
 import testfixtures
 
 from traits.trait_errors import TraitError
 
-from force_bdss.data_sources.tests.test_base_data_source import DummyDataSource
+from force_bdss.data_sources.tests.test_base_data_source import \
+    DummyDataSource
 from force_bdss.data_sources.tests.test_base_data_source_model import \
     DummyDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceFactory
 
 
-class TestBaseDataSourceFactory(unittest.TestCase):
+class TestBaseDataSourceFactory(TestCase):
     def setUp(self):
         self.plugin = {'id': "pid", 'name': 'Plugin'}
 

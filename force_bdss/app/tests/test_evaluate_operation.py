@@ -4,6 +4,7 @@ import testfixtures
 
 from force_bdss.app.evaluate_operation import EvaluateOperation
 from force_bdss.core.data_value import DataValue
+from force_bdss.io.workflow_reader import ModelInstantiationFailedException
 from force_bdss.tests import fixtures
 from force_bdss.tests.probe_classes.workflow_file import (
     ProbeWorkflowFile
@@ -167,15 +168,25 @@ class TestEvaluateOperation(TestCase):
 
         factory = self.registry.data_source_factories[0]
         factory.output_slots_size = 2
-        self.operation.workflow_file.read()
 
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    r"The number of data values \(2 values\)"
-                    " returned by 'test_data_source' does not match"
-                    " the number of user-defined names"):
-                self.operation.run()
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(ModelInstantiationFailedException):
+                self.operation.workflow_file.read()
+            capture.check(
+                ('force_bdss.data_sources.base_data_source_model',
+                 'ERROR',
+                 'The number of OutputSlotInfo objects (1) of the'
+                 " ProbeDataSourceModel model doesn't match the "
+                 "expected number of slots (2). This is likely due to "
+                 'a corrupted file.'),
+                ('force_bdss.io.workflow_reader',
+                 'ERROR',
+                 'Unable to create model for DataSource '
+                 'force.bdss.enthought.plugin.test.v0.factory'
+                 '.probe_data_source. This is likely due to a coding '
+                 'error in the plugin. Check the logs for more '
+                 'information.')
+            )
 
     def test_data_source_broken(self):
 
