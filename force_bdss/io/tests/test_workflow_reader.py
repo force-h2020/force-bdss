@@ -88,6 +88,31 @@ class TestWorkflowReader(unittest.TestCase):
             with self.assertRaises(InvalidVersionException):
                 self.wfreader.read(_as_json_stringio(data))
 
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(InvalidVersionException):
+                self.wfreader._extract_version(data)
+            capture.check(
+                (
+                    "force_bdss.io.workflow_reader",
+                    "ERROR",
+                    "Invalid input file: "
+                    " version 2 is not in the "
+                    "list of supported versions ['1']",
+                )
+            )
+
+        data = {"workflow": {}}
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(InvalidFileException):
+                self.wfreader._extract_version(data)
+            capture.check(
+                (
+                    "force_bdss.io.workflow_reader",
+                    "ERROR",
+                    "Invalid input file: no version specified",
+                )
+            )
+
     def test_absent_version(self):
         data = {}
 

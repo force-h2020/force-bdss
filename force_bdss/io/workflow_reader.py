@@ -108,24 +108,7 @@ class WorkflowReader(HasStrictTraits):
         """
         json_data = json.load(file)
 
-        try:
-            version = json_data["version"]
-        except KeyError:
-            logger.error("File missing version information")
-            raise InvalidFileException(
-                "Corrupted input file, no version specified"
-            )
-
-        if version not in SUPPORTED_FILE_VERSIONS:
-            logger.error(
-                "File contains version {} that is not in the "
-                "list of supported versions {}".format(
-                    version, SUPPORTED_FILE_VERSIONS
-                )
-            )
-            raise InvalidVersionException(
-                "File version {} not supported".format(json_data["version"])
-            )
+        _ = self._extract_version(json_data)
 
         try:
             wf_data = json_data["workflow"]
@@ -139,6 +122,26 @@ class WorkflowReader(HasStrictTraits):
             raise InvalidFileException(msg)
 
         return wf
+
+    def _extract_version(self, json_data):
+        error_prefix = "Invalid input file: "
+        try:
+            version = json_data["version"]
+        except KeyError:
+            version_error_message = error_prefix + "no version specified"
+            logger.error(version_error_message)
+            raise InvalidFileException(version_error_message)
+
+        if version not in SUPPORTED_FILE_VERSIONS:
+            error_postfix = (
+                f" version {version} is not in the "
+                f"list of supported versions {SUPPORTED_FILE_VERSIONS}"
+            )
+            version_error_message = error_prefix + error_postfix
+            logger.error(version_error_message)
+            raise InvalidVersionException(version_error_message)
+
+        return version
 
     def read_dict(self, wf_data):
         """Read a dictionary containing workflow data and return a Workflow
