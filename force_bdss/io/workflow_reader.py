@@ -106,11 +106,31 @@ class WorkflowReader(HasStrictTraits):
             occurred. This is likely due to a coding error in the plugin.
 
         """
-        with open(path, 'r') as input_file:
-            json_data = json.load(input_file)
+        json_data = self.load_data(path)
 
         _ = self._extract_version(json_data)
+        workflow = self._extract_workflow(json_data)
+        return workflow
 
+    def load_data(self, filepath):
+        """ Loads the data from file located at `filepath` in json
+        format.
+
+        Parameters
+        ----------
+        filepath: str
+            path to file to load in string format
+
+        Returns
+        ----------
+        json_data: dict
+            data parsed from json-formatted file
+        """
+        with open(filepath, "r") as input_file:
+            json_data = json.load(input_file)
+        return json_data
+
+    def _extract_workflow(self, json_data):
         try:
             wf_data = json_data["workflow"]
             wf = Workflow()
@@ -122,8 +142,7 @@ class WorkflowReader(HasStrictTraits):
             wf.notification_listeners[:] = listeners
         except KeyError as e:
             msg = (
-                "Invalid input file format: "
-                f"unable to find key {e}. "
+                f"Invalid input file format: unable to find key {e}."
                 "The file might be corrupted or unsupported."
             )
             logger.exception(msg)

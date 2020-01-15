@@ -1,7 +1,5 @@
 from copy import deepcopy
-import json
 import unittest
-from io import StringIO
 import logging
 
 import testfixtures
@@ -21,6 +19,8 @@ from force_bdss.tests.dummy_classes.factory_registry import (
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
+from force_bdss.tests import fixtures
+
 
 log = logging.getLogger(__name__)
 
@@ -29,19 +29,29 @@ class TestWorkflowReader(unittest.TestCase):
     def setUp(self):
         self.registry = DummyFactoryRegistry()
         self.wfreader = WorkflowReader(self.registry)
+        self.working_data = fixtures.get("test_workflow_reader.json")
 
-        self.working_data = {
+    def test_initialization(self):
+        self.assertEqual(self.wfreader.factory_registry, self.registry)
+
+        workflow = self.wfreader.read(self.working_data)
+
+        self.assertIsInstance(workflow, Workflow)
+
+    def test_load_data(self):
+        data = self.wfreader.load_data(self.working_data)
+        control_dict = {
             "version": "1",
             "workflow": {
                 "mco_model": {
-                    "id": "force.bdss.enthought.plugin.test.v0"
-                    ".factory.dummy_mco",
+                    "id": "force.bdss.enthought.plugin.test.v0."
+                          "factory.dummy_mco",
                     "model_data": {
                         "parameters": [
                             {
-                                "id": "force.bdss.enthought.plugin.test.v0"
-                                ".factory.dummy_mco.parameter"
-                                ".dummy_mco_parameter",
+                                "id": "force.bdss.enthought.plugin."
+                                      "test.v0.factory.dummy_mco.parameter."
+                                      "dummy_mco_parameter",
                                 "model_data": {},
                             }
                         ],
@@ -51,8 +61,8 @@ class TestWorkflowReader(unittest.TestCase):
                 "execution_layers": [
                     [
                         {
-                            "id": "force.bdss.enthought.plugin.test.v0"
-                            ".factory.dummy_data_source",
+                            "id": "force.bdss.enthought.plugin."
+                                  "test.v0.factory.dummy_data_source",
                             "model_data": {
                                 "input_slot_info": [
                                     {"name": "input_slot_name"}
@@ -66,27 +76,18 @@ class TestWorkflowReader(unittest.TestCase):
                 ],
                 "notification_listeners": [
                     {
-                        "id": "force.bdss.enthought.plugin.test.v0"
-                        ".factory.dummy_notification_listener",
+                        "id": "force.bdss.enthought.plugin.test.v0."
+                              "factory.dummy_notification_listener",
                         "model_data": {},
                     }
                 ],
             },
         }
 
-    def test_initialization(self):
-        self.assertEqual(self.wfreader.factory_registry, self.registry)
-
-        workflow = self.wfreader.read(_as_json_stringio(self.working_data))
-
-        self.assertIsInstance(workflow, Workflow)
+        self.assertDictEqual(data, control_dict)
 
     def test_invalid_version(self):
         data = {"version": "2", "workflow": {}}
-
-        with testfixtures.LogCapture():
-            with self.assertRaises(InvalidVersionException):
-                self.wfreader.read(_as_json_stringio(data))
 
         with testfixtures.LogCapture() as capture:
             with self.assertRaises(InvalidVersionException):
@@ -109,62 +110,58 @@ class TestWorkflowReader(unittest.TestCase):
                 (
                     "force_bdss.io.workflow_reader",
                     "ERROR",
-                    "Invalid input file format: "
-                    "no version specified",
+                    "Invalid input file format: " "no version specified",
                 )
             )
 
-    def test_absent_version(self):
         data = {}
-
         with testfixtures.LogCapture():
             with self.assertRaises(InvalidFileException):
-                self.wfreader.read(_as_json_stringio(data))
+                self.wfreader._extract_version(data)
 
     def test_missing_key(self):
         data = {"version": "1", "workflow": {}}
 
         with testfixtures.LogCapture():
             with self.assertRaises(InvalidFileException):
-                self.wfreader.read(_as_json_stringio(data))
+                self.wfreader._extract_workflow(data)
 
     def test_missing_plugin_mco(self):
-        data = self.working_data
+        data = self.wfreader.load_data(self.working_data)
         data["workflow"]["mco_model"]["id"] = "missing_mco"
 
         with self.assertRaises(MissingPluginException):
-            self.wfreader.read(_as_json_stringio(data))
+            self.wfreader._extract_workflow(data)
 
     def test_missing_plugin_mco_parameter(self):
-        data = self.working_data
+        data = self.wfreader.load_data(self.working_data)
         data["workflow"]["mco_model"]["model_data"]["parameters"][0][
             "id"
         ] = "missing_parameter"
 
         with self.assertRaises(MissingPluginException):
-            self.wfreader.read(_as_json_stringio(data))
+            self.wfreader._extract_workflow(data)
 
     def test_missing_plugin_notification_listener(self):
-        data = self.working_data
+        data = self.wfreader.load_data(self.working_data)
         data["workflow"]["notification_listeners"][0]["id"] = "missing_nl"
 
         with self.assertRaises(MissingPluginException):
-            self.wfreader.read(_as_json_stringio(data))
+            self.wfreader._extract_workflow(data)
 
     def test_missing_plugin_data_source(self):
-        data = self.working_data
+        data = self.wfreader.load_data(self.working_data)
         data["workflow"]["execution_layers"][0][0]["id"] = "missing_ds"
 
         with self.assertRaises(MissingPluginException):
-            self.wfreader.read(_as_json_stringio(data))
+            self.wfreader._extract_workflow(data)
 
     def test_deprecated_wf_format_wrapper(self):
-        self.working_data["workflow"]["mco"] = self.working_data[
-            "workflow"
-        ].pop("mco_model")
+        data = self.wfreader.load_data(self.working_data)
+        data["workflow"]["mco"] = data["workflow"].pop("mco_model")
 
         with testfixtures.LogCapture() as capture:
-            self.wfreader._extract_mco_model(self.working_data["workflow"])
+            self.wfreader._extract_mco_model(data["workflow"])
             expected_log = (
                 "force_bdss.core.workflow",
                 "WARNING",
@@ -174,83 +171,41 @@ class TestWorkflowReader(unittest.TestCase):
             capture.check(expected_log)
 
     def test_persistent_wfdata(self):
-        copied_data = deepcopy(self.working_data["workflow"])
-        self.wfreader._extract_mco_model(self.working_data["workflow"])
-        self.assertDictEqual(copied_data, self.working_data["workflow"])
-        self.wfreader._extract_mco_model(self.working_data["workflow"])
+        data = self.wfreader.load_data(self.working_data)["workflow"]
+        copied_data = deepcopy(data)
+        self.wfreader._extract_mco_model(data)
+        self.assertDictEqual(copied_data, data)
+        self.wfreader._extract_mco_model(data)
 
-        self.wfreader._extract_execution_layers(self.working_data["workflow"])
-        self.assertDictEqual(copied_data, self.working_data["workflow"])
-        self.wfreader._extract_execution_layers(self.working_data["workflow"])
+        self.wfreader._extract_execution_layers(data)
+        self.assertDictEqual(copied_data, data)
+        self.wfreader._extract_execution_layers(data)
 
-        self.wfreader._extract_notification_listeners(
-            self.working_data["workflow"]
-        )
-        self.assertDictEqual(copied_data, self.working_data["workflow"])
-        self.wfreader._extract_notification_listeners(
-            self.working_data["workflow"]
-        )
+        self.wfreader._extract_notification_listeners(data)
+        self.assertDictEqual(copied_data, data)
+        self.wfreader._extract_notification_listeners(data)
 
 
 class TestModelCreationFailure(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.wfreader = WorkflowReader(self.registry)
-
-        self.working_data = {
-            "version": "1",
-            "workflow": {
-                "mco_model": {
-                    "id": "force.bdss.enthought.plugin.test.v0"
-                    ".factory.probe_mco",
-                    "model_data": {
-                        "parameters": [
-                            {
-                                "id": "force.bdss.enthought.plugin.test.v0"
-                                ".factory.probe_mco.parameter"
-                                ".probe_mco_parameter",
-                                "model_data": {},
-                            }
-                        ],
-                        "kpis": [],
-                    },
-                },
-                "execution_layers": [
-                    [
-                        {
-                            "id": "force.bdss.enthought.plugin.test.v0"
-                            ".factory.probe_data_source",
-                            "model_data": {
-                                "input_slot_info": [],
-                                "output_slot_info": [],
-                            },
-                        }
-                    ]
-                ],
-                "notification_listeners": [
-                    {
-                        "id": "force.bdss.enthought.plugin.test.v0"
-                        ".factory.probe_notification_listener",
-                        "model_data": {},
-                    }
-                ],
-            },
-        }
+        self.working_data = fixtures.get("test_failing_workflow_reader.json")
 
     def test_basic_probe_loading(self):
-        self.wfreader.read(_as_json_stringio(self.working_data))
+        self.wfreader.read(self.working_data)
 
     def test_data_source_model_throws(self):
         self.registry.data_source_factories[0].raises_on_create_model = True
         with testfixtures.LogCapture():
             with self.assertRaises(ModelInstantiationFailedException):
-                self.wfreader.read(_as_json_stringio(self.working_data))
+                self.wfreader.read(self.working_data)
 
     def test_mco_model_throws(self):
         self.registry.mco_factories[0].raises_on_create_model = True
         with testfixtures.LogCapture():
             with self.assertRaises(ModelInstantiationFailedException):
-                self.wfreader.read(_as_json_stringio(self.working_data))
+                self.wfreader.read(self.working_data)
 
     def test_notification_listener_throws(self):
         factory = self.registry.notification_listener_factories[0]
@@ -258,14 +213,15 @@ class TestModelCreationFailure(unittest.TestCase):
 
         with testfixtures.LogCapture():
             with self.assertRaises(ModelInstantiationFailedException):
-                self.wfreader.read(_as_json_stringio(self.working_data))
+                self.wfreader.read(self.working_data)
 
     def test__extract_mco_parameters_throws(self):
-        model_data = self.working_data["workflow"]["mco_model"]["model_data"]
+        wfdata = self.wfreader.load_data(self.working_data)["workflow"]
+        model_data = wfdata["mco_model"]["model_data"]
         model_data["parameters"][0]["model_data"] = {"bad": "data"}
         with testfixtures.LogCapture() as capture:
             with self.assertRaises(ModelInstantiationFailedException):
-                self.wfreader.read(_as_json_stringio(self.working_data))
+                self.wfreader._extract_mco_model(wfdata)
             capture.check(
                 (
                     "force_bdss.io.workflow_reader",
@@ -313,11 +269,3 @@ class TestDeprecationWrapper(unittest.TestCase):
                 decorated_method(None, mixed_dict), mixed_dict
             )
             capture.check()
-
-
-def _as_json_stringio(data):
-    fp = StringIO()
-    json.dump(data, fp)
-    fp.seek(0)
-
-    return fp
