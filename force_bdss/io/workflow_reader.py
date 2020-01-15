@@ -73,7 +73,7 @@ class WorkflowReader(HasStrictTraits):
             factory_registry=factory_registry, *args, **kwargs
         )
 
-    def read(self, file):
+    def read(self, path):
         """Reads the file and returns a Workflow object.
         If any problem is found, raises an InvalidFileException or a
         derived, more specialized exception.
@@ -106,7 +106,8 @@ class WorkflowReader(HasStrictTraits):
             occurred. This is likely due to a coding error in the plugin.
 
         """
-        json_data = json.load(file)
+        with open(path, 'r') as input_file:
+            json_data = json.load(input_file)
 
         _ = self._extract_version(json_data)
 
