@@ -74,6 +74,11 @@ class TestWorkflowWriter(unittest.TestCase):
         ]
         return wf
 
+    def test_get_workflow_data(self):
+        reader = WorkflowReader()
+        wfwriter = WorkflowWriter()
+        self.assertDictEqual(self.)
+
     def test_write_and_read_empty_workflow(self):
         wf = Workflow()
         wfwriter = WorkflowWriter()
