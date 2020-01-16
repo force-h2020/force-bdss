@@ -1,12 +1,12 @@
 import json
-from traits.api import HasStrictTraits, Unicode
+from traits.api import HasStrictTraits, Str
 
 
 class WorkflowWriter(HasStrictTraits):
     """A Writer for writing the Workflow onto disk.
     """
 
-    version = Unicode('1')
+    version = Str("1")
 
     def write(self, workflow, f):
         """Writes the workflow model object to a file f in JSON format.
