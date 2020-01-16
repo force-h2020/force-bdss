@@ -34,6 +34,18 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
 
+    def test_empty__getstate__(self):
+        workflow = Workflow()
+        state = workflow.__getstate__()
+        self.assertDictEqual(
+            state,
+            {
+                "mco_model": None,
+                "execution_layers": [],
+                "notification_listeners": [],
+            },
+        )
+
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution
         # layer 0: in1 + in2   | in3 + in4

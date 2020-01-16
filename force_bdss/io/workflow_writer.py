@@ -148,3 +148,22 @@ def nested_getstate(state_dict):
         except AttributeError:
             pass
     return state_dict
+
+
+def recursive_getstate(state_dict):
+    # We safely attempt to get the state of the nested objects in `state_dict`
+    # on the zero and first levels using __getstate__.
+    # If the `state_dict` item is an iterable, we __getstate__ of the iterable
+    # elements. Otherwise, we __getstate__ the item itself.
+    # If we can't __getstate__ of the item, we leave it as it is.
+    for key in state_dict:
+        try:
+            if isinstance(state_dict[key], (tuple, list)):
+                state_dict[key] = [el.__getstate__() for el in state_dict[key]]
+            elif isinstance(state_dict[key], dict):
+                state_dict[key] = recursive_getstate(state_dict[key])
+            else:
+                state_dict[key] = state_dict[key].__getstate__()
+        except AttributeError:
+            pass
+    return state_dict

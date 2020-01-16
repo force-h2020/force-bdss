@@ -1,7 +1,7 @@
 import abc
 from traits.api import ABCHasStrictTraits, Instance
 
-from ..data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 
 
 class BaseDataSource(ABCHasStrictTraits):

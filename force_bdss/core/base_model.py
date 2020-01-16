@@ -1,7 +1,10 @@
 from traits.api import ABCHasStrictTraits, Instance
 
 from force_bdss.core.base_factory import BaseFactory
-from force_bdss.io.workflow_writer import pop_dunder_recursive
+from force_bdss.io.workflow_writer import (
+    pop_dunder_recursive,
+    recursive_getstate,
+)
 
 
 class BaseModel(ABCHasStrictTraits):
@@ -15,4 +18,6 @@ class BaseModel(ABCHasStrictTraits):
         super(BaseModel, self).__init__(factory=factory, *args, **kwargs)
 
     def __getstate__(self):
-        return pop_dunder_recursive(super(BaseModel, self).__getstate__())
+        state = pop_dunder_recursive(super().__getstate__())
+        state = recursive_getstate(state)
+        return state

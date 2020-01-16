@@ -7,7 +7,10 @@ from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
-
+from force_bdss.io.workflow_writer import (
+    pop_dunder_recursive,
+    recursive_getstate,
+)
 
 log = logging.getLogger(__name__)
 
@@ -98,3 +101,11 @@ class Workflow(HasStrictTraits):
                 errors += layer.verify()
 
         return errors
+
+    def __getstate__(self):
+        """ Returns state dictionary of the object. For a nested dict,
+        __getstate__ is applied to zero level items and first level items.
+        """
+        state = pop_dunder_recursive(super().__getstate__())
+        state = recursive_getstate(state)
+        return state
