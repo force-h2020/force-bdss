@@ -26,6 +26,7 @@ class WorkflowWriter(HasStrictTraits):
         json.dump(data, f, indent=4)
 
     def get_workflow_data(self, workflow):
+        """ Public method to get a serialized form of workflow"""
         return self._workflow_data(workflow)
 
     def _workflow_data(self, workflow):

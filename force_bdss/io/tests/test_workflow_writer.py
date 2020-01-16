@@ -75,9 +75,12 @@ class TestWorkflowWriter(unittest.TestCase):
         return wf
 
     def test_get_workflow_data(self):
-        reader = WorkflowReader()
         wfwriter = WorkflowWriter()
-        self.assertDictEqual(self.)
+        workflow = Workflow()
+        self.assertDictEqual(
+            wfwriter.get_workflow_data(workflow),
+            wfwriter._workflow_data(workflow),
+        )
 
     def test_write_and_read_empty_workflow(self):
         wf = Workflow()
@@ -123,6 +126,10 @@ class TestWorkflowWriter(unittest.TestCase):
 
         test_result_dictionary = pop_recursive(test_dictionary, "K3")
         self.assertEqual(test_result_dictionary, result_dictionary)
+
+        small_dict = {"key": "value"}
+        missing_key = "another_key"
+        self.assertDictEqual(pop_recursive(small_dict, missing_key), small_dict)
 
     def test_dunder_recursive(self):
         test_dict = {
