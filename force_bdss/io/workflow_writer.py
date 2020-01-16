@@ -8,7 +8,7 @@ class WorkflowWriter(HasStrictTraits):
 
     version = Str("1")
 
-    def write(self, workflow, f):
+    def write(self, workflow, path, *, mode="w"):
         """Writes the workflow model object to a file f in JSON format.
 
         Parameters
@@ -16,14 +16,17 @@ class WorkflowWriter(HasStrictTraits):
         workflow: Workflow
             The Workflow instance to write to file
 
-        f: File
-            A file object on which to write the workflow, properly serialized
-            into JSON.
+        path: string
+            A path string of the file on which to write the workflow
+
+        mode: string
+            file open mode, "w" by default to write
         """
         data = {"version": self.version}
-
         data["workflow"] = self._workflow_data(workflow)
-        json.dump(data, f, indent=4)
+
+        with open(path, mode) as f:
+            json.dump(data, f, indent=4)
 
     def get_workflow_data(self, workflow):
         """ Public method to get a serialized form of workflow"""

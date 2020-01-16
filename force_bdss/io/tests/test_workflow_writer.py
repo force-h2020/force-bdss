@@ -1,7 +1,5 @@
 import json
 import unittest
-
-from io import StringIO
 from unittest import mock
 
 from force_bdss.core.execution_layer import ExecutionLayer
@@ -29,10 +27,13 @@ class TestWorkflowWriter(unittest.TestCase):
 
     def test_write(self):
         wfwriter = WorkflowWriter()
-        fp = StringIO()
-        wf = self._create_workflow()
-        wfwriter.write(wf, fp)
-        result = json.loads(fp.getvalue())
+        workflow = self._create_workflow()
+
+        filename = "tmp.json"
+        wfwriter.write(workflow, filename)
+        with open(filename) as f:
+            result = json.load(f)
+
         self.assertIn("version", result)
         self.assertIn("workflow", result)
         self.assertIn("mco_model", result["workflow"])
@@ -40,16 +41,15 @@ class TestWorkflowWriter(unittest.TestCase):
 
     def test_write_and_read(self):
         wfwriter = WorkflowWriter()
-        wf = self._create_workflow()
+        workflow = self._create_workflow()
 
         filename = "tmp.json"
-        with open(filename, "w") as fp:
-            wfwriter.write(wf, fp)
+        wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(filename)
         self.assertEqual(
-            wf_result.mco_model.factory.id, wf.mco_model.factory.id
+            wf_result.mco_model.factory.id, workflow.mco_model.factory.id
         )
         self.assertEqual(len(wf_result.execution_layers), 2)
         self.assertEqual(len(wf_result.execution_layers[0].data_sources), 2)
@@ -83,12 +83,11 @@ class TestWorkflowWriter(unittest.TestCase):
         )
 
     def test_write_and_read_empty_workflow(self):
-        wf = Workflow()
+        workflow = Workflow()
         wfwriter = WorkflowWriter()
 
         filename = "tmp.json"
-        with open(filename, "w") as fp:
-            wfwriter.write(wf, fp)
+        wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
         wf_result = wfreader.read(filename)
