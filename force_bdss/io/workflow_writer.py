@@ -20,7 +20,7 @@ class WorkflowWriter(HasStrictTraits):
             A file object on which to write the workflow, properly serialized
             into JSON.
         """
-        data = {'version': self.version}
+        data = {"version": self.version}
 
         data["workflow"] = self._workflow_data(workflow)
         json.dump(data, f, indent=4)
@@ -33,11 +33,11 @@ class WorkflowWriter(HasStrictTraits):
             "mco_model": self._mco_data(workflow.mco_model),
             "execution_layers": [
                 self._execution_layer_data(el)
-                for el in workflow.execution_layers],
+                for el in workflow.execution_layers
+            ],
             "notification_listeners": [
-                self._model_data(nl)
-                for nl in workflow.notification_listeners
-            ]
+                self._model_data(nl) for nl in workflow.notification_listeners
+            ],
         }
 
         return workflow_data
@@ -55,19 +55,14 @@ class WorkflowWriter(HasStrictTraits):
             state = param.__getstate__()
 
             parameters_data.append(
-                {
-                    "id": param.factory.id,
-                    "model_data": state
-                }
+                {"id": param.factory.id, "model_data": state}
             )
 
         data["model_data"]["parameters"] = parameters_data
 
         kpis_data = []
         for kpi in data["model_data"]["kpis"]:
-            kpis_data.append(
-                kpi.__getstate__()
-            )
+            kpis_data.append(kpi.__getstate__())
 
         data["model_data"]["kpis"] = kpis_data
 
@@ -88,10 +83,7 @@ class WorkflowWriter(HasStrictTraits):
         """
         state = model.__getstate__()
 
-        return {
-            "id": model.factory.id,
-            "model_data": state
-        }
+        return {"id": model.factory.id, "model_data": state}
 
 
 def pop_recursive(dictionary, remove_key):
@@ -120,7 +112,7 @@ def pop_dunder_recursive(dictionary):
     """ Recursively removes all dunder keys from a nested dictionary. """
     keys = [key for key in dictionary.keys()]
     for key in keys:
-        if key.startswith('__') and key.endswith('__'):
+        if key.startswith("__") and key.endswith("__"):
             dictionary.pop(key)
 
     for key, value in dictionary.items():
