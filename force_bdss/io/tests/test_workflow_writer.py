@@ -129,7 +129,9 @@ class TestWorkflowWriter(unittest.TestCase):
 
         small_dict = {"key": "value"}
         missing_key = "another_key"
-        self.assertDictEqual(pop_recursive(small_dict, missing_key), small_dict)
+        self.assertDictEqual(
+            pop_recursive(small_dict, missing_key), small_dict
+        )
 
     def test_dunder_recursive(self):
         test_dict = {
