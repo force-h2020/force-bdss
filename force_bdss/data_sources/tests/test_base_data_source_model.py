@@ -6,13 +6,15 @@ from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.tests.dummy_classes.data_source import (
-    DummyDataSource, DummyDataSourceModel
+    DummyDataSource,
+    DummyDataSourceModel,
 )
 
 from unittest import mock
 
-from force_bdss.data_sources.base_data_source_factory import \
-    BaseDataSourceFactory
+from force_bdss.data_sources.base_data_source_factory import (
+    BaseDataSourceFactory,
+)
 
 
 class ChangesSlotsModel(BaseDataSourceModel):
@@ -22,7 +24,6 @@ class ChangesSlotsModel(BaseDataSourceModel):
 
 
 class BadDataSource(DummyDataSource):
-
     def slots(self, model):
         raise Exception("bad slots")
 
@@ -30,51 +31,40 @@ class BadDataSource(DummyDataSource):
 class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
     def setUp(self):
         self.mock_factory = mock.Mock(spec=BaseDataSourceFactory)
+        self.mock_factory.id = "id"
 
     def test_getstate(self):
         model = DummyDataSourceModel(self.mock_factory)
         self.assertDictEqual(
             model.__getstate__(),
             {
-                "input_slot_info": [],
-                "output_slot_info": []
-            })
+                "id": "id",
+                "model_data": {"input_slot_info": [], "output_slot_info": []},
+            },
+        )
 
         model.input_slot_info = [
-            InputSlotInfo(
-                name="foo"
-            ),
-            InputSlotInfo(
-                name="bar"
-            )
+            InputSlotInfo(name="foo"),
+            InputSlotInfo(name="bar"),
         ]
         model.output_slot_info = [
             OutputSlotInfo(name="baz"),
-            OutputSlotInfo(name="quux")
+            OutputSlotInfo(name="quux"),
         ]
 
         self.assertDictEqual(
             model.__getstate__(),
             {
-                "input_slot_info": [
-                    {
-                        "source": "Environment",
-                        "name": "foo"
-                    },
-                    {
-                        "source": "Environment",
-                        "name": "bar"
-                    }
-                ],
-                "output_slot_info": [
-                    {
-                        "name": "baz",
-                    },
-                    {
-                        "name": "quux",
-                    }
-                ]
-            })
+                "id": "id",
+                "model_data": {
+                    "input_slot_info": [
+                        {"source": "Environment", "name": "foo"},
+                        {"source": "Environment", "name": "bar"},
+                    ],
+                    "output_slot_info": [{"name": "baz"}, {"name": "quux"}],
+                },
+            },
+        )
 
     def test_changes_slots(self):
         model = ChangesSlotsModel(self.mock_factory)
