@@ -22,8 +22,7 @@ class WorkflowWriter(HasStrictTraits):
         mode: string
             file open mode, "w" by default to write
         """
-        data = {"version": self.version}
-        data["workflow"] = workflow.__getstate__()  # self._workflow_data(workflow)
+        data = {"version": self.version, "workflow": workflow.__getstate__()}
 
         with open(path, mode) as f:
             json.dump(data, f, indent=4)
