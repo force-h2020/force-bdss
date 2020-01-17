@@ -133,6 +133,10 @@ class TestWorkflowReader(unittest.TestCase):
 
         self.assertIsInstance(workflow, Workflow)
 
+    def test_read_version_1(self):
+        old_json = fixtures.get("test_workflow_reader_v1.json")
+        self.wfreader.read(old_json)
+
     def test_invalid_version(self):
         data = {"version": "2", "workflow": {}}
 
