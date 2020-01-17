@@ -3,7 +3,7 @@ from functools import wraps
 import json
 import logging
 
-from traits.api import HasStrictTraits, Instance
+from traits.api import HasStrictTraits, Instance, Str
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.i_factory_registry import IFactoryRegistry
@@ -14,7 +14,7 @@ from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_FILE_VERSIONS = ["1"]
+SUPPORTED_FILE_VERSIONS = ["1", "1.1"]
 
 
 class BaseWorkflowReaderException(Exception):
@@ -59,6 +59,8 @@ class WorkflowReader(HasStrictTraits):
     #: The Factory registry. The reader needs it to create the
     #: specific model objects.
     factory_registry = Instance(IFactoryRegistry)
+
+    workflow_format_version = Str()
 
     def __init__(self, factory_registry, *args, **kwargs):
         """Initializes the reader.
@@ -108,7 +110,7 @@ class WorkflowReader(HasStrictTraits):
         """
         json_data = self.load_data(path)
 
-        _ = self._extract_version(json_data)
+        self.workflow_format_version = self._extract_version(json_data)
         workflow = self._extract_workflow(json_data)
         return workflow
 
@@ -247,7 +249,12 @@ class WorkflowReader(HasStrictTraits):
         for el_entry in deepcopy(wf_data["execution_layers"]):
             layer = ExecutionLayer()
 
-            for ds_entry in el_entry["data_sources"]:
+            if self.workflow_format_version == "1":
+                ds_iterable = el_entry
+            elif self.workflow_format_version == "1.1":
+                ds_iterable = el_entry["data_sources"]
+
+            for ds_entry in ds_iterable:
                 ds_id = ds_entry["id"]
 
                 try:
