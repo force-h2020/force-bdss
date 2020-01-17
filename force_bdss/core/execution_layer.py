@@ -7,7 +7,7 @@ from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.core.data_value import DataValue
 from force_bdss.io.workflow_writer import (
     pop_dunder_recursive,
-    recursive_getstate,
+    nested_getstate,
 )
 
 
@@ -173,7 +173,7 @@ class ExecutionLayer(HasStrictTraits):
 
     def __getstate__(self):
         state = pop_dunder_recursive(super().__getstate__())
-        state = recursive_getstate(state)
+        state = nested_getstate(state)
         return state
 
 
