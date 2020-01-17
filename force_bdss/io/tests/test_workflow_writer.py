@@ -78,7 +78,7 @@ class TestWorkflowWriter(unittest.TestCase):
         workflow = Workflow()
         self.assertDictEqual(
             wfwriter.get_workflow_data(workflow),
-            wfwriter._workflow_data(workflow),
+            workflow.__getstate__(),
         )
 
     def test_write_and_read_empty_workflow(self):

@@ -31,63 +31,6 @@ class WorkflowWriter(HasStrictTraits):
         """ Public method to get a serialized form of workflow"""
         return workflow.__getstate__()
 
-    def _workflow_data(self, workflow):
-        workflow_data = {
-            "mco_model": self._mco_data(workflow.mco_model),
-            "execution_layers": [
-                self._execution_layer_data(el)
-                for el in workflow.execution_layers
-            ],
-            "notification_listeners": [
-                self._model_data(nl) for nl in workflow.notification_listeners
-            ],
-        }
-
-        return workflow_data
-
-    def _mco_data(self, mco):
-        """Extracts the data from the MCO object and returns its dictionary.
-        If the MCO is None, returns None"""
-        if mco is None:
-            return None
-
-        data = self._model_data(mco)
-
-        parameters_data = []
-        for param in data["model_data"]["parameters"]:
-            state = param.__getstate__()
-
-            parameters_data.append(
-                {"id": param.factory.id, "model_data": state}
-            )
-
-        data["model_data"]["parameters"] = parameters_data
-
-        kpis_data = []
-        for kpi in data["model_data"]["kpis"]:
-            kpis_data.append(kpi.__getstate__())
-
-        data["model_data"]["kpis"] = kpis_data
-
-        return data
-
-    def _execution_layer_data(self, layer):
-        """Extracts the execution layer list of DataSource models"""
-        data = []
-
-        for ds in layer.data_sources:
-            data.append(self._model_data(ds))
-
-        return data
-
-    def _model_data(self, model):
-        """
-        Extracts the data from an external model and returns its dictionary
-        """
-        state = model.__getstate__()
-
-        return {"id": model.factory.id, "model_data": state}
-
 
 def pop_recursive(dictionary, remove_key):
     """Recursively remove a named key from dictionary and any contained
