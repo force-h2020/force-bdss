@@ -20,4 +20,5 @@ class BaseModel(ABCHasStrictTraits):
     def __getstate__(self):
         state = pop_dunder_recursive(super().__getstate__())
         state = recursive_getstate(state)
+        state = {"id": self.factory.id, "model_data": state}
         return state
