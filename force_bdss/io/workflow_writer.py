@@ -23,14 +23,14 @@ class WorkflowWriter(HasStrictTraits):
             file open mode, "w" by default to write
         """
         data = {"version": self.version}
-        data["workflow"] = self._workflow_data(workflow)
+        data["workflow"] = workflow.__getstate__()  # self._workflow_data(workflow)
 
         with open(path, mode) as f:
             json.dump(data, f, indent=4)
 
     def get_workflow_data(self, workflow):
         """ Public method to get a serialized form of workflow"""
-        return self._workflow_data(workflow)
+        return workflow.__getstate__()
 
     def _workflow_data(self, workflow):
         workflow_data = {
