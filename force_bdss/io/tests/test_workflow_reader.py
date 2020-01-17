@@ -20,6 +20,7 @@ from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
 from force_bdss.tests import fixtures
+from force_bdss.tests.dummy_classes.mco import DummyMCOParameter
 
 
 log = logging.getLogger(__name__)
@@ -31,13 +32,6 @@ class TestWorkflowReader(unittest.TestCase):
         self.wfreader = WorkflowReader(self.registry)
         self.working_data = fixtures.get("test_workflow_reader.json")
 
-    def test_initialization(self):
-        self.assertEqual(self.wfreader.factory_registry, self.registry)
-
-        workflow = self.wfreader.read(self.working_data)
-
-        self.assertIsInstance(workflow, Workflow)
-
     def test_load_data(self):
         data = self.wfreader.load_data(self.working_data)
         control_dict = {
@@ -45,13 +39,13 @@ class TestWorkflowReader(unittest.TestCase):
             "workflow": {
                 "mco_model": {
                     "id": "force.bdss.enthought.plugin.test.v0."
-                          "factory.dummy_mco",
+                    "factory.dummy_mco",
                     "model_data": {
                         "parameters": [
                             {
                                 "id": "force.bdss.enthought.plugin."
-                                      "test.v0.factory.dummy_mco.parameter."
-                                      "dummy_mco_parameter",
+                                "test.v0.factory.dummy_mco.parameter."
+                                "dummy_mco_parameter",
                                 "model_data": {},
                             }
                         ],
@@ -62,7 +56,7 @@ class TestWorkflowReader(unittest.TestCase):
                     [
                         {
                             "id": "force.bdss.enthought.plugin."
-                                  "test.v0.factory.dummy_data_source",
+                            "test.v0.factory.dummy_data_source",
                             "model_data": {
                                 "input_slot_info": [
                                     {"name": "input_slot_name"}
@@ -77,7 +71,7 @@ class TestWorkflowReader(unittest.TestCase):
                 "notification_listeners": [
                     {
                         "id": "force.bdss.enthought.plugin.test.v0."
-                              "factory.dummy_notification_listener",
+                        "factory.dummy_notification_listener",
                         "model_data": {},
                     }
                 ],
@@ -85,6 +79,30 @@ class TestWorkflowReader(unittest.TestCase):
         }
 
         self.assertDictEqual(data, control_dict)
+
+    def test_read_version(self):
+        json_data = self.wfreader.load_data(self.working_data)
+        version = self.wfreader._extract_version(json_data)
+        self.assertEqual("1", version)
+
+    def test__extract_mco_model(self):
+        json_data = self.wfreader.load_data(self.working_data)
+        workflow_data = json_data["workflow"]
+        mco_model = self.wfreader._extract_mco_model(workflow_data)
+
+        mco_factory = self.registry.mco_factories[0]
+        expected_mco_model = mco_factory.model_class
+        self.assertIsInstance(mco_model, expected_mco_model)
+        self.assertEqual(0, len(mco_model.kpis))
+        self.assertEqual(1, len(mco_model.parameters))
+        self.assertIsInstance(mco_model.parameters[0], DummyMCOParameter)
+
+    def test_initialization(self):
+        self.assertEqual(self.wfreader.factory_registry, self.registry)
+
+        workflow = self.wfreader.read(self.working_data)
+
+        self.assertIsInstance(workflow, Workflow)
 
     def test_invalid_version(self):
         data = {"version": "2", "workflow": {}}
