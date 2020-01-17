@@ -1,6 +1,5 @@
 import json
 import unittest
-from unittest import mock
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification

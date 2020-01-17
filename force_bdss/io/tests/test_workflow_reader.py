@@ -5,6 +5,9 @@ import logging
 import testfixtures
 
 from force_bdss.core.workflow import Workflow
+from force_bdss.core.execution_layer import ExecutionLayer
+from force_bdss.core.input_slot_info import InputSlotInfo
+from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.io.workflow_reader import (
     WorkflowReader,
     InvalidVersionException,
@@ -21,6 +24,7 @@ from force_bdss.tests.probe_classes.factory_registry import (
 )
 from force_bdss.tests import fixtures
 from force_bdss.tests.dummy_classes.mco import DummyMCOParameter
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 
 
 log = logging.getLogger(__name__)
@@ -35,44 +39,46 @@ class TestWorkflowReader(unittest.TestCase):
     def test_load_data(self):
         data = self.wfreader.load_data(self.working_data)
         control_dict = {
-            "version": "1",
+            "version": "1.1",
             "workflow": {
                 "mco_model": {
-                    "id": "force.bdss.enthought.plugin.test.v0."
-                    "factory.dummy_mco",
+                    "id": "force.bdss.enthought.plugin.test."
+                    "v0.factory.dummy_mco",
                     "model_data": {
                         "parameters": [
                             {
                                 "id": "force.bdss.enthought.plugin."
-                                "test.v0.factory.dummy_mco.parameter."
-                                "dummy_mco_parameter",
+                                "test.v0.factory.dummy_mco."
+                                "parameter.dummy_mco_parameter",
                                 "model_data": {},
                             }
                         ],
                         "kpis": [],
                     },
                 },
-                "execution_layers": [
-                    [
-                        {
-                            "id": "force.bdss.enthought.plugin."
-                            "test.v0.factory.dummy_data_source",
-                            "model_data": {
-                                "input_slot_info": [
-                                    {"name": "input_slot_name"}
-                                ],
-                                "output_slot_info": [
-                                    {"name": "output_slot_name"}
-                                ],
-                            },
-                        }
-                    ]
-                ],
                 "notification_listeners": [
                     {
                         "id": "force.bdss.enthought.plugin.test.v0."
                         "factory.dummy_notification_listener",
                         "model_data": {},
+                    }
+                ],
+                "execution_layers": [
+                    {
+                        "data_sources": [
+                            {
+                                "id": "force.bdss.enthought.plugin."
+                                "test.v0.factory.dummy_data_source",
+                                "model_data": {
+                                    "input_slot_info": [
+                                        {"name": "input_slot_name"}
+                                    ],
+                                    "output_slot_info": [
+                                        {"name": "output_slot_name"}
+                                    ],
+                                },
+                            }
+                        ]
                     }
                 ],
             },
@@ -83,7 +89,7 @@ class TestWorkflowReader(unittest.TestCase):
     def test_read_version(self):
         json_data = self.wfreader.load_data(self.working_data)
         version = self.wfreader._extract_version(json_data)
-        self.assertEqual("1", version)
+        self.assertEqual("1.1", version)
 
     def test__extract_mco_model(self):
         json_data = self.wfreader.load_data(self.working_data)
@@ -96,6 +102,29 @@ class TestWorkflowReader(unittest.TestCase):
         self.assertEqual(0, len(mco_model.kpis))
         self.assertEqual(1, len(mco_model.parameters))
         self.assertIsInstance(mco_model.parameters[0], DummyMCOParameter)
+
+    def test__extract_execution_layers(self):
+        json_data = self.wfreader.load_data(self.working_data)
+        workflow_data = json_data["workflow"]
+        self.wfreader.workflow_format_version = json_data["version"]
+
+        exec_layers = self.wfreader._extract_execution_layers(workflow_data)
+        self.assertEqual(1, len(exec_layers))
+        self.assertIsInstance(exec_layers[0], ExecutionLayer)
+
+        self.assertEqual(1, len(exec_layers[0].data_sources))
+        data_source = exec_layers[0].data_sources[0]
+        self.assertIsInstance(data_source, DummyDataSourceModel)
+
+        input_slots = data_source.input_slot_info
+        self.assertEqual(1, len(input_slots))
+        self.assertIsInstance(input_slots[0], InputSlotInfo)
+        self.assertEqual("input_slot_name", input_slots[0].name)
+
+        output_slots = data_source.output_slot_info
+        self.assertEqual(1, len(output_slots))
+        self.assertIsInstance(output_slots[0], OutputSlotInfo)
+        self.assertEqual("output_slot_name", output_slots[0].name)
 
     def test_initialization(self):
         self.assertEqual(self.wfreader.factory_registry, self.registry)
@@ -116,7 +145,7 @@ class TestWorkflowReader(unittest.TestCase):
                     "ERROR",
                     "Invalid input file format: "
                     " version 2 is not in the "
-                    "list of supported versions ['1']",
+                    "list of supported versions ['1', '1.1']",
                 )
             )
 
@@ -163,13 +192,17 @@ class TestWorkflowReader(unittest.TestCase):
     def test_missing_plugin_notification_listener(self):
         data = self.wfreader.load_data(self.working_data)
         data["workflow"]["notification_listeners"][0]["id"] = "missing_nl"
+        self.wfreader.workflow_format_version = data["version"]
 
         with self.assertRaises(MissingPluginException):
             self.wfreader._extract_workflow(data)
 
     def test_missing_plugin_data_source(self):
         data = self.wfreader.load_data(self.working_data)
-        data["workflow"]["execution_layers"][0][0]["id"] = "missing_ds"
+        self.wfreader.workflow_format_version = data["version"]
+
+        exec_layers = data["workflow"]["execution_layers"]
+        exec_layers[0]["data_sources"][0]["id"] = "missing_ds"
 
         with self.assertRaises(MissingPluginException):
             self.wfreader._extract_workflow(data)
@@ -177,6 +210,7 @@ class TestWorkflowReader(unittest.TestCase):
     def test_deprecated_wf_format_wrapper(self):
         data = self.wfreader.load_data(self.working_data)
         data["workflow"]["mco"] = data["workflow"].pop("mco_model")
+        self.wfreader.workflow_format_version = data["version"]
 
         with testfixtures.LogCapture() as capture:
             self.wfreader._extract_mco_model(data["workflow"])
@@ -189,19 +223,23 @@ class TestWorkflowReader(unittest.TestCase):
             capture.check(expected_log)
 
     def test_persistent_wfdata(self):
-        data = self.wfreader.load_data(self.working_data)["workflow"]
-        copied_data = deepcopy(data)
-        self.wfreader._extract_mco_model(data)
-        self.assertDictEqual(copied_data, data)
-        self.wfreader._extract_mco_model(data)
+        data = self.wfreader.load_data(self.working_data)
+        self.wfreader.workflow_format_version = data["version"]
 
-        self.wfreader._extract_execution_layers(data)
-        self.assertDictEqual(copied_data, data)
-        self.wfreader._extract_execution_layers(data)
+        workflow_data = data["workflow"]
+        copied_data = deepcopy(workflow_data)
 
-        self.wfreader._extract_notification_listeners(data)
-        self.assertDictEqual(copied_data, data)
-        self.wfreader._extract_notification_listeners(data)
+        self.wfreader._extract_mco_model(workflow_data)
+        self.assertDictEqual(copied_data, workflow_data)
+        self.wfreader._extract_mco_model(workflow_data)
+
+        self.wfreader._extract_execution_layers(workflow_data)
+        self.assertDictEqual(copied_data, workflow_data)
+        self.wfreader._extract_execution_layers(workflow_data)
+
+        self.wfreader._extract_notification_listeners(workflow_data)
+        self.assertDictEqual(copied_data, workflow_data)
+        self.wfreader._extract_notification_listeners(workflow_data)
 
 
 class TestModelCreationFailure(unittest.TestCase):
