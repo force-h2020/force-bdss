@@ -247,7 +247,7 @@ class WorkflowReader(HasStrictTraits):
         for el_entry in deepcopy(wf_data["execution_layers"]):
             layer = ExecutionLayer()
 
-            for ds_entry in el_entry:
+            for ds_entry in el_entry["data_sources"]:
                 ds_id = ds_entry["id"]
 
                 try:
