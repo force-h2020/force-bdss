@@ -6,7 +6,7 @@ class WorkflowWriter(HasStrictTraits):
     """A Writer for writing the Workflow onto disk.
     """
 
-    version = Str("1")
+    version = Str("1.1")
 
     def write(self, workflow, path, *, mode="w"):
         """Writes the workflow model object to a file f in JSON format.
