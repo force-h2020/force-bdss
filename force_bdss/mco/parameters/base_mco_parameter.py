@@ -61,5 +61,5 @@ class BaseMCOParameter(BaseModel):
 
     @classmethod
     def from_json(cls, factory, json_data):
-        parameter = cls(factory=factory, **json_data)
+        parameter = factory.create_model(json_data)
         return parameter

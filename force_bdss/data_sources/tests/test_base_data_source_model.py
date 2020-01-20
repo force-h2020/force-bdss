@@ -9,6 +9,9 @@ from force_bdss.tests.dummy_classes.data_source import (
     DummyDataSource,
     DummyDataSourceModel,
 )
+from force_bdss.tests.dummy_classes.factory_registry import (
+    DummyFactoryRegistry,
+)
 
 from unittest import mock
 
@@ -96,6 +99,9 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             model.verify()
 
     def test_fromjson(self):
+        registry = DummyFactoryRegistry()
+        factory = registry.data_source_factories[0]
+
         model_data = {
             "input_slot_info": [
                 {"source": "Environment", "name": "foo"},
@@ -103,9 +109,13 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             ],
             "output_slot_info": [{"name": "baz"}, {"name": "quux"}],
         }
-        model = DummyDataSourceModel.from_json(self.mock_factory, model_data)
+        model = DummyDataSourceModel.from_json(factory, model_data)
         self.assertDictEqual(
-            model.__getstate__(), {"model_data": model_data, "id": "id"}
+            model.__getstate__(),
+            {
+                "model_data": model_data,
+                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+            },
         )
         # Test the initial dict did not change
         self.assertDictEqual(

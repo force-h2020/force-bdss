@@ -159,5 +159,5 @@ class BaseDataSourceModel(BaseModel):
         output_slots = [OutputSlotInfo(**d) for d in data["output_slot_info"]]
         data["output_slot_info"] = output_slots
 
-        data_source = cls(factory=factory, **data)
+        data_source = factory.create_model(data)
         return data_source

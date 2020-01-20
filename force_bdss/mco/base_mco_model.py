@@ -174,5 +174,5 @@ class BaseMCOModel(BaseModel):
 
         data["kpis"] = [KPISpecification(**d) for d in data["kpis"]]
 
-        mco_model = cls(factory=factory, **data)
+        mco_model = factory.create_model(data)
         return mco_model
