@@ -176,10 +176,28 @@ class ExecutionLayer(HasStrictTraits):
 
     @classmethod
     def from_json(cls, factory_registry, json_data):
+        """ Instantiate an ExecutionLayer object from a `json_data`
+        dictionary and the generating `factory_registry`.
+        If the `json_data` is an empty dict, the `data_sources`
+        attribute will be an empty list.
+
+        Parameters
+        ----------
+        factory_registry: Instance(IFactoryRegistry)
+            Generating factory registry
+        json_data: dict
+            Dictionary with an execution layer serialized data
+
+        Returns
+        ----------
+        layer: ExecutionLayer
+            ExecutionLayer instance with attributes values from
+            the `json_data` dict
+        """
         data = deepcopy(json_data)
 
         models = []
-        for data_source in data["data_sources"]:
+        for data_source in data.get("data_sources", []):
             id = data_source["id"]
             data_source_factory = factory_registry.data_source_factory_by_id(
                 id

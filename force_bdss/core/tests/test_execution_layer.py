@@ -260,6 +260,10 @@ class TestExecutionLayer(TestCase):
             layer.__getstate__(), layer_data
         )
 
+    def test_empty_layer_from_json(self):
+        layer = ExecutionLayer.from_json(self.registry, {})
+        self.assertEqual(0, len(layer.data_sources))
+
 
 class TestBindDataValues(TestCase):
     def setUp(self):
