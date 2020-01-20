@@ -144,11 +144,21 @@ class BaseMCOModel(BaseModel):
 
     @classmethod
     def from_json(cls, factory, json_data):
-        """
+        """ Instantiate an BaseMCOModel object from a `json_data`
+        dictionary and the generating `factory` object.
+
         Parameters
         ----------
         factory: BaseMCOFactory
+            Generating factory object
         json_data: dict
+            Dictionary with an MCOModel  serialized data
+
+        Returns
+        ----------
+        layer: BaseMCOModel
+            BaseMCOModel instance with attributes values from
+            the `json_data` dict
         """
         data = deepcopy(json_data)
 
