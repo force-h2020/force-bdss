@@ -267,11 +267,14 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
             workflow_state,
             {
                 "mco_model": {
-                    "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
+                    "id": "force.bdss.enthought.plugin.test.v0.factory."
+                    "dummy_mco",
                     "model_data": {
                         "parameters": [
                             {
-                                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                                "id": "force.bdss.enthought.plugin."
+                                "test.v0.factory."
+                                "dummy_mco.parameter.dummy_mco_parameter",
                                 "model_data": {"x": 0, "name": "", "type": ""},
                             }
                         ],
@@ -280,7 +283,8 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
                 },
                 "notification_listeners": [
                     {
-                        "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_notification_listener",
+                        "id": "force.bdss.enthought.plugin.test.v0.factory."
+                        "dummy_notification_listener",
                         "model_data": {},
                     }
                 ],
@@ -288,7 +292,8 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
                     {
                         "data_sources": [
                             {
-                                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+                                "id": "force.bdss.enthought.plugin.test.v0."
+                                "factory.dummy_data_source",
                                 "model_data": {
                                     "input_slot_info": [
                                         {

@@ -14,7 +14,9 @@ class TestBaseMCOModel(unittest.TestCase):
         empty_data = {
             "parameters": [
                 {
-                    "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                    "id": "force.bdss.enthought.plugin."
+                          "test.v0.factory.dummy_mco.parameter."
+                          "dummy_mco_parameter",
                     "model_data": {},
                 }
             ],
@@ -26,11 +28,14 @@ class TestBaseMCOModel(unittest.TestCase):
         self.assertDictEqual(
             mco_model.__getstate__(),
             {
-                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
+                "id": "force.bdss.enthought.plugin.test.v0."
+                      "factory.dummy_mco",
                 "model_data": {
                     "parameters": [
                         {
-                            "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                            "id": "force.bdss.enthought.plugin."
+                                  "test.v0.factory.dummy_mco."
+                                  "parameter.dummy_mco_parameter",
                             "model_data": {"x": 0, "name": "", "type": ""},
                         }
                     ],
@@ -44,7 +49,9 @@ class TestBaseMCOModel(unittest.TestCase):
             {
                 "parameters": [
                     {
-                        "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                        "id": "force.bdss.enthought.plugin."
+                              "test.v0.factory.dummy_mco."
+                              "parameter.dummy_mco_parameter",
                         "model_data": {},
                     }
                 ],

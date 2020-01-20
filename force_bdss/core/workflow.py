@@ -6,9 +6,8 @@ from traits.api import HasStrictTraits, Instance, List
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.notification_listeners.base_notification_listener_model import (
-    BaseNotificationListenerModel,
-)
+from force_bdss.notification_listeners.base_notification_listener_model \
+    import BaseNotificationListenerModel
 from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
@@ -129,10 +128,10 @@ class Workflow(HasStrictTraits):
 
         listeners = []
         for listener_data in workflow_data["notification_listeners"]:
-            listener_factory = factory_registry.notification_listener_factory_by_id(
+            lis_factory = factory_registry.notification_listener_factory_by_id(
                 listener_data["id"]
             )
-            listener = listener_factory.create_model(
+            listener = lis_factory.create_model(
                 listener_data["model_data"]
             )
             listeners.append(listener)

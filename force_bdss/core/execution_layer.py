@@ -6,10 +6,7 @@ from traits.api import HasStrictTraits, List
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.core.data_value import DataValue
-from force_bdss.io.workflow_writer import (
-    pop_dunder_recursive,
-    nested_getstate,
-)
+from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
 
 
 log = logging.getLogger(__name__)
@@ -189,8 +186,12 @@ class ExecutionLayer(HasStrictTraits):
         models = []
         for data_source in data_sources:
             id = data_source["id"]
-            data_source_factory = factory_registry.data_source_factory_by_id(id)
-            model = data_source_factory.model_class.from_json(data_source_factory, data_source["model_data"])
+            data_source_factory = factory_registry.data_source_factory_by_id(
+                id
+            )
+            model = data_source_factory.model_class.from_json(
+                data_source_factory, data_source["model_data"]
+            )
             models.append(model)
 
         if version == "1":

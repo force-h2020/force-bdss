@@ -239,7 +239,8 @@ class TestExecutionLayer(TestCase):
         self.assertDictEqual(
             layer_data[0],
             {
-                "id": "force.bdss.enthought.plugin.test.v0.factory.probe_data_source",
+                "id": "force.bdss.enthought.plugin.test.v0."
+                      "factory.probe_data_source",
                 "model_data": {
                     "input_slot_info": [
                         {"source": "Environment", "name": "foo"}
