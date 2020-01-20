@@ -119,7 +119,8 @@ class Workflow(HasStrictTraits):
         factory_registry: IFactoryRegistry
             Generating factory registry for the MCOModel of the workflow
         json_data: dict
-            Dictionary with the content of the `Workflow`'s in serialized format
+            Dictionary with the content of the `Workflow`'s in serialized
+            format
 
         Returns
         -------
@@ -197,10 +198,8 @@ class Workflow(HasStrictTraits):
 
             if version == "1":
                 data = {"data_sources": layer_data}
-            elif version == "1.1":
-                data = layer_data
             else:
-                raise KeyError
+                data = layer_data
 
             layer = ExecutionLayer.from_json(factory_registry, data)
             execution_layers.append(layer)
