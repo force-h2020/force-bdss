@@ -12,6 +12,8 @@ from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
+from force_bdss.notification_listeners.base_notification_listener_model \
+    import BaseNotificationListenerModel
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
@@ -19,6 +21,8 @@ from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
 from force_bdss.tests.dummy_classes.factory_registry import (
     DummyFactoryRegistry,
 )
+from force_bdss.tests.dummy_classes.mco import DummyMCOParameter
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 from force_bdss.tests import fixtures
 
 
@@ -328,3 +332,56 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         reference_data = deepcopy(data)
         _ = Workflow.from_json(registry, data)
         self.assertDictEqual(data, reference_data)
+
+    def test__extract_mco_model(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        mco_model = Workflow._extract_mco_model(registry, workflow_data)
+
+        mco_factory = registry.mco_factories[0]
+        expected_mco_model = mco_factory.model_class
+        self.assertIsInstance(mco_model, expected_mco_model)
+        self.assertEqual(0, len(mco_model.kpis))
+        self.assertEqual(1, len(mco_model.parameters))
+        self.assertIsInstance(mco_model.parameters[0], DummyMCOParameter)
+
+    def test__extract_execution_layers(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        exec_layers = Workflow._extract_execution_layers(
+            registry, workflow_data, version=data["version"]
+        )
+        self.assertEqual(1, len(exec_layers))
+        self.assertIsInstance(exec_layers[0], ExecutionLayer)
+
+        self.assertEqual(1, len(exec_layers[0].data_sources))
+        data_source = exec_layers[0].data_sources[0]
+        self.assertIsInstance(data_source, DummyDataSourceModel)
+
+        input_slots = data_source.input_slot_info
+        self.assertEqual(1, len(input_slots))
+        self.assertIsInstance(input_slots[0], InputSlotInfo)
+        self.assertEqual("input_slot_name", input_slots[0].name)
+
+        output_slots = data_source.output_slot_info
+        self.assertEqual(1, len(output_slots))
+        self.assertIsInstance(output_slots[0], OutputSlotInfo)
+        self.assertEqual("output_slot_name", output_slots[0].name)
+
+    def test__extract_notification_listeners(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        listeners = Workflow._extract_notification_listeners(
+            registry, workflow_data
+        )
+        self.assertEqual(1, len(listeners))
+        self.assertIsInstance(listeners[0], BaseNotificationListenerModel)
