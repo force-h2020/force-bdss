@@ -135,6 +135,22 @@ class BaseDataSourceModel(BaseModel):
 
     @classmethod
     def from_json(cls, factory, json_data):
+        """ Instantiate an BaseMCOModel object from a `json_data`
+        dictionary and the generating `factory` object.
+
+        Parameters
+        ----------
+        factory: IDataSourceFactory
+            Generating factory object
+        json_data: dict
+            Dictionary with a DataSourceModel serialized data
+
+        Returns
+        ----------
+        layer: BaseDataSourceModel
+            BaseDataSourceModel instance with attributes values from
+            the `json_data` dict
+        """
         data = deepcopy(json_data)
 
         input_slots = [InputSlotInfo(**d) for d in data["input_slot_info"]]
