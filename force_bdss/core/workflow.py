@@ -142,10 +142,15 @@ class Workflow(HasStrictTraits):
     def _extract_execution_layers(factory_registry, workflow_data, version):
         execution_layers = []
         for layer_data in workflow_data["execution_layers"]:
-            layer = ExecutionLayer.from_json(
-                factory_registry, layer_data, version=version
-            )
+
+            if version == "1":
+                data = {"data_sources": layer_data}
+            elif version == "1.1":
+                data = layer_data
+
+            layer = ExecutionLayer.from_json(factory_registry, data)
             execution_layers.append(layer)
+
         return execution_layers
 
     @staticmethod

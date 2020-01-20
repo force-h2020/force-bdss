@@ -175,16 +175,11 @@ class ExecutionLayer(HasStrictTraits):
         return state
 
     @classmethod
-    def from_json(cls, factory_registry, json_data, version):
+    def from_json(cls, factory_registry, json_data):
         data = deepcopy(json_data)
 
-        if version == "1":
-            data_sources = data
-        elif version == "1.1":
-            data_sources = data["data_sources"]
-
         models = []
-        for data_source in data_sources:
+        for data_source in data["data_sources"]:
             id = data_source["id"]
             data_source_factory = factory_registry.data_source_factory_by_id(
                 id
@@ -193,11 +188,7 @@ class ExecutionLayer(HasStrictTraits):
                 data_source_factory, data_source["model_data"]
             )
             models.append(model)
-
-        if version == "1":
-            data = {"data_sources": models}
-        elif version == "1.1":
-            data["data_sources"] = models
+        data["data_sources"] = models
 
         layer = cls(**data)
         return layer
