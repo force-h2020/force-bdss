@@ -111,7 +111,7 @@ class WorkflowReader(HasStrictTraits):
         json_data = self.load_data(path)
 
         self.workflow_format_version = self._extract_version(json_data)
-        workflow = self._extract_workflow(json_data)
+        workflow = Workflow.from_json(self.factory_registry, json_data)
         return workflow
 
     def load_data(self, filepath):

@@ -114,7 +114,8 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             model.__getstate__(),
             {
                 "model_data": model_data,
-                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+                "id": "force.bdss.enthought.plugin.test.v0.factory."
+                      "dummy_data_source",
             },
         )
         # Test the initial dict did not change

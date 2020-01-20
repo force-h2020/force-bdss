@@ -1,7 +1,10 @@
 import unittest
 
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
-from force_bdss.tests.probe_classes.mco import ProbeParameterFactory, ProbeParameter
+from force_bdss.tests.probe_classes.mco import (
+    ProbeParameterFactory,
+    ProbeParameter,
+)
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
     ProbeMCOFactory,
@@ -31,7 +34,11 @@ class TestBaseMCOParameter(unittest.TestCase):
         parameter = ProbeParameter.from_json(parameter_factory, parameter_data)
         self.assertDictEqual(
             parameter.__getstate__(),
-            {"id": "force.bdss.enthought.plugin.test.v0.factory.probe_mco.parameter.probe_mco_parameter", "model_data": parameter_data},
+            {
+                "id": "force.bdss.enthought.plugin.test.v0.factory."
+                      "probe_mco.parameter.probe_mco_parameter",
+                "model_data": parameter_data,
+            },
         )
 
         self.assertDictEqual(parameter_data, {"name": "name", "type": "type"})
