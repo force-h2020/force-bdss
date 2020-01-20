@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 
 from traits.api import HasStrictTraits, List
@@ -175,6 +176,30 @@ class ExecutionLayer(HasStrictTraits):
         state = pop_dunder_recursive(super().__getstate__())
         state = nested_getstate(state)
         return state
+
+    @classmethod
+    def from_json(cls, factory_registry, json_data, version):
+        data = deepcopy(json_data)
+
+        if version == "1":
+            data_sources = data
+        elif version == "1.1":
+            data_sources = data["data_sources"]
+
+        models = []
+        for data_source in data_sources:
+            id = data_source["id"]
+            data_source_factory = factory_registry.data_source_factory_by_id(id)
+            model = data_source_factory.model_class.from_json(data_source_factory, data_source["model_data"])
+            models.append(model)
+
+        if version == "1":
+            data = {"data_sources": models}
+        elif version == "1.1":
+            data["data_sources"] = models
+
+        layer = cls(**data)
+        return layer
 
 
 def _bind_data_values(available_data_values, model_slot_map, slots):
