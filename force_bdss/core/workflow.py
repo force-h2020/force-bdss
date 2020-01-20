@@ -117,10 +117,9 @@ class Workflow(HasStrictTraits):
         Parameters
         ----------
         factory_registry: IFactoryRegistry
-            Generating factory registry for the MCOModel of the
-            workflow
+            Generating factory registry for the MCOModel of the workflow
         json_data: dict
-            Dictionary with the content of the `Workflow`s in serialized format
+            Dictionary with the content of the `Workflow`'s in serialized format
 
         Returns
         -------
