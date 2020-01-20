@@ -1,3 +1,4 @@
+from copy import deepcopy
 from logging import getLogger
 
 from traits.api import (
@@ -131,3 +132,16 @@ class BaseDataSourceModel(BaseModel):
 
         if changes_slots:
             self.changes_slots = True
+
+    @classmethod
+    def from_json(cls, factory, json_data):
+        data = deepcopy(json_data)
+
+        input_slots = [InputSlotInfo(**d) for d in data["input_slot_info"]]
+        data["input_slot_info"] = input_slots
+
+        output_slots = [OutputSlotInfo(**d) for d in data["output_slot_info"]]
+        data["output_slot_info"] = output_slots
+
+        data_source = cls(factory=factory, **data)
+        return data_source

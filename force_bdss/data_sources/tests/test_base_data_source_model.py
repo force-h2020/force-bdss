@@ -94,3 +94,27 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
         model = DummyDataSourceModel(self.mock_factory)
         with self.assertRaises(Exception):
             model.verify()
+
+    def test_fromjson(self):
+        model_data = {
+            "input_slot_info": [
+                {"source": "Environment", "name": "foo"},
+                {"source": "Environment", "name": "bar"},
+            ],
+            "output_slot_info": [{"name": "baz"}, {"name": "quux"}],
+        }
+        model = DummyDataSourceModel.from_json(self.mock_factory, model_data)
+        self.assertDictEqual(
+            model.__getstate__(), {"model_data": model_data, "id": "id"}
+        )
+        # Test the initial dict did not change
+        self.assertDictEqual(
+            model_data,
+            {
+                "input_slot_info": [
+                    {"source": "Environment", "name": "foo"},
+                    {"source": "Environment", "name": "bar"},
+                ],
+                "output_slot_info": [{"name": "baz"}, {"name": "quux"}],
+            },
+        )
