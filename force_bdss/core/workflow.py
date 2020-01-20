@@ -182,10 +182,11 @@ class Workflow(HasStrictTraits):
             Generating factory registry for the data sources inside the
             execution layers
         workflow_data: dict
-            Dictionary with the content of the `ExecutionLayer`s in serialized
-            format
+            Dictionary with the content of the `ExecutionLayer`s in
+            serialized format
         version: str
-            Workflow file format. Indicates the structure of the `workflow_data`
+            Workflow file format. Indicates the structure of the
+            `workflow_data`
 
         Returns
         -------
