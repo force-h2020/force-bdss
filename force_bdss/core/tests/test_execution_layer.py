@@ -231,16 +231,14 @@ class TestExecutionLayer(TestCase):
         json_path = fixtures.get("test_probe.json")
         with open(json_path) as f:
             data = json.load(f)
-        layer_data = data["workflow"]["execution_layers"][0]
-        layer = ExecutionLayer.from_json(
-            self.registry, layer_data, version="1"
-        )
+        layer_data = {"data_sources": data["workflow"]["execution_layers"][0]}
+        layer = ExecutionLayer.from_json(self.registry, layer_data)
 
         self.assertDictEqual(
-            layer_data[0],
+            layer_data["data_sources"][0],
             {
                 "id": "force.bdss.enthought.plugin.test.v0."
-                      "factory.probe_data_source",
+                "factory.probe_data_source",
                 "model_data": {
                     "input_slot_info": [
                         {"source": "Environment", "name": "foo"}
@@ -250,7 +248,7 @@ class TestExecutionLayer(TestCase):
             },
         )
 
-        layer_data[0]["model_data"].update(
+        layer_data["data_sources"][0]["model_data"].update(
             {
                 "input_slots_type": "PRESSURE",
                 "output_slots_type": "PRESSURE",
@@ -259,8 +257,7 @@ class TestExecutionLayer(TestCase):
             }
         )
         self.assertDictEqual(
-            layer.__getstate__(),
-            {"data_sources": [layer_data[0]]},
+            layer.__getstate__(), layer_data
         )
 
 
