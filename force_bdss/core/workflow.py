@@ -6,8 +6,9 @@ from traits.api import HasStrictTraits, Instance, List
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.notification_listeners.base_notification_listener_model \
-    import BaseNotificationListenerModel
+from force_bdss.notification_listeners.base_notification_listener_model import (
+    BaseNotificationListenerModel,
+)
 from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
@@ -112,30 +113,48 @@ class Workflow(HasStrictTraits):
     def from_json(cls, factory_registry, json_data):
         workflow_data = deepcopy(json_data["workflow"])
 
+        workflow_data["mco_model"] = cls._extract_mco_model(
+            factory_registry, workflow_data
+        )
+
+        workflow_data["execution_layers"] = cls._extract_execution_layers(
+            factory_registry, workflow_data, json_data["version"]
+        )
+
+        workflow_data[
+            "notification_listeners"
+        ] = cls._extract_notification_listeners(
+            factory_registry, workflow_data
+        )
+
+        workflow = cls(**workflow_data)
+        return workflow
+
+    @staticmethod
+    def _extract_mco_model(factory_registry, workflow_data):
         mco_data = workflow_data.get("mco_model")
         mco_factory = factory_registry.mco_factory_by_id(mco_data["id"])
-        workflow_data["mco_model"] = mco_factory.model_class.from_json(
+        return mco_factory.model_class.from_json(
             mco_factory, mco_data["model_data"]
         )
 
+    @staticmethod
+    def _extract_execution_layers(factory_registry, workflow_data, version):
         execution_layers = []
         for layer_data in workflow_data["execution_layers"]:
             layer = ExecutionLayer.from_json(
-                factory_registry, layer_data, version=json_data["version"]
+                factory_registry, layer_data, version=version
             )
             execution_layers.append(layer)
-        workflow_data["execution_layers"] = execution_layers
+        return execution_layers
 
+    @staticmethod
+    def _extract_notification_listeners(factory_registry, workflow_data):
         listeners = []
         for listener_data in workflow_data["notification_listeners"]:
             lis_factory = factory_registry.notification_listener_factory_by_id(
                 listener_data["id"]
             )
-            listener = lis_factory.create_model(
-                listener_data["model_data"]
-            )
+            listener = lis_factory.create_model(listener_data["model_data"])
             listeners.append(listener)
-        workflow_data["notification_listeners"] = listeners
-
-        workflow = cls(**workflow_data)
-        return workflow
+        return listeners
