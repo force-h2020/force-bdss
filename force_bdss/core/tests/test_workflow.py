@@ -1,5 +1,7 @@
-import unittest
+from copy import deepcopy
+import json
 import testfixtures
+import unittest
 
 from traits.testing.api import UnittestTools
 
@@ -14,6 +16,10 @@ from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
+from force_bdss.tests.dummy_classes.factory_registry import (
+    DummyFactoryRegistry,
+)
+from force_bdss.tests import fixtures
 
 
 class TestWorkflowAttributeWarning(unittest.TestCase):
@@ -249,3 +255,63 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
                 for i in range(num_outputs):
                     self.assertEqual(kpi_results[i].name, spec[i][0])
                     self.assertEqual(kpi_results[i].value, spec[i][1])
+
+    def test_from_json(self):
+        registry = DummyFactoryRegistry()
+        json_path = fixtures.get("test_workflow_reader.json")
+        with open(json_path) as f:
+            data = json.load(f)
+        wf = Workflow.from_json(registry, data)
+        workflow_state = wf.__getstate__()
+        self.assertDictEqual(
+            workflow_state,
+            {
+                "mco_model": {
+                    "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
+                    "model_data": {
+                        "parameters": [
+                            {
+                                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco.parameter.dummy_mco_parameter",
+                                "model_data": {"x": 0, "name": "", "type": ""},
+                            }
+                        ],
+                        "kpis": [],
+                    },
+                },
+                "notification_listeners": [
+                    {
+                        "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_notification_listener",
+                        "model_data": {},
+                    }
+                ],
+                "execution_layers": [
+                    {
+                        "data_sources": [
+                            {
+                                "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+                                "model_data": {
+                                    "input_slot_info": [
+                                        {
+                                            "name": "input_slot_name",
+                                            "source": "Environment",
+                                        }
+                                    ],
+                                    "output_slot_info": [
+                                        {"name": "output_slot_name"}
+                                    ],
+                                },
+                            }
+                        ]
+                    }
+                ],
+            },
+        )
+
+    def test_persistent_wfdata(self):
+        registry = DummyFactoryRegistry()
+        json_path = fixtures.get("test_workflow_reader.json")
+        with open(json_path) as f:
+            data = json.load(f)
+        reference_data = deepcopy(data)
+        _ = Workflow.from_json(registry, data)
+        self.assertDictEqual(data, reference_data)

@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 
 from traits.api import HasStrictTraits, Instance, List
@@ -5,12 +6,10 @@ from traits.api import HasStrictTraits, Instance, List
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.notification_listeners.base_notification_listener_model \
-    import BaseNotificationListenerModel
-from force_bdss.io.workflow_writer import (
-    pop_dunder_recursive,
-    nested_getstate,
+from force_bdss.notification_listeners.base_notification_listener_model import (
+    BaseNotificationListenerModel,
 )
+from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
 
@@ -109,3 +108,35 @@ class Workflow(HasStrictTraits):
         state = pop_dunder_recursive(super().__getstate__())
         state = nested_getstate(state)
         return state
+
+    @classmethod
+    def from_json(cls, factory_registry, json_data):
+        workflow_data = deepcopy(json_data["workflow"])
+
+        mco_data = workflow_data.get("mco_model")
+        mco_factory = factory_registry.mco_factory_by_id(mco_data["id"])
+        workflow_data["mco_model"] = mco_factory.model_class.from_json(
+            mco_factory, mco_data["model_data"]
+        )
+
+        execution_layers = []
+        for layer_data in workflow_data["execution_layers"]:
+            layer = ExecutionLayer.from_json(
+                factory_registry, layer_data, version=json_data["version"]
+            )
+            execution_layers.append(layer)
+        workflow_data["execution_layers"] = execution_layers
+
+        listeners = []
+        for listener_data in workflow_data["notification_listeners"]:
+            listener_factory = factory_registry.notification_listener_factory_by_id(
+                listener_data["id"]
+            )
+            listener = listener_factory.create_model(
+                listener_data["model_data"]
+            )
+            listeners.append(listener)
+        workflow_data["notification_listeners"] = listeners
+
+        workflow = cls(**workflow_data)
+        return workflow
