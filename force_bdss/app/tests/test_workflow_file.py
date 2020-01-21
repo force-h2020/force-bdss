@@ -39,7 +39,7 @@ class TestWorkflowFile(TestCase):
         # Test undefined reader
         self.workflow_file.reader = None
         with self.assertRaisesRegex(
-            ValueError, "No workflow reader specified."
+            AttributeError, "No workflow reader specified."
         ):
             self.workflow_file.read()
 
@@ -52,6 +52,6 @@ class TestWorkflowFile(TestCase):
         # Test undefined writer
         self.workflow_file.writer = None
         with self.assertRaisesRegex(
-            ValueError, "No workflow writer specified."
+            AttributeError, "No workflow writer specified."
         ):
             self.workflow_file.write()
