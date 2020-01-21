@@ -43,6 +43,7 @@ class WorkflowReader(HasStrictTraits):
     #: specific model objects.
     factory_registry = Instance(IFactoryRegistry)
 
+    #: The version of the workflow data file format
     workflow_format_version = Str()
 
     def __init__(self, factory_registry, *args, **kwargs):
@@ -63,31 +64,13 @@ class WorkflowReader(HasStrictTraits):
 
         Parameters
         ----------
-        file: File
-            A file object containing the data of the workflow in the
-            appropriate json format.
+        path: str
+            A path to file containing the serialized data of the workflow.
 
         Returns
         -------
         Workflow
             An instance of the model tree, rooted at Workflow.
-
-        Raises
-        ------
-        InvalidFileException
-            Raised if the file is corrupted or cannot be read by this reader.
-
-        InvalidVersionException
-            Raised if the version is not supported.
-
-        MissingPluginException
-            The file cannot be opened because it needs a plugin that is not
-            available.
-
-        ModelInstantiationFailedException
-            When instantiating the model for a given plugin, an exception
-            occurred. This is likely due to a coding error in the plugin.
-
         """
         json_data = self.load_data(path)
 
@@ -102,7 +85,7 @@ class WorkflowReader(HasStrictTraits):
         Parameters
         ----------
         filepath: str
-            path to file to load in string format
+            path to file to load
 
         Returns
         ----------
@@ -116,6 +99,11 @@ class WorkflowReader(HasStrictTraits):
     def _extract_version(self, json_data):
         """ Verifies the workflow.json version. Checks if it is
         supported by the current version of BDSS.
+
+        Parameters
+        ----------
+        json_data: dict
+            Dictionary with complete serialized form of a workflow
         """
         error_prefix = "Invalid input file format: "
         try:

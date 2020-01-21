@@ -113,6 +113,9 @@ class Workflow(HasStrictTraits):
         """ Generates the `Workflow` instance from the `json_data` dictionary.
         Explicitly populates the workflow attributes with instances from the
         `factory_registry` and data from `json_data`.
+        Generates the `mco_model`, list of `execution_layers`, list of
+        `notification_listeners`, and then creates a `Workflow` instance with
+        these objects.
 
         Parameters
         ----------
