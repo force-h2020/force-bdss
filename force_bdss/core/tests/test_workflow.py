@@ -1,6 +1,5 @@
 from copy import deepcopy
 import json
-import testfixtures
 import unittest
 
 from traits.testing.api import UnittestTools
@@ -8,7 +7,7 @@ from traits.testing.api import UnittestTools
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
+from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
@@ -24,19 +23,6 @@ from force_bdss.tests.dummy_classes.factory_registry import (
 from force_bdss.tests.dummy_classes.mco import DummyMCOParameter
 from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
 from force_bdss.tests import fixtures
-
-
-class TestWorkflowAttributeWarning(unittest.TestCase):
-    def test_warn(self):
-        with testfixtures.LogCapture() as capture:
-            WorkflowAttributeWarning.warn()
-            expected_log = (
-                "force_bdss.core.workflow",
-                "WARNING",
-                "The Workflow object format with 'mco' attribute is "
-                "now deprecated. Please use 'mco_model' attribute instead.",
-            )
-            capture.check(expected_log)
 
 
 class TestWorkflow(unittest.TestCase, UnittestTools):

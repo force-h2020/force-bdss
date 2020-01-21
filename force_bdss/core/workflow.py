@@ -13,17 +13,6 @@ from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 log = logging.getLogger(__name__)
 
 
-class WorkflowAttributeWarning:
-    warning_message = (
-        "The Workflow object format with 'mco' attribute is now"
-        " deprecated. Please use 'mco_model' attribute instead."
-    )
-
-    @classmethod
-    def warn(cls):
-        log.warning(cls.warning_message)
-
-
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
