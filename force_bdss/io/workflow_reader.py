@@ -75,7 +75,10 @@ class WorkflowReader(HasStrictTraits):
         json_data = self.load_data(path)
 
         self.workflow_format_version = self._extract_version(json_data)
-        workflow = Workflow.from_json(self.factory_registry, json_data)
+
+        workflow_data = self._preprocess_workflow_data(json_data)
+
+        workflow = Workflow.from_json(self.factory_registry, workflow_data)
         return workflow
 
     def load_data(self, filepath):
@@ -123,3 +126,19 @@ class WorkflowReader(HasStrictTraits):
             raise InvalidVersionException(version_error_message)
 
         return version
+
+    def _preprocess_workflow_data(self, json_data):
+        workflow_data = json_data.get("workflow", {})
+        workflow_data["mco_model"] = workflow_data.get("mco_model", None)
+        workflow_data["execution_layers"] = workflow_data.get(
+            "execution_layers", []
+        )
+        for i, layer in enumerate(workflow_data["execution_layers"]):
+            if self.workflow_format_version == "1":
+                workflow_data["execution_layers"][i] = {"data_sources": layer}
+
+        workflow_data["notification_listeners"] = workflow_data.get(
+            "notification_listeners", []
+        )
+
+        return workflow_data

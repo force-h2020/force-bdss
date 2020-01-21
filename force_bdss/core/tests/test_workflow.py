@@ -265,7 +265,7 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         json_path = fixtures.get("test_workflow_reader.json")
         with open(json_path) as f:
             data = json.load(f)
-        wf = Workflow.from_json(registry, data)
+        wf = Workflow.from_json(registry, data["workflow"])
         workflow_state = wf.__getstate__()
         self.assertDictEqual(
             workflow_state,
@@ -316,21 +316,13 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
             },
         )
 
-    def test_from_json_v1(self):
-        json_path = fixtures.get("test_probe.json")
-        with open(json_path) as f:
-            data = json.load(f)
-        wf = Workflow.from_json(self.registry, data)
-        self.assertEqual(1, len(wf.execution_layers))
-        self.assertEqual(1, len(wf.execution_layers[0].data_sources))
-
     def test_persistent_wfdata(self):
         registry = DummyFactoryRegistry()
         json_path = fixtures.get("test_workflow_reader.json")
         with open(json_path) as f:
             data = json.load(f)
         reference_data = deepcopy(data)
-        _ = Workflow.from_json(registry, data)
+        _ = Workflow.from_json(registry, data["workflow"])
         self.assertDictEqual(data, reference_data)
 
     def test__extract_mco_model(self):
@@ -355,7 +347,7 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
 
         workflow_data = data["workflow"]
         exec_layers = Workflow._extract_execution_layers(
-            registry, workflow_data, version=data["version"]
+            registry, workflow_data
         )
         self.assertEqual(1, len(exec_layers))
         self.assertIsInstance(exec_layers[0], ExecutionLayer)
