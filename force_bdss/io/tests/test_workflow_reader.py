@@ -88,7 +88,9 @@ class TestWorkflowReader(unittest.TestCase):
 
     def test_read_version_1(self):
         old_json = fixtures.get("test_workflow_reader_v1.json")
-        self.wfreader.read(old_json)
+        workflow = self.wfreader.read(old_json)
+        self.assertEqual(1, len(workflow.execution_layers))
+        self.assertEqual(1, len(workflow.execution_layers[0].data_sources))
 
     def test_invalid_version(self):
         data = {"version": "2", "workflow": {}}
