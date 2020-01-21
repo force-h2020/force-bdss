@@ -27,7 +27,8 @@ from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
-from .io.workflow_writer import WorkflowWriter, pop_recursive  # noqa
+from .io.workflow_writer import WorkflowWriter  # noqa
+from force_bdss.core.base_model import pop_recursive  # noqa
 
 from .local_traits import Identifier, PositiveInt  # noqa
 

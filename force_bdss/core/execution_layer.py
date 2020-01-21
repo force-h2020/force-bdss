@@ -6,8 +6,7 @@ from traits.api import HasStrictTraits, List
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.core.data_value import DataValue
-from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
-
+from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
 

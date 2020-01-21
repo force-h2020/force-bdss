@@ -1,7 +1,7 @@
 from traits.api import HasStrictTraits, List, Instance, Float, Unicode
 
 from force_bdss.core.data_value import DataValue
-from force_bdss.io.workflow_writer import pop_dunder_recursive, nested_getstate
+from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
 
 class BaseDriverEvent(HasStrictTraits):

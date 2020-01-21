@@ -10,9 +10,8 @@ from force_bdss.tests.dummy_classes.factory_registry import (
 
 from force_bdss.io.workflow_writer import (
     WorkflowWriter,
-    pop_recursive,
-    pop_dunder_recursive,
 )
+from force_bdss.core.base_model import pop_recursive, pop_dunder_recursive
 from force_bdss.core.workflow import Workflow
 from force_bdss.core.input_slot_info import InputSlotInfo
 
