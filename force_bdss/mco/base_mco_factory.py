@@ -6,8 +6,9 @@ from force_bdss.core.base_factory import BaseFactory
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.parameters.base_mco_parameter_factory import \
-    BaseMCOParameterFactory
+from force_bdss.mco.parameters.base_mco_parameter_factory import (
+    BaseMCOParameterFactory,
+)
 
 from .i_mco_factory import IMCOFactory
 
@@ -48,29 +49,26 @@ class BaseMCOFactory(BaseFactory):
 
     def get_optimizer_class(self):
         raise NotImplementedError(
-            "get_optimizer_class was not implemented in factory {}".format(
-                self.__class__
-            )
+            f"get_optimizer_class was not implemented "
+            f"in factory {self.__class__}"
         )
 
     def get_model_class(self):
         raise NotImplementedError(
-            "get_model_class was not implemented in factory {}".format(
-                self.__class__
-            )
+            "get_model_class was not implemented "
+            f"in factory {self.__class__}"
         )
 
     def get_communicator_class(self):
         raise NotImplementedError(
-            "get_communicator_class was not implemented in factory {}".format(
-                self.__class__
-            )
+            "get_communicator_class was not implemented "
+            f"in factory {self.__class__}"
         )
 
     def get_parameter_factory_classes(self):
         raise NotImplementedError(
             "get_parameter_factory_classes was not implemented "
-            "in factory {}".format(self.__class__)
+            f"in factory {self.__class__}"
         )
 
     def create_optimizer(self):
@@ -135,4 +133,8 @@ class BaseMCOFactory(BaseFactory):
             if factory.id == parameter_id:
                 return factory
 
-        raise KeyError(parameter_id)
+        raise KeyError(
+            f"Invalid Parameter Factory id {parameter_id} for "
+            f"the specified MCO Factory {self.__class__}. "
+            "No plugin responsible for the id is found."
+        )
