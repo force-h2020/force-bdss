@@ -176,8 +176,8 @@ class WorkflowReader(HasStrictTraits):
         workflow_data["execution_layers"] = workflow_data.get(
             "execution_layers", []
         )
-        for i, layer in enumerate(workflow_data["execution_layers"]):
-            if format_version == "1":
+        if format_version == "1":
+            for i, layer in enumerate(workflow_data["execution_layers"]):
                 workflow_data["execution_layers"][i] = {"data_sources": layer}
 
         workflow_data["notification_listeners"] = workflow_data.get(
