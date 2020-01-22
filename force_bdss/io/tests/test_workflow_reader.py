@@ -131,6 +131,6 @@ class TestWorkflowReader(unittest.TestCase):
         self.assertDictEqual(
             WorkflowReader.parse_data(json_data),
             self.wfreader._preprocess_workflow_data(
-                json_data, self.wfreader.workflow_format_version
+                json_data, self.wfreader._extract_version(json_data)
             ),
         )
