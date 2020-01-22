@@ -124,3 +124,13 @@ class TestWorkflowReader(unittest.TestCase):
         with testfixtures.LogCapture():
             with self.assertRaises(InvalidFileException):
                 self.wfreader._extract_version(data)
+
+    def test_parse_data(self):
+        json_data = self.wfreader.load_data(self.working_data)
+
+        self.assertDictEqual(
+            WorkflowReader.parse_data(json_data),
+            self.wfreader._preprocess_workflow_data(
+                json_data, self.wfreader.workflow_format_version
+            ),
+        )

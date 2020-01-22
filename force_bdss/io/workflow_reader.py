@@ -76,12 +76,15 @@ class WorkflowReader(HasStrictTraits):
 
         self.workflow_format_version = self._extract_version(json_data)
 
-        workflow_data = self._preprocess_workflow_data(json_data)
+        workflow_data = self._preprocess_workflow_data(
+            json_data, self.workflow_format_version
+        )
 
         workflow = Workflow.from_json(self.factory_registry, workflow_data)
         return workflow
 
-    def load_data(self, filepath):
+    @staticmethod
+    def load_data(filepath):
         """ Loads the data from file located at `filepath` in json
         format.
 
@@ -99,7 +102,30 @@ class WorkflowReader(HasStrictTraits):
             json_data = json.load(input_file)
         return json_data
 
-    def _extract_version(self, json_data):
+    @classmethod
+    def parse_data(cls, json_data):
+        """ Public class method to parse the `json_data` dictionary using
+        the WorkflowReader methods into a  workflow_data dictionary, compatible
+        with Workflow.from_json() method.
+
+        Parameters
+        ----------
+        json_data: dict
+            Dictionary with workflow data to be processed
+
+        Returns
+        ----------
+        workflow_data: dict
+            Dictionary in the format, compatible with Workflow.from_json()
+        """
+        format_version = cls._extract_version(json_data)
+        workflow_data = cls._preprocess_workflow_data(
+            json_data, format_version
+        )
+        return workflow_data
+
+    @staticmethod
+    def _extract_version(json_data):
         """ Verifies the workflow.json version. Checks if it is
         supported by the current version of BDSS.
 
@@ -127,14 +153,31 @@ class WorkflowReader(HasStrictTraits):
 
         return version
 
-    def _preprocess_workflow_data(self, json_data):
+    @staticmethod
+    def _preprocess_workflow_data(json_data, format_version):
+        """ Method for workflow data preprocessing: adding necessary keys
+        and default values to the workflow_data dictionary. The preliminary
+        processing logic depends on the `format_version` of the json data.
+
+        Parameters
+        ----------
+        json_data: dict
+            Dictionary with serialized form of a workflow
+        format_version: str
+            workflow file format
+
+        Returns
+        ----------
+        workflow_data: dict
+            Dictionary in the format, compatible with Workflow.from_json()
+        """
         workflow_data = json_data.get("workflow", {})
         workflow_data["mco_model"] = workflow_data.get("mco_model", None)
         workflow_data["execution_layers"] = workflow_data.get(
             "execution_layers", []
         )
         for i, layer in enumerate(workflow_data["execution_layers"]):
-            if self.workflow_format_version == "1":
+            if format_version == "1":
                 workflow_data["execution_layers"][i] = {"data_sources": layer}
 
         workflow_data["notification_listeners"] = workflow_data.get(
