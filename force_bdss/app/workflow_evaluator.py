@@ -27,9 +27,6 @@ class WorkflowEvaluator(HasStrictTraits):
     #: A reference to the mco model of the workflow instance.
     mco_model = DelegatesTo("workflow", prefix="mco_model")
 
-    #: The path to the workflow file.
-    workflow_filepath = Unicode()
-
     def _internal_evaluate(self, parameter_values):
         """Evaluates the workflow using the given parameter values
         running on the internal process"""

@@ -15,7 +15,7 @@ class TestBaseOptimizerEngine(TestCase):
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
         self.evaluator = WorkflowEvaluator(
-            workflow=workflow_file.workflow, workflow_filepath=file_path
+            workflow=workflow_file.workflow
         )
         self.optimizer_engine = EmptyOptimizerEngine(
             single_point_evaluator=self.evaluator

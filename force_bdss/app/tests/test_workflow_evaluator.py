@@ -13,19 +13,17 @@ class TestWorkflowEvaluator(TestCase):
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
         self.evaluator = WorkflowEvaluator(
-            workflow=workflow_file.workflow, workflow_filepath=file_path
+            workflow=workflow_file.workflow
         )
 
     def test_empty_init(self):
 
         evaluator = WorkflowEvaluator()
         self.assertIsNone(evaluator.workflow)
-        self.assertEqual("", evaluator.workflow_filepath)
 
     def test_init(self):
 
         self.assertIsInstance(self.evaluator.workflow, Workflow)
-        self.assertEqual("test_probe.json", self.evaluator.workflow_filepath)
         self.assertEqual(
             self.evaluator.workflow.mco_model, self.evaluator.mco_model
         )

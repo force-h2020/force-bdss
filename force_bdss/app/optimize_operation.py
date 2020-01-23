@@ -46,7 +46,7 @@ class OptimizeOperation(HasStrictTraits):
 
     def _solver_default(self):
         return WorkflowEvaluator(
-            workflow=self.workflow, workflow_filepath=self.workflow_file.path
+            workflow=self.workflow
         )
 
     def run(self):
