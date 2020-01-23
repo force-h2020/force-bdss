@@ -3,7 +3,6 @@ import logging
 from traits.api import (
     HasStrictTraits,
     Instance,
-    Unicode,
     provides,
     DelegatesTo,
 )

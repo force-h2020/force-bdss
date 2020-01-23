@@ -9,7 +9,6 @@ from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 
 class TestWorkflowEvaluator(TestCase):
     def setUp(self):
-        file_path = "test_probe.json"
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
         self.evaluator = WorkflowEvaluator(
