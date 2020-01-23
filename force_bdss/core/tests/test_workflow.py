@@ -1,38 +1,46 @@
+from copy import deepcopy
+import json
 import unittest
-import testfixtures
 
 from traits.testing.api import UnittestTools
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
-from force_bdss.core.workflow import Workflow, WorkflowAttributeWarning
+from force_bdss.core.workflow import Workflow
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
 from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.data_value import DataValue
+from force_bdss.notification_listeners.base_notification_listener_model \
+    import BaseNotificationListenerModel
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
-
-
-class TestWorkflowAttributeWarning(unittest.TestCase):
-    def test_warn(self):
-        with testfixtures.LogCapture() as capture:
-            WorkflowAttributeWarning.warn()
-            expected_log = (
-                "force_bdss.core.workflow",
-                "WARNING",
-                "The Workflow object format with 'mco' attribute is "
-                "now deprecated. Please use 'mco_model' attribute instead.",
-            )
-            capture.check(expected_log)
+from force_bdss.tests.dummy_classes.factory_registry import (
+    DummyFactoryRegistry,
+)
+from force_bdss.tests.dummy_classes.mco import DummyMCOParameter
+from force_bdss.tests.dummy_classes.data_source import DummyDataSourceModel
+from force_bdss.tests import fixtures
 
 
 class TestWorkflow(unittest.TestCase, UnittestTools):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
+
+    def test_empty__getstate__(self):
+        workflow = Workflow()
+        state = workflow.__getstate__()
+        self.assertDictEqual(
+            state,
+            {
+                "mco_model": None,
+                "execution_layers": [],
+                "notification_listeners": [],
+            },
+        )
 
     def test_multilayer_execution(self):
         # The multilayer peforms the following execution
@@ -237,3 +245,121 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
                 for i in range(num_outputs):
                     self.assertEqual(kpi_results[i].name, spec[i][0])
                     self.assertEqual(kpi_results[i].value, spec[i][1])
+
+    def test_from_json(self):
+        registry = DummyFactoryRegistry()
+        json_path = fixtures.get("test_workflow_reader.json")
+        with open(json_path) as f:
+            data = json.load(f)
+        wf = Workflow.from_json(registry, data["workflow"])
+        workflow_state = wf.__getstate__()
+        self.assertDictEqual(
+            workflow_state,
+            {
+                "mco_model": {
+                    "id": "force.bdss.enthought.plugin.test.v0.factory."
+                    "dummy_mco",
+                    "model_data": {
+                        "parameters": [
+                            {
+                                "id": "force.bdss.enthought.plugin."
+                                "test.v0.factory."
+                                "dummy_mco.parameter.dummy_mco_parameter",
+                                "model_data": {"x": 0, "name": "", "type": ""},
+                            }
+                        ],
+                        "kpis": [],
+                    },
+                },
+                "notification_listeners": [
+                    {
+                        "id": "force.bdss.enthought.plugin.test.v0.factory."
+                        "dummy_notification_listener",
+                        "model_data": {},
+                    }
+                ],
+                "execution_layers": [
+                    {
+                        "data_sources": [
+                            {
+                                "id": "force.bdss.enthought.plugin.test.v0."
+                                "factory.dummy_data_source",
+                                "model_data": {
+                                    "input_slot_info": [
+                                        {
+                                            "name": "input_slot_name",
+                                            "source": "Environment",
+                                        }
+                                    ],
+                                    "output_slot_info": [
+                                        {"name": "output_slot_name"}
+                                    ],
+                                },
+                            }
+                        ]
+                    }
+                ],
+            },
+        )
+
+    def test_persistent_wfdata(self):
+        registry = DummyFactoryRegistry()
+        json_path = fixtures.get("test_workflow_reader.json")
+        with open(json_path) as f:
+            data = json.load(f)
+        reference_data = deepcopy(data)
+        _ = Workflow.from_json(registry, data["workflow"])
+        self.assertDictEqual(data, reference_data)
+
+    def test__extract_mco_model(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        mco_model = Workflow._extract_mco_model(registry, workflow_data)
+
+        mco_factory = registry.mco_factories[0]
+        expected_mco_model = mco_factory.model_class
+        self.assertIsInstance(mco_model, expected_mco_model)
+        self.assertEqual(0, len(mco_model.kpis))
+        self.assertEqual(1, len(mco_model.parameters))
+        self.assertIsInstance(mco_model.parameters[0], DummyMCOParameter)
+
+    def test__extract_execution_layers(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        exec_layers = Workflow._extract_execution_layers(
+            registry, workflow_data
+        )
+        self.assertEqual(1, len(exec_layers))
+        self.assertIsInstance(exec_layers[0], ExecutionLayer)
+
+        self.assertEqual(1, len(exec_layers[0].data_sources))
+        data_source = exec_layers[0].data_sources[0]
+        self.assertIsInstance(data_source, DummyDataSourceModel)
+
+        input_slots = data_source.input_slot_info
+        self.assertEqual(1, len(input_slots))
+        self.assertIsInstance(input_slots[0], InputSlotInfo)
+        self.assertEqual("input_slot_name", input_slots[0].name)
+
+        output_slots = data_source.output_slot_info
+        self.assertEqual(1, len(output_slots))
+        self.assertIsInstance(output_slots[0], OutputSlotInfo)
+        self.assertEqual("output_slot_name", output_slots[0].name)
+
+    def test__extract_notification_listeners(self):
+        registry = DummyFactoryRegistry()
+        with open(fixtures.get("test_workflow_reader.json")) as f:
+            data = json.load(f)
+
+        workflow_data = data["workflow"]
+        listeners = Workflow._extract_notification_listeners(
+            registry, workflow_data
+        )
+        self.assertEqual(1, len(listeners))
+        self.assertIsInstance(listeners[0], BaseNotificationListenerModel)

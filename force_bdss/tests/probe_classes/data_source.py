@@ -1,8 +1,10 @@
 from traits.api import Bool, Function, Unicode, Int, on_trait_change
 
 from force_bdss.api import (
-    BaseDataSourceFactory, BaseDataSourceModel, BaseDataSource,
-    Slot
+    BaseDataSourceFactory,
+    BaseDataSourceModel,
+    BaseDataSource,
+    Slot,
 )
 from force_bdss.core.data_value import DataValue
 
@@ -28,23 +30,32 @@ class ProbeDataSource(BaseDataSource):
     def slots(self, model):
         self.slots_called = True
         return (
-            tuple(Slot(type=model.input_slots_type)
-                  for _ in range(model.input_slots_size))
-        ), (
-            tuple(Slot(type=model.output_slots_type)
-                  for _ in range(model.output_slots_size))
+            (
+                tuple(
+                    Slot(type=model.input_slots_type)
+                    for _ in range(model.input_slots_size)
+                )
+            ),
+            (
+                tuple(
+                    Slot(type=model.output_slots_type)
+                    for _ in range(model.output_slots_size)
+                )
+            ),
         )
 
 
 class ProbeDataSourceModel(BaseDataSourceModel):
-    input_slots_type = Unicode('PRESSURE')
-    output_slots_type = Unicode('PRESSURE')
+    input_slots_type = Unicode("PRESSURE")
+    output_slots_type = Unicode("PRESSURE")
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
 
-    @on_trait_change('input_slots_type,output_slots_type,'
-                     'input_slots_size,output_slots_size')
+    @on_trait_change(
+        "input_slots_type,output_slots_type,"
+        "input_slots_size,output_slots_size"
+    )
     def update_slots(self):
         self.changes_slots = True
 
@@ -53,8 +64,8 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
 
     run_function = Function(default_value=run_func)
 
-    input_slots_type = Unicode('PRESSURE')
-    output_slots_type = Unicode('PRESSURE')
+    input_slots_type = Unicode("PRESSURE")
+    output_slots_type = Unicode("PRESSURE")
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
@@ -100,7 +111,4 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
         else:
             run_function = self.run_function
 
-        return self.data_source_class(
-            factory=self,
-            run_function=run_function,
-        )
+        return self.data_source_class(factory=self, run_function=run_function)

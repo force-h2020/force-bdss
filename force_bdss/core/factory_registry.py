@@ -4,7 +4,7 @@ from force_bdss.core.i_factory_registry import IFactoryRegistry
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
 from force_bdss.mco.i_mco_factory import IMCOFactory
 from force_bdss.notification_listeners.i_notification_listener_factory import (  # noqa: E501
-    INotificationListenerFactory
+    INotificationListenerFactory,
 )
 from force_bdss.ui_hooks.i_ui_hooks_factory import IUIHooksFactory
 
@@ -48,7 +48,10 @@ class FactoryRegistry(HasStrictTraits):
         for ds in self.data_source_factories:
             if ds.id == id:
                 return ds
-        raise KeyError(id)
+        raise KeyError(
+            f"Invalid DataSource Factory id {id}. "
+            "No plugin responsible for the id is found."
+        )
 
     def mco_factory_by_id(self, id):
         """Finds a given Multi Criteria Optimizer (MCO) factory by means of
@@ -67,7 +70,10 @@ class FactoryRegistry(HasStrictTraits):
         for mco in self.mco_factories:
             if mco.id == id:
                 return mco
-        raise KeyError(id)
+        raise KeyError(
+            f"Invalid MCO Factory id {id}. "
+            "No plugin responsible for the id is found."
+        )
 
     def mco_parameter_factory_by_id(self, mco_id, parameter_id):
         """Retrieves the MCO parameter factory for a given MCO id and
@@ -95,7 +101,11 @@ class FactoryRegistry(HasStrictTraits):
             if factory.id == parameter_id:
                 return factory
 
-        raise KeyError(parameter_id)
+        raise KeyError(
+            f"Invalid Parameter Factory id {parameter_id} for "
+            f"the specified MCO Factory {mco_id}. "
+            "No plugin responsible for the id is found."
+        )
 
     def notification_listener_factory_by_id(self, id):
         """Finds a given notification listener by means of its id.
@@ -115,4 +125,7 @@ class FactoryRegistry(HasStrictTraits):
             if nl.id == id:
                 return nl
 
-        raise KeyError(id)
+        raise KeyError(
+            f"Invalid Notification Listener Factory id {id}. "
+            "No plugin responsible for the id is found."
+        )

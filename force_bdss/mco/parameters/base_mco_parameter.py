@@ -2,8 +2,9 @@ from traits.api import String, Instance
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core.verifier import VerifierError
-from force_bdss.mco.parameters.base_mco_parameter_factory import \
-    BaseMCOParameterFactory
+from force_bdss.mco.parameters.base_mco_parameter_factory import (
+    BaseMCOParameterFactory,
+)
 from force_bdss.local_traits import Identifier
 
 
@@ -23,9 +24,7 @@ class BaseMCOParameter(BaseModel):
     type = String(visible=False)
 
     def __init__(self, factory, *args, **kwargs):
-        super(BaseMCOParameter, self).__init__(
-            factory=factory, *args, **kwargs
-        )
+        super().__init__(factory=factory, *args, **kwargs)
 
     def verify(self):
         """ Verify the MCO parameter.
@@ -44,7 +43,7 @@ class BaseMCOParameter(BaseModel):
             errors.append(
                 VerifierError(
                     subject=self,
-                    trait_name='name',
+                    trait_name="name",
                     local_error="MCO parameter is not named",
                     global_error="An MCO parameter is not named",
                 )
@@ -53,9 +52,14 @@ class BaseMCOParameter(BaseModel):
             errors.append(
                 VerifierError(
                     subject=self,
-                    trait_name='type',
+                    trait_name="type",
                     local_error="MCO parameter has no type set",
                     global_error="An MCO parameter has no type set",
                 )
             )
         return errors
+
+    @classmethod
+    def from_json(cls, factory, json_data):
+        parameter = factory.create_model(json_data)
+        return parameter

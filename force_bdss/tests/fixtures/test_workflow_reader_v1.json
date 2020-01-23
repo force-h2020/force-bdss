@@ -1,5 +1,5 @@
 {
-    "version": "1.1",
+    "version": "1",
     "workflow": {
         "mco_model": {
             "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_mco",
@@ -20,17 +20,15 @@
             }
         ],
         "execution_layers": [
-            {
-                "data_sources": [
-                    {
-                        "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
-                        "model_data": {
-                            "input_slot_info": [{"name": "input_slot_name"}],
-                            "output_slot_info": [{"name": "output_slot_name"}]
-                        }
+            [
+                {
+                    "id": "force.bdss.enthought.plugin.test.v0.factory.dummy_data_source",
+                    "model_data": {
+                        "input_slot_info": [{"name": "input_slot_name"}],
+                        "output_slot_info": [{"name": "output_slot_name"}]
                     }
-                ]
-            }
+                }
+            ]
         ]
     }
 }
