@@ -9,8 +9,6 @@ from traits.api import (
     provides,
 )
 
-from force_bdss.mco.i_evaluator import IEvaluator
-from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener,
@@ -41,14 +39,6 @@ class OptimizeOperation(HasStrictTraits):
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
-    #: The Solver to use in the MCO run
-    solver = Instance(IEvaluator)
-
-    def _solver_default(self):
-        return WorkflowEvaluator(
-            workflow=self.workflow
-        )
-
     def run(self):
         """ Create and run the optimizer. """
         self.workflow_file.verify()
@@ -62,7 +52,7 @@ class OptimizeOperation(HasStrictTraits):
         self._deliver_start_event()
 
         try:
-            self.mco.run(self.solver)
+            self.mco.run(self.workflow)
         except Exception:
             log.exception(
                 (

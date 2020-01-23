@@ -1,8 +1,6 @@
 from .core_driver_events import *  # noqa
 from .ids import plugin_id, factory_id  # noqa
 
-from .app.workflow_evaluator import WorkflowEvaluator # noqa
-
 from .core.base_factory import BaseFactory  # noqa
 from .core.base_model import BaseModel  # noqa
 from .core.data_value import DataValue  # noqa

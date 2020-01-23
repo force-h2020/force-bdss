@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from force_bdss.core.kpi_specification import KPISpecification
-from force_bdss.app.workflow_evaluator import WorkflowEvaluator
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     EmptyOptimizerEngine,
 )
@@ -11,12 +10,9 @@ from force_bdss.tests import fixtures
 
 class TestBaseOptimizerEngine(TestCase):
     def setUp(self):
-        file_path = "test_probe.json"
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
-        self.evaluator = WorkflowEvaluator(
-            workflow=workflow_file.workflow
-        )
+        self.evaluator = workflow_file.workflow
         self.optimizer_engine = EmptyOptimizerEngine(
             single_point_evaluator=self.evaluator
         )
