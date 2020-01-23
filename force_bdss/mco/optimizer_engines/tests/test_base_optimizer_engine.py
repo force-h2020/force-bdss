@@ -12,14 +12,14 @@ class TestBaseOptimizerEngine(TestCase):
     def setUp(self):
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
-        self.evaluator = workflow_file.workflow
+        self.workflow = workflow_file.workflow
         self.optimizer_engine = EmptyOptimizerEngine(
-            single_point_evaluator=self.evaluator
+            single_point_evaluator=self.workflow
         )
 
     def test_initialize(self):
         self.assertIs(
-            self.evaluator, self.optimizer_engine.single_point_evaluator
+            self.workflow, self.optimizer_engine.single_point_evaluator
         )
         self.assertListEqual([], self.optimizer_engine.parameters)
         self.assertListEqual([], self.optimizer_engine.kpis)
@@ -29,7 +29,7 @@ class TestBaseOptimizerEngine(TestCase):
 
         point = [1.0]
         self.assertListEqual(
-            self.evaluator.evaluate(point), self.optimizer_engine._score(point)
+            self.workflow.evaluate(point), self.optimizer_engine._score(point)
         )
 
     def test__minimization_score(self):
