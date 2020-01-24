@@ -17,6 +17,7 @@ from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
 from force_bdss.tests.probe_classes.mco import ProbeMCOFactory
+from force_bdss.tests.probe_classes.workflow_file import ProbeWorkflowFile
 from force_bdss.tests.dummy_classes.factory_registry import (
     DummyFactoryRegistry,
 )
@@ -245,6 +246,23 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
                 for i in range(num_outputs):
                     self.assertEqual(kpi_results[i].name, spec[i][0])
                     self.assertEqual(kpi_results[i].value, spec[i][1])
+
+    def test__internal_evaluate(self):
+        workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
+        workflow_file.read()
+        workflow = workflow_file.workflow
+
+        kpi_results = workflow._internal_evaluate([1.0])
+        self.assertEqual(1, len(kpi_results))
+
+    def test_evaluate(self):
+        workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
+        workflow_file.read()
+        workflow = workflow_file.workflow
+        kpi_results = workflow.evaluate([1.0])
+
+        self.assertEqual(1, len(kpi_results))
+        self.assertIsNone(kpi_results[0])
 
     def test_from_json(self):
         registry = DummyFactoryRegistry()
