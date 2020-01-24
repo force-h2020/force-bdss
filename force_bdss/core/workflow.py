@@ -1,7 +1,14 @@
 from copy import deepcopy
 import logging
 
-from traits.api import HasStrictTraits, Instance, List, Event, provides, on_trait_change
+from traits.api import (
+    HasStrictTraits,
+    Instance,
+    List,
+    Event,
+    provides,
+    on_trait_change
+)
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
