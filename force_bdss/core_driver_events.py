@@ -1,24 +1,7 @@
 from traits.api import HasStrictTraits, List, Instance, Float, Unicode
 
 from force_bdss.core.data_value import DataValue
-from force_bdss.io.workflow_writer import pop_dunder_recursive
-
-
-def nested_getstate(state_dict):
-    # We safely attempt to __getstate__ of the nested objects in `state_dict`
-    # on the zero and first levels.
-    # If the `state_dict` item is an iterable, we __getstate__ of the iterable
-    # elements. Otherwise, we __getstate__ the item itself.
-    # If we can't __getstate__ of the item, we leave it as it is.
-    for key in state_dict:
-        try:
-            if isinstance(state_dict[key], (tuple, list)):
-                state_dict[key] = [el.__getstate__() for el in state_dict[key]]
-            else:
-                state_dict[key] = state_dict[key].__getstate__()
-        except AttributeError:
-            pass
-    return state_dict
+from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
 
 class BaseDriverEvent(HasStrictTraits):

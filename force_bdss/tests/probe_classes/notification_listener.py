@@ -1,8 +1,10 @@
 from traits.api import Bool, Function, Any
 
 from force_bdss.api import (
-    BaseNotificationListener, BaseNotificationListenerModel,
-    BaseNotificationListenerFactory)
+    BaseNotificationListener,
+    BaseNotificationListenerModel,
+    BaseNotificationListenerFactory,
+)
 
 
 def pass_function(*args, **kwargs):
@@ -101,4 +103,5 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
             self,
             initialize_function=initialize_function,
             deliver_function=deliver_function,
-            finalize_function=finalize_function)
+            finalize_function=finalize_function,
+        )

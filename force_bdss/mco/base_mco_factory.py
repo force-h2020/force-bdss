@@ -6,8 +6,9 @@ from force_bdss.core.base_factory import BaseFactory
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.parameters.base_mco_parameter_factory import \
-    BaseMCOParameterFactory
+from force_bdss.mco.parameters.base_mco_parameter_factory import (
+    BaseMCOParameterFactory,
+)
 
 from .i_mco_factory import IMCOFactory
 
@@ -18,6 +19,7 @@ log = logging.getLogger(__name__)
 class BaseMCOFactory(BaseFactory):
     """Base class for the MultiCriteria Optimizer factory.
     """
+
     # NOTE: any changes to the interface of this class must be replicated
     # in the IMCOFactory interface class.
 
@@ -37,10 +39,7 @@ class BaseMCOFactory(BaseFactory):
     parameter_factories = List(Instance(BaseMCOParameterFactory))
 
     def __init__(self, plugin, *args, **kwargs):
-        super(BaseMCOFactory, self).__init__(
-            plugin=plugin,
-            *args,
-            **kwargs)
+        super(BaseMCOFactory, self).__init__(plugin=plugin, *args, **kwargs)
 
         self.optimizer_class = self.get_optimizer_class()
         self.model_class = self.get_model_class()
@@ -50,23 +49,27 @@ class BaseMCOFactory(BaseFactory):
 
     def get_optimizer_class(self):
         raise NotImplementedError(
-            "get_optimizer_class was not implemented in factory {}".format(
-                self.__class__))
+            f"get_optimizer_class was not implemented "
+            f"in factory {self.__class__}"
+        )
 
     def get_model_class(self):
         raise NotImplementedError(
-            "get_model_class was not implemented in factory {}".format(
-                self.__class__))
+            "get_model_class was not implemented "
+            f"in factory {self.__class__}"
+        )
 
     def get_communicator_class(self):
         raise NotImplementedError(
-            "get_communicator_class was not implemented in factory {}".format(
-                self.__class__))
+            "get_communicator_class was not implemented "
+            f"in factory {self.__class__}"
+        )
 
     def get_parameter_factory_classes(self):
         raise NotImplementedError(
             "get_parameter_factory_classes was not implemented "
-            "in factory {}".format(self.__class__))
+            f"in factory {self.__class__}"
+        )
 
     def create_optimizer(self):
         """Factory method.
@@ -121,6 +124,17 @@ class BaseMCOFactory(BaseFactory):
         -------
         List of BaseMCOParameterFactory
         """
-        return [factory_cls(self)
-                for factory_cls in self.parameter_factory_classes
-                ]
+        return [
+            factory_cls(self) for factory_cls in self.parameter_factory_classes
+        ]
+
+    def parameter_factory_by_id(self, parameter_id):
+        for factory in self.parameter_factories:
+            if factory.id == parameter_id:
+                return factory
+
+        raise KeyError(
+            f"Invalid Parameter Factory id {parameter_id} for "
+            f"the specified MCO Factory {self.__class__}. "
+            "No plugin responsible for the id is found."
+        )

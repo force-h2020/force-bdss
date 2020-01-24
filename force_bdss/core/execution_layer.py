@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 
 from traits.api import HasStrictTraits, List
@@ -5,7 +6,7 @@ from traits.api import HasStrictTraits, List
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.core.data_value import DataValue
-
+from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
 
@@ -40,9 +41,8 @@ class ExecutionLayer(HasStrictTraits):
                 log.exception(
                     "Unable to create data source from factory '{}' "
                     "in plugin '{}'. This may indicate a programming "
-                    "error in the plugin".format(
-                        factory.id,
-                        factory.plugin_id))
+                    "error in the plugin".format(factory.id, factory.plugin_id)
+                )
                 raise
 
             # Get the slots for this data source. These must be matched to
@@ -58,13 +58,11 @@ class ExecutionLayer(HasStrictTraits):
             # environment data values, and in the appropriate ordering as
             # needed by the input slots.
             passed_data_values = _bind_data_values(
-                environment_data_values,
-                model.input_slot_info,
-                in_slots)
+                environment_data_values, model.input_slot_info, in_slots
+            )
 
             # execute data source, passing only relevant data values.
-            log.info("Evaluating for Data Source {}".format(
-                factory.name))
+            log.info("Evaluating for Data Source {}".format(factory.name))
             log.info("Passed values:")
             for idx, dv in enumerate(passed_data_values):
                 log.info("{}: {}".format(idx, dv))
@@ -74,17 +72,16 @@ class ExecutionLayer(HasStrictTraits):
             except Exception:
                 log.exception(
                     "Evaluation could not be performed. "
-                    "Run method raised exception.")
+                    "Run method raised exception."
+                )
                 raise
 
             if not isinstance(res, list):
                 error_txt = (
                     "The run method of data source {} must return a list."
                     " It returned instead {}. Fix the run() method to return"
-                    " the appropriate entity.".format(
-                        factory.name,
-                        type(res)
-                    ))
+                    " the appropriate entity.".format(factory.name, type(res))
+                )
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
 
@@ -93,9 +90,8 @@ class ExecutionLayer(HasStrictTraits):
                     "The number of data values ({} values) returned"
                     " by '{}' does not match the number"
                     " of output slots it specifies ({} values)."
-                    " This is likely a plugin error.").format(
-                    len(res), factory.name, len(out_slots)
-                )
+                    " This is likely a plugin error."
+                ).format(len(res), factory.name, len(out_slots))
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
 
@@ -105,11 +101,8 @@ class ExecutionLayer(HasStrictTraits):
                     " by '{}' does not match the number"
                     " of user-defined names specified ({} values)."
                     " This is either a plugin error or a file"
-                    " error.").format(
-                    len(res),
-                    factory.name,
-                    len(model.output_slot_info)
-                )
+                    " error."
+                ).format(len(res), factory.name, len(model.output_slot_info))
 
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
@@ -122,9 +115,7 @@ class ExecutionLayer(HasStrictTraits):
                         " {} was instead found in position {}."
                         " Fix the DataSource.run() method"
                         " to return the appropriate entity.".format(
-                            factory.name,
-                            type(dv),
-                            idx
+                            factory.name, type(dv), idx
                         )
                     )
                     log.error(error_txt)
@@ -166,8 +157,8 @@ class ExecutionLayer(HasStrictTraits):
             errors.append(
                 VerifierError(
                     subject=self,
-                    severity='warning',
-                    trait_name='data_sources',
+                    severity="warning",
+                    trait_name="data_sources",
                     local_error="Layer has no data sources",
                     global_error="An execution layer has no data sources",
                 )
@@ -177,10 +168,50 @@ class ExecutionLayer(HasStrictTraits):
 
         return errors
 
+    def __getstate__(self):
+        state = pop_dunder_recursive(super().__getstate__())
+        state = nested_getstate(state)
+        return state
 
-def _bind_data_values(available_data_values,
-                      model_slot_map,
-                      slots):
+    @classmethod
+    def from_json(cls, factory_registry, json_data):
+        """ Instantiate an ExecutionLayer object from a `json_data`
+        dictionary and the generating `factory_registry`.
+        If the `json_data` is an empty dict, the `data_sources`
+        attribute will be an empty list.
+
+        Parameters
+        ----------
+        factory_registry: Instance(IFactoryRegistry)
+            Generating factory registry
+        json_data: dict
+            Dictionary with an execution layer serialized data
+
+        Returns
+        ----------
+        layer: ExecutionLayer
+            ExecutionLayer instance with attributes values from
+            the `json_data` dict
+        """
+        data = deepcopy(json_data)
+
+        models = []
+        for data_source in data.get("data_sources", []):
+            id = data_source["id"]
+            data_source_factory = factory_registry.data_source_factory_by_id(
+                id
+            )
+            model = data_source_factory.model_class.from_json(
+                data_source_factory, data_source["model_data"]
+            )
+            models.append(model)
+        data["data_sources"] = models
+
+        layer = cls(**data)
+        return layer
+
+
+def _bind_data_values(available_data_values, model_slot_map, slots):
     """
     Given the named data values in the environment, the slots a given
     data source expects, and the user-specified names for each of these
@@ -191,9 +222,11 @@ def _bind_data_values(available_data_values,
     lookup_map = {dv.name: dv for dv in available_data_values}
 
     if len(slots) != len(model_slot_map):
-        raise RuntimeError("The length of the slots is not equal to"
-                           " the length of the slot map. This may"
-                           " indicate a file error.")
+        raise RuntimeError(
+            "The length of the slots is not equal to"
+            " the length of the slot map. This may"
+            " indicate a file error."
+        )
 
     try:
         for slot, slot_map in zip(slots, model_slot_map):
@@ -202,7 +235,8 @@ def _bind_data_values(available_data_values,
         raise RuntimeError(
             "Unable to find requested name '{}' in available "
             "data values. Current data value names: {}".format(
-                slot_map.name,
-                list(lookup_map.keys())))
+                slot_map.name, list(lookup_map.keys())
+            )
+        )
 
     return passed_data_values

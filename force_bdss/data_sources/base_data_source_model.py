@@ -1,3 +1,4 @@
+from copy import deepcopy
 from logging import getLogger
 
 from traits.api import (
@@ -9,7 +10,6 @@ from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.io.workflow_writer import pop_dunder_recursive
 
 
 logger = getLogger(__name__)
@@ -126,20 +126,38 @@ class BaseDataSourceModel(BaseModel):
 
         return errors
 
-    def __getstate__(self):
-        state = pop_dunder_recursive(super().__getstate__())
-        state["input_slot_info"] = [
-            x.__getstate__() for x in self.input_slot_info
-        ]
-        state["output_slot_info"] = [
-            x.__getstate__() for x in self.output_slot_info
-        ]
-
-        return state
-
     @on_trait_change("+changes_slots")
     def _trigger_changes_slots(self, obj, name, new):
         changes_slots = self.traits()[name].changes_slots
 
         if changes_slots:
             self.changes_slots = True
+
+    @classmethod
+    def from_json(cls, factory, json_data):
+        """ Instantiate an BaseMCOModel object from a `json_data`
+        dictionary and the generating `factory` object.
+
+        Parameters
+        ----------
+        factory: IDataSourceFactory
+            Generating factory object
+        json_data: dict
+            Dictionary with a DataSourceModel serialized data
+
+        Returns
+        ----------
+        layer: BaseDataSourceModel
+            BaseDataSourceModel instance with attributes values from
+            the `json_data` dict
+        """
+        data = deepcopy(json_data)
+
+        input_slots = [InputSlotInfo(**d) for d in data["input_slot_info"]]
+        data["input_slot_info"] = input_slots
+
+        output_slots = [OutputSlotInfo(**d) for d in data["output_slot_info"]]
+        data["output_slot_info"] = output_slots
+
+        data_source = factory.create_model(data)
+        return data_source
