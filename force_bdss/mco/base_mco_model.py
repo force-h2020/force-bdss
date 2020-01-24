@@ -36,9 +36,6 @@ class BaseMCOModel(BaseModel):
     #: A list of KPI specification objects and their objective.
     kpis = List(KPISpecification, visible=False)
 
-    #: Propagation channel for events from the MCO
-    event = Event()
-
     def bind_parameters(self, data_values):
         """ Bind and filter values from the MCO to the model parameters.
 
