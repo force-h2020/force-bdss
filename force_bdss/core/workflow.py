@@ -27,8 +27,8 @@ log = logging.getLogger(__name__)
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
-    #: The Workflow MCOModel object.
-    #: Can be None if no MCOModel has been specified yet.
+    #: The Workflow BaseMCOModel object.
+    #: Can be None if no BaseMCOModel has been specified yet.
     mco_model = Instance(BaseMCOModel, allow_none=True)
 
     #: The execution layers. Execution starts from the first layer,
@@ -270,7 +270,7 @@ class Workflow(HasStrictTraits):
 
     @on_trait_change("mco_model:event,execution_layers:event")
     def notify_driver_event(self, event):
-        """ Captures a BaseDriverEvent and passes if on to CoreMCODriver
+        """ Captures a BaseDriverEvent and passes it on to OptimizeOperation
 
         Parameters
         ----------

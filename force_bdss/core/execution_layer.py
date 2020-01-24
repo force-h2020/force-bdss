@@ -215,7 +215,7 @@ class ExecutionLayer(HasStrictTraits):
 
     @on_trait_change("data_sources:event")
     def notify_driver_event(self, event):
-        """ Captures a BaseDriverEvent and passes if on to CoreMCODriver
+        """ Captures a BaseDriverEvent and passes it on to a Workflow
 
         Parameters
         ----------
