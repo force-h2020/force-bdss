@@ -6,7 +6,7 @@ from traits.api import ABCHasStrictTraits, List, Instance, Bool
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.i_evaluator import IEvaluator
-from force_bdss.io.workflow_writer import pop_dunder_recursive
+from force_bdss.core.base_model import pop_dunder_recursive
 from force_bdss.mco.optimizer_engines.utilities import convert_by_mask
 
 log = logging.getLogger(__name__)

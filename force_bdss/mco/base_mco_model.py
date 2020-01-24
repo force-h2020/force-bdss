@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 
 from traits.api import Instance, List
@@ -140,3 +141,38 @@ class BaseMCOModel(BaseModel):
     def create_finish_event(self):
         """ Creates base event indicating the finished MCO."""
         return MCOFinishEvent()
+
+    @classmethod
+    def from_json(cls, factory, json_data):
+        """ Instantiate an BaseMCOModel object from a `json_data`
+        dictionary and the generating `factory` object.
+
+        Parameters
+        ----------
+        factory: BaseMCOFactory
+            Generating factory object
+        json_data: dict
+            Dictionary with an MCOModel  serialized data
+
+        Returns
+        ----------
+        layer: BaseMCOModel
+            BaseMCOModel instance with attributes values from
+            the `json_data` dict
+        """
+        data = deepcopy(json_data)
+
+        parameters = []
+        for parameter_data in data["parameters"]:
+            id = parameter_data["id"]
+            parameter_factory = factory.parameter_factory_by_id(id)
+            parameter = parameter_factory.model_class.from_json(
+                parameter_factory, parameter_data["model_data"]
+            )
+            parameters.append(parameter)
+        data["parameters"] = parameters
+
+        data["kpis"] = [KPISpecification(**d) for d in data["kpis"]]
+
+        mco_model = factory.create_model(data)
+        return mco_model
