@@ -185,7 +185,7 @@ class TestOptimizeOperation(TestCase):
 
         # Test normal operation
         self.assertIsNone(self.operation.mco)
-        self.operation.create_mco()
+        self.operation.mco = self.operation.create_mco()
         self.assertIsInstance(self.operation.mco, BaseMCO)
 
         # Now cause an exception to occur when BaseMCO is
@@ -233,7 +233,7 @@ class TestOptimizeOperation(TestCase):
 
     def test_progress_event_handling(self):
 
-        self.operation.create_mco()
+        self.operation.mco = self.operation.create_mco()
         listener = self.operation.listeners[0]
         self.operation.mco.notify_new_point(
             [DataValue(value=1), DataValue(value=2)],
