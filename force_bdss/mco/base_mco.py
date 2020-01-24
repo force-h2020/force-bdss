@@ -1,4 +1,6 @@
 import abc
+import logging
+import warnings
 
 from traits.api import (
     ABCHasStrictTraits, Event, Instance
@@ -7,6 +9,25 @@ from traits.api import (
 from force_bdss.core_driver_events import MCOProgressEvent
 
 from .i_mco_factory import IMCOFactory
+
+
+log = logging.getLogger(__name__)
+
+
+class NotifyEventWarning:
+
+    warning_message = (
+        "Use of the BaseMCO.event attribute is now deprecated and will"
+        " be removed in version 0.5.0. Please replace any uses of the "
+        "BaseMCO.notify and BaseMCO.notify_new_point method with the "
+        "equivalent BaseMCOModel.notify and "
+        "BaseMCOModel.notify_new_point methods respectively"
+    )
+
+    @classmethod
+    def warn(cls):
+        log.warning(cls.warning_message)
+        warnings.warn(cls.warning_message, DeprecationWarning)
 
 
 class BaseMCO(ABCHasStrictTraits):
@@ -74,4 +95,5 @@ class BaseMCO(ABCHasStrictTraits):
         event: BaseMCOEvent
             The event to broadcast.
         """
+        NotifyEventWarning.warn()
         self.event = event
