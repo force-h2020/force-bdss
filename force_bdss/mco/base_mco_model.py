@@ -1,7 +1,7 @@
 from copy import deepcopy
 import logging
 
-from traits.api import Instance, List
+from traits.api import Instance, List, Event
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core_driver_events import MCOStartEvent, MCOFinishEvent
@@ -31,6 +31,9 @@ class BaseMCOModel(BaseModel):
 
     #: A list of KPI specification objects and their objective.
     kpis = List(KPISpecification, visible=False)
+
+    #: Propagation channel for events from the MCO
+    event = Event()
 
     def bind_parameters(self, data_values):
         """ Bind and filter values from the MCO to the model parameters.

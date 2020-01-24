@@ -17,7 +17,6 @@ class BaseMCO(ABCHasStrictTraits):
     #: A reference to the factory
     factory = Instance(IMCOFactory)
 
-    #: Propagation channel for events from the MCO
     event = Event()
 
     def __init__(self, factory, **traits):

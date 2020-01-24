@@ -1,4 +1,4 @@
-from traits.api import ABCHasStrictTraits, Instance
+from traits.api import ABCHasStrictTraits, Instance, Event
 
 from force_bdss.core.base_factory import BaseFactory
 
@@ -10,6 +10,9 @@ class BaseModel(ABCHasStrictTraits):
     #: retrieve it as the originating factory.
     factory = Instance(BaseFactory, visible=False, transient=True)
 
+    #: Propagation channel for events from the Workflow objects
+    event = Event()
+
     def __init__(self, factory, *args, **kwargs):
         super(BaseModel, self).__init__(factory=factory, *args, **kwargs)
 
@@ -18,6 +21,18 @@ class BaseModel(ABCHasStrictTraits):
         state = nested_getstate(state)
         state = {"id": self.factory.id, "model_data": state}
         return state
+
+    def notify(self, event):
+        """Notify the listeners with an event. The notification will be
+        synchronous. All notification listeners will receive the event, one
+        after another.
+
+        Parameters
+        ----------
+        event: BaseMCOEvent
+            The event to broadcast.
+        """
+        self.event = event
 
 
 def pop_recursive(dictionary, remove_key):
