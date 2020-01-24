@@ -1,7 +1,7 @@
 from copy import deepcopy
 import logging
 
-from traits.api import Instance, List, Event
+from traits.api import Instance, List
 
 from force_bdss.core.base_model import BaseModel
 from force_bdss.core_driver_events import (

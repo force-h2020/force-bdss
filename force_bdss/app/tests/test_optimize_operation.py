@@ -287,7 +287,6 @@ class TestOptimizeOperation(TestCase):
             self.assertEqual(1.5, event.weights[0])
             self.assertEqual(1.5, event.weights[1])
 
-
     def test_run_empty_workflow(self):
 
         # Load a blank workflow
