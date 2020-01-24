@@ -4,6 +4,7 @@ import unittest
 
 from traits.testing.api import UnittestTools
 
+from force_bdss.core_driver_events import BaseDriverEvent
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
@@ -381,3 +382,18 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         )
         self.assertEqual(1, len(listeners))
         self.assertIsInstance(listeners[0], BaseNotificationListenerModel)
+
+    def test_notify_driver_event(self):
+        workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
+        workflow_file.read()
+        workflow = workflow_file.workflow
+
+        with self.assertTraitChanges(
+                workflow, 'event', count=1):
+            workflow.execution_layers[0].data_sources[0].notify(
+                BaseDriverEvent())
+
+        with self.assertTraitChanges(
+                workflow, 'event', count=1):
+            workflow.mco_model.notify(
+                BaseDriverEvent())

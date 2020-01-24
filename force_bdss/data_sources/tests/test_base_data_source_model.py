@@ -98,7 +98,7 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
         with self.assertRaises(Exception):
             model.verify()
 
-    def test_fromjson(self):
+    def test_from_json(self):
         registry = DummyFactoryRegistry()
         factory = registry.data_source_factories[0]
 
