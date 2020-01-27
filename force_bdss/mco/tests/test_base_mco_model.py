@@ -101,7 +101,11 @@ class TestNotifyMCOProgressWarning(unittest.TestCase):
             "equivalent BaseMCOModel.notify_progress_event method."
         )
 
-        expected_log = ("force_bdss.mco.base_mco_model", "WARNING", expected_message)
+        expected_log = (
+            "force_bdss.mco.base_mco_model",
+            "WARNING",
+            expected_message,
+        )
 
         with testfixtures.LogCapture() as capture, warnings.catch_warnings(
             record=True
