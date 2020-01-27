@@ -91,10 +91,10 @@ class OptimizeOperation(HasStrictTraits):
         self.mco = None
 
     def _deliver_start_event(self):
-        self._deliver_event(self.workflow.mco_model.create_start_event())
+        self.workflow.mco_model.notify_start_event()
 
     def _deliver_finish_event(self):
-        self._deliver_event(self.workflow.mco_model.create_finish_event())
+        self.workflow.mco_model.notify_finish_event()
 
     @on_trait_change("workflow_file:workflow:event,mco:event")
     def _deliver_event(self, event):
