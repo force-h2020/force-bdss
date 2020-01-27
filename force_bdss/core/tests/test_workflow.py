@@ -388,12 +388,10 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
         workflow_file.read()
         workflow = workflow_file.workflow
 
-        with self.assertTraitChanges(
-                workflow, 'event', count=1):
+        with self.assertTraitChanges(workflow, "event", count=1):
             workflow.execution_layers[0].data_sources[0].notify(
-                BaseDriverEvent())
+                BaseDriverEvent()
+            )
 
-        with self.assertTraitChanges(
-                workflow, 'event', count=1):
-            workflow.mco_model.notify(
-                BaseDriverEvent())
+        with self.assertTraitChanges(workflow, "event", count=1):
+            workflow.mco_model.notify(BaseDriverEvent())
