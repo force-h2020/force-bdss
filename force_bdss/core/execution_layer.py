@@ -1,7 +1,7 @@
 from copy import deepcopy
 import logging
 
-from traits.api import HasStrictTraits, List
+from traits.api import HasStrictTraits, List, on_trait_change, Event
 
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
@@ -18,6 +18,9 @@ class ExecutionLayer(HasStrictTraits):
 
     #: The data sources in the execution layer.
     data_sources = List(BaseDataSourceModel)
+
+    #: Propagation channel for events from the Workflow objects
+    event = Event()
 
     def execute_layer(self, environment_data_values):
         """ Performs the evaluation of a single layer.
@@ -209,6 +212,17 @@ class ExecutionLayer(HasStrictTraits):
 
         layer = cls(**data)
         return layer
+
+    @on_trait_change("data_sources:event")
+    def notify_driver_event(self, event):
+        """ Captures a BaseDriverEvent and passes it on to a Workflow
+
+        Parameters
+        ----------
+        event: BaseDriverEvent
+            The BaseDriverEvent that has been changed
+        """
+        self.event = event
 
 
 def _bind_data_values(available_data_values, model_slot_map, slots):

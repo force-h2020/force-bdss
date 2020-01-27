@@ -5,12 +5,13 @@ import testfixtures
 from force_bdss.app.optimize_operation import OptimizeOperation
 from force_bdss.core.data_value import DataValue
 from force_bdss.core_driver_events import (
-    MCOStartEvent, MCOFinishEvent, MCOProgressEvent)
+    MCOStartEvent,
+    MCOFinishEvent,
+    MCOProgressEvent,
+)
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.tests import fixtures
-from force_bdss.tests.probe_classes.workflow_file import (
-    ProbeWorkflowFile
-)
+from force_bdss.tests.probe_classes.workflow_file import ProbeWorkflowFile
 
 
 def raise_exception(*args, **kwargs):
@@ -18,16 +19,13 @@ def raise_exception(*args, **kwargs):
 
 
 class TestOptimizeOperation(TestCase):
-
     def setUp(self):
         self.operation = OptimizeOperation()
         self.operation.workflow_file = ProbeWorkflowFile(
             path=fixtures.get("test_probe.json")
         )
         self.operation.workflow_file.read()
-        self.registry = (
-            self.operation.workflow_file.reader.factory_registry
-        )
+        self.registry = self.operation.workflow_file.reader.factory_registry
 
     def test__init__(self):
 
@@ -56,16 +54,20 @@ class TestOptimizeOperation(TestCase):
         self.operation.workflow.mco_model = None
         with testfixtures.LogCapture() as capture:
             with self.assertRaisesRegex(
-                    RuntimeError,
-                    "Workflow file has errors"):
+                RuntimeError, "Workflow file has errors"
+            ):
                 self.operation.run()
             capture.check(
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Unable to execute workflow due to verification errors:'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Workflow has no MCO'),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Unable to execute workflow due to verification errors:",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Workflow has no MCO",
+                ),
             )
 
     def test__initialize_listeners(self):
@@ -84,14 +86,17 @@ class TestOptimizeOperation(TestCase):
             with self.assertRaises(Exception):
                 self.operation._initialize_listeners()
             capture.check(
-                ("force_bdss.app.optimize_operation",
-                 "ERROR",
-                 "Failed to create listener with id "
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_notification_listener' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "This may indicate a programming error in the "
-                 "plugin."))
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Failed to create listener with id "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_notification_listener' in plugin "
+                    "'force.bdss.enthought.plugin.test.v0'. "
+                    "This may indicate a programming error in the "
+                    "plugin.",
+                )
+            )
 
         # Test for error on initialization of listener, we
         # only expect a log message
@@ -101,13 +106,16 @@ class TestOptimizeOperation(TestCase):
         with testfixtures.LogCapture() as capture:
             self.operation._initialize_listeners()
             capture.check(
-                ("force_bdss.app.optimize_operation",
-                 "ERROR",
-                 "Failed to initialize listener with id "
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_notification_listener' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "The listener will be dropped."))
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Failed to initialize listener with id "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_notification_listener' in plugin "
+                    "'force.bdss.enthought.plugin.test.v0'. "
+                    "The listener will be dropped.",
+                )
+            )
 
     def test__finalize_listeners(self):
 
@@ -130,12 +138,15 @@ class TestOptimizeOperation(TestCase):
         with testfixtures.LogCapture() as capture:
             self.operation._finalize_listeners()
             capture.check(
-                ("force_bdss.app.optimize_operation",
-                 "ERROR",
-                 "Exception while finalizing listener "
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_notification_listener' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'."))
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Exception while finalizing listener "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_notification_listener' in plugin "
+                    "'force.bdss.enthought.plugin.test.v0'.",
+                )
+            )
 
         self.assertEqual(0, len(self.operation.listeners))
         self.assertTrue(listener.finalize_called)
@@ -148,17 +159,11 @@ class TestOptimizeOperation(TestCase):
         # Deliver a start event
         self.operation._deliver_start_event()
         self.assertTrue(listener.deliver_called)
-        self.assertIsInstance(
-            listener.deliver_call_args[0][0],
-            MCOStartEvent
-        )
+        self.assertIsInstance(listener.deliver_call_args[0][0], MCOStartEvent)
 
         # Deliver a finish event
         self.operation._deliver_finish_event()
-        self.assertIsInstance(
-            listener.deliver_call_args[0][0],
-            MCOFinishEvent
-        )
+        self.assertIsInstance(listener.deliver_call_args[0][0], MCOFinishEvent)
 
         # Now initialise a set of listeners that will raise an
         # exception when delivered to test error handling
@@ -172,20 +177,23 @@ class TestOptimizeOperation(TestCase):
             self.operation._deliver_start_event()
             self.assertTrue(listener.deliver_called)
             capture.check(
-                ("force_bdss.app.optimize_operation",
-                 "ERROR",
-                 "Exception while delivering to listener "
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_notification_listener' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "The listener will be dropped and computation "
-                 "will continue."))
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Exception while delivering to listener "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_notification_listener' in plugin "
+                    "'force.bdss.enthought.plugin.test.v0'. "
+                    "The listener will be dropped and computation "
+                    "will continue.",
+                )
+            )
 
     def test_create_mco(self):
 
         # Test normal operation
         self.assertIsNone(self.operation.mco)
-        self.operation.create_mco()
+        self.operation.mco = self.operation.create_mco()
         self.assertIsInstance(self.operation.mco, BaseMCO)
 
         # Now cause an exception to occur when BaseMCO is
@@ -197,18 +205,19 @@ class TestOptimizeOperation(TestCase):
             with self.assertRaises(Exception):
                 self.operation.create_mco()
             capture.check(
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Unable to instantiate optimizer for mco '
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_mco' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "An exception was raised. This might "
-                 'indicate a programming error in the plugin.')
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Unable to instantiate optimizer for mco "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_mco' in plugin "
+                    "'force.bdss.enthought.plugin.test.v0'. "
+                    "An exception was raised. This might "
+                    "indicate a programming error in the plugin.",
+                )
             )
 
     def test_mco_run_exception(self):
-
         def run_func(*args, **kwargs):
             raise Exception("run_func")
 
@@ -221,36 +230,88 @@ class TestOptimizeOperation(TestCase):
             with self.assertRaises(Exception):
                 self.operation.run()
             capture.check(
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Method run() of MCO with id '
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_mco' from plugin "
-                 "'force.bdss.enthought.plugin.test.v0'"
-                 " raised exception. This might indicate "
-                 'a programming error in the plugin.')
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Method run() of MCO with id "
+                    "'force.bdss.enthought.plugin.test.v0"
+                    ".factory.probe_mco' from plugin "
+                    "'force.bdss.enthought.plugin.test.v0'"
+                    " raised exception. This might indicate "
+                    "a programming error in the plugin.",
+                )
             )
 
     def test_progress_event_handling(self):
 
-        self.operation.create_mco()
+        self.operation.mco = self.operation.create_mco()
         listener = self.operation.listeners[0]
-        self.operation.mco.notify_new_point(
-            [DataValue(value=1), DataValue(value=2)],
-            [DataValue(value=3), DataValue(value=4)],
-            [0.5, 0.5])
+
+        expected_log = (
+            "force_bdss.mco.base_mco_model",
+            "WARNING",
+            "Use of the BaseMCOModel.notify_new_point method is now deprecated"
+            " and will be removed in version 0.5.0. Please replace any uses "
+            "of the BaseMCO.notify_new_point method with the "
+            "equivalent BaseMCOModel.notify_progress_event method."
+        )
+
+        with testfixtures.LogCapture() as capture:
+            self.operation.workflow.mco_model.notify_new_point(
+                [DataValue(value=1), DataValue(value=2)],
+                [DataValue(value=3), DataValue(value=4)],
+                [0.5, 0.5],
+            )
+            capture.check(expected_log)
+
         self.assertIsInstance(
-            listener.deliver_call_args[0][0],
-            MCOProgressEvent)
+            listener.deliver_call_args[0][0], MCOProgressEvent
+        )
 
         event = listener.deliver_call_args[0][0]
 
-        self.assertEqual(event.optimal_point[0].value, 1)
-        self.assertEqual(event.optimal_point[1].value, 2)
-        self.assertEqual(event.optimal_kpis[0].value, 3)
-        self.assertEqual(event.optimal_kpis[1].value, 4)
-        self.assertEqual(event.weights[0], 0.5)
-        self.assertEqual(event.weights[0], 0.5)
+        self.assertEqual(1, event.optimal_point[0].value, 1)
+        self.assertEqual(2, event.optimal_point[1].value, 2)
+        self.assertEqual(3, event.optimal_kpis[0].value, 3)
+        self.assertEqual(4, event.optimal_kpis[1].value, 4)
+        self.assertEqual(0.5, event.weights[0], 0.5)
+        self.assertEqual(0.5, event.weights[1], 0.5)
+
+    def test_deprecated_progress_event_handling(self):
+
+        # NOTE: this unit test should be removed alongside BaseMCO.event
+        expected_log = (
+            "force_bdss.mco.base_mco",
+            "WARNING",
+            "Use of the BaseMCO.event attribute is now deprecated and will"
+            " be removed in version 0.5.0. Please replace any uses of the "
+            "BaseMCO.notify and BaseMCO.notify_new_point method with the "
+            "equivalent BaseMCOModel.notify and "
+            "BaseMCOModel.notify_new_point methods respectively",
+        )
+
+        self.operation.mco = self.operation.create_mco()
+        listener = self.operation.listeners[0]
+        with testfixtures.LogCapture() as capture:
+            self.operation.mco.notify_new_point(
+                [DataValue(value=2), DataValue(value=3)],
+                [DataValue(value=4), DataValue(value=5)],
+                weights=[1.5, 1.5],
+            )
+            self.assertIsInstance(
+                listener.deliver_call_args[0][0], MCOProgressEvent
+            )
+
+            event = listener.deliver_call_args[0][0]
+
+            capture.check(expected_log)
+
+            self.assertEqual(2, event.optimal_point[0].value)
+            self.assertEqual(3, event.optimal_point[1].value)
+            self.assertEqual(4, event.optimal_kpis[0].value)
+            self.assertEqual(5, event.optimal_kpis[1].value)
+            self.assertEqual(1.5, event.weights[0])
+            self.assertEqual(1.5, event.weights[1])
 
     def test_run_empty_workflow(self):
 
@@ -264,14 +325,21 @@ class TestOptimizeOperation(TestCase):
             with self.assertRaises(RuntimeError):
                 self.operation.run()
             capture.check(
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Unable to execute workflow due to verification errors:'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR', 'Workflow has no MCO'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Workflow has no execution layers')
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Unable to execute workflow due to verification errors:",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Workflow has no MCO",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Workflow has no execution layers",
+                ),
             )
 
     def test_non_valid_file(self):
@@ -286,18 +354,29 @@ class TestOptimizeOperation(TestCase):
             with self.assertRaises(RuntimeError):
                 self.operation.run()
             capture.check(
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'Unable to execute workflow due to verification errors:'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'The MCO has no defined parameters'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'The MCO has no defined KPIs'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'The number of input slots is incorrect.'),
-                ('force_bdss.app.optimize_operation',
-                 'ERROR',
-                 'The number of output slots is incorrect.'))
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "Unable to execute workflow due to verification errors:",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "The MCO has no defined parameters",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "The MCO has no defined KPIs",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "The number of input slots is incorrect.",
+                ),
+                (
+                    "force_bdss.app.optimize_operation",
+                    "ERROR",
+                    "The number of output slots is incorrect.",
+                ),
+            )

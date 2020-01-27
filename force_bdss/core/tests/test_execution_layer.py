@@ -3,6 +3,8 @@ from unittest import TestCase
 
 import testfixtures
 
+from traits.testing.unittest_tools import UnittestTools
+
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.execution_layer import ExecutionLayer, _bind_data_values
 from force_bdss.core.input_slot_info import InputSlotInfo
@@ -11,10 +13,11 @@ from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
+from force_bdss.core_driver_events import BaseDriverEvent
 from force_bdss.tests import fixtures
 
 
-class TestExecutionLayer(TestCase):
+class TestExecutionLayer(TestCase, UnittestTools):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
@@ -263,6 +266,11 @@ class TestExecutionLayer(TestCase):
     def test_empty_layer_from_json(self):
         layer = ExecutionLayer.from_json(self.registry, {})
         self.assertEqual(0, len(layer.data_sources))
+
+    def test_notify_driver_event(self):
+        with self.assertTraitChanges(
+                self.layer, 'event', count=1):
+            self.layer.data_sources[0].notify(BaseDriverEvent())
 
 
 class TestBindDataValues(TestCase):

@@ -1,7 +1,14 @@
 from copy import deepcopy
 import logging
 
-from traits.api import HasStrictTraits, Instance, List, provides
+from traits.api import (
+    HasStrictTraits,
+    Instance,
+    List,
+    Event,
+    provides,
+    on_trait_change
+)
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
@@ -20,8 +27,8 @@ log = logging.getLogger(__name__)
 class Workflow(HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
-    #: The Workflow MCOModel object.
-    #: Can be None if no MCOModel has been specified yet.
+    #: The Workflow BaseMCOModel object.
+    #: Can be None if no BaseMCOModel has been specified yet.
     mco_model = Instance(BaseMCOModel, allow_none=True)
 
     #: The execution layers. Execution starts from the first layer,
@@ -31,6 +38,9 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
+
+    #: Propagation channel for events from the Workflow objects
+    event = Event()
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
@@ -257,3 +267,14 @@ class Workflow(HasStrictTraits):
             listener = lis_factory.create_model(listener_data["model_data"])
             listeners.append(listener)
         return listeners
+
+    @on_trait_change("mco_model:event,execution_layers:event")
+    def notify_driver_event(self, event):
+        """ Captures a BaseDriverEvent and passes it on to OptimizeOperation
+
+        Parameters
+        ----------
+        event: BaseDriverEvent
+            The BaseDriverEvent that has been changed
+        """
+        self.event = event

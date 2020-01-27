@@ -48,7 +48,7 @@ class OptimizeOperation(HasStrictTraits):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
-        self.create_mco()
+        self.mco = self.create_mco()
         self._deliver_start_event()
 
         try:
@@ -70,7 +70,7 @@ class OptimizeOperation(HasStrictTraits):
         """ Create the MCO from the model's factory. """
         mco_factory = self.workflow.mco_model.factory
         try:
-            self.mco = mco_factory.create_optimizer()
+            mco = mco_factory.create_optimizer()
         except Exception:
             log.exception(
                 (
@@ -84,17 +84,19 @@ class OptimizeOperation(HasStrictTraits):
 
         self._initialize_listeners()
 
+        return mco
+
     def destroy_mco(self):
         self._finalize_listeners()
         self.mco = None
 
     def _deliver_start_event(self):
-        self._deliver_event(self.workflow.mco_model.create_start_event())
+        self.workflow.mco_model.notify_start_event()
 
     def _deliver_finish_event(self):
-        self._deliver_event(self.workflow.mco_model.create_finish_event())
+        self.workflow.mco_model.notify_finish_event()
 
-    @on_trait_change("mco:event")
+    @on_trait_change("workflow_file:workflow:event,mco:event")
     def _deliver_event(self, event):
         """ Delivers an event to the listeners """
         for listener in self.listeners[:]:
