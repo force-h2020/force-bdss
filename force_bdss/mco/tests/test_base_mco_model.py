@@ -1,7 +1,10 @@
 import unittest
+import testfixtures
+import warnings
 
 from traits.testing.api import UnittestTools
 
+from force_bdss.mco.base_mco_model import NotifyMCOProgressWarning
 from force_bdss.core.data_value import DataValue
 from force_bdss.tests.dummy_classes.factory_registry import (
     DummyFactoryRegistry,
@@ -84,3 +87,27 @@ class TestBaseMCOModel(unittest.TestCase, UnittestTools):
                     [DataValue(value=4), DataValue(value=5)],
                     weights=[1.5, 1.5],
                 )
+
+
+class TestNotifyMCOProgressWarning(unittest.TestCase):
+    """NOTE: this class should be removed alongside BaseMCO.event"""
+
+    def test_warn(self):
+
+        expected_message = (
+            "Use of the BaseMCOModel.notify_new_point method is now deprecated"
+            " and will be removed in version 0.5.0. Please replace any uses "
+            "of the BaseMCO.notify_new_point method with the "
+            "equivalent BaseMCOModel.notify_progress_event method."
+        )
+
+        expected_log = ("force_bdss.mco.base_mco_model", "WARNING", expected_message)
+
+        with testfixtures.LogCapture() as capture, warnings.catch_warnings(
+            record=True
+        ) as errors:
+
+            NotifyMCOProgressWarning.warn()
+
+            capture.check(expected_log)
+            self.assertEqual(expected_message, str(errors[0].message))
