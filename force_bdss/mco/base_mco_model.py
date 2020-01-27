@@ -7,7 +7,7 @@ from force_bdss.core.base_model import BaseModel
 from force_bdss.core_driver_events import (
     MCOStartEvent,
     MCOFinishEvent,
-    MCOProgressEvent
+    MCOProgressEvent,
 )
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.verifier import VerifierError
@@ -40,7 +40,9 @@ class BaseMCOModel(BaseModel):
     _start_event_type = Type(MCOStartEvent, visible=False, transient=True)
 
     #: Type of the MCO Start event
-    _progress_event_type = Type(MCOProgressEvent, visible=False, transient=True)
+    _progress_event_type = Type(
+        MCOProgressEvent, visible=False, transient=True
+    )
 
     #: Type of the MCO Start event
     _finish_event_type = Type(MCOFinishEvent, visible=False, transient=True)
@@ -144,16 +146,18 @@ class BaseMCOModel(BaseModel):
 
         return errors
 
-    def create_start_event(self):
+    def notify_start_event(self):
         """ Creates base event indicating the start of the MCO."""
-        return self._start_event_type(
-            parameter_names=list(p.name for p in self.parameters),
-            kpi_names=list(kpi.name for kpi in self.kpis),
+        self.notify(
+            self._start_event_type(
+                parameter_names=list(p.name for p in self.parameters),
+                kpi_names=list(kpi.name for kpi in self.kpis),
+            )
         )
 
-    def create_finish_event(self):
+    def notify_finish_event(self):
         """ Creates base event indicating the finished MCO."""
-        return self._finish_event_type()
+        self.notify(self._finish_event_type())
 
     def notify_new_point(self, optimal_point, optimal_kpis, weights):
         """Notify the discovery of a new optimal point.
@@ -172,11 +176,13 @@ class BaseMCOModel(BaseModel):
             A list of weight values from 0.0 to 1.0 that have been assigned
             for this point to each KPI.
         """
-        self.notify(self._progress_event_type(
-            optimal_point=optimal_point,
-            optimal_kpis=optimal_kpis,
-            weights=weights,
-        ))
+        self.notify(
+            self._progress_event_type(
+                optimal_point=optimal_point,
+                optimal_kpis=optimal_kpis,
+                weights=weights,
+            )
+        )
 
     @classmethod
     def from_json(cls, factory, json_data):
