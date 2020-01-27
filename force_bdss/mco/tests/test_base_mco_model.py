@@ -82,5 +82,5 @@ class TestBaseMCOModel(unittest.TestCase, UnittestTools):
                 workflow.mco_model.notify_new_point(
                     [DataValue(value=2), DataValue(value=3)],
                     [DataValue(value=4), DataValue(value=5)],
-                    [1.5, 1.5],
+                    weights=[1.5, 1.5],
                 )
