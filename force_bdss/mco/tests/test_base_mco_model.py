@@ -87,16 +87,6 @@ class TestBaseMCOModel(unittest.TestCase, UnittestTools):
                     [DataValue(value=4), DataValue(value=5)]
                 )
 
-        # NOTE: this functionality is deprecated and therefore the test
-        # should be removed alongside BaseMCOModel.notify_new_point
-        with self.assertTraitChanges(workflow, "event", count=1):
-            with self.assertTraitChanges(workflow.mco_model, "event", count=1):
-                workflow.mco_model.notify_new_point(
-                    [DataValue(value=2), DataValue(value=3)],
-                    [DataValue(value=4), DataValue(value=5)],
-                    weights=[1.5, 1.5],
-                )
-
 
 class TestNotifyMCOProgressWarning(unittest.TestCase):
     """NOTE: this class should be removed alongside BaseMCO.event"""

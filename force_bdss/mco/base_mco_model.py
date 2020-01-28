@@ -8,8 +8,7 @@ from force_bdss.core.base_model import BaseModel
 from force_bdss.core_driver_events import (
     MCOStartEvent,
     MCOFinishEvent,
-    MCOProgressEvent,
-    WeightedMCOProgressEvent
+    MCOProgressEvent
 )
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.verifier import VerifierError
@@ -175,32 +174,6 @@ class BaseMCOModel(BaseModel):
     def notify_finish_event(self):
         """ Creates base event indicating the finished MCO."""
         self.notify(self._finish_event_type())
-
-    def notify_new_point(self, optimal_point, optimal_kpis, weights):
-        """Notify the discovery of a new optimal point.
-
-        Parameters
-        ----------
-        optimal_point: List(Instance(DataValue))
-            A list of DataValue objects describing the point in parameter
-            space that produces an optimised result.
-
-        optimal_kpis: List(Instance(DataValue))
-            A list of DataValue objects describing the KPI values resulting
-            from the optimal_point values above.
-
-        weights: List(Float)
-             A list of weight values from 0.0 to 1.0 that have been assigned
-             for this point to each KPI.
-        """
-        NotifyMCOProgressWarning.warn()
-        self.notify(
-            WeightedMCOProgressEvent(
-                optimal_point=optimal_point,
-                optimal_kpis=optimal_kpis,
-                weights=weights,
-            )
-        )
 
     def notify_progress_event(self, optimal_point, optimal_kpis, **kwargs):
         """Notify the discovery of a new optimal point.
