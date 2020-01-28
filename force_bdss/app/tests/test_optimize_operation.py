@@ -273,7 +273,7 @@ class TestOptimizeOperation(TestCase):
             " be removed in version 0.5.0. Please replace any uses of the "
             "BaseMCO.notify and BaseMCO.notify_new_point method with the "
             "equivalent BaseMCOModel.notify and "
-            "BaseMCOModel.notify_new_point methods respectively",
+            "BaseMCOModel.notify_progress_event methods respectively",
         )
 
         self.operation.mco = self.operation.create_mco()

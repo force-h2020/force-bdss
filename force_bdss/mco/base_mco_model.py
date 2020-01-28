@@ -1,6 +1,5 @@
 from copy import deepcopy
 import logging
-import warnings
 
 from traits.api import Instance, List, Type
 
@@ -17,21 +16,6 @@ from .i_mco_factory import IMCOFactory
 
 
 log = logging.getLogger(__name__)
-
-
-class NotifyMCOProgressWarning:
-
-    warning_message = (
-        "Use of the BaseMCOModel.notify_new_point method is now deprecated"
-        " and will be removed in version 0.5.0. Please replace any uses "
-        "of the BaseMCO.notify_new_point method with the "
-        "equivalent BaseMCOModel.notify_progress_event method."
-    )
-
-    @classmethod
-    def warn(cls):
-        log.warning(cls.warning_message)
-        warnings.warn(cls.warning_message, DeprecationWarning)
 
 
 class BaseMCOModel(BaseModel):
