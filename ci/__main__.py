@@ -7,15 +7,19 @@ from subprocess import check_call
 DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
 
-CORE_DEPS = ["envisage==4.7.2-1", "click==7.0-1"]
+CORE_DEPS = ["envisage==4.8.0-3",
+             "click==7.0-1"]
 
 DOCS_DEPS = ["sphinx==1.8.5-3"]
 
-DEV_DEPS = ["flake8==3.7.7-1", "coverage==4.3.4-1", "testfixtures==4.10.0-1"]
+DEV_DEPS = ["flake8==3.7.7-1",
+            "coverage==4.3.4-1",
+            "testfixtures==4.10.0-1"]
 
 PIP_DEPS = ["stevedore==1.30.1"]
 
-ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2", "scipy>=1.2.1"]
+ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
+                        "scipy>=1.2.1"]
 
 
 @click.group()
