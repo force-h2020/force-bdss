@@ -9,6 +9,7 @@ from force_bdss.core_driver_events import (
     MCOStartEvent,
     MCOFinishEvent,
     MCOProgressEvent,
+    WeightedMCOProgressEvent
 )
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.verifier import VerifierError
@@ -194,7 +195,7 @@ class BaseMCOModel(BaseModel):
         """
         NotifyMCOProgressWarning.warn()
         self.notify(
-            self._progress_event_type(
+            self.WeightedMCOProgressEvent(
                 optimal_point=optimal_point,
                 optimal_kpis=optimal_kpis,
                 weights=weights,

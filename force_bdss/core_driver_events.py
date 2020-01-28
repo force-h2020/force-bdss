@@ -62,27 +62,17 @@ class MCOProgressEvent(BaseDriverEvent):
     #: The associated KPIs to the above point
     optimal_kpis = List(Instance(DataValue))
 
-    #: The weights assigned to the KPIs
-    weights = List(Float())
-
     def serialize(self):
         """ Provides serialized form of MCOProgressEvent for further data storage
         (e.g. in csv format) or processing.
-
-        Note: this code duplicates the MCOProgressEvent handler in
-        `force_wfmanager.wfmanager_setup_task._server_event_mainthread`
-        Can we refactor this?
-
-        Warning: `weights` attribute is NOT serialized here. We expect it to be
-        refactored to custom MCOProgressEvent class.
 
         Usage example:
         For a custom MCOProgressEvent subclass, this method can be overloaded.
         An example of a custom `serialize` method would be:
         >>> class CustomMCOProgressEvent(MCOProgressEvent):
-        >>>     weights = List(Float())
+        >>>     metadata = List(Float)
         >>>     def serialize(self):
-        >>>         return super().serialize() + self.weights
+        >>>         return super().serialize() + self.metadata
         >>>
 
         Returns:
@@ -90,3 +80,14 @@ class MCOProgressEvent(BaseDriverEvent):
         """
         event_datavalues = self.optimal_point + self.optimal_kpis
         return [entry.value for entry in event_datavalues]
+
+
+class WeightedMCOProgressEvent(MCOProgressEvent):
+    """Allows reporting of weights generated during an MCO by a
+    WeightedOptimizerEngine"""
+
+    #: Weights assigned to each KPI during the MCO optimization
+    weights = List(Float())
+
+    def serialize(self):
+        return super().serialize() + self.weights
