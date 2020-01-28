@@ -34,9 +34,9 @@ class MCOStartEvent(BaseDriverEvent):
         For a custom MCOStartEvent subclass, this method can be overloaded.
         An example of a custom `serialize` method would be:
         >>> class CustomMCOStartEvent(MCOStartEvent):
-        >>>     weights = List(Float())
+        >>>
         >>>     def serialize(self):
-        >>>         custom_data = [f"{name}_weight" for name in self.kpi_names]
+        >>>         custom_data = [f"{name} data" for name in self.kpi_names]
         >>>         return super().serialize() + custom_data
         >>>
 
@@ -44,6 +44,19 @@ class MCOStartEvent(BaseDriverEvent):
             List(Unicode): event parameters names and kpi names
         """
         return self.parameter_names + self.kpi_names
+
+
+class WeightedMCOStartEvent(MCOStartEvent):
+    """Initializes reporting of weights generated during an MCO by a
+    WeightedOptimizerEngine"""
+
+    def serialize(self):
+        """Overloaded method to provide weights alongside each
+        reported KPI"""
+        value_names = self.parameter_names
+        for kpi_name in self.kpi_names:
+            value_names.extend([kpi_name, kpi_name + " weight"])
+        return value_names
 
 
 class MCOFinishEvent(BaseDriverEvent):
@@ -90,4 +103,9 @@ class WeightedMCOProgressEvent(MCOProgressEvent):
     weights = List(Float())
 
     def serialize(self):
-        return super().serialize() + self.weights
+        """Overloaded method to provide weights alongside each
+        reported KPI"""
+        event_datavalues = [entry.value for entry in self.optimal_point]
+        for kpi, weight in zip(self.optimal_kpis, self.weights):
+            event_datavalues.extend([kpi.value, weight])
+        return event_datavalues
