@@ -6,7 +6,7 @@ from traits.api import (
     ABCHasStrictTraits, Event, Instance
 )
 
-from force_bdss.core_driver_events import MCOProgressEvent
+from force_bdss.core_driver_events import WeightedMCOProgressEvent
 
 from .i_mco_factory import IMCOFactory
 
@@ -79,11 +79,13 @@ class BaseMCO(ABCHasStrictTraits):
             A list of weight values from 0.0 to 1.0 that have been assigned
             for this point to each KPI.
         """
-        self.notify(MCOProgressEvent(
-            optimal_point=optimal_point,
-            optimal_kpis=optimal_kpis,
-            weights=weights,
-        ))
+        self.notify(
+            WeightedMCOProgressEvent(
+                optimal_point=optimal_point,
+                optimal_kpis=optimal_kpis,
+                weights=weights,
+            )
+        )
 
     def notify(self, event):
         """Notify the listeners with an event. The notification will be

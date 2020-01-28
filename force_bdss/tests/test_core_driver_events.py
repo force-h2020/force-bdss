@@ -5,6 +5,7 @@ from traits.api import Instance, Int
 from force_bdss.core.data_value import DataValue
 from force_bdss.core_driver_events import (
     MCOProgressEvent,
+    WeightedMCOProgressEvent,
     MCOStartEvent,
     MCOFinishEvent,
     BaseDriverEvent,
@@ -20,8 +21,7 @@ class TestCoreDriverEvents(unittest.TestCase):
     def test_getstate_progress_event(self):
         ev = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
-            optimal_point=[DataValue(value=12), DataValue(value=13)],
-            weights=[1.0],
+            optimal_point=[DataValue(value=12), DataValue(value=13)]
         )
 
         self.assertEqual(
@@ -51,8 +51,7 @@ class TestCoreDriverEvents(unittest.TestCase):
                         "type": "",
                         "value": 13,
                     },
-                ],
-                "weights": [1.0],
+                ]
             },
         )
 
@@ -98,7 +97,14 @@ class TestCoreDriverEvents(unittest.TestCase):
         event = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
             optimal_point=[DataValue(value=12), DataValue(value=13)],
-            weights=[1.0],
         )
 
         self.assertListEqual(event.serialize(), [12, 13, 10])
+
+        event = WeightedMCOProgressEvent(
+            optimal_kpis=[DataValue(value=10)],
+            optimal_point=[DataValue(value=12), DataValue(value=13)],
+            weights=[1.0],
+        )
+
+        self.assertListEqual(event.serialize(), [12, 13, 10, 1.0])

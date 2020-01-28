@@ -195,7 +195,7 @@ class BaseMCOModel(BaseModel):
         """
         NotifyMCOProgressWarning.warn()
         self.notify(
-            self.WeightedMCOProgressEvent(
+            WeightedMCOProgressEvent(
                 optimal_point=optimal_point,
                 optimal_kpis=optimal_kpis,
                 weights=weights,
