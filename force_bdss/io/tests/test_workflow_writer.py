@@ -1,5 +1,6 @@
 import json
 import unittest
+import tempfile
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
@@ -46,7 +47,8 @@ class TestWorkflowWriter(unittest.TestCase):
         wfwriter = WorkflowWriter()
         workflow = self.sample_workflow()
 
-        filename = "tmp.json"
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
         with open(filename) as f:
             result = json.load(f)
@@ -60,7 +62,8 @@ class TestWorkflowWriter(unittest.TestCase):
         wfwriter = WorkflowWriter()
         workflow = self.sample_workflow()
 
-        filename = "tmp.json"
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
@@ -84,7 +87,8 @@ class TestWorkflowWriter(unittest.TestCase):
         workflow = Workflow()
         wfwriter = WorkflowWriter()
 
-        filename = "tmp.json"
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
