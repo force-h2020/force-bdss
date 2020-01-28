@@ -47,7 +47,8 @@ class TestWorkflowWriter(unittest.TestCase):
         wfwriter = WorkflowWriter()
         workflow = self.sample_workflow()
 
-        filename = tempfile.mktemp()
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
         with open(filename) as f:
             result = json.load(f)
@@ -61,7 +62,8 @@ class TestWorkflowWriter(unittest.TestCase):
         wfwriter = WorkflowWriter()
         workflow = self.sample_workflow()
 
-        filename = tempfile.mktemp()
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
@@ -85,7 +87,8 @@ class TestWorkflowWriter(unittest.TestCase):
         workflow = Workflow()
         wfwriter = WorkflowWriter()
 
-        filename = tempfile.mktemp()
+        tmp_file = tempfile.NamedTemporaryFile()
+        filename = tmp_file.name
         wfwriter.write(workflow, filename)
 
         wfreader = WorkflowReader(self.registry)
