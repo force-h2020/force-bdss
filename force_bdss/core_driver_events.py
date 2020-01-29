@@ -26,6 +26,26 @@ class BaseDriverEvent(HasStrictTraits):
 
     @staticmethod
     def get_event_class(id_string):
+        """Retrieve the class object from the id_string
+
+        Parameters
+        ----------
+        id_string: str
+            The string containing the path to the class definition.
+
+        Returns
+        -------
+        cls: BaseDriverEvent subclass
+
+        Raises
+        ------
+        ImportError
+            If the path from the `id_string` is an incorrect
+             reference
+        DriverEventTypeError
+            If the class from the `id_string` is not a subclass of
+            BaseDriverEvent
+        """
         class_module, class_name = id_string.rsplit(".", 1)
         module = importlib.import_module(class_module)
         try:
@@ -44,9 +64,26 @@ class BaseDriverEvent(HasStrictTraits):
         return cls
 
     @classmethod
-    def from_json(cls, data):
-        klass = cls.get_event_class(data["id"])
-        return klass(**data["model_data"])
+    def from_json(cls, json_data):
+        """ Instantiate a BaseDriverEvent object from a `json_data`
+        dictionary and the generating `factory_registry`.
+        If the `json_data` is an empty dict, the `data_sources`
+        attribute will be an empty list.
+
+        Parameters
+        ----------
+        json_data: dict
+            Dictionary with an execution layer serialized data
+
+        Returns
+        ----------
+        event: BaseDriverEvent
+            BaseDriverEvent or a subclass of BaseDriverEvent instance
+            with attributes values from the `json_data` dict
+        """
+        klass = cls.get_event_class(json_data["id"])
+        event = klass(**json_data["model_data"])
+        return event
 
 
 class MCOStartEvent(BaseDriverEvent):
