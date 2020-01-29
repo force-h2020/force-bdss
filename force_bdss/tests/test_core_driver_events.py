@@ -228,12 +228,12 @@ class TestCoreDriverEvents(unittest.TestCase):
         self.assertDictEqual(event.__getstate__(), data)
 
         start_data = {
-                "model_data": {
-                    "parameter_names": ["p1", "p2"],
-                    "kpi_names": ["k1", "k2", "k3"],
-                },
-                "id": "force_bdss.core_driver_events.MCOStartEvent",
-            }
+            "model_data": {
+                "parameter_names": ["p1", "p2"],
+                "kpi_names": ["k1", "k2", "k3"],
+            },
+            "id": "force_bdss.core_driver_events.MCOStartEvent",
+        }
         start_event = BaseDriverEvent.from_json(start_data)
         self.assertIsInstance(start_event, MCOStartEvent)
         self.assertDictEqual(start_event.__getstate__(), start_data)
@@ -245,3 +245,37 @@ class TestCoreDriverEvents(unittest.TestCase):
         finish_event = BaseDriverEvent.from_json(finish_data)
         self.assertIsInstance(finish_event, MCOFinishEvent)
         self.assertDictEqual(finish_event.__getstate__(), finish_data)
+
+        progress_data = {
+            "id": "force_bdss.core_driver_events.MCOProgressEvent",
+            "model_data": {
+                "optimal_kpis": [
+                    {
+                        "accuracy": None,
+                        "name": "",
+                        "quality": "AVERAGE",
+                        "type": "",
+                        "value": 10,
+                    }
+                ],
+                "optimal_point": [
+                    {
+                        "accuracy": None,
+                        "name": "",
+                        "quality": "AVERAGE",
+                        "type": "",
+                        "value": 12,
+                    },
+                    {
+                        "accuracy": None,
+                        "name": "",
+                        "quality": "AVERAGE",
+                        "type": "",
+                        "value": 13,
+                    },
+                ],
+            },
+        }
+        progress_event = BaseDriverEvent.from_json(progress_data)
+        self.assertIsInstance(progress_event, MCOProgressEvent)
+        self.assertDictEqual(progress_event.__getstate__(), progress_data)

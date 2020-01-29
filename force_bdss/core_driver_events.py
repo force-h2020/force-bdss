@@ -1,12 +1,25 @@
 import importlib
+from copy import deepcopy
 
-from traits.api import HasStrictTraits, List, Instance, Float, Unicode
+from traits.api import (
+    HasStrictTraits,
+    List,
+    Instance,
+    Float,
+    Unicode,
+    TraitError,
+)
 
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
 
 class DriverEventTypeError(TypeError):
+    """Raised when a BaseDriverEvent is attempted to be instantiated with a
+     class that is not a subclass of BaseDriverEvent."""
+
+
+class DriverEventDeserializationError(TypeError):
     """Raised when a BaseDriverEvent is attempted to be instantiated with a
      class that is not a subclass of BaseDriverEvent."""
 
@@ -70,6 +83,13 @@ class BaseDriverEvent(HasStrictTraits):
         If the `json_data` is an empty dict, the `data_sources`
         attribute will be an empty list.
 
+        First, the method attempts to create an instance by passing
+        the json_data["model_data"] data to the default traits init
+        method (as a dictionary). If the attributes of the new instance
+        can't be initialized that way (for instance, if they are custom
+        traits objects themselves), the method uses the `klass.from_json`
+        method. If this was not successful, an Exception is raised.
+
         Parameters
         ----------
         json_data: dict
@@ -82,7 +102,15 @@ class BaseDriverEvent(HasStrictTraits):
             with attributes values from the `json_data` dict
         """
         klass = cls.get_event_class(json_data["id"])
-        event = klass(**json_data["model_data"])
+        try:
+            event = klass(**json_data["model_data"])
+        except TraitError:
+            try:
+                event = klass.from_json(json_data["model_data"])
+            except Exception:
+                error_message = ""
+                raise DriverEventDeserializationError(error_message)
+
         return event
 
 
@@ -163,6 +191,17 @@ class MCOProgressEvent(BaseDriverEvent):
         """
         event_datavalues = self.optimal_point + self.optimal_kpis
         return [entry.value for entry in event_datavalues]
+
+    @classmethod
+    def from_json(cls, json_data):
+        data = deepcopy(json_data)
+        data["optimal_point"] = [
+            DataValue(**data) for data in data["optimal_point"]
+        ]
+        data["optimal_kpis"] = [
+            DataValue(**data) for data in data["optimal_kpis"]
+        ]
+        return cls(**data)
 
 
 class WeightedMCOProgressEvent(MCOProgressEvent):
