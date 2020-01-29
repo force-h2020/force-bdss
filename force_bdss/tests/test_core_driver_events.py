@@ -117,3 +117,20 @@ class TestCoreDriverEvents(unittest.TestCase):
         )
 
         self.assertListEqual([12, 13, 10, 1.0], event.serialize())
+
+    def test_default_weights_weighted_progress_event(self):
+        event = WeightedMCOProgressEvent(
+            optimal_kpis=[DataValue(value=10)],
+            optimal_point=[DataValue(value=12), DataValue(value=13)],
+        )
+        self.assertEqual(len(event.optimal_kpis), len(event.weights))
+        self.assertListEqual(event.weights, [1.0 / len(event.optimal_kpis)] * len(event.optimal_kpis))
+        self.assertEqual(event.serialize(), [12, 13, 10, 1.0])
+
+        event = WeightedMCOProgressEvent(
+            optimal_kpis=[],
+            optimal_point=[DataValue(value=12), DataValue(value=13)],
+        )
+        self.assertEqual(len(event.optimal_kpis), len(event.weights))
+        self.assertListEqual(event.weights, [])
+        self.assertEqual(event.serialize(), [12, 13])
