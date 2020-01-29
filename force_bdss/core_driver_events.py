@@ -102,6 +102,12 @@ class WeightedMCOProgressEvent(MCOProgressEvent):
     #: Weights assigned to each KPI during the MCO optimization
     weights = List(Float())
 
+    def _weights_default(self):
+        """Default weights are normalised and uniform for each KPI"""
+        if self.optimal_kpis:
+            return [1 / len(self.optimal_kpis)] * len(self.optimal_kpis)
+        return []
+
     def serialize(self):
         """Overloaded method to provide weights alongside each
         reported KPI"""
