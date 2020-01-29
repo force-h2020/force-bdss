@@ -22,7 +22,7 @@ class TestCoreDriverEvents(unittest.TestCase):
     def test_getstate_progress_event(self):
         ev = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
-            optimal_point=[DataValue(value=12), DataValue(value=13)]
+            optimal_point=[DataValue(value=12), DataValue(value=13)],
         )
 
         self.assertEqual(
@@ -52,7 +52,7 @@ class TestCoreDriverEvents(unittest.TestCase):
                         "type": "",
                         "value": 13,
                     },
-                ]
+                ],
             },
         )
 
@@ -92,15 +92,24 @@ class TestCoreDriverEvents(unittest.TestCase):
         event = MCOStartEvent(
             parameter_names=["p1", "p2"], kpi_names=["k1", "k2", "k3"]
         )
-        self.assertListEqual(
-            ["p1", "p2", "k1", "k2", "k3"], event.serialize())
+        self.assertListEqual(["p1", "p2", "k1", "k2", "k3"], event.serialize())
 
         event = WeightedMCOStartEvent(
             parameter_names=["p1", "p2"], kpi_names=["k1", "k2", "k3"]
         )
         self.assertListEqual(
-            ["p1", "p2", "k1", "k1 weight",
-             "k2", "k2 weight", "k3", "k3 weight"], event.serialize())
+            [
+                "p1",
+                "p2",
+                "k1",
+                "k1 weight",
+                "k2",
+                "k2 weight",
+                "k3",
+                "k3 weight",
+            ],
+            event.serialize(),
+        )
 
     def test_serialize_progress_event(self):
         event = MCOProgressEvent(
@@ -124,7 +133,10 @@ class TestCoreDriverEvents(unittest.TestCase):
             optimal_point=[DataValue(value=12), DataValue(value=13)],
         )
         self.assertEqual(len(event.optimal_kpis), len(event.weights))
-        self.assertListEqual(event.weights, [1.0 / len(event.optimal_kpis)] * len(event.optimal_kpis))
+        self.assertListEqual(
+            event.weights,
+            [1.0 / len(event.optimal_kpis)] * len(event.optimal_kpis),
+        )
         self.assertEqual(event.serialize(), [12, 13, 10, 1.0])
 
         event = WeightedMCOProgressEvent(
