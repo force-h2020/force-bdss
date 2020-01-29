@@ -18,7 +18,7 @@ class TestNotifyEventWarning(unittest.TestCase):
             " be removed in version 0.5.0. Please replace any uses of the "
             "BaseMCO.notify and BaseMCO.notify_new_point method with the "
             "equivalent BaseMCOModel.notify and "
-            "BaseMCOModel.notify_new_point methods respectively")
+            "BaseMCOModel.notify_progress_event methods respectively")
 
         expected_log = (
             "force_bdss.mco.base_mco",

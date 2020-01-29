@@ -21,7 +21,7 @@ class NotifyEventWarning:
         " be removed in version 0.5.0. Please replace any uses of the "
         "BaseMCO.notify and BaseMCO.notify_new_point method with the "
         "equivalent BaseMCOModel.notify and "
-        "BaseMCOModel.notify_new_point methods respectively"
+        "BaseMCOModel.notify_progress_event methods respectively"
     )
 
     @classmethod
@@ -63,7 +63,7 @@ class BaseMCO(ABCHasStrictTraits):
         """
 
     def notify_new_point(self, optimal_point, optimal_kpis, weights):
-        """Notify the discovery of a new optimal point.
+        """DEPRECATED: Notify the discovery of a new optimal point.
 
         Parameters
         ----------
@@ -78,12 +78,17 @@ class BaseMCO(ABCHasStrictTraits):
         weights: List(Float())
             A list of weight values from 0.0 to 1.0 that have been assigned
             for this point to each KPI.
+
+            NOTE: currently these are not
+            passed into the MCOProgress event, and we only include the
+            argument to fulfil backwards compatibility
         """
-        self.notify(MCOProgressEvent(
-            optimal_point=optimal_point,
-            optimal_kpis=optimal_kpis,
-            weights=weights,
-        ))
+        self.notify(
+            MCOProgressEvent(
+                optimal_point=optimal_point,
+                optimal_kpis=optimal_kpis
+            )
+        )
 
     def notify(self, event):
         """Notify the listeners with an event. The notification will be
