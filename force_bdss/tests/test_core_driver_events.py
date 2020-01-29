@@ -217,3 +217,31 @@ class TestCoreDriverEvents(unittest.TestCase):
             f"requested by the event with id {data['id']}",
         ):
             BaseDriverEvent.get_event_class(data["id"])
+
+    def test_from_json(self):
+        data = {
+            "id": "force_bdss.core_driver_events.BaseDriverEvent",
+            "model_data": {},
+        }
+        event = BaseDriverEvent.from_json(data)
+        self.assertIsInstance(event, BaseDriverEvent)
+        self.assertDictEqual(event.__getstate__(), data)
+
+        start_data = {
+                "model_data": {
+                    "parameter_names": ["p1", "p2"],
+                    "kpi_names": ["k1", "k2", "k3"],
+                },
+                "id": "force_bdss.core_driver_events.MCOStartEvent",
+            }
+        start_event = BaseDriverEvent.from_json(start_data)
+        self.assertIsInstance(start_event, MCOStartEvent)
+        self.assertDictEqual(start_event.__getstate__(), start_data)
+
+        finish_data = {
+            "id": "force_bdss.core_driver_events.MCOFinishEvent",
+            "model_data": {},
+        }
+        finish_event = BaseDriverEvent.from_json(finish_data)
+        self.assertIsInstance(finish_event, MCOFinishEvent)
+        self.assertDictEqual(finish_event.__getstate__(), finish_data)
