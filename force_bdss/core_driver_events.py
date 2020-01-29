@@ -1,7 +1,14 @@
+import importlib
+
 from traits.api import HasStrictTraits, List, Instance, Float, Unicode
 
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
+
+
+class DriverEventTypeError(TypeError):
+    """Raised when a BaseDriverEvent is attempted to be instantiated with a
+     class that is not a subclass of BaseDriverEvent."""
 
 
 class BaseDriverEvent(HasStrictTraits):
@@ -16,6 +23,30 @@ class BaseDriverEvent(HasStrictTraits):
         id = ".".join((self.__class__.__module__, self.__class__.__name__))
         state = {"model_data": state, "id": id}
         return state
+
+    @staticmethod
+    def get_event_class(id_string):
+        class_module, class_name = id_string.rsplit(".", 1)
+        module = importlib.import_module(class_module)
+        try:
+            cls = getattr(module, class_name)
+        except AttributeError:
+            error_message = (
+                f"Unable to locate the class definition {class_name} "
+                f"in module {module} requested by the event with "
+                f"id {id_string}"
+            )
+            raise ImportError(error_message)
+        if not issubclass(cls, BaseDriverEvent):
+            raise DriverEventTypeError(
+                f"Class {cls} must be a subclass of BaseDriverEvent"
+            )
+        return cls
+
+    @classmethod
+    def from_json(cls, data):
+        klass = cls.get_event_class(data["id"])
+        return klass(**data["model_data"])
 
 
 class MCOStartEvent(BaseDriverEvent):
