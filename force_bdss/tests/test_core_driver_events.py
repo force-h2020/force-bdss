@@ -28,31 +28,34 @@ class TestCoreDriverEvents(unittest.TestCase):
         self.assertEqual(
             ev.__getstate__(),
             {
-                "optimal_kpis": [
-                    {
-                        "accuracy": None,
-                        "name": "",
-                        "quality": "AVERAGE",
-                        "type": "",
-                        "value": 10,
-                    }
-                ],
-                "optimal_point": [
-                    {
-                        "accuracy": None,
-                        "name": "",
-                        "quality": "AVERAGE",
-                        "type": "",
-                        "value": 12,
-                    },
-                    {
-                        "accuracy": None,
-                        "name": "",
-                        "quality": "AVERAGE",
-                        "type": "",
-                        "value": 13,
-                    },
-                ],
+                "id": "force_bdss.core_driver_events.MCOProgressEvent",
+                "model_data": {
+                    "optimal_kpis": [
+                        {
+                            "accuracy": None,
+                            "name": "",
+                            "quality": "AVERAGE",
+                            "type": "",
+                            "value": 10,
+                        }
+                    ],
+                    "optimal_point": [
+                        {
+                            "accuracy": None,
+                            "name": "",
+                            "quality": "AVERAGE",
+                            "type": "",
+                            "value": 12,
+                        },
+                        {
+                            "accuracy": None,
+                            "name": "",
+                            "quality": "AVERAGE",
+                            "type": "",
+                            "value": 13,
+                        },
+                    ],
+                },
             },
         )
 
@@ -62,28 +65,49 @@ class TestCoreDriverEvents(unittest.TestCase):
         )
         self.assertDictEqual(
             event.__getstate__(),
-            {"parameter_names": ["p1", "p2"], "kpi_names": ["k1", "k2", "k3"]},
+            {
+                "model_data": {
+                    "parameter_names": ["p1", "p2"],
+                    "kpi_names": ["k1", "k2", "k3"],
+                },
+                "id": "force_bdss.core_driver_events.MCOStartEvent",
+            },
         )
 
     def test_getstate_finish_event(self):
         event = MCOFinishEvent()
-        self.assertFalse(event.__getstate__())
+        self.assertDictEqual(
+            event.__getstate__(),
+            {
+                "model_data": {},
+                "id": "force_bdss.core_driver_events.MCOFinishEvent",
+            },
+        )
 
     def test_getstate_base_event(self):
         event = BaseDriverEvent()
-        self.assertFalse(event.__getstate__())
+        self.assertDictEqual(
+            event.__getstate__(),
+            {
+                "id": "force_bdss.core_driver_events.BaseDriverEvent",
+                "model_data": {},
+            },
+        )
 
         event = DummyEvent(stateful_data=DataValue(value=1))
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "stateless_data": 1,
-                "stateful_data": {
-                    "accuracy": None,
-                    "name": "",
-                    "quality": "AVERAGE",
-                    "type": "",
-                    "value": 1,
+                "id": "force_bdss.tests.test_core_driver_events.DummyEvent",
+                "model_data": {
+                    "stateless_data": 1,
+                    "stateful_data": {
+                        "accuracy": None,
+                        "name": "",
+                        "quality": "AVERAGE",
+                        "type": "",
+                        "value": 1,
+                    },
                 },
             },
         )

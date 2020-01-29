@@ -13,6 +13,8 @@ class BaseDriverEvent(HasStrictTraits):
         """
         state = pop_dunder_recursive(super().__getstate__())
         state = nested_getstate(state)
+        id = ".".join((self.__class__.__module__, self.__class__.__name__))
+        state = {"model_data": state, "id": id}
         return state
 
 
