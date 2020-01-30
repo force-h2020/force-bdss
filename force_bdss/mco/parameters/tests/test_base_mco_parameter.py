@@ -19,18 +19,23 @@ class TestBaseMCOParameter(unittest.TestCase):
     def setUp(self):
         self.registry = ProbeFactoryRegistry()
         self.plugin = self.registry.plugin
+        self.mco_factory = ProbeMCOFactory(self.plugin)
 
     def test_instantiation(self):
-        mco_factory = ProbeMCOFactory(self.plugin)
-        factory = ProbeParameterFactory(mco_factory)
+        factory = ProbeParameterFactory(self.mco_factory)
         param = ProbeParameter(factory)
         self.assertEqual(param.factory, factory)
 
-    def test_from_json(self):
-        mco_factory = ProbeMCOFactory(self.plugin)
-        parameter_factory = mco_factory.parameter_factories[0]
+    def test_cuba_type(self):
+        parameter_factory = self.mco_factory.parameter_factories[0]
+        parameter = parameter_factory.create_model(
+            {'cuba_type': 'Volume'}
+        )
 
-        parameter_data = {"name": "name", "type": "type"}
+    def test_from_json(self):
+        parameter_factory = self.mco_factory.parameter_factories[0]
+
+        parameter_data = {"name": "name", "cuba_type": "type"}
         parameter = ProbeParameter.from_json(parameter_factory, parameter_data)
         self.assertDictEqual(
             parameter.__getstate__(),
@@ -41,4 +46,4 @@ class TestBaseMCOParameter(unittest.TestCase):
             },
         )
 
-        self.assertDictEqual(parameter_data, {"name": "name", "type": "type"})
+        self.assertDictEqual(parameter_data, {"name": "name", "cuba_type": "type"})
