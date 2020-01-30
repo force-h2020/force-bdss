@@ -17,7 +17,7 @@ from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
 from force_bdss.mco.i_evaluator import IEvaluator
 from force_bdss.core.data_value import DataValue
-from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
+from force_bdss.utilities import pop_dunder_recursive, nested_getstate
 
 
 log = logging.getLogger(__name__)

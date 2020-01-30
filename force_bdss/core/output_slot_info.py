@@ -1,8 +1,8 @@
 from traits.api import HasStrictTraits
 
 from force_bdss.core.verifier import VerifierError
-from force_bdss.core.base_model import pop_dunder_recursive
 from force_bdss.local_traits import Identifier
+from force_bdss.utilities import pop_dunder_recursive
 
 
 class OutputSlotInfo(HasStrictTraits):

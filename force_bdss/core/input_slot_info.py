@@ -1,7 +1,8 @@
 from traits.api import HasStrictTraits, Enum
 
-from force_bdss.core.base_model import pop_dunder_recursive
 from force_bdss.local_traits import Identifier
+from force_bdss.utilities import pop_dunder_recursive
+
 from .verifier import VerifierError
 
 
