@@ -130,7 +130,13 @@ class BaseDriverEvent(HasStrictTraits):
 
     @classmethod
     def loads_json(cls, data):
-        json_data = json.loads(data)
+        try:
+            json_data = json.loads(data)
+        except json.JSONDecodeError as e:
+            raise DriverEventDeserializationError(
+                f"Data object {data} is not compatible "
+                f"with the json.loads method and raises {e}"
+            )
         return cls.from_json(json_data)
 
 
