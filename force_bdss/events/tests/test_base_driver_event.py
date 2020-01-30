@@ -1,18 +1,12 @@
 import unittest
 
-from traits.api import Instance, Int
-
+from force_bdss.tests.dummy_classes.notification_listener import DummyEvent
 from force_bdss.core.data_value import DataValue
 from force_bdss.events.base_driver_event import (
     BaseDriverEvent,
     DriverEventTypeError,
     DriverEventDeserializationError,
 )
-
-
-class DummyEvent(BaseDriverEvent):
-    stateless_data = Int(1)
-    stateful_data = Instance(DataValue)
 
 
 class TestBaseDriverEvent(unittest.TestCase):
@@ -31,8 +25,8 @@ class TestBaseDriverEvent(unittest.TestCase):
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "id": "force_bdss.events.tests"
-                      ".test_base_driver_event.DummyEvent",
+                "id": "force_bdss.tests.dummy_classes"
+                      ".notification_listener.DummyEvent",
                 "model_data": {
                     "stateless_data": 1,
                     "stateful_data": {
