@@ -1,5 +1,6 @@
-import importlib
 from copy import deepcopy
+import importlib
+import json
 
 from traits.api import (
     HasStrictTraits,
@@ -36,6 +37,9 @@ class BaseDriverEvent(HasStrictTraits):
         id = ".".join((self.__class__.__module__, self.__class__.__name__))
         state = {"model_data": state, "id": id}
         return state
+
+    def dumps_json(self):
+        return json.dumps(self.__getstate__())
 
     @staticmethod
     def get_event_class(id_string):
@@ -117,6 +121,10 @@ class BaseDriverEvent(HasStrictTraits):
                 raise DriverEventDeserializationError(error_message)
 
         return event
+
+    @classmethod
+    def loads_json(cls, data):
+        return cls.from_json(json.loads(data))
 
 
 class MCOStartEvent(BaseDriverEvent):
