@@ -21,6 +21,10 @@ PIP_DEPS = ["stevedore==1.30.1"]
 ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
                         "scipy>=1.2.1"]
 
+CUDS_ONTOLOGIES = [
+    'cuba',
+    'ontology.force.yml'
+]
 
 @click.group()
 def cli():
@@ -74,6 +78,14 @@ def build_env(python_version):
         check_call(
             ["edm", "run", "-e", env_name, "--", "pip", "install"] + PIP_DEPS
         )
+
+    # Ensure CUBA cuds ontology is installed and install local Force
+    # ontology
+    for ontology in CUDS_ONTOLOGIES:
+        check_call(
+            ["edm", "run", "-e", env_name, "--", "pico", "install", ontology]
+        )
+
 
 
 @cli.command(help="Install the BDSS in the execution environment")

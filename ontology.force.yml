@@ -1,0 +1,39 @@
+---
+version: "0.1"
+
+author: Frank Longford <flongford@enthought.com>, Enthought Ltd
+
+namespace: FORCE_ONTOLOGY
+
+requirements: ["CUBA"]
+
+ontology:
+
+  HAS_PART:
+    description: "default relationship"
+    subclass_of:
+      - CUBA.ACTIVE_RELATIONSHIP
+    inverse: FORCE_ONTOLOGY.IS_PART_OF
+    default_rel: true
+
+  IS_PART_OF:
+    description: "inverse of the default relationship"
+    subclass_of:
+      - CUBA.RELATIONSHIP
+    inverse: FORCE_ONTOLOGY.HAS_PART
+
+  ########
+
+  VALUE:
+    subclass_of:
+      - CUBA.ATTRIBUTE
+
+  VOLUME:
+    subclass_of:
+      - FORCE_ONTOLOGY.VALUE
+    datatype: FLOAT
+
+  PRESSURE:
+    subclass_of:
+      - FORCE_ONTOLOGY.VALUE
+    datatype: FLOAT
