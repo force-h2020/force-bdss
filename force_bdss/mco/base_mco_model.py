@@ -4,7 +4,7 @@ import logging
 from traits.api import Instance, List, Type
 
 from force_bdss.core.base_model import BaseModel
-from force_bdss.core_driver_events import (
+from force_bdss.events.mco_events import (
     MCOStartEvent,
     MCOFinishEvent,
     MCOProgressEvent

@@ -3,7 +3,7 @@ import unittest
 from traits.api import Instance, Int
 
 from force_bdss.core.data_value import DataValue
-from force_bdss.core_driver_events import (
+from force_bdss.events.mco_events import (
     MCOProgressEvent,
     WeightedMCOProgressEvent,
     MCOStartEvent,
@@ -13,12 +13,8 @@ from force_bdss.core_driver_events import (
 )
 
 
-class DummyEvent(BaseDriverEvent):
-    stateless_data = Int(1)
-    stateful_data = Instance(DataValue)
+class TestMCOEvents(unittest.TestCase):
 
-
-class TestCoreDriverEvents(unittest.TestCase):
     def test_getstate_progress_event(self):
         ev = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
@@ -68,25 +64,6 @@ class TestCoreDriverEvents(unittest.TestCase):
     def test_getstate_finish_event(self):
         event = MCOFinishEvent()
         self.assertFalse(event.__getstate__())
-
-    def test_getstate_base_event(self):
-        event = BaseDriverEvent()
-        self.assertFalse(event.__getstate__())
-
-        event = DummyEvent(stateful_data=DataValue(value=1))
-        self.assertDictEqual(
-            event.__getstate__(),
-            {
-                "stateless_data": 1,
-                "stateful_data": {
-                    "accuracy": None,
-                    "name": "",
-                    "quality": "AVERAGE",
-                    "type": "",
-                    "value": 1,
-                },
-            },
-        )
 
     def test_serialize_start_event(self):
         event = MCOStartEvent(

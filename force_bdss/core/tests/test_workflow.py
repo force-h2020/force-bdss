@@ -4,7 +4,7 @@ import unittest
 
 from traits.testing.api import UnittestTools
 
-from force_bdss.core_driver_events import BaseDriverEvent
+from force_bdss.events.base_driver_event import BaseDriverEvent
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.core.output_slot_info import OutputSlotInfo
