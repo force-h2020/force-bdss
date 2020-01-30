@@ -39,6 +39,13 @@ class BaseDriverEvent(HasStrictTraits):
         return state
 
     def dumps_json(self):
+        """ Returns the state of the BaseDriverEvent subclass instance,
+        serialized to a json-formatted string.
+
+        Returns
+        ----------
+        JSON-formatted string
+        """
         return json.dumps(self.__getstate__())
 
     @staticmethod
@@ -132,6 +139,14 @@ class BaseDriverEvent(HasStrictTraits):
 
     @classmethod
     def loads_json(cls, data):
+        """ Create a BaseDriverEvent subclass object from a json loadable
+        `data` object.
+
+        Parameters
+        ----------
+        data: `str`, `bytes` or `bytearray`
+            An object to be json.loads-ed and passed to class constructor
+        """
         try:
             json_data = json.loads(data)
         except json.JSONDecodeError as e:
