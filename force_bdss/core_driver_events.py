@@ -108,7 +108,12 @@ class BaseDriverEvent(HasStrictTraits):
             try:
                 event = klass.from_json(json_data["model_data"])
             except Exception:
-                error_message = ""
+                error_message = (
+                    f"Unable to instantiate a {klass} instance "
+                    f"with data {json_data['model_data']}: the "
+                    f"`__init__` and `from_json` methods failed "
+                    f"to create an instance."
+                )
                 raise DriverEventDeserializationError(error_message)
 
         return event

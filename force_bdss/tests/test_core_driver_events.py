@@ -279,3 +279,22 @@ class TestCoreDriverEvents(unittest.TestCase):
         progress_event = BaseDriverEvent.from_json(progress_data)
         self.assertIsInstance(progress_event, MCOProgressEvent)
         self.assertDictEqual(progress_event.__getstate__(), progress_data)
+
+        failed_data = {
+            "id": "force_bdss.core_driver_events.MCOProgressEvent",
+            "model_data": {
+                "optimal_kpis": [{"random_trait": "some data"}],
+                "optimal_point": [],
+            },
+        }
+        with self.assertRaisesRegex(
+            Exception,
+            r"Unable to instantiate a \<class "
+            r"'force_bdss.core_driver_events.MCOProgressEvent'\> "
+            r"instance with data "
+            r"\{'optimal_kpis': \[\{'random_trait': 'some data'\}\],"
+            r" 'optimal_point': \[\]}"
+            r": the `__init__` and `from_json` "
+            r"methods failed to create an instance.",
+        ):
+            BaseDriverEvent.from_json(failed_data)
