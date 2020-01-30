@@ -1,4 +1,11 @@
-from traits.trait_types import List, Unicode, Instance, Float
+from copy import deepcopy
+
+from traits.api import (
+    List,
+    Instance,
+    Float,
+    Unicode,
+)
 
 from force_bdss.core.data_value import DataValue
 
@@ -69,6 +76,17 @@ class MCOProgressEvent(BaseDriverEvent):
         """
         event_datavalues = self.optimal_point + self.optimal_kpis
         return [entry.value for entry in event_datavalues]
+
+    @classmethod
+    def from_json(cls, json_data):
+        data = deepcopy(json_data)
+        data["optimal_point"] = [
+            DataValue(**data) for data in data["optimal_point"]
+        ]
+        data["optimal_kpis"] = [
+            DataValue(**data) for data in data["optimal_kpis"]
+        ]
+        return cls(**data)
 
 
 class WeightedMCOStartEvent(MCOStartEvent):
