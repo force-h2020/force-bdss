@@ -1,26 +1,24 @@
 from copy import deepcopy
 import logging
 
-from traits.api import HasStrictTraits, List, on_trait_change, Event
+from traits.api import HasStrictTraits, List, on_trait_change
 
+from force_bdss.core.data_value import DataValue
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-from force_bdss.core.data_value import DataValue
+from force_bdss.events.event_notifier import EventNotifier
 from force_bdss.utilities import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
 
 
-class ExecutionLayer(HasStrictTraits):
+class ExecutionLayer(EventNotifier, HasStrictTraits):
     """Represents a single layer in the execution stack.
     It contains a list of the data source models that must be executed.
     """
 
     #: The data sources in the execution layer.
     data_sources = List(BaseDataSourceModel)
-
-    #: Propagation channel for events from the Workflow objects
-    event = Event()
 
     def execute_layer(self, environment_data_values):
         """ Performs the evaluation of a single layer.
@@ -222,7 +220,7 @@ class ExecutionLayer(HasStrictTraits):
         event: BaseDriverEvent
             The BaseDriverEvent that has been changed
         """
-        self.event = event
+        self.notify(event)
 
 
 def _bind_data_values(available_data_values, model_slot_map, slots):
