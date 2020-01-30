@@ -107,9 +107,11 @@ class BaseDriverEvent(HasStrictTraits):
         """
         try:
             class_id = json_data["id"]
-        except Exception as e:
+        except KeyError as e:
             raise DriverEventDeserializationError(
-                "Could not parse json data: {}".format(e)
+                f"Could not parse json data. "
+                f"The `json_data` argument should contain the"
+                f"class id key {e}."
             )
         klass = cls.get_event_class(class_id)
         try:

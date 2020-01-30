@@ -1,3 +1,4 @@
+from json import dumps
 import unittest
 
 from traits.api import Instance, Int
@@ -11,6 +12,7 @@ from force_bdss.core_driver_events import (
     MCOFinishEvent,
     BaseDriverEvent,
     DriverEventTypeError,
+    DriverEventDeserializationError,
 )
 
 
@@ -280,6 +282,7 @@ class TestCoreDriverEvents(unittest.TestCase):
         self.assertIsInstance(progress_event, MCOProgressEvent)
         self.assertDictEqual(progress_event.__getstate__(), progress_data)
 
+    def test_raises_from_json(self):
         failed_data = {
             "id": "force_bdss.core_driver_events.MCOProgressEvent",
             "model_data": {
@@ -298,3 +301,57 @@ class TestCoreDriverEvents(unittest.TestCase):
             r"methods failed to create an instance.",
         ):
             BaseDriverEvent.from_json(failed_data)
+
+        key_failed_data = {
+            "model_data": {
+                "optimal_kpis": [{"random_trait": "some data"}],
+                "optimal_point": [],
+            }
+        }
+        with self.assertRaisesRegex(
+            DriverEventDeserializationError,
+            "Could not parse json data. "
+            "The `json_data` argument should contain the"
+            "class id key 'id'.",
+        ):
+            BaseDriverEvent.from_json(key_failed_data)
+
+    def test_loads_json(self):
+        start_data = {
+            "model_data": {
+                "parameter_names": ["p1", "p2"],
+                "kpi_names": ["k1", "k2", "k3"],
+            },
+            "id": "force_bdss.core_driver_events.MCOStartEvent",
+        }
+        start_event = BaseDriverEvent.loads_json(dumps(start_data))
+        self.assertIsInstance(start_event, MCOStartEvent)
+        self.assertDictEqual(start_event.__getstate__(), start_data)
+        self.assertEqual(start_event.dumps_json(), dumps(start_data))
+
+        wrong_json_data = "something weird"
+        with self.assertRaisesRegex(
+            DriverEventDeserializationError,
+            f"Data object {wrong_json_data} is not compatible "
+            f"with the json.loads method and raises",
+        ):
+            BaseDriverEvent.loads_json(wrong_json_data)
+
+    def test_dumps_json(self):
+        start_data = {
+            "model_data": {
+                "parameter_names": ["p1", "p2"],
+                "kpi_names": ["k1", "k2", "k3"],
+            },
+            "id": "force_bdss.core_driver_events.MCOStartEvent",
+        }
+        start_event = BaseDriverEvent.from_json(start_data)
+        json_dump = start_event.dumps_json()
+        self.assertIn('"parameter_names": ["p1", "p2"]', json_dump)
+        self.assertIn('"kpi_names": ["k1", "k2", "k3"]', json_dump)
+        self.assertIn('"parameter_names": ["p1", "p2"]', json_dump)
+        self.assertIn('"model_data": {', json_dump)
+        self.assertIn(
+            '"id": "force_bdss.core_driver_events.MCOStartEvent"', json_dump
+        )
+        self.assertEqual(len(str(start_data)), len(json_dump))
