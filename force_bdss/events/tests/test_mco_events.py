@@ -1,7 +1,5 @@
 import unittest
 
-from traits.api import Instance, Int
-
 from force_bdss.core.data_value import DataValue
 from force_bdss.events.mco_events import (
     MCOProgressEvent,
@@ -9,7 +7,6 @@ from force_bdss.events.mco_events import (
     MCOStartEvent,
     WeightedMCOStartEvent,
     MCOFinishEvent,
-    BaseDriverEvent,
 )
 
 
