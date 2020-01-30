@@ -1,14 +1,14 @@
 from traits.api import ABCHasStrictTraits, Instance
 
 from force_bdss.core.base_factory import BaseFactory
-from force_bdss.events.event_notifier import EventNotifier
+from force_bdss.events.event_notifier_mixin import EventNotifierMixin
 from force_bdss.utilities import (
     pop_dunder_recursive,
     nested_getstate
 )
 
 
-class BaseModel(EventNotifier, ABCHasStrictTraits):
+class BaseModel(EventNotifierMixin, ABCHasStrictTraits):
     """Base class for all the models of all the factories."""
 
     #: A reference to the creating factory, so that we can

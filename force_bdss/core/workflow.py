@@ -11,7 +11,7 @@ from traits.api import (
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
-from force_bdss.events.event_notifier import EventNotifier
+from force_bdss.events.event_notifier_mixin import EventNotifierMixin
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 
 
 @provides(IEvaluator)
-class Workflow(EventNotifier, HasStrictTraits):
+class Workflow(EventNotifierMixin, HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
     #: The Workflow BaseMCOModel object.

@@ -6,13 +6,13 @@ from traits.api import HasStrictTraits, List, on_trait_change
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
-from force_bdss.events.event_notifier import EventNotifier
+from force_bdss.events.event_notifier_mixin import EventNotifierMixin
 from force_bdss.utilities import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)
 
 
-class ExecutionLayer(EventNotifier, HasStrictTraits):
+class ExecutionLayer(EventNotifierMixin, HasStrictTraits):
     """Represents a single layer in the execution stack.
     It contains a list of the data source models that must be executed.
     """

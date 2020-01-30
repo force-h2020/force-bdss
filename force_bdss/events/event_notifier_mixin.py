@@ -1,7 +1,7 @@
 from traits.api import HasStrictTraits, Event
 
 
-class EventNotifier(HasStrictTraits):
+class EventNotifierMixin(HasStrictTraits):
     """Allows the class to receive and transmit BaseDriverEvent objects"""
 
     #: Propagation channel for events from the Workflow objects
