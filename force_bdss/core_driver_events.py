@@ -105,7 +105,13 @@ class BaseDriverEvent(HasStrictTraits):
             BaseDriverEvent or a subclass of BaseDriverEvent instance
             with attributes values from the `json_data` dict
         """
-        klass = cls.get_event_class(json_data["id"])
+        try:
+            class_id = json_data["id"]
+        except Exception as e:
+            raise DriverEventDeserializationError(
+                "Could not parse json data: {}".format(e)
+            )
+        klass = cls.get_event_class(class_id)
         try:
             event = klass(**json_data["model_data"])
         except TraitError:
@@ -124,7 +130,8 @@ class BaseDriverEvent(HasStrictTraits):
 
     @classmethod
     def loads_json(cls, data):
-        return cls.from_json(json.loads(data))
+        json_data = json.loads(data)
+        return cls.from_json(json_data)
 
 
 class MCOStartEvent(BaseDriverEvent):
