@@ -2,13 +2,17 @@ from unittest import TestCase, mock
 
 from traits.testing.unittest_tools import UnittestTools
 
-from force_bdss.api import (
+from force_bdss.core.data_value import DataValue
+from force_bdss.events.mco_events import (
+    MCOStartEvent,
+    MCOProgressEvent,
+    WeightedMCOStartEvent,
+    WeightedMCOProgressEvent
+)
+from force_bdss.io.base_csv_writer import (
     BaseCSVWriterFactory,
     BaseCSVWriter,
     BaseCSVWriterModel,
-    DataValue,
-    MCOStartEvent,
-    MCOProgressEvent,
 )
 
 _CSVWRITER_OPEN = "force_bdss.io.base_csv_writer.open"
@@ -70,6 +74,37 @@ class TestCSVWriter(TestCase, UnittestTools):
             )
             self.assertDictEqual(
                 {"p1": None, "p2": None, "kpi1": None, "kpi2": None},
+                self.notification_listener.row_data,
+            )
+
+            mock_open.assert_called_once()
+
+    def test_deliver_weighted_mco_start_event(self):
+
+        mock_open = mock.mock_open()
+
+        with mock.patch(_CSVWRITER_OPEN, mock_open, create=True):
+            event = WeightedMCOStartEvent(
+                parameter_names=[p.name for p in self.parameters],
+                kpi_names=[k.name for k in self.kpis]
+            )
+            self.assertListEqual(
+                ["p1", "p2", "kpi1", "kpi1 weight", "kpi2", "kpi2 weight"],
+                self.notification_listener.parse_start_event(event),
+            )
+
+            self.notification_listener.deliver(event)
+            self.assertListEqual(
+                ["p1", "p2", "kpi1", "kpi1 weight", "kpi2", "kpi2 weight"],
+                self.notification_listener.header
+            )
+            self.assertDictEqual(
+                {"p1": None,
+                 "p2": None,
+                 "kpi1": None,
+                 "kpi1 weight": None,
+                 "kpi2": None,
+                 "kpi2 weight": None,},
                 self.notification_listener.row_data,
             )
 

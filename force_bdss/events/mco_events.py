@@ -96,7 +96,7 @@ class WeightedMCOStartEvent(MCOStartEvent):
     def serialize(self):
         """Overloaded method to provide weights alongside each
         reported KPI"""
-        value_names = self.parameter_names
+        value_names = deepcopy(self.parameter_names)
         for kpi_name in self.kpi_names:
             value_names.extend([kpi_name, kpi_name + " weight"])
         return value_names
