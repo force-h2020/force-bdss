@@ -4,7 +4,7 @@ from traits.api import (
     List,
     Instance,
     Float,
-    Unicode,
+    Str,
 )
 
 from force_bdss.core.data_value import DataValue
@@ -16,10 +16,10 @@ class MCOStartEvent(BaseDriverEvent):
     """ The MCO driver should emit this event when the evaluation starts."""
 
     #: The names assigned to the parameters.
-    parameter_names = List(Unicode())
+    parameter_names = List(Str())
 
     #: The names associated to the KPIs
-    kpi_names = List(Unicode())
+    kpi_names = List(Str())
 
     def serialize(self):
         """ Provides serialized form of MCOStartEvent for further data storage
@@ -37,7 +37,7 @@ class MCOStartEvent(BaseDriverEvent):
         >>>
 
         Returns:
-            List(Unicode): event parameters names and kpi names
+            List(Str): event parameters names and kpi names
         """
         return self.parameter_names + self.kpi_names
 

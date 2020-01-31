@@ -1,4 +1,4 @@
-from traits.api import HasStrictTraits, Unicode
+from traits.api import HasStrictTraits, Str
 
 from force_bdss.local_traits import CUBAType
 from force_bdss.utilities import pop_dunder_recursive
@@ -12,7 +12,7 @@ class Slot(HasStrictTraits):
     they return as output.
     """
     #: A textual description of the slot
-    description = Unicode("No description")
+    description = Str("No description")
 
     #: The CUBA key of the slot
     type = CUBAType()

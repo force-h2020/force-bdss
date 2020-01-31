@@ -1,5 +1,5 @@
 from envisage.plugin import Plugin
-from traits.api import Bool, HasStrictTraits, Unicode
+from traits.api import Bool, HasStrictTraits, Str
 
 from force_bdss.ids import factory_id
 
@@ -7,13 +7,13 @@ from force_bdss.ids import factory_id
 class BaseFactory(HasStrictTraits):
     #: Unique identifier that identifies the factory uniquely in the
     #: universe of factories. Create one with the function factory_id()
-    id = Unicode()
+    id = Str()
 
     #: A human readable name of the factory. Spaces allowed
-    name = Unicode()
+    name = Str()
 
     #: A long description of the factory.
-    description = Unicode()
+    description = Str()
 
     #: If the factor should be visible in the UI. Set to false to make it
     #: invisible. This is normally useful for notification systems that are
@@ -23,10 +23,10 @@ class BaseFactory(HasStrictTraits):
     #: Reference to the plugin that carries this factory
     #: This is automatically set by the system. you should not define it
     #: in your subclass.
-    plugin_id = Unicode(allow_none=False)
+    plugin_id = Str(allow_none=False)
 
     #: Human readable name of Plugin for UI
-    plugin_name = Unicode(allow_none=False)
+    plugin_name = Str(allow_none=False)
 
     def __init__(self, plugin, *args, **kwargs):
         super(BaseFactory, self).__init__(*args, **kwargs)

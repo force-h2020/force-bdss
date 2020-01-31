@@ -1,6 +1,6 @@
 import logging
 
-from traits.api import Any, Enum, HasStrictTraits, Unicode
+from traits.api import Any, Enum, HasStrictTraits, Str
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +15,13 @@ class VerifierError(HasStrictTraits):
 
     #: Holds the trait name within :attr:`subject` which is causing the error.
     #: (Optional)
-    trait_name = Unicode
+    trait_name = Str()
 
     #: An error message relevant to a view of the subject.
-    local_error = Unicode
+    local_error = Str()
 
     #: An error message relevant to the overall workflow.
-    global_error = Unicode
+    global_error = Str()
 
     def __init__(self, subject, **traits):
         if 'local_error' not in traits:
