@@ -21,7 +21,7 @@ from .data_sources.base_data_source_factory import BaseDataSourceFactory  # noqa
 from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
 
 from .events.mco_events import *  # noqa
-from .events.base_driver_event import BaseDriverEvent # noqa
+from .events.base_driver_event import BaseDriverEvent, DriverEventDeserializationError, DriverEventTypeError # noqa
 
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
