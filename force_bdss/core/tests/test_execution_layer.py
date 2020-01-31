@@ -13,7 +13,7 @@ from force_bdss.core.slot import Slot
 from force_bdss.tests.probe_classes.factory_registry import (
     ProbeFactoryRegistry,
 )
-from force_bdss.core_driver_events import BaseDriverEvent
+from force_bdss.events.base_driver_event import BaseDriverEvent
 from force_bdss.tests import fixtures
 
 

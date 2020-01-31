@@ -1,5 +1,6 @@
 from traits.api import HasStrictTraits, Any, String, Enum
-from force_bdss.core.base_model import pop_dunder_recursive
+
+from force_bdss.utilities import pop_dunder_recursive
 
 
 class DataValue(HasStrictTraits):
