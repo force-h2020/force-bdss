@@ -23,7 +23,6 @@ from .data_sources.i_data_source_factory import IDataSourceFactory  # noqa
 from .events.mco_events import *  # noqa
 from .events.base_driver_event import BaseDriverEvent # noqa
 
-from .io.base_csv_writer import BaseCSVWriterFactory, BaseCSVWriterModel, BaseCSVWriter  # noqa
 from .io.workflow_reader import WorkflowReader  # noqa
 from .io.workflow_reader import InvalidFileException  # noqa
 from .io.workflow_writer import WorkflowWriter  # noqa
@@ -45,6 +44,7 @@ from .mco.parameters.mco_parameters import FixedMCOParameter, RangedMCOParameter
 from .mco.optimizer_engines.base_optimizer_engine import BaseOptimizerEngine  # noqa
 from .mco.optimizer_engines.weighted_optimizer_engine import WeightedOptimizerEngine  # noqa
 
+from .notification_listeners.base_csv_writer import BaseCSVWriterFactory, BaseCSVWriterModel, BaseCSVWriter  # noqa
 from .notification_listeners.i_notification_listener_factory import INotificationListenerFactory  # noqa
 from .notification_listeners.base_notification_listener import BaseNotificationListener  # noqa
 from .notification_listeners.base_notification_listener_factory import BaseNotificationListenerFactory  # noqa

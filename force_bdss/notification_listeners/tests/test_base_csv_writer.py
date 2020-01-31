@@ -14,7 +14,8 @@ from force_bdss.notification_listeners.base_csv_writer import (
     BaseCSVWriterModel
 )
 
-_CSVWRITER_OPEN = "force_bdss.io.base_csv_writer.open"
+_CSVWRITER_OPEN = ("force_bdss.notification_listeners."
+                   "base_csv_writer.open")
 
 
 class TestCSVWriter(TestCase, UnittestTools):
@@ -103,7 +104,8 @@ class TestCSVWriter(TestCase, UnittestTools):
                  "kpi1": None,
                  "kpi1 weight": None,
                  "kpi2": None,
-                 "kpi2 weight": None,},
+                 "kpi2 weight": None,
+                 },
                 self.notification_listener.row_data,
             )
 
