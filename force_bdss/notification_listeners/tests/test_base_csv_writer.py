@@ -6,13 +6,12 @@ from force_bdss.core.data_value import DataValue
 from force_bdss.events.mco_events import (
     MCOStartEvent,
     MCOProgressEvent,
-    WeightedMCOStartEvent,
-    WeightedMCOProgressEvent
+    WeightedMCOStartEvent
 )
-from force_bdss.io.base_csv_writer import (
+from force_bdss.notification_listeners.base_csv_writer import (
     BaseCSVWriterFactory,
     BaseCSVWriter,
-    BaseCSVWriterModel,
+    BaseCSVWriterModel
 )
 
 _CSVWRITER_OPEN = "force_bdss.io.base_csv_writer.open"
