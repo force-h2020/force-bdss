@@ -151,14 +151,14 @@ class TestMCOEvents(unittest.TestCase):
             "id": "force_bdss.events.mco_events.MCOStartEvent",
             "model_data": {},
         }
-        klass = MCOStartEvent.get_event_class(data["id"])
+        klass = BaseDriverEvent.get_event_class(data["id"])
         self.assertIs(klass, MCOStartEvent)
 
         data = {
             "id": "force_bdss.events.mco_events.MCOFinishEvent",
             "model_data": {},
         }
-        klass = MCOFinishEvent.get_event_class(data["id"])
+        klass = BaseDriverEvent.get_event_class(data["id"])
         self.assertIs(klass, MCOFinishEvent)
 
     def test_from_json(self):
@@ -170,7 +170,7 @@ class TestMCOEvents(unittest.TestCase):
             },
             "id": "force_bdss.events.mco_events.MCOStartEvent",
         }
-        start_event = MCOStartEvent.from_json(start_data)
+        start_event = BaseDriverEvent.from_json(start_data)
         self.assertIsInstance(start_event, MCOStartEvent)
         self.assertDictEqual(start_event.__getstate__(), start_data)
 
@@ -178,7 +178,7 @@ class TestMCOEvents(unittest.TestCase):
             "id": "force_bdss.events.mco_events.MCOFinishEvent",
             "model_data": {},
         }
-        finish_event = MCOFinishEvent.from_json(finish_data)
+        finish_event = BaseDriverEvent.from_json(finish_data)
         self.assertIsInstance(finish_event, MCOFinishEvent)
         self.assertDictEqual(finish_event.__getstate__(), finish_data)
 
@@ -244,7 +244,7 @@ class TestMCOEvents(unittest.TestCase):
             },
             "id": "force_bdss.events.mco_events.MCOStartEvent",
         }
-        start_event = MCOStartEvent.loads_json(dumps(start_data))
+        start_event = BaseDriverEvent.loads_json(dumps(start_data))
         self.assertIsInstance(start_event, MCOStartEvent)
         self.assertDictEqual(start_event.__getstate__(), start_data)
         self.assertEqual(start_event.dumps_json(), dumps(start_data))
@@ -257,7 +257,7 @@ class TestMCOEvents(unittest.TestCase):
             },
             "id": "force_bdss.events.mco_events.MCOStartEvent",
         }
-        start_event = MCOStartEvent.from_json(start_data)
+        start_event = BaseDriverEvent.from_json(start_data)
         json_dump = start_event.dumps_json()
         self.assertIn('"parameter_names": ["p1", "p2"]', json_dump)
         self.assertIn('"kpi_names": ["k1", "k2", "k3"]', json_dump)
