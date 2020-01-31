@@ -1,12 +1,11 @@
-from traits.api import Bool, Function, Unicode, Int, on_trait_change
+from traits.api import Bool, Function, Int, on_trait_change
 
-from force_bdss.api import (
-    BaseDataSourceFactory,
-    BaseDataSourceModel,
-    BaseDataSource,
-    Slot,
-)
 from force_bdss.core.data_value import DataValue
+from force_bdss.core.slot import Slot
+from force_bdss.data_sources.base_data_source import BaseDataSource
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
+from force_bdss.data_sources.base_data_source_factory import BaseDataSourceFactory
+from force_bdss.local_traits import CUBAType
 
 
 def run_func(model, parameters):
@@ -46,8 +45,8 @@ class ProbeDataSource(BaseDataSource):
 
 
 class ProbeDataSourceModel(BaseDataSourceModel):
-    input_slots_type = Unicode("PRESSURE")
-    output_slots_type = Unicode("PRESSURE")
+    input_slots_type = CUBAType("PRESSURE")
+    output_slots_type = CUBAType("PRESSURE")
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
@@ -64,8 +63,8 @@ class ProbeDataSourceFactory(BaseDataSourceFactory):
 
     run_function = Function(default_value=run_func)
 
-    input_slots_type = Unicode("PRESSURE")
-    output_slots_type = Unicode("PRESSURE")
+    input_slots_type = CUBAType("PRESSURE")
+    output_slots_type = CUBAType("PRESSURE")
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
