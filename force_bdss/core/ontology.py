@@ -4,17 +4,30 @@ from osp.core import cuba, force_ontology
 from osp.core.ontology.namespace import OntologyNamespace
 from osp.core.ontology.validator import entity_name_regex
 
-from traits.api import TraitType, HasStrictTraits, String, List
+from traits.api import (
+    TraitType,
+    HasStrictTraits,
+    String,
+    List,
+    Bool,
+    Float,
+    Int,
+    Str,
+    Array,
+    Any,
+    provides
+)
 
+from force_bdss.core.i_ontology import IOntology
 
 ONTOLOGY_DATATYPE_CONVERSIONS = {
-    'BOOL': bool,
-    "INT": int,
-    "FLOAT": float,
-    "STRING": str,
-    "UUID": str,
-    "UNDEFINED": None,
-    "VECTOR": np.ndarray
+    'BOOL': {'basic': bool, 'trait': Bool},
+    "INT": {'basic': int, 'trait': Int},
+    "FLOAT": {'basic': float, 'trait': Float},
+    "STRING": {'basic': str, 'trait': Str},
+    "UUID": {'basic': str, 'trait': Str},
+    "UNDEFINED": {'basic': None, 'trait': Any},
+    "VECTOR": {'basic': np.ndarray, 'trait': Array}
 }
 
 
@@ -41,9 +54,10 @@ class Ontology(TraitType):
         self.error(object, name, value)
 
 
+@provides(IOntology)
 class BDSSOntology(HasStrictTraits):
 
-    #: List of OntologyNamespace object
+    #: List of OntologyNamespace objects
     ontologies = List(Ontology, transient=True, visible=False)
 
     def _ontologies_default(self):
@@ -65,7 +79,7 @@ class BDSSOntology(HasStrictTraits):
             except AttributeError:
                 pass
 
-    def python_type(self, cuba_type):
+    def cuba_to_basic(self, cuba_type):
         """Return the basic python data type for an
         OntologyAttribute object corresponding to CUBA type
         string
@@ -76,4 +90,16 @@ class BDSSOntology(HasStrictTraits):
             Name of attribute to look up
         """
         cuba_attr = self.cuba_attr(cuba_type)
-        return ONTOLOGY_DATATYPE_CONVERSIONS[cuba_attr.datatype]
+        return ONTOLOGY_DATATYPE_CONVERSIONS[cuba_attr.datatype]['basic']
+
+    def cuba_to_trait(self, cuba_type):
+        """Return the TraitType for an OntologyAttribute object
+        corresponding to CUBA type string
+
+        Parameters
+        ----------
+        cuba_type: CUBAType
+           Name of attribute to look up
+        """
+        cuba_attr = self.cuba_attr(cuba_type)
+        return ONTOLOGY_DATATYPE_CONVERSIONS[cuba_attr.datatype]['trait']

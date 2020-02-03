@@ -3,9 +3,14 @@ from unittest import TestCase
 from osp.core.ontology.namespace import OntologyNamespace
 from osp.core.ontology.attribute import OntologyAttribute
 
-from traits.api import HasTraits, TraitError
+from traits.api import HasTraits, TraitError, Float, Any
 
-from force_bdss.core.ontology import CUBAType, Ontology, BDSSOntology
+from force_bdss.core.ontology import (
+    CUBAType,
+    CUBATypeMixin,
+    Ontology,
+    BDSSOntology
+)
 
 
 class ProbeHasTraits(HasTraits):
@@ -36,7 +41,10 @@ class TestOntology(TestCase):
 
         self.assertEqual(self.probe_class.cuba, "VOLUME")
 
-        for not_allowed in ["0", None, 123, "0hello", "hi$", "hi%"]:
+        for allowed in ["ALLCAPS", "Value", "CamelCase"]:
+            self.probe_class.cuba = allowed
+
+        for not_allowed in ["0", None, 123, "hello", "$hi", ""]:
             with self.assertRaises(TraitError):
                 self.probe_class.cuba = not_allowed
 
@@ -53,4 +61,6 @@ class TestOntology(TestCase):
         self.assertEqual('FLOAT', volume.datatype)
 
         self.assertEqual(
-            float, self.bdss_ontology.python_type('Volume'))
+            float, self.bdss_ontology.cuba_to_basic('Volume'))
+        self.assertEqual(
+            Float, self.bdss_ontology.cuba_to_trait('Volume'))
