@@ -5,26 +5,26 @@ from traits.api import (
     HasStrictTraits,
     Instance,
     List,
-    Event,
     provides,
     on_trait_change
 )
 
 from force_bdss.core.execution_layer import ExecutionLayer
 from force_bdss.core.verifier import VerifierError
+from force_bdss.events.event_notifier_mixin import EventNotifierMixin
 from force_bdss.mco.base_mco_model import BaseMCOModel
 from force_bdss.notification_listeners.base_notification_listener_model \
     import BaseNotificationListenerModel
 from force_bdss.mco.i_evaluator import IEvaluator
 from force_bdss.core.data_value import DataValue
-from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
+from force_bdss.utilities import pop_dunder_recursive, nested_getstate
 
 
 log = logging.getLogger(__name__)
 
 
 @provides(IEvaluator)
-class Workflow(HasStrictTraits):
+class Workflow(EventNotifierMixin, HasStrictTraits):
     """Model object that represents the Workflow as a whole"""
 
     #: The Workflow BaseMCOModel object.
@@ -38,9 +38,6 @@ class Workflow(HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
-
-    #: Propagation channel for events from the Workflow objects
-    event = Event()
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
@@ -277,4 +274,4 @@ class Workflow(HasStrictTraits):
         event: BaseDriverEvent
             The BaseDriverEvent that has been changed
         """
-        self.event = event
+        self.notify(event)

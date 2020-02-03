@@ -3,7 +3,7 @@ from unittest import TestCase
 from traits.testing.unittest_tools import UnittestTools
 
 from force_bdss.core.base_model import BaseModel
-from force_bdss.core_driver_events import BaseDriverEvent
+from force_bdss.events.base_driver_event import BaseDriverEvent
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 
 

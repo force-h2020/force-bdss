@@ -1,21 +1,18 @@
 import csv
 
-from traits.api import Unicode, Instance, List, Dict
+from traits.api import Str, Instance, List, Dict, File
 
-from force_bdss.api import (
-    BaseNotificationListenerFactory,
-    BaseNotificationListenerModel,
-    BaseNotificationListener,
-    MCOProgressEvent,
-    MCOStartEvent,
-)
+from force_bdss.events.mco_events import MCOStartEvent, MCOProgressEvent
+from force_bdss.notification_listeners.base_notification_listener import BaseNotificationListener # noqa
+from force_bdss.notification_listeners.base_notification_listener_factory import BaseNotificationListenerFactory # noqa
+from force_bdss.notification_listeners.base_notification_listener_model import BaseNotificationListenerModel # noqa
 
 
 class BaseCSVWriterModel(BaseNotificationListenerModel):
     """ Base Model class for CSV writer."""
 
     #: CSV file path for data storage and output
-    path = Unicode("output.csv")
+    path = File("output.csv")
 
 
 class BaseCSVWriter(BaseNotificationListener):
@@ -32,10 +29,10 @@ class BaseCSVWriter(BaseNotificationListener):
     model = Instance(BaseCSVWriterModel)
 
     # Header to include in output CSV
-    header = List(Unicode)
+    header = List(Str)
 
     # Data entries in CSV rows
-    row_data = Dict(key_trait=Unicode)
+    row_data = Dict(key_trait=Str)
 
     def _row_data_default(self):
         return dict.fromkeys(self.header)

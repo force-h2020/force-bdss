@@ -4,7 +4,7 @@ import testfixtures
 
 from force_bdss.app.optimize_operation import OptimizeOperation
 from force_bdss.core.data_value import DataValue
-from force_bdss.core_driver_events import (
+from force_bdss.events.mco_events import (
     MCOStartEvent,
     MCOFinishEvent,
     MCOProgressEvent,

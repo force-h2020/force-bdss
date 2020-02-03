@@ -1,19 +1,15 @@
-from traits.api import HasStrictTraits, List, Instance, Float, Unicode
+from copy import deepcopy
+
+from traits.api import (
+    List,
+    Instance,
+    Float,
+    Unicode,
+)
 
 from force_bdss.core.data_value import DataValue
-from force_bdss.core.base_model import pop_dunder_recursive, nested_getstate
 
-
-class BaseDriverEvent(HasStrictTraits):
-    """ Base event for the MCO driver."""
-
-    def __getstate__(self):
-        """ Returns state dictionary of the object. For a nested dict,
-        __getstate__ is applied to zero level items and first level items.
-        """
-        state = pop_dunder_recursive(super().__getstate__())
-        state = nested_getstate(state)
-        return state
+from .base_driver_event import BaseDriverEvent
 
 
 class MCOStartEvent(BaseDriverEvent):
@@ -44,19 +40,6 @@ class MCOStartEvent(BaseDriverEvent):
             List(Unicode): event parameters names and kpi names
         """
         return self.parameter_names + self.kpi_names
-
-
-class WeightedMCOStartEvent(MCOStartEvent):
-    """Initializes reporting of weights generated during an MCO by a
-    WeightedOptimizerEngine"""
-
-    def serialize(self):
-        """Overloaded method to provide weights alongside each
-        reported KPI"""
-        value_names = self.parameter_names
-        for kpi_name in self.kpi_names:
-            value_names.extend([kpi_name, kpi_name + " weight"])
-        return value_names
 
 
 class MCOFinishEvent(BaseDriverEvent):
@@ -93,6 +76,30 @@ class MCOProgressEvent(BaseDriverEvent):
         """
         event_datavalues = self.optimal_point + self.optimal_kpis
         return [entry.value for entry in event_datavalues]
+
+    @classmethod
+    def from_json(cls, json_data):
+        data = deepcopy(json_data)
+        data["optimal_point"] = [
+            DataValue(**data) for data in data["optimal_point"]
+        ]
+        data["optimal_kpis"] = [
+            DataValue(**data) for data in data["optimal_kpis"]
+        ]
+        return cls(**data)
+
+
+class WeightedMCOStartEvent(MCOStartEvent):
+    """Initializes reporting of weights generated during an MCO by a
+    WeightedOptimizerEngine"""
+
+    def serialize(self):
+        """Overloaded method to provide weights alongside each
+        reported KPI"""
+        value_names = deepcopy(self.parameter_names)
+        for kpi_name in self.kpi_names:
+            value_names.extend([kpi_name, kpi_name + " weight"])
+        return value_names
 
 
 class WeightedMCOProgressEvent(MCOProgressEvent):
