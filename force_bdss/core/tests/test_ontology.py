@@ -9,7 +9,7 @@ from force_bdss.core.ontology import (
     CUBAType,
     CUBATypeMixin,
     Ontology,
-    BDSSOntology
+    BDSSOntologyRegistry
 )
 
 
@@ -26,7 +26,7 @@ class TestOntology(TestCase):
             cuba="VOLUME"
         )
         self.cuba_type_mixin = CUBATypeMixin()
-        self.bdss_ontology = BDSSOntology()
+        self.bdss_ontology = BDSSOntologyRegistry()
 
     def test_ontology_trait_type(self):
 

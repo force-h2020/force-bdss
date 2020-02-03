@@ -1,7 +1,7 @@
 from traits.has_traits import Interface
 
 
-class IOntology(Interface):
+class IOntologyRegistry(Interface):
 
     def cuba_to_basic(self, cuba_type):
         """Return the basic python data type for an

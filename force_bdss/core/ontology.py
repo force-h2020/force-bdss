@@ -18,7 +18,7 @@ from traits.api import (
     provides
 )
 
-from force_bdss.core.i_ontology import IOntology
+from force_bdss.core.i_ontology_registry import IOntologyRegistry
 
 # Note: this is a work around to obtain the python basic and TraitType
 # from a CUBA key. The type conversions are only expect to be stable for
@@ -49,16 +49,16 @@ class CUBATypeMixin(HasStrictTraits):
     #: A CUBA key describing the type of the parameter
     type = CUBAType('Value', visible=False)
 
-    def trait_type(self, ontology):
-        """Return the TraitType for an IOntology object
+    def trait_type(self, ontology_registry):
+        """Return the TraitType for an IOntologyRegistry object
         corresponding to CUBA type string
 
         Parameters
         ----------
-        ontology: force_bdss.core.i_ontology.IOntology
-           Class that fulfills the IOntology interface
+        ontology_registry: IOntologyRegistry
+           Class that fulfills the IOntologyRegistry interface
         """
-        return ontology.cuba_to_trait(self.type)
+        return ontology_registry.cuba_to_trait(self.type)
 
 
 class Ontology(TraitType):
@@ -80,8 +80,8 @@ class Ontology(TraitType):
         self.error(object, name, value)
 
 
-@provides(IOntology)
-class BDSSOntology(HasStrictTraits):
+@provides(IOntologyRegistry)
+class BDSSOntologyRegistry(HasStrictTraits):
 
     #: List of OntologyNamespace objects
     ontologies = List(Ontology, transient=True, visible=False)

@@ -3,7 +3,7 @@ import unittest
 from traits.api import Float, Any
 
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
-from force_bdss.core.ontology import BDSSOntology
+from force_bdss.core.ontology import BDSSOntologyRegistry
 from force_bdss.tests.probe_classes.mco import (
     ProbeParameterFactory,
     ProbeParameter,
@@ -35,7 +35,7 @@ class TestBaseMCOParameter(unittest.TestCase):
 
         self.assertEqual('Value', parameter.type)
 
-        ontology = BDSSOntology()
+        ontology = BDSSOntologyRegistry()
         self.assertEqual(
             Any, parameter.trait_type(ontology))
 
