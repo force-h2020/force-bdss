@@ -20,6 +20,15 @@ from traits.api import (
 
 from force_bdss.core.i_ontology import IOntology
 
+# Note: this is a work around to obtain the python basic and TraitType
+# from a CUBA key. The type conversions are only expect to be stable for
+# the BDSS deployment environment. It is also expected that future
+# versions of osp-core will implement an equivalent method.
+
+# Please also note the behavioural differences between basic python
+# and TraitType conversions for the "UNDEFINED" CUBAType. This allows
+# for more traits flexibility if the CUBAType is not present in a
+# given Ontology object
 ONTOLOGY_DATATYPE_CONVERSIONS = {
     'BOOL': {'basic': bool, 'trait': Bool},
     "INT": {'basic': int, 'trait': Int},
@@ -83,7 +92,7 @@ class BDSSOntology(HasStrictTraits):
 
     def cuba_attr(self, cuba_type):
         """Search in loaded ontologies for first OntologyAttribute object
-        corresponding to CUBA type string
+        corresponding to CUBA type string.
 
         Parameters
         ----------
@@ -95,6 +104,11 @@ class BDSSOntology(HasStrictTraits):
                 return getattr(ontology, cuba_type.upper())
             except AttributeError:
                 pass
+
+        # If CUBAType does not exist in any ontology, consider it
+        # as a generic OntologyAttribute object with undefined data
+        # value attribute
+        return getattr(force_ontology, 'VALUE')
 
     def cuba_to_basic(self, cuba_type):
         """Return the basic python data type for an

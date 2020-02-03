@@ -71,8 +71,16 @@ class TestOntology(TestCase):
         volume = self.bdss_ontology.cuba_attr('Volume')
         self.assertIsInstance(volume, OntologyAttribute)
         self.assertEqual('FLOAT', volume.datatype)
-
         self.assertEqual(
             float, self.bdss_ontology.cuba_to_basic('Volume'))
         self.assertEqual(
             Float, self.bdss_ontology.cuba_to_trait('Volume'))
+
+        # Handling of CUBA type not in any ontology
+        not_present = self.bdss_ontology.cuba_attr('NotPresent')
+        self.assertIsInstance(not_present, OntologyAttribute)
+        self.assertEqual('UNDEFINED', not_present.datatype)
+        self.assertEqual(
+            None, self.bdss_ontology.cuba_to_basic('NotPresent'))
+        self.assertEqual(
+            Any, self.bdss_ontology.cuba_to_trait('NotPresent'))
