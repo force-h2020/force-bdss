@@ -52,11 +52,9 @@ class TestVerifier(unittest.TestCase):
         wf.mco_model.parameters.append(parameter_factory.create_model())
 
         errors = verify_workflow(wf)
-        self.assertEqual(len(errors), 4)
+        self.assertEqual(len(errors), 3)
         self.assertEqual(errors[1].subject, wf.mco_model.parameters[0])
         self.assertIn("MCO parameter is not named", errors[1].local_error)
-        self.assertEqual(errors[1].subject, wf.mco_model.parameters[0])
-        self.assertIn("MCO parameter has no type set", errors[2].local_error)
 
     def test_empty_kpi_options(self):
         wf = self.workflow
@@ -77,7 +75,7 @@ class TestVerifier(unittest.TestCase):
         parameter_factory = mco_factory.parameter_factories[0]
         wf.mco_model.parameters.append(parameter_factory.create_model())
         wf.mco_model.parameters[0].name = "name"
-        wf.mco_model.parameters[0].type = "type"
+        wf.mco_model.parameters[0].type = "Type"
         wf.mco_model.kpis.append(KPISpecification(name='name'))
 
         layer = ExecutionLayer()
@@ -94,7 +92,7 @@ class TestVerifier(unittest.TestCase):
         parameter_factory = mco_factory.parameter_factories[0]
         wf.mco_model.parameters.append(parameter_factory.create_model())
         wf.mco_model.parameters[0].name = "name"
-        wf.mco_model.parameters[0].type = "type"
+        wf.mco_model.parameters[0].type = "Type"
         wf.mco_model.kpis.append(KPISpecification(name='name'))
 
         layer = ExecutionLayer()

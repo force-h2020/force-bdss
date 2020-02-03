@@ -27,6 +27,7 @@ ontology:
   VALUE:
     subclass_of:
       - CUBA.ATTRIBUTE
+    datatype: UNDEFINED
 
   VOLUME:
     subclass_of:

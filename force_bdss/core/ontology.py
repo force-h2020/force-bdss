@@ -35,6 +35,23 @@ ONTOLOGY_DATATYPE_CONVERSIONS = {
 CUBAType = String(regex=entity_name_regex)
 
 
+class CUBATypeMixin(HasStrictTraits):
+
+    #: A CUBA key describing the type of the parameter
+    type = CUBAType('Value', visible=False)
+
+    def trait_type(self, ontology):
+        """Return the TraitType for an IOntology object
+        corresponding to CUBA type string
+
+        Parameters
+        ----------
+        ontology: force_bdss.core.i_ontology.IOntology
+           Class that fulfills the IOntology interface
+        """
+        return ontology.cuba_to_trait(self.type)
+
+
 class Ontology(TraitType):
 
     #: The default value for the trait:

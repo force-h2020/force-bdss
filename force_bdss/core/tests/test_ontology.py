@@ -25,6 +25,7 @@ class TestOntology(TestCase):
         self.probe_class = ProbeHasTraits(
             cuba="VOLUME"
         )
+        self.cuba_type_mixin = CUBATypeMixin()
         self.bdss_ontology = BDSSOntology()
 
     def test_ontology_trait_type(self):
@@ -47,6 +48,17 @@ class TestOntology(TestCase):
         for not_allowed in ["0", None, 123, "hello", "$hi", ""]:
             with self.assertRaises(TraitError):
                 self.probe_class.cuba = not_allowed
+
+    def test_cuba_type_mixin(self):
+
+        self.assertEqual(
+            Any,
+            self.cuba_type_mixin.trait_type(self.bdss_ontology))
+
+        self.cuba_type_mixin.type = 'Volume'
+        self.assertEqual(
+            Float,
+            self.cuba_type_mixin.trait_type(self.bdss_ontology))
 
     def test_bdss_ontology(self):
 
