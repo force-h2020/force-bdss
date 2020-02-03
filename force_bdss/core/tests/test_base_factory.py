@@ -36,7 +36,7 @@ class TestBaseFactory(unittest.TestCase):
         self.assertEqual(factory.name, 'Dummy Factory')
         self.assertEqual(factory.description, "No description available.")
 
-        # Initialisation with a Unicode argument
+        # Initialisation with a string argument
         factory = DummyBaseFactory({'id': self.plugin_id,
                                     'name': self.plugin_name})
         self.assertEqual(factory.id, 'pid.factory.dummy_factory')

@@ -3,7 +3,7 @@ from functools import partial
 import numpy as np
 from scipy import optimize as scipy_optimize
 
-from traits.api import Enum, Unicode, Property
+from traits.api import Enum, Str, Property
 
 from force_bdss.api import PositiveInt
 from .base_optimizer_engine import BaseOptimizerEngine
@@ -61,7 +61,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     """
 
     #: Optimizer name
-    name = Unicode("Weighted_Optimizer")
+    name = Str("Weighted_Optimizer")
 
     #: Search grid resolution per KPI
     num_points = PositiveInt(7)
@@ -70,7 +70,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     algorithms = Enum("SLSQP", "TNC")
 
     #: Method to calculate KPIs normalization coefficients
-    scaling_method = Unicode("sen_scaling_method")
+    scaling_method = Str("sen_scaling_method")
 
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")

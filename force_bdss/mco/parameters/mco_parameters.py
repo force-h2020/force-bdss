@@ -1,6 +1,6 @@
 import numpy as np
 
-from traits.api import List, Unicode, Property, Float, Any, Int
+from traits.api import List, Str, Property, Float, Any, Int
 from traitsui.api import ListEditor
 
 from .base_mco_parameter import BaseMCOParameter
@@ -129,7 +129,7 @@ class CategoricalMCOParameter(BaseMCOParameter):
     """ Categorical MCO Parameter implements unordered, discrete valued,
     categorical data. Available categorical values are strings. """
 
-    categories = List(Unicode, editor=ListEditor())
+    categories = List(Str, editor=ListEditor())
     sample_values = Property(depends_on="categories", visible=False)
 
     def _get_sample_values(self):

@@ -1,4 +1,4 @@
-from traits.api import Interface, Unicode
+from traits.api import Interface, Str
 
 
 class IFactory(Interface):
@@ -7,11 +7,11 @@ class IFactory(Interface):
 
     Refer to the BaseDataSourceFactory for documentation.
     """
-    id = Unicode()
+    id = Str()
 
-    name = Unicode()
+    name = Str()
 
-    plugin_id = Unicode(allow_none=False)
+    plugin_id = Str(allow_none=False)
 
     def get_name(self):
         pass
