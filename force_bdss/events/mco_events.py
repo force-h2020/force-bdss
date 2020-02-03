@@ -5,6 +5,7 @@ from traits.api import (
     Instance,
     Float,
     Unicode,
+    Type
 )
 
 from force_bdss.core.data_value import DataValue
@@ -87,6 +88,27 @@ class MCOProgressEvent(BaseDriverEvent):
             DataValue(**data) for data in data["optimal_kpis"]
         ]
         return cls(**data)
+
+
+class TypeMCOStartEvent(MCOStartEvent):
+    """ An example MCOStartEvent that also provides information
+    on each parameter and KPI TraitType"""
+
+    #: The names assigned to the parameters.
+    parameter_types = List(Type)
+
+    #: The names associated to the KPIs
+    kpi_types = List(Type)
+
+    def serialize(self):
+        """Overloads super method to return trait type alongside
+        each variable name"""
+        name_list = super(TypeMCOStartEvent, self).serialize()
+        type_list = self.parameter_types + self.kpi_types
+        return [
+            (name, type)
+            for name, type in zip(name_list, type_list)
+        ]
 
 
 class WeightedMCOStartEvent(MCOStartEvent):

@@ -30,4 +30,7 @@ setup(
         ],
     },
     packages=find_packages(),
+    install_requires=[
+        "osp-core>=3.3.2",
+    ]
 )

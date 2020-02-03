@@ -1,6 +1,6 @@
 from traits.api import HasStrictTraits, Unicode
 
-from force_bdss.local_traits import CUBAType
+from force_bdss.core.ontology import CUBAType
 from force_bdss.utilities import pop_dunder_recursive
 
 

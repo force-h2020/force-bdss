@@ -1,6 +1,8 @@
 from json import dumps
 import unittest
 
+from traits.api import Str, Float, Bool
+
 from force_bdss.core.data_value import DataValue
 from force_bdss.events.base_driver_event import BaseDriverEvent
 from force_bdss.events.mco_events import (
@@ -8,6 +10,7 @@ from force_bdss.events.mco_events import (
     WeightedMCOProgressEvent,
     MCOStartEvent,
     WeightedMCOStartEvent,
+    TypeMCOStartEvent,
     MCOFinishEvent,
 )
 
@@ -100,6 +103,18 @@ class TestMCOEvents(unittest.TestCase):
                 "k3 weight",
             ],
             event.serialize(),
+        )
+
+        event = TypeMCOStartEvent(
+            parameter_names=["p1", "p2"],
+            kpi_names=["k1", "k2", "k3"],
+            parameter_types=[Float, Float],
+            kpi_types=[Str, Float, Bool],
+        )
+        self.assertListEqual(
+            [("p1", Float), ("p2", Float),
+             ("k1", Str), ("k2", Float), ("k3", Bool)],
+            event.serialize()
         )
 
     def test_serialize_progress_event(self):
