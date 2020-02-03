@@ -1,16 +1,15 @@
 from unittest import TestCase
 
 from osp.core.ontology.namespace import OntologyNamespace
-from osp.core.ontology.attribute import OntologyAttribute
 
 from traits.api import HasTraits, TraitError, Float, Any
 
 from force_bdss.core.ontology import (
     CUBAType,
     CUBATypeMixin,
-    Ontology,
-    BDSSOntologyRegistry
+    Ontology
 )
+from force_bdss.core.ontology_registry import OntologyRegistry
 
 
 class ProbeHasTraits(HasTraits):
@@ -26,7 +25,6 @@ class TestOntology(TestCase):
             cuba="VOLUME"
         )
         self.cuba_type_mixin = CUBATypeMixin()
-        self.bdss_ontology = BDSSOntologyRegistry()
 
     def test_ontology_trait_type(self):
 
@@ -51,36 +49,13 @@ class TestOntology(TestCase):
 
     def test_cuba_type_mixin(self):
 
+        ontology_registry = OntologyRegistry()
+
         self.assertEqual(
             Any,
-            self.cuba_type_mixin.trait_type(self.bdss_ontology))
+            self.cuba_type_mixin.trait_type(ontology_registry))
 
         self.cuba_type_mixin.type = 'Volume'
         self.assertEqual(
             Float,
-            self.cuba_type_mixin.trait_type(self.bdss_ontology))
-
-    def test_bdss_ontology(self):
-
-        self.assertEqual(1, len(self.bdss_ontology.ontologies))
-        self.assertIsInstance(
-            self.bdss_ontology.ontologies[0], OntologyNamespace)
-        self.assertEqual(
-            'FORCE_ONTOLOGY', self.bdss_ontology.ontologies[0].name)
-
-        volume = self.bdss_ontology.cuba_attr('Volume')
-        self.assertIsInstance(volume, OntologyAttribute)
-        self.assertEqual('FLOAT', volume.datatype)
-        self.assertEqual(
-            float, self.bdss_ontology.cuba_to_basic('Volume'))
-        self.assertEqual(
-            Float, self.bdss_ontology.cuba_to_trait('Volume'))
-
-        # Handling of CUBA type not in any ontology
-        not_present = self.bdss_ontology.cuba_attr('NotPresent')
-        self.assertIsInstance(not_present, OntologyAttribute)
-        self.assertEqual('UNDEFINED', not_present.datatype)
-        self.assertEqual(
-            None, self.bdss_ontology.cuba_to_basic('NotPresent'))
-        self.assertEqual(
-            Any, self.bdss_ontology.cuba_to_trait('NotPresent'))
+            self.cuba_type_mixin.trait_type(ontology_registry))
