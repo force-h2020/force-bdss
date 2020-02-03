@@ -26,6 +26,7 @@ CUDS_ONTOLOGIES = [
     'ontology.force.yml'
 ]
 
+
 @click.group()
 def cli():
     pass
@@ -85,7 +86,6 @@ def build_env(python_version):
         check_call(
             ["edm", "run", "-e", env_name, "--", "pico", "install", ontology]
         )
-
 
 
 @cli.command(help="Install the BDSS in the execution environment")

@@ -41,7 +41,9 @@ class TestBaseMCOModel(unittest.TestCase, UnittestTools):
                             "id": "force.bdss.enthought.plugin."
                             "test.v0.factory.dummy_mco."
                             "parameter.dummy_mco_parameter",
-                            "model_data": {"x": 0, "name": "", "type": ""},
+                            "model_data": {"x": 0,
+                                           "name": "",
+                                           "type": "Value"},
                         }
                     ],
                     "kpis": [],

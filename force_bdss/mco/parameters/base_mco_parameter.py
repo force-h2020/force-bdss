@@ -1,7 +1,7 @@
-from traits.api import Instance, Type
+from traits.api import Instance
 
 from force_bdss.core.base_model import BaseModel
-from force_bdss.core.ontology import CUBAType
+from force_bdss.core.ontology import CUBATypeMixin
 from force_bdss.core.verifier import VerifierError
 from force_bdss.mco.parameters.base_mco_parameter_factory import (
     BaseMCOParameterFactory,
@@ -9,7 +9,7 @@ from force_bdss.mco.parameters.base_mco_parameter_factory import (
 from force_bdss.local_traits import Identifier
 
 
-class BaseMCOParameter(BaseModel):
+class BaseMCOParameter(CUBATypeMixin, BaseModel):
     """The base class of all MCO Parameter models.
     Must be reimplemented by specific classes handling the specific parameter
     that MCOs understand.
@@ -20,13 +20,6 @@ class BaseMCOParameter(BaseModel):
 
     #: A user defined name for the parameter
     name = Identifier(visible=False)
-
-    #: A CUBA key describing the type of the parameter
-    cuba_type = CUBAType(visible=False)
-
-    #: Trait type for parameter values, determines expected data type
-    #: in absence of cuba_type
-    data_type = Type()
 
     def __init__(self, factory, *args, **kwargs):
         super().__init__(factory=factory, *args, **kwargs)
@@ -53,7 +46,7 @@ class BaseMCOParameter(BaseModel):
                     global_error="An MCO parameter is not named",
                 )
             )
-        if not self.cuba_type:
+        if not self.type:
             errors.append(
                 VerifierError(
                     subject=self,

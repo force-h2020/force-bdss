@@ -1,12 +1,13 @@
 from traits.api import Enum, HasStrictTraits, Float, Bool
 
+from force_bdss.core.ontology import CUBATypeMixin
 from force_bdss.local_traits import Identifier
 from force_bdss.utilities import pop_dunder_recursive
 
 from .verifier import VerifierError
 
 
-class KPISpecification(HasStrictTraits):
+class KPISpecification(CUBATypeMixin, HasStrictTraits):
     #: The user defined name of the variable containing the kpi value.
     name = Identifier()
 
