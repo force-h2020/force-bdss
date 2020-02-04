@@ -1,3 +1,4 @@
+from tempfile import NamedTemporaryFile
 from unittest import TestCase, mock
 
 from force_bdss.io.file_tree_builder import (
@@ -94,6 +95,12 @@ class TestFileTreeBuilder(TestCase):
         )
 
     def test__make_directory(self):
+
+        with mock.patch(FILE_TREE_MKPATH) as mock_mkdir:
+            with NamedTemporaryFile() as tmp_file:
+                self.builder._make_directory(tmp_file.name)
+            mock_mkdir.assert_not_called()
+
         with mock.patch(FILE_TREE_MKPATH) as mock_mkdir:
             mock_mkdir.side_effect = mock_empty
             self.builder._make_directory('')
