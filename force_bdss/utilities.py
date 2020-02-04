@@ -1,3 +1,24 @@
+import os
+
+
+def path_generator(dictionary, path=None):
+    """Recursively iterate over a nested dictionary to
+    yield each key as a path from the top of the branch"""
+
+    if path is None:
+        path = ""
+
+    for key, value in dictionary.items():
+        # Yield current path
+        yield os.path.join(path, key)
+
+        # Continue to iterate down a nested dict
+        if isinstance(value, dict):
+            yield from path_generator(
+                value, os.path.join(path, key)
+            )
+
+
 def pop_recursive(dictionary, remove_key):
     """Recursively remove a named key from dictionary and any contained
     dictionaries."""

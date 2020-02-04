@@ -1,9 +1,48 @@
 import unittest
 
-from force_bdss.utilities import pop_dunder_recursive, pop_recursive
+from force_bdss.utilities import (
+    pop_dunder_recursive,
+    pop_recursive,
+    path_generator
+)
 
 
 class TestDictUtils(unittest.TestCase):
+
+    def test_path_generator(self):
+
+        nested_dict = {
+            'first': {
+                'second_1': {
+                    'third_1': {}
+                },
+                'second_2': {
+                    'third_2': {}
+                }
+            }
+        }
+
+        paths = [
+            key for key in path_generator(nested_dict)
+        ]
+
+        self.assertListEqual(
+            ['first', 'first/second_1', 'first/second_1/third_1',
+             'first/second_2', 'first/second_2/third_2'],
+            paths
+        )
+
+        paths = [
+            key for key in path_generator(nested_dict, 'root')
+        ]
+
+        self.assertListEqual(
+            ['root/first', 'root/first/second_1',
+             'root/first/second_1/third_1',
+             'root/first/second_2', 'root/first/second_2/third_2'],
+            paths
+        )
+
     def test_dunder_recursive(self):
         test_dict = {
             "__traits_version__": "4.6.0",
