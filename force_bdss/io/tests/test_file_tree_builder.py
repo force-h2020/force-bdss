@@ -106,6 +106,7 @@ class TestFileTreeBuilder(TestCase):
             '3_production': {}
         }
         directory_list = self.builder._create_directory_list()
+        print(directory_list)
         self.assertListEqual(
             ['test_experiment_1',
              'test_experiment_1/1_build',
@@ -114,8 +115,7 @@ class TestFileTreeBuilder(TestCase):
             directory_list
         )
 
-        (self.builder._file_tree['test_experiment_1']
-         ['1_build']['1_nested_folder']) = {}
+        self.builder._file_tree['1_build']['1_nested_folder'] = {}
 
         directory_list = self.builder._create_directory_list()
         self.assertListEqual(
@@ -129,11 +129,9 @@ class TestFileTreeBuilder(TestCase):
 
     def test_build_file_tree(self):
         self.builder._file_tree = {
-            'test_experiment_1': {
-                '1_build': {},
-                '2_minimize': {},
-                '3_production': {},
-            }
+            '1_build': {},
+            '2_minimize': {},
+            '3_production': {},
         }
         with mock.patch(FILE_TREE_MKPATH) as mock_mkdir:
             mock_mkdir.side_effect = mock_empty

@@ -39,7 +39,8 @@ class FileTreeBuilder(HasStrictTraits):
         """Iterate through each branch in file tree and
         return each directory that needs to be created in
         an appropriate order."""
-        directory_list = [
+        directory_list = [self.root]
+        directory_list += [
             path for path in path_generator(
                 self._file_tree, self.root)
         ]
