@@ -9,11 +9,13 @@ def path_generator(dictionary, path=None):
         path = ""
 
     for key, value in dictionary.items():
-        # Yield current path
-        yield os.path.join(path, key)
-
-        # Continue to iterate down a nested dict
+        # Only continue to iterate down a nested dict
         if isinstance(value, dict):
+
+            # Yield current path
+            yield os.path.join(path, key)
+
+            # Recursively yield all nested dicts
             yield from path_generator(
                 value, os.path.join(path, key)
             )

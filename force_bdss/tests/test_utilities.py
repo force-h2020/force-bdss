@@ -14,10 +14,11 @@ class TestDictUtils(unittest.TestCase):
         nested_dict = {
             'first': {
                 'second_1': {
-                    'third_1': {}
+                    'third': {}
                 },
                 'second_2': {
-                    'third_2': {}
+                    'third': {},
+                    'not_a_dict': []
                 }
             }
         }
@@ -27,8 +28,8 @@ class TestDictUtils(unittest.TestCase):
         ]
 
         self.assertListEqual(
-            ['first', 'first/second_1', 'first/second_1/third_1',
-             'first/second_2', 'first/second_2/third_2'],
+            ['first', 'first/second_1', 'first/second_1/third',
+             'first/second_2', 'first/second_2/third'],
             paths
         )
 
@@ -38,8 +39,8 @@ class TestDictUtils(unittest.TestCase):
 
         self.assertListEqual(
             ['root/first', 'root/first/second_1',
-             'root/first/second_1/third_1',
-             'root/first/second_2', 'root/first/second_2/third_2'],
+             'root/first/second_1/third',
+             'root/first/second_2', 'root/first/second_2/third'],
             paths
         )
 
