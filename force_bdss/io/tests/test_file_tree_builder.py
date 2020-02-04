@@ -18,16 +18,12 @@ class TestFileTreeBuilder(TestCase):
     def setUp(self):
 
         self.builder = FileTreeBuilder(
-            directory='test_experiment_1'
+            root='test_experiment_1'
         )
 
     def test_add_path(self):
 
-        self.assertDictEqual(
-            {'test_experiment_1': {}},
-            self.builder._file_tree
-        )
-
+        self.assertDictEqual({}, self.builder._file_tree)
         self.builder.add_path("test_experiment_1/new_folder")
 
         self.assertDictEqual(
@@ -105,11 +101,9 @@ class TestFileTreeBuilder(TestCase):
 
     def test__create_directory_list(self):
         self.builder._file_tree = {
-            'test_experiment_1': {
-                '1_build': {},
-                '2_minimize': {},
-                '3_production': {},
-            }
+            '1_build': {},
+            '2_minimize': {},
+            '3_production': {}
         }
         directory_list = self.builder._create_directory_list()
         self.assertListEqual(

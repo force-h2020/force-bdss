@@ -14,7 +14,7 @@ class FileTreeBuilder(HasStrictTraits):
 
     #: Location to create file tree in. (By default, the
     #: current working directory)
-    directory = Directory()
+    root = Directory()
 
     # --------------------
     #  Private Attributes
@@ -24,9 +24,7 @@ class FileTreeBuilder(HasStrictTraits):
     _file_tree = Dict(Directory, Dict)
 
     def __file_tree_default(self):
-        return collections.OrderedDict({
-            self.directory: {}
-        })
+        return collections.OrderedDict()
 
     # --------------------
     #   Private Methods
@@ -42,7 +40,8 @@ class FileTreeBuilder(HasStrictTraits):
         return each directory that needs to be created in
         an appropriate order."""
         directory_list = [
-            path for path in path_generator(self._file_tree)
+            path for path in path_generator(
+                self._file_tree, self.root)
         ]
         return directory_list
     # --------------------
@@ -54,9 +53,9 @@ class FileTreeBuilder(HasStrictTraits):
         edit an existing paths"""
 
         directories = path.split('/')
-        directory = self._file_tree[directories[0]]
+        directory = self._file_tree
 
-        for folder in directories[1:]:
+        for folder in directories:
             if folder not in directory:
                 directory[folder] = {}
             directory = directory[folder]
