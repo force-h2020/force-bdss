@@ -58,14 +58,14 @@ class TestDictUtils(unittest.TestCase):
         class Foo(HasTraits):
             string = Str("abc")
             int_list = List(Int())
-            dictionary = Dict(key_trait=Str(), value_trait=Int())
+            dictionary = Dict(key_trait=Str(), value_trait=List(Int()))
 
-        f = Foo(int_list=[1, 2, 3], dictionary={"a": 1, "b": 2})
+        f = Foo(int_list=[1, 2, 3], dictionary={"a": [1], "b": [2, 3]})
         state = pop_dunder_recursive(f.__getstate__())
         self.assertDictEqual(
             nested_getstate(state),
             {
-                "dictionary": {"a": 1, "b": 2},
+                "dictionary": {"a": [1], "b": [2, 3]},
                 "int_list": [1, 2, 3],
                 "string": "abc",
             },
