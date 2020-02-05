@@ -51,6 +51,11 @@ def nested_getstate(state_dict):
         try:
             if isinstance(state_dict[key], (tuple, list)):
                 state_dict[key] = [el.__getstate__() for el in state_dict[key]]
+            elif isinstance(state_dict[key], dict):
+                for element in state_dict[key]:
+                    state_dict[key][element] = state_dict[key][
+                        element
+                    ].__getstate__()
             else:
                 state_dict[key] = state_dict[key].__getstate__()
         except AttributeError:
