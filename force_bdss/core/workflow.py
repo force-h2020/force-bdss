@@ -6,7 +6,8 @@ from traits.api import (
     Instance,
     List,
     provides,
-    on_trait_change
+    on_trait_change,
+    Bool,
 )
 
 from force_bdss.core.execution_layer import ExecutionLayer
@@ -18,6 +19,7 @@ from force_bdss.notification_listeners.base_notification_listener_model \
 from force_bdss.mco.i_evaluator import IEvaluator
 from force_bdss.core.data_value import DataValue
 from force_bdss.utilities import pop_dunder_recursive, nested_getstate
+from force_bdss.events.mco_events import MCOTerminateEvent
 
 
 log = logging.getLogger(__name__)
@@ -38,6 +40,8 @@ class Workflow(EventNotifierMixin, HasStrictTraits):
 
     #: Contains information about the listeners to be setup
     notification_listeners = List(BaseNotificationListenerModel)
+
+    _terminate = Bool(False, visible=False, transient=True)
 
     def execute(self, data_values):
         """Executes the given workflow using the list of data values.
@@ -275,3 +279,23 @@ class Workflow(EventNotifierMixin, HasStrictTraits):
             The BaseDriverEvent that has been changed
         """
         self.notify(event)
+
+        self._scan_pending_terminate_events()
+
+    def _scan_pending_terminate_events(self):
+        """ Iterates over the `pending_event` attribute of the notification
+        listeners and checks whether any `MCOTerminateEvent` are pending.
+        If there is such event pending, sets the `_terminate` attribute to True.
+        """
+        for notification_listener in self.notification_listeners:
+            try:
+                pending_event = notification_listener.get_pending_event()
+            except AttributeError:
+                pass
+            else:
+                if isinstance(pending_event, MCOTerminateEvent):
+                    self._terminate = True
+                    notification_listener.resolve_pending_event()
+
+    def terminating(self):
+        return self._terminate
