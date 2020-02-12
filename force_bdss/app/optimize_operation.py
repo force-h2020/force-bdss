@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from traits.api import (
     DelegatesTo,
@@ -113,6 +114,10 @@ class OptimizeOperation(HasStrictTraits):
                 )
                 self._finalize_listener(listener)
                 self.listeners.remove(listener)
+
+        if self.workflow.terminating():
+            self._finalize_listeners()
+            sys.exit("BDSS stopped")
 
     def _finalize_listener(self, listener):
         """Helper method. Finalizes a listener and handles possible

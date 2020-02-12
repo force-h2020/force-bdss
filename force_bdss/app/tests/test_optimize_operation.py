@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 import testfixtures
 
@@ -249,7 +249,7 @@ class TestOptimizeOperation(TestCase):
 
         self.operation.workflow.mco_model.notify_progress_event(
             [DataValue(value=1), DataValue(value=2)],
-            [DataValue(value=3), DataValue(value=4)]
+            [DataValue(value=3), DataValue(value=4)],
         )
 
         self.assertIsInstance(
@@ -364,3 +364,14 @@ class TestOptimizeOperation(TestCase):
                     "The number of output slots is incorrect.",
                 ),
             )
+
+    def test_terminating_workflow(self):
+        self.operation.workflow._terminate = True
+        self.operation._initialize_listeners()
+        with mock.patch(
+            "force_bdss.app.optimize_operation.OptimizeOperation"
+            "._finalize_listeners"
+        ) as mock_call:
+            with self.assertRaisesRegex(SystemExit, "BDSS stopped"):
+                self.operation._deliver_start_event()
+            mock_call.assert_called_once()
