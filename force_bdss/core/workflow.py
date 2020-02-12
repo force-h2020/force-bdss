@@ -285,7 +285,8 @@ class Workflow(EventNotifierMixin, HasStrictTraits):
     def _scan_pending_terminate_events(self):
         """ Iterates over the `pending_event` attribute of the notification
         listeners and checks whether any `MCOTerminateEvent` are pending.
-        If there is such event pending, sets the `_terminate` attribute to True.
+        If there is such event pending, sets the self.`_terminate` attribute
+        to True.
         """
         for notification_listener in self.notification_listeners:
             try:
