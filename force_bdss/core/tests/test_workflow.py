@@ -395,3 +395,21 @@ class TestWorkflow(unittest.TestCase, UnittestTools):
 
         with self.assertTraitChanges(workflow, "event", count=1):
             workflow.mco_model.notify(BaseDriverEvent())
+
+    def test_workflow_terminate(self):
+        workflow_file = ProbeWorkflowFile(
+            path=fixtures.get("test_probe_ui_terminate.json")
+        )
+        workflow_file.read()
+        workflow = workflow_file.workflow
+        workflow.execution_layers[0].data_sources[0].notify(
+            BaseDriverEvent()
+        )
+        self.assertEqual(workflow.terminating(), workflow._terminate)
+        self.assertFalse(workflow.terminating())
+        workflow.notification_listeners[0]._has_pending_event = True
+        workflow.execution_layers[0].data_sources[0].notify(
+            BaseDriverEvent()
+        )
+        self.assertEqual(workflow.terminating(), workflow._terminate)
+        self.assertTrue(workflow.terminating())

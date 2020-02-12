@@ -1,12 +1,16 @@
 from traits.api import Any
 
 from force_bdss.core.factory_registry import FactoryRegistry
-from force_bdss.tests.probe_classes.probe_extension_plugin import \
-    ProbeExtensionPlugin
+from force_bdss.tests.probe_classes.probe_extension_plugin import (
+    ProbeExtensionPlugin,
+)
 
 from .mco import ProbeMCOFactory
 from .data_source import ProbeDataSourceFactory
-from .notification_listener import ProbeNotificationListenerFactory
+from .notification_listener import (
+    ProbeNotificationListenerFactory,
+    ProbeUINotificationListenerFactory,
+)
 from .ui_hooks import ProbeUIHooksFactory
 
 
@@ -24,7 +28,10 @@ class ProbeFactoryRegistry(FactoryRegistry):
         return [ProbeDataSourceFactory(self.plugin)]
 
     def _notification_listener_factories_default(self):
-        return [ProbeNotificationListenerFactory(self.plugin)]
+        return [
+            ProbeNotificationListenerFactory(self.plugin),
+            ProbeUINotificationListenerFactory(self.plugin),
+        ]
 
     def _ui_hooks_factories_default(self):
         return [ProbeUIHooksFactory(self.plugin)]
