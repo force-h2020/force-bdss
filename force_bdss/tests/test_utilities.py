@@ -1,6 +1,12 @@
 import unittest
 
-from force_bdss.utilities import pop_dunder_recursive, pop_recursive
+from traits.api import HasTraits, List, Str, Int, Dict
+
+from force_bdss.utilities import (
+    pop_dunder_recursive,
+    pop_recursive,
+    nested_getstate,
+)
 
 
 class TestDictUtils(unittest.TestCase):
@@ -46,4 +52,21 @@ class TestDictUtils(unittest.TestCase):
         missing_key = "another_key"
         self.assertDictEqual(
             pop_recursive(small_dict, missing_key), small_dict
+        )
+
+    def test_nested_getstate(self):
+        class Foo(HasTraits):
+            string = Str("abc")
+            int_list = List(Int())
+            dictionary = Dict(key_trait=Str(), value_trait=List(Int()))
+
+        f = Foo(int_list=[1, 2, 3], dictionary={"a": [1], "b": [2, 3]})
+        state = pop_dunder_recursive(f.__getstate__())
+        self.assertDictEqual(
+            nested_getstate(state),
+            {
+                "dictionary": {"a": [1], "b": [2, 3]},
+                "int_list": [1, 2, 3],
+                "string": "abc",
+            },
         )
