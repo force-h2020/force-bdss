@@ -14,10 +14,6 @@ from force_bdss.tests import fixtures
 from force_bdss.tests.probe_classes.workflow_file import ProbeWorkflowFile
 
 
-def raise_exception(*args, **kwargs):
-    raise Exception()
-
-
 class TestOptimizeOperation(TestCase):
     def setUp(self):
         self.operation = OptimizeOperation()
@@ -366,7 +362,7 @@ class TestOptimizeOperation(TestCase):
             )
 
     def test_terminating_workflow(self):
-        self.operation.workflow._terminate = True
+        self.operation._stop_event.set()
         self.operation._initialize_listeners()
         with mock.patch(
             "force_bdss.app.optimize_operation.OptimizeOperation"

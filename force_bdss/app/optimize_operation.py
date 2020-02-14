@@ -1,5 +1,6 @@
 import logging
 import sys
+from threading import Event as ThreadingEvent
 
 from traits.api import (
     DelegatesTo,
@@ -39,6 +40,16 @@ class OptimizeOperation(HasStrictTraits):
 
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
+
+    _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
+
+    _pause_event = Instance(ThreadingEvent, visible=False, transient=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._stop_event = ThreadingEvent()
+        self._pause_event = ThreadingEvent()
+        self._pause_event.set()
 
     def run(self):
         """ Create and run the optimizer. """
@@ -115,8 +126,13 @@ class OptimizeOperation(HasStrictTraits):
                 self._finalize_listener(listener)
                 self.listeners.remove(listener)
 
-        if self.workflow.terminating():
-            self._finalize_listeners()
+        self.ui_event_response()
+
+    def ui_event_response(self):
+        self._pause_event.wait()
+
+        if self._stop_event.is_set():
+            self.destroy_mco()
             sys.exit("BDSS stopped")
 
     def _finalize_listener(self, listener):
@@ -151,6 +167,12 @@ class OptimizeOperation(HasStrictTraits):
                     )
                 )
                 raise
+
+            try:
+                listener.set_stop_event(self._stop_event)
+                listener.set_pause_event(self._pause_event)
+            except AttributeError:
+                pass
 
             try:
                 listener.initialize(nl_model)
