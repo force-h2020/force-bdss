@@ -5,7 +5,6 @@ from force_bdss.api import (
     BaseNotificationListenerModel,
     BaseNotificationListenerFactory,
 )
-from force_bdss.events.mco_events import MCOTerminateEvent
 
 
 def pass_function(*args, **kwargs):
