@@ -106,30 +106,3 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
             deliver_function=deliver_function,
             finalize_function=finalize_function,
         )
-
-
-class ProbeUINotificationListenerModel(BaseNotificationListenerModel):
-    _has_pending_event = Bool(False)
-
-    def get_pending_event(self):
-        if self._has_pending_event:
-            return MCOTerminateEvent()
-        else:
-            return None
-
-    def resolve_pending_event(self):
-        pass
-
-
-class ProbeUINotificationListenerFactory(BaseNotificationListenerFactory):
-    def get_name(self):
-        return "test_uinotification_listener"
-
-    def get_identifier(self):
-        return "probe_uinotification_listener"
-
-    def get_listener_class(self):
-        return BaseNotificationListener
-
-    def get_model_class(self):
-        return ProbeUINotificationListenerModel

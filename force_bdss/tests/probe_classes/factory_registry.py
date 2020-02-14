@@ -9,7 +9,6 @@ from .mco import ProbeMCOFactory
 from .data_source import ProbeDataSourceFactory
 from .notification_listener import (
     ProbeNotificationListenerFactory,
-    ProbeUINotificationListenerFactory,
 )
 from .ui_hooks import ProbeUIHooksFactory
 
@@ -28,10 +27,7 @@ class ProbeFactoryRegistry(FactoryRegistry):
         return [ProbeDataSourceFactory(self.plugin)]
 
     def _notification_listener_factories_default(self):
-        return [
-            ProbeNotificationListenerFactory(self.plugin),
-            ProbeUINotificationListenerFactory(self.plugin),
-        ]
+        return [ProbeNotificationListenerFactory(self.plugin)]
 
     def _ui_hooks_factories_default(self):
         return [ProbeUIHooksFactory(self.plugin)]
