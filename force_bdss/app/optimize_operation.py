@@ -41,8 +41,12 @@ class OptimizeOperation(HasStrictTraits):
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
+    #: Threading Event instance that indicates if the optimization operation
+    #: should be stopped.
     _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
 
+    #: Threading Event instance that indicates if the optimization operation
+    #: should be paused and then resumed.
     _pause_event = Instance(ThreadingEvent, visible=False, transient=True)
 
     def __init__(self, *args, **kwargs):
@@ -110,7 +114,11 @@ class OptimizeOperation(HasStrictTraits):
 
     @on_trait_change("workflow_file:workflow:event,mco:event")
     def _deliver_event(self, event):
-        """ Delivers an event to the listeners """
+        """ Events fired by the workflow_file.workflow are the communication
+        entry points with the BDSS execution process.
+        Delivers an event to the listeners, and performs the
+        control events check after the `event` is delivered.
+        """
         for listener in self.listeners[:]:
             try:
                 listener.deliver(event)
@@ -129,6 +137,10 @@ class OptimizeOperation(HasStrictTraits):
         self.ui_event_response()
 
     def ui_event_response(self):
+        """ Checks the status of the _pause_event and _stop_event
+        attributes. Pauses the BDSS execution until the _pause_event is set.
+        Terminates the OptimizeOperation if the _stop_event is set.
+        """
         self._pause_event.wait()
 
         if self._stop_event.is_set():

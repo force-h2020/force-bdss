@@ -4,6 +4,10 @@ from traits.api import Instance, HasStrictTraits
 
 
 class UIEventNotificationMixin(HasStrictTraits):
+    """ The UIEventNotificationMixin contains the _stop and _pause
+    threading.Event instances, and implements basic API to send the
+    stop or pause / resume commands via these events."""
+
     #: control event that indicates whether the `STOP` signal has been
     #: received by the Listener from the UI
     _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
