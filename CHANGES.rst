@@ -87,10 +87,11 @@ Documentation
 Maintenance and code organization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Envisage version updated to 4.8.0-3 (#222, #272)
+* Envisage version updated to 4.9.2-2 (#222, #272, #289)
 * Click version updated to 7.0-1 (#222)
 * Flake version updated to 3.7.7-1 (#222)
-* Stevedore version updated to 1.30-1 (#222)
+* Sphinx version updated to 1.8.5-6 (#289)
+* Stevedore version updated to 1.32-0 (#222, #289)
 * EDM version updated to 2.1.0 in Travis CI (#223, #256) using python 3.6 bootstrap environment
 * Travis CI now runs 2 jobs: Linux Ubuntu Bionic (#256) and MacOS (#223)
 * Better handling of ClickExceptions in CI (#245)
