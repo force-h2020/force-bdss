@@ -91,7 +91,7 @@ Maintenance and code organization
 * Click version updated to 7.0-1 (#222)
 * Flake version updated to 3.7.7-1 (#222)
 * Stevedore version updated to 1.30-1 (#222)
-# EDM version updated to 2.1.0 in Travis CI (#223, #256) using python 3.6 bootstrap environment
+* EDM version updated to 2.1.0 in Travis CI (#223, #256) using python 3.6 bootstrap environment
 * Travis CI now runs 2 jobs: Linux Ubuntu Bionic (#256) and MacOS (#223)
 * Better handling of ClickExceptions in CI (#245)
 
