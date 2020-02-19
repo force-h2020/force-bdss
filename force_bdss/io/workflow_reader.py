@@ -172,14 +172,25 @@ class WorkflowReader(HasStrictTraits):
             Dictionary in the format, compatible with Workflow.from_json()
         """
         workflow_data = json_data.get("workflow", {})
+
+        # Currently there are two main differences between version 1 and 1.1:
+        # - `mco` key used in version 1 vs `mco_model` key in version 1.1
+        # - `execution_layers` value is a list of lists in version 1 vs a
+        # list of dictionaries in version 1.1
+
+        # Renaming of mco key to mco_model
         if format_version == "1":
             workflow_data["mco_model"] = workflow_data.get("mco", None)
             workflow_data.pop("mco", None)
         else:
             workflow_data["mco_model"] = workflow_data.get("mco_model", None)
+
         workflow_data["execution_layers"] = workflow_data.get(
             "execution_layers", []
         )
+
+        # Changing `execution_layers` to a list of dictionaries with a single
+        # `data_sources` key
         if format_version == "1":
             for i, layer in enumerate(workflow_data["execution_layers"]):
                 workflow_data["execution_layers"][i] = {"data_sources": layer}
