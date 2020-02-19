@@ -10,7 +10,7 @@ PYTHON_VERSIONS = ["3.6"]
 CORE_DEPS = ["envisage==4.9.2-2",
              "click==7.0-1"]
 
-DOCS_DEPS = ["sphinx==1.8.5-3"]
+DOCS_DEPS = ["sphinx==1.8.5-6"]
 
 DEV_DEPS = ["flake8==3.7.7-1",
             "coverage==4.3.4-1",
