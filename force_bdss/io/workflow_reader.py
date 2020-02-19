@@ -172,7 +172,11 @@ class WorkflowReader(HasStrictTraits):
             Dictionary in the format, compatible with Workflow.from_json()
         """
         workflow_data = json_data.get("workflow", {})
-        workflow_data["mco_model"] = workflow_data.get("mco_model", None)
+        if format_version == "1":
+            workflow_data["mco_model"] = workflow_data.get("mco", None)
+            workflow_data.pop("mco", None)
+        else:
+            workflow_data["mco_model"] = workflow_data.get("mco_model", None)
         workflow_data["execution_layers"] = workflow_data.get(
             "execution_layers", []
         )
