@@ -17,8 +17,9 @@ backward incompatible changes, including:
     -  New classes: ``WorkflowFile``
     - ``BaseFactory`` class no longer carries around the Envisage plugin that it is
       instantiated from, only a reference to the name and id
-* Dependencies of core EDM packages (traits, traitsui, envisage etc.) updated to latest versions
-  as of release date
+    - Communication pathway for ``BaseDriverEvents`` during an MCO run has been changed,
+      rendering some methods obsolete
+* New workflow file formatting version 1.1
 
 The following people contributed
 code changes for this release:
@@ -26,13 +27,74 @@ code changes for this release:
 * Corran Webster
 * James Johnson
 * Frank Longford
-* Nicola Demitri
+* Nicola De Mitri
 * Petr Kungurtsev
 
 Features
 ~~~~~~~~
-* New
-* New auto-generated Sphinx documentation
+
+* New ``ServiceOfferExtensionPlugin`` class (#227, #228), providing support for developers
+  to contribute custom UI objects for the WfManager in a BDSS plugin.
+* New ``WorkflowFile`` class (#220) containing all functionalities required to describe, read and write
+  ``Workflow`` objects
+* Selection of useful objects from plugins have been incorporated into core library
+    - ``BaseMCOParameter`` subclasses (#242, #253, #255)
+    - ``BaseCSVWriter*`` classes (#244), subclasses of ``BaseNotificationListener``
+* New ``BaseOptimizerEngine`` class (#243), providing a standard interface between black-box
+  optimization libraries (scipy, acado, nevergrad etc.) and functionalities of the ``BaseMCO`` class
+* ``WeightedOptimizer`` subclass (#243) ported from ITWM plugin and included as part of core library
+* ``BaseDriverEvents`` class now includes serialization and deserilaization methods (#247, #248, #275),
+  generally based on those ported from the WfManager
+* New ``WeightedMCOStartEvent`` and ``WeightedMCOProgressEvent`` (#274) included as part of core library,
+  designed to be used alongside ``WeightedOptmizer``
+
+
+Changes
+~~~~~~~~
+
+* Major refactoring of ``BDSSApplication`` (#220) to separate core features from Envisage
+* ``BaseDriverEvents`` are propagated through the ``Workflow`` class, rather than the
+  ``BaseMCO`` class (#269, #279).
+* Replaced (now obsolete) ``Unicode`` traits in favour of ``Str`` (#265, #280)
+* ``Workflow.mco`` attribute renamed to ``Workflow.mco_model`` (#257)
+* ``WorkflowReader`` and ``WorkflowWriter`` classes refactored (#266, #263), resulting in new
+  version 1.1 of workflow file formats
+
+Fixes
+~~~~~
+
+* Fixes bug whereby ``WorkflowReader`` class could mutate workflow file (#
+* Adds missing verification step for ``BaseMCOModel`` (#226) that requires at least 1 KPI
+* Use ``tempfile`` library for creating temporary files (#273) in unit testing
+* Fixes applied to remove weak design choice (#232, #276) of lower level objects accessing higher
+  application-level objects
+* API module improved to provide more classes (#277) to be accessible by external packages
+
+Deprecations
+~~~~~~~~~~~~
+
+* ``BaseMCO.notify_driver_event`` method deprecated (#276), in favour of ``BaseMCOModel.notify_driver_event``
+* ``BaseFactory`` class no longer carries around the Envisage plugin (#232) that it is
+  instantiated from, only a reference to the name and id
+
+Documentation
+~~~~~~~~~~~~~
+
+* Added documentation for contributing UI objects via ``ServiceOfferExtensionPlugin`` (#225, #228)
+* Updated README (#262) including build status and links to installation instructions
+* New auto-generated Sphinx documentation (#245, #251)
+
+Maintenance and code organization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Envisage version updated to 4.8.0-3 (#222, #272)
+* Click version updated to 7.0-1 (#222)
+* Flake version updated to 3.7.7-1 (#222)
+* Stevedore version updated to 1.30-1 (#222)
+# EDM version updated to 2.1.0 in Travis CI (#223, #256) using python 3.6 bootstrap environment
+* Travis CI now runs 2 jobs: Linux Ubuntu Bionic (#256) and MacOS (#223)
+* Better handling of ClickExceptions in CI (#245)
+
 
 Release 0.3.0
 -------------
