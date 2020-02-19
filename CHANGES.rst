@@ -1,8 +1,38 @@
 FORCE BDSS Changelog
---------------------
+====================
 
 Release 0.4.0
 -------------
+
+Released:
+
+Release notes
+~~~~~~~~~~~~~
+
+Version 0.4.0 is a major update to the BDSS package, and includes a number of
+backward incompatible changes, including:
+
+* Major refactoring of ``BDSSApplication`` class to separate dependency on Envisage library
+    -  Removed classes: ``BaseCoreDriver``, ``CoreEvaluationDriver``, ``CoreMCODriver``
+    -  New classes: ``WorkflowFile``
+    - ``BaseFactory`` class no longer carries around the Envisage plugin that it is
+      instantiated from, only a reference to the name and id
+* Dependencies of core EDM packages (traits, traitsui, envisage etc.) updated to latest versions
+  as of release date
+
+The following people contributed
+code changes for this release:
+
+* Corran Webster
+* James Johnson
+* Frank Longford
+* Nicola Demitri
+* Petr Kungurtsev
+
+Features
+~~~~~~~~
+* New
+* New auto-generated Sphinx documentation
 
 Release 0.3.0
 -------------
