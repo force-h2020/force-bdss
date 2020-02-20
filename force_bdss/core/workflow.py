@@ -6,7 +6,7 @@ from traits.api import (
     Instance,
     List,
     provides,
-    on_trait_change
+    on_trait_change,
 )
 
 from force_bdss.core.execution_layer import ExecutionLayer

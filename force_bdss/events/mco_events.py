@@ -46,6 +46,10 @@ class MCOFinishEvent(BaseDriverEvent):
     """ The MCO driver should emit this event when the evaluation ends."""
 
 
+class MCOTerminateEvent(BaseDriverEvent):
+    """ The MCO Event indicating that the Workflow should be terminated.."""
+
+
 class MCOProgressEvent(BaseDriverEvent):
     """ The MCO driver should emit this event for every new point that is
     evaluated during the MCO run.

@@ -9,6 +9,7 @@ from force_bdss.events.mco_events import (
     MCOStartEvent,
     WeightedMCOStartEvent,
     MCOFinishEvent,
+    MCOTerminateEvent
 )
 
 
@@ -76,6 +77,16 @@ class TestMCOEvents(unittest.TestCase):
             {
                 "model_data": {},
                 "id": "force_bdss.events.mco_events.MCOFinishEvent",
+            },
+        )
+
+    def test_getstate_terminate_event(self):
+        event = MCOTerminateEvent()
+        self.assertDictEqual(
+            event.__getstate__(),
+            {
+                "model_data": {},
+                "id": "force_bdss.events.mco_events.MCOTerminateEvent",
             },
         )
 
