@@ -1,4 +1,6 @@
 import logging
+import sys
+from threading import Event as ThreadingEvent
 
 from traits.api import (
     DelegatesTo,
@@ -38,6 +40,20 @@ class OptimizeOperation(HasStrictTraits):
 
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
+
+    #: Threading Event instance that indicates if the optimization operation
+    #: should be stopped.
+    _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
+
+    #: Threading Event instance that indicates if the optimization operation
+    #: should be paused and then resumed.
+    _pause_event = Instance(ThreadingEvent, visible=False, transient=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._stop_event = ThreadingEvent()
+        self._pause_event = ThreadingEvent()
+        self._pause_event.set()
 
     def run(self):
         """ Create and run the optimizer. """
@@ -98,7 +114,11 @@ class OptimizeOperation(HasStrictTraits):
 
     @on_trait_change("workflow_file:workflow:event,mco:event")
     def _deliver_event(self, event):
-        """ Delivers an event to the listeners """
+        """ Events fired by the workflow_file.workflow are the communication
+        entry points with the BDSS execution process.
+        Delivers an event to the listeners, and performs the
+        control events check after the `event` is delivered.
+        """
         for listener in self.listeners[:]:
             try:
                 listener.deliver(event)
@@ -113,6 +133,19 @@ class OptimizeOperation(HasStrictTraits):
                 )
                 self._finalize_listener(listener)
                 self.listeners.remove(listener)
+
+        self.ui_event_response()
+
+    def ui_event_response(self):
+        """ Checks the status of the _pause_event and _stop_event
+        attributes. Pauses the BDSS execution until the _pause_event is set.
+        Terminates the OptimizeOperation if the _stop_event is set.
+        """
+        self._pause_event.wait()
+
+        if self._stop_event.is_set():
+            self.destroy_mco()
+            sys.exit("BDSS stopped")
 
     def _finalize_listener(self, listener):
         """Helper method. Finalizes a listener and handles possible
@@ -146,6 +179,12 @@ class OptimizeOperation(HasStrictTraits):
                     )
                 )
                 raise
+
+            try:
+                listener.set_stop_event(self._stop_event)
+                listener.set_pause_event(self._pause_event)
+            except AttributeError:
+                pass
 
             try:
                 listener.initialize(nl_model)

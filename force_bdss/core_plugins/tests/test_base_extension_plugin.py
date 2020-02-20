@@ -9,16 +9,16 @@ from force_bdss.tests.probe_classes.probe_extension_plugin import \
 class TestBaseExtensionPlugin(unittest.TestCase):
     def test_basic_init(self):
         plugin = ProbeExtensionPlugin()
-        self.assertEqual(len(plugin.data_source_factories), 1)
-        self.assertEqual(len(plugin.notification_listener_factories), 1)
-        self.assertEqual(len(plugin.mco_factories), 1)
-        self.assertEqual(len(plugin.ui_hooks_factories), 1)
+        self.assertEqual(1, len(plugin.data_source_factories))
+        self.assertEqual(1, len(plugin.notification_listener_factories))
+        self.assertEqual(1, len(plugin.mco_factories))
+        self.assertEqual(1, len(plugin.ui_hooks_factories))
         self.assertFalse(plugin.broken)
-        self.assertEqual(plugin.error_msg, "")
-        self.assertEqual(plugin.error_tb, "")
-        self.assertEqual(plugin.name, "Probe extension")
-        self.assertEqual(plugin.version, 0)
-        self.assertEqual(plugin.description, "A description")
+        self.assertEqual("", plugin.error_msg)
+        self.assertEqual("", plugin.error_tb)
+        self.assertEqual("Probe extension", plugin.name)
+        self.assertEqual(0, plugin.version)
+        self.assertEqual("A description", plugin.description)
 
     def test_exception(self):
         with mock.patch.object(ProbeExtensionPlugin, "get_name") \
@@ -29,8 +29,8 @@ class TestBaseExtensionPlugin(unittest.TestCase):
 
         self.assertEqual(plugin.error_msg, "Boom")
         self.assertNotEqual(plugin.error_tb, "")
-        self.assertEqual(len(plugin.data_source_factories), 0)
-        self.assertEqual(len(plugin.notification_listener_factories), 0)
-        self.assertEqual(len(plugin.mco_factories), 0)
-        self.assertEqual(len(plugin.ui_hooks_factories), 0)
+        self.assertEqual(0, len(plugin.data_source_factories))
+        self.assertEqual(0, len(plugin.notification_listener_factories))
+        self.assertEqual(0, len(plugin.mco_factories))
+        self.assertEqual(0, len(plugin.ui_hooks_factories))
         self.assertTrue(plugin.broken)

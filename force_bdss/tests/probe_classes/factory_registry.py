@@ -1,12 +1,15 @@
 from traits.api import Any
 
 from force_bdss.core.factory_registry import FactoryRegistry
-from force_bdss.tests.probe_classes.probe_extension_plugin import \
-    ProbeExtensionPlugin
+from force_bdss.tests.probe_classes.probe_extension_plugin import (
+    ProbeExtensionPlugin,
+)
 
 from .mco import ProbeMCOFactory
 from .data_source import ProbeDataSourceFactory
-from .notification_listener import ProbeNotificationListenerFactory
+from .notification_listener import (
+    ProbeNotificationListenerFactory,
+)
 from .ui_hooks import ProbeUIHooksFactory
 
 
