@@ -1,6 +1,9 @@
 from unittest import TestCase
 
-from force_bdss.events.data_source_events import DataSourceStartEvent, DataSourceFinishEvent
+from force_bdss.events.data_source_events import (
+    DataSourceStartEvent,
+    DataSourceFinishEvent,
+)
 
 
 class TestDataSourceEvents(TestCase):
@@ -10,7 +13,8 @@ class TestDataSourceEvents(TestCase):
             event.__getstate__(),
             {
                 "model_data": {},
-                "id": "force_bdss.events.data_source_events.DataSourceStartEvent",
+                "id": "force_bdss.events.data_source_events."
+                      "DataSourceStartEvent",
             },
         )
 
@@ -20,6 +24,7 @@ class TestDataSourceEvents(TestCase):
             event.__getstate__(),
             {
                 "model_data": {},
-                "id": "force_bdss.events.data_source_events.DataSourceFinishEvent",
+                "id": "force_bdss.events.data_source_events."
+                      "DataSourceFinishEvent",
             },
         )

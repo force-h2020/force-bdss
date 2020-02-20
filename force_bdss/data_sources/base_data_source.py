@@ -23,7 +23,7 @@ class BaseDataSource(ABCHasStrictTraits):
 
     def _run(self, model, parameters):
         """ Private method to execute the DataSource from the ExecutionLayer.
-        Sends a BaseDriverEvent event before and after the DataSource execution,
+        Sends BaseDriverEvent event before and after the DataSource execution,
         such that the Workflow can be interacted with during its execution.
         """
         model.notify(DataSourceStartEvent())
