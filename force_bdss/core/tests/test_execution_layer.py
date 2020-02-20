@@ -1,5 +1,5 @@
 import json
-from unittest import TestCase
+from unittest import TestCase, mock
 
 import testfixtures
 
@@ -230,6 +230,14 @@ class TestExecutionLayer(TestCase, UnittestTools):
         self.assertEqual(res[1].name, "three")
         self.assertEqual(res[1].value, 3)
 
+        with mock.patch(
+            "force_bdss.data_sources.base_data_source.BaseDataSource._run",
+            return_value=run(None)
+        ) as mock_run:
+            # mock_run.side_effect = [1, 2]
+            self.layer.execute_layer(data_values)
+        mock_run.assert_called_once()
+
     def test_from_json(self):
         json_path = fixtures.get("test_probe.json")
         with open(json_path) as f:
@@ -259,17 +267,14 @@ class TestExecutionLayer(TestCase, UnittestTools):
                 "output_slots_size": 1,
             }
         )
-        self.assertDictEqual(
-            layer.__getstate__(), layer_data
-        )
+        self.assertDictEqual(layer.__getstate__(), layer_data)
 
     def test_empty_layer_from_json(self):
         layer = ExecutionLayer.from_json(self.registry, {})
         self.assertEqual(0, len(layer.data_sources))
 
     def test_notify_driver_event(self):
-        with self.assertTraitChanges(
-                self.layer, 'event', count=1):
+        with self.assertTraitChanges(self.layer, "event", count=1):
             self.layer.data_sources[0].notify(BaseDriverEvent())
 
 
