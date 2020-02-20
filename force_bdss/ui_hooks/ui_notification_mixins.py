@@ -23,8 +23,8 @@ class UIEventNotificationMixin(HasStrictTraits):
         self._pause_event = event
 
     def send_stop(self):
-        self._pause_event.set()
         self._stop_event.set()
+        self._pause_event.set()
 
     def send_pause(self):
         self._pause_event.clear()
