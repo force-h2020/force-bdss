@@ -23,7 +23,10 @@ class UIEventNotificationMixin(HasStrictTraits):
         self._pause_event = event
 
     def send_stop(self):
+        # Sends stop event first, in case run is already paused
         self._stop_event.set()
+
+        # In case system is paused, then resume and stop
         self._pause_event.set()
 
     def send_pause(self):
