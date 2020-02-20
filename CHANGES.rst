@@ -47,6 +47,8 @@ Features
   generally based on those ported from the WfManager
 * New ``WeightedMCOStartEvent`` and ``WeightedMCOProgressEvent`` (#274) included as part of core library,
   designed to be used alongside ``WeightedOptmizer``
+* New ``UIEventNotificationMixin`` class (#296) and ability to stop and pause the ``OptimizeOperation``
+  during an MCO run via a ``BaseDriverEvent``
 
 
 Changes
