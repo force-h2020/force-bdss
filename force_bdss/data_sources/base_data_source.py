@@ -2,6 +2,10 @@ import abc
 from traits.api import ABCHasStrictTraits, Instance
 
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.events.data_source_events import (
+    DataSourceStartEvent,
+    DataSourceFinishEvent,
+)
 
 
 class BaseDataSource(ABCHasStrictTraits):
@@ -10,13 +14,22 @@ class BaseDataSource(ABCHasStrictTraits):
 
     Inherit from this class for your specific DataSource.
     """
+
     #: A reference to the factory
     factory = Instance(IDataSourceFactory)
 
     def __init__(self, factory, *args, **kwargs):
-        super(BaseDataSource, self).__init__(
-            factory=factory, *args, **kwargs
-        )
+        super(BaseDataSource, self).__init__(factory=factory, *args, **kwargs)
+
+    def _run(self, model, parameters):
+        """ Private method to execute the DataSource from the ExecutionLayer.
+        Sends BaseDriverEvent event before and after the DataSource execution,
+        such that the Workflow can be interacted with during its execution.
+        """
+        model.notify(DataSourceStartEvent())
+        result = self.run(model, parameters)
+        model.notify(DataSourceFinishEvent())
+        return result
 
     @abc.abstractmethod
     def run(self, model, parameters):

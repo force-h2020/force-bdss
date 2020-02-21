@@ -8,11 +8,12 @@ from traits.api import (
 )
 
 from force_bdss.core.data_value import DataValue
+from force_bdss.ui_hooks.ui_notification_mixins import UIEventMixin
 
 from .base_driver_event import BaseDriverEvent
 
 
-class MCOStartEvent(BaseDriverEvent):
+class MCOStartEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event when the evaluation starts."""
 
     #: The names assigned to the parameters.
@@ -42,15 +43,11 @@ class MCOStartEvent(BaseDriverEvent):
         return self.parameter_names + self.kpi_names
 
 
-class MCOFinishEvent(BaseDriverEvent):
+class MCOFinishEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event when the evaluation ends."""
 
 
-class MCOTerminateEvent(BaseDriverEvent):
-    """ The MCO Event indicating that the Workflow should be terminated.."""
-
-
-class MCOProgressEvent(BaseDriverEvent):
+class MCOProgressEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event for every new point that is
     evaluated during the MCO run.
     """

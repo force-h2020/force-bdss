@@ -9,20 +9,19 @@ from force_bdss.events.mco_events import (
     MCOStartEvent,
     WeightedMCOStartEvent,
     MCOFinishEvent,
-    MCOTerminateEvent
 )
+from force_bdss.ui_hooks.ui_notification_mixins import UIEventMixin
 
 
 class TestMCOEvents(unittest.TestCase):
-
     def test_getstate_progress_event(self):
-        ev = MCOProgressEvent(
+        event = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
             optimal_point=[DataValue(value=12), DataValue(value=13)],
         )
 
         self.assertEqual(
-            ev.__getstate__(),
+            event.__getstate__(),
             {
                 "id": "force_bdss.events.mco_events.MCOProgressEvent",
                 "model_data": {
@@ -54,6 +53,7 @@ class TestMCOEvents(unittest.TestCase):
                 },
             },
         )
+        self.assertIsInstance(event, UIEventMixin)
 
     def test_getstate_start_event(self):
         event = MCOStartEvent(
@@ -69,6 +69,7 @@ class TestMCOEvents(unittest.TestCase):
                 "id": "force_bdss.events.mco_events.MCOStartEvent",
             },
         )
+        self.assertIsInstance(event, UIEventMixin)
 
     def test_getstate_finish_event(self):
         event = MCOFinishEvent()
@@ -79,16 +80,7 @@ class TestMCOEvents(unittest.TestCase):
                 "id": "force_bdss.events.mco_events.MCOFinishEvent",
             },
         )
-
-    def test_getstate_terminate_event(self):
-        event = MCOTerminateEvent()
-        self.assertDictEqual(
-            event.__getstate__(),
-            {
-                "model_data": {},
-                "id": "force_bdss.events.mco_events.MCOTerminateEvent",
-            },
-        )
+        self.assertIsInstance(event, UIEventMixin)
 
     def test_serialize_start_event(self):
         event = MCOStartEvent(
