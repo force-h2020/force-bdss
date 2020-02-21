@@ -34,3 +34,11 @@ class UIEventNotificationMixin(HasStrictTraits):
 
     def send_resume(self):
         self._pause_event.set()
+
+
+class UIEventMixin:
+    """ This mixin class indicates that the Event object will be
+    parsed by the UINotification Listener in the WorkflowManager.
+    All events which are not subclasses of the UIEventMixin will be
+    ignored by the UINotification Listener in the WorkflowManager."""
+    pass

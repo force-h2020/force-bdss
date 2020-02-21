@@ -53,6 +53,6 @@ from .notification_listeners.base_notification_listener_model import BaseNotific
 from .ui_hooks.i_ui_hooks_factory import IUIHooksFactory  # noqa
 from .ui_hooks.base_ui_hooks_factory import BaseUIHooksFactory  # noqa
 from .ui_hooks.base_ui_hooks_manager import BaseUIHooksManager  # noqa
-from .ui_hooks.ui_notification_mixins import UIEventNotificationMixin  # noqa
+from .ui_hooks.ui_notification_mixins import UIEventNotificationMixin, UIEventMixin  # noqa
 
 from .utilities import pop_recursive, pop_dunder_recursive  # noqa
