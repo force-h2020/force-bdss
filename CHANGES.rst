@@ -49,6 +49,10 @@ Features
   designed to be used alongside ``WeightedOptmizer``
 * New ``UIEventNotificationMixin`` class (#296) and ability to stop and pause the ``OptimizeOperation``
   during an MCO run via a ``BaseDriverEvent``
+* New ``UIEventMixin`` class (#290) that can be used to specify ``BaseDriverEvent`` subclasses
+  required to be deleivered to a UI
+* New ``DataSourceStartEvent`` and ``DataSourceFinishEvent`` classes (#290) that inform the
+  ``OptimizeOperation`` when a ``BaseDataSource.run`` method has been called and finished
 
 
 Changes
