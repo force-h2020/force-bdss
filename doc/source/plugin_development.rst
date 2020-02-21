@@ -235,6 +235,10 @@ to return a class inheriting from ``BaseUIHooksManager``. This class has
 specific methods to be reimplemented to perform operations before and after
 some UI operations.
 
+Any ``BaseDriverEvents`` that are required to be delivered to a UI can be indicated
+using the ``UIEventMixin`` class. The ``MCOStartEvent``, ``MCOProgressEvent`` and
+``MCOFinishEvent`` are all examples of such objects.
+
 Envisage Service Offers
 ^^^^^^^^^^^^^^^^^^^^^^^
 

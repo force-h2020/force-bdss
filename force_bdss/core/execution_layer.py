@@ -69,7 +69,7 @@ class ExecutionLayer(EventNotifierMixin, HasStrictTraits):
                 log.info("{}: {}".format(idx, dv))
 
             try:
-                res = data_source.run(model, passed_data_values)
+                res = data_source._run(model, passed_data_values)
             except Exception:
                 log.exception(
                     "Evaluation could not be performed. "
