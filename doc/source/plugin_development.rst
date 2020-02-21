@@ -92,7 +92,18 @@ Typically, options that change slots are those options that modify the behavior
 of the computational engine, thus requiring more or less input (input slots)
 or producing more or less output (output slots).
 
-You can also define a view with traitsui (``import traitsui.api``). This is
+Many ``BaseModel`` subclasses also include a ``verify`` method, which is
+called before an MCO run starts to ensure that the execution will be successful.
+This verification tep can also be triggered in the WfManager UI even before an MCO run is
+submitted. For ``BaseDataSourceModel`` subclasses is is automatically performed whenever the
+slots objects are updated, however developers can also include the `verify=True` metadata
+on any additional trait that requires verification. Including this in example above::
+
+    class MyModel(BaseDataSourceModel):
+        normal_option = String(verify=True)
+        option_changing_slots = String(changes_slots=True)
+
+You can also define a UI view with traitsui (``import traitsui.api``). This is
 recommended as the default view arranges the options in random order. To do
 so, have a ``default_traits_view()`` method::
 
