@@ -1,10 +1,13 @@
 FORCE BDSS Changelog
 ====================
 
+Release 0.5.0
+-------------
+
 Release 0.4.0
 -------------
 
-Released:
+Released: 24 Feb 2020
 
 Release notes
 ~~~~~~~~~~~~~
