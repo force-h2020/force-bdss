@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-VERSION = "0.4.0"
+VERSION = "0.5.0.dev0"
 
 
 # Read description
