@@ -96,6 +96,9 @@ class MCORuntimeEvent(BaseDriverEvent):
      the Workflow or the UI, this event would be an MCORuntimeEvent.
     """
 
+    #: An identification label (name) of the MCORuntimeEvent
+    name = Str(allow_none=False)
+
 
 class WeightedMCOStartEvent(MCOStartEvent):
     """Initializes reporting of weights generated during an MCO by a
