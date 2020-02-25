@@ -22,4 +22,5 @@ class MixinDummyOptimizerEngine(HasStrictTraits):
         self.scaling_values = np.array([1./0.17**2] * self.dimension)
 
     def _score(self, input_point):
-        return (input_point[0] - 0.33) ** 2, (input_point[1] - 0.67) ** 2
+        score = (input_point[0] - 0.33) ** 2, (input_point[1] - 0.67) ** 2
+        return score
