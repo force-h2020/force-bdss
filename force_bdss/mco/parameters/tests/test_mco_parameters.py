@@ -10,6 +10,8 @@ from force_bdss.mco.parameters.mco_parameters import (
     ListedMCOParameterFactory,
     CategoricalMCOParameter,
     CategoricalMCOParameterFactory,
+    RangedVectorMCOParameter,
+    RangedVectorMCOParameterFactory,
 )
 
 
@@ -97,6 +99,65 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(100.0, parameter.upper_bound)
         self.assertEqual(5, parameter.n_samples)
         self.assertEqual(100.0, parameter.initial_value)
+
+
+class TestRangedVectorMCOParameter(TestCase):
+    def setUp(self):
+        self.mco_factory = mock.Mock(
+            spec=BaseMCOFactory,
+            plugin_id="pid",
+            plugin_name="Plugin",
+            id="mcoid",
+        )
+        self.factory = RangedVectorMCOParameterFactory(self.mco_factory)
+        self.parameter = RangedVectorMCOParameter(self.factory)
+
+    def test_factory(self):
+        self.assertEqual("ranged_vector", self.factory.get_identifier())
+        self.assertEqual("Ranged Vector", self.factory.get_name())
+        self.assertEqual(
+            "A vector parameter with a ranged level in floating point values.",
+            self.factory.get_description(),
+        )
+
+    def test_default(self):
+        self.assertEqual([0.1], self.parameter.lower_bound)
+        self.assertEqual([100.0], self.parameter.upper_bound)
+        self.assertEqual(5, self.parameter.n_samples)
+        self.assertEqual([50.05], self.parameter.initial_value)
+
+    def test_sample_values(self):
+        for expected, actual in zip(
+            [0.1, 25.075, 50.05, 75.025, 100.0],
+            list(self.parameter.sample_values[0]),
+        ):
+            self.assertAlmostEqual(expected, actual)
+        self.parameter.lower_bound[0] = 90.0
+        for expected, actual in zip(
+            [90.0, 92.5, 95.0, 97.5, 100.0],
+            list(self.parameter.sample_values[0]),
+        ):
+            self.assertAlmostEqual(expected, actual)
+        self.parameter.n_samples = 3
+        for expected, actual in zip(
+            [90.0, 95.0, 100.0], list(self.parameter.sample_values[0])
+        ):
+            self.assertAlmostEqual(expected, actual)
+
+    def test_custom_parameter(self):
+        parameter = RangedVectorMCOParameter(self.factory, lower_bound=[10])
+        self.assertListEqual([10], parameter.lower_bound)
+        self.assertListEqual([100.0], parameter.upper_bound)
+        self.assertEqual(5, parameter.n_samples)
+        self.assertEqual([55.0], parameter.initial_value)
+
+        parameter = RangedVectorMCOParameter(
+            self.factory, lower_bound=[10], initial_value=[100]
+        )
+        self.assertEqual([10], parameter.lower_bound)
+        self.assertEqual([100.0], parameter.upper_bound)
+        self.assertEqual(5, parameter.n_samples)
+        self.assertEqual([100.0], parameter.initial_value)
 
 
 class TestListedMCOParameter(TestCase):
