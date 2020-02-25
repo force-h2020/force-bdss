@@ -18,10 +18,10 @@ class BaseMCOParameter(BaseModel):
     factory = Instance(BaseMCOParameterFactory, visible=False, transient=True)
 
     #: A user defined name for the parameter
-    name = Identifier(visible=False)
+    name = Identifier(visible=False, verify=True)
 
     #: A CUBA key describing the type of the parameter
-    type = String(visible=False)
+    type = String(visible=False, verify=True)
 
     def __init__(self, factory, *args, **kwargs):
         super().__init__(factory=factory, *args, **kwargs)

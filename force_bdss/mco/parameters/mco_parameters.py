@@ -58,13 +58,13 @@ class RangedMCOParameter(BaseMCOParameter):
     lower and upper floating point values."""
 
     #: Lower bound for parameter values range
-    lower_bound = Float(0.1)
+    lower_bound = Float(0.1, verify=True)
 
     #: Upper bound for parameter values range
-    upper_bound = Float(100.0)
+    upper_bound = Float(100.0, verify=True)
 
     #: Initial value. Defines the parameter bias
-    initial_value = Float
+    initial_value = Float(verify=True)
 
     n_samples = Int(5)
 
@@ -168,13 +168,13 @@ class RangedVectorMCOParameter(RangedMCOParameter):
     dimension = PositiveInt(1)
 
     #: Lower vector bound for parameter values range
-    lower_bound = List(Float(), value=[0.1])
+    lower_bound = List(Float(), value=[0.1], verify=True)
 
     #: Upper vector bound for parameter values range
-    upper_bound = List(Float(), value=[100.0])
+    upper_bound = List(Float(), value=[100.0], verify=True)
 
     #: Initial value. Defines the parameter bias
-    initial_value = List(Float())
+    initial_value = List(Float(), verify=True)
 
     def _initial_value_default(self):
         return [
