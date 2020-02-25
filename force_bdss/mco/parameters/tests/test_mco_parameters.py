@@ -100,6 +100,34 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(5, parameter.n_samples)
         self.assertEqual(100.0, parameter.initial_value)
 
+    def test_verify(self):
+        parameter = RangedMCOParameter(
+            self.factory,
+            lower_bound=10,
+            upper_bound=20,
+            initial_value=30,
+            name="name",
+            type="type",
+        )
+        errors = parameter.verify()
+        messages = [error.local_error for error in errors]
+        self.assertEqual(1, len(messages))
+        expected_message = (
+            "Initial value of the Ranged parameter must be "
+            "withing the lower and the upper bounds."
+        )
+        self.assertEqual(expected_message, messages[0])
+
+        parameter.lower_bound = 25
+        errors = parameter.verify()
+        messages = [error.local_error for error in errors]
+        self.assertEqual(2, len(messages))
+        expected_message = (
+            "Upper bound value of the Ranged parameter must be greater "
+            "than the lower bound value."
+        )
+        self.assertEqual(expected_message, messages[1])
+
 
 class TestRangedVectorMCOParameter(TestCase):
     def setUp(self):
@@ -158,6 +186,34 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual([100.0], parameter.upper_bound)
         self.assertEqual(5, parameter.n_samples)
         self.assertEqual([100.0], parameter.initial_value)
+
+    def test_verify(self):
+        parameter = RangedVectorMCOParameter(
+            self.factory,
+            lower_bound=[10],
+            upper_bound=[20],
+            initial_value=[30],
+            name="name",
+            type="type",
+        )
+        errors = parameter.verify()
+        messages = [error.local_error for error in errors]
+        self.assertEqual(1, len(messages))
+        expected_message = (
+            "Initial values at indices [0] of the Ranged Vector parameter "
+            "must be withing the lower and the upper bounds."
+        )
+        self.assertEqual(expected_message, messages[0])
+
+        parameter.upper_bound = [7]
+        errors = parameter.verify()
+        messages = [error.local_error for error in errors]
+        self.assertEqual(2, len(messages))
+        expected_message = (
+            "Upper bound values at indices [0] of the Ranged Vector"
+            " parameter must greater than the lower bound values."
+        )
+        self.assertEqual(expected_message, messages[1])
 
 
 class TestListedMCOParameter(TestCase):

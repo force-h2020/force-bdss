@@ -1,14 +1,6 @@
 import numpy as np
 
-from traits.api import (
-    List,
-    Str,
-    Property,
-    Float,
-    Any,
-    Int,
-    on_trait_change,
-)
+from traits.api import List, Str, Property, Float, Any, Int, on_trait_change
 from traitsui.api import (
     ListEditor,
     Item,
@@ -19,6 +11,7 @@ from traitsui.api import (
 )
 
 from force_bdss.local_traits import PositiveInt
+from force_bdss.core.verifier import VerifierError
 from .base_mco_parameter import BaseMCOParameter
 from .base_mco_parameter_factory import BaseMCOParameterFactory
 
@@ -113,6 +106,42 @@ class RangedMCOParameter(BaseMCOParameter):
             Item("n_samples"),
         )
 
+    def verify(self):
+        errors = super().verify()
+
+        if (
+            self.initial_value > self.upper_bound
+            or self.initial_value < self.lower_bound
+        ):
+            error = (
+                "Initial value of the Ranged parameter must be withing the "
+                "lower and the upper bounds."
+            )
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    trait_name="initial_value",
+                    local_error=error,
+                    global_error=error,
+                )
+            )
+
+        if self.upper_bound < self.lower_bound:
+            error = (
+                "Upper bound value of the Ranged parameter must be greater "
+                "than the lower bound value."
+            )
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    trait_name="upper_bound",
+                    local_error=error,
+                    global_error=error,
+                )
+            )
+
+        return errors
+
 
 class RangedMCOParameterFactory(BaseMCOParameterFactory):
     """ Ranged Parameter factory"""
@@ -187,6 +216,53 @@ class RangedVectorMCOParameter(RangedMCOParameter):
             ),
             Item("n_samples"),
         )
+
+    def verify(self):
+        errors = BaseMCOParameter.verify(self)
+
+        failed_init_values = []
+        failed_bounds = []
+        for dim in range(self.dimension):
+            initial_value = self.initial_value[dim]
+            upper_bound = self.upper_bound[dim]
+            lower_bound = self.lower_bound[dim]
+
+            if initial_value > upper_bound or initial_value < lower_bound:
+                failed_init_values.append(dim)
+            if upper_bound < lower_bound:
+                failed_bounds.append(dim)
+
+        if failed_init_values:
+            error = (
+                f"Initial values at indices {failed_init_values} of the "
+                "Ranged Vector parameter must be withing the lower and "
+                "the upper bounds."
+            )
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    trait_name="initial_value",
+                    local_error=error,
+                    global_error=error,
+                )
+            )
+
+        if failed_bounds:
+            error = (
+                f"Upper bound values at indices {failed_bounds} of the "
+                "Ranged Vector parameter must greater than the lower "
+                "bound values."
+            )
+            errors.append(
+                VerifierError(
+                    subject=self,
+                    trait_name="upper_bound",
+                    local_error=error,
+                    global_error=error,
+                )
+            )
+
+        return errors
 
 
 class RangedVectorMCOParameterFactory(BaseMCOParameterFactory):
