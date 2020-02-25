@@ -1,7 +1,22 @@
 import numpy as np
 
-from traits.api import List, Str, Property, Float, Any, Int, on_trait_change
-from traitsui.api import ListEditor, Item, View, HGroup
+from traits.api import (
+    List,
+    Str,
+    Property,
+    Float,
+    Any,
+    Int,
+    on_trait_change,
+)
+from traitsui.api import (
+    ListEditor,
+    Item,
+    View,
+    HGroup,
+    RangeEditor,
+    TextEditor,
+)
 
 from force_bdss.local_traits import PositiveInt
 from .base_mco_parameter import BaseMCOParameter
@@ -70,6 +85,32 @@ class RangedMCOParameter(BaseMCOParameter):
     def _get_sample_values(self):
         return list(
             np.linspace(self.lower_bound, self.upper_bound, self.n_samples)
+        )
+
+    def default_traits_view(self):
+        return View(
+            Item(
+                "lower_bound",
+                editor=TextEditor(
+                    auto_set=False, enter_set=True, evaluate=float
+                ),
+            ),
+            Item(
+                "upper_bound",
+                editor=TextEditor(
+                    auto_set=False, enter_set=True, evaluate=float
+                ),
+            ),
+            Item(
+                "initial_value",
+                editor=RangeEditor(
+                    low_name="lower_bound",
+                    high_name="upper_bound",
+                    format="%.3f",
+                    label_width=28,
+                ),
+            ),
+            Item("n_samples"),
         )
 
 
