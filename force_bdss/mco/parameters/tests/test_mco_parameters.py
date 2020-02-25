@@ -187,6 +187,30 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual(5, parameter.n_samples)
         self.assertEqual([100.0], parameter.initial_value)
 
+    def test_dimension_change(self):
+        self.assertEqual(1, self.parameter.dimension)
+        self.assertEqual(1, len(self.parameter.upper_bound))
+        self.assertEqual(1, len(self.parameter.lower_bound))
+        self.assertEqual(1, len(self.parameter.initial_value))
+
+        self.parameter.dimension = 3
+        self.assertEqual(3, self.parameter.dimension)
+        self.assertEqual(3, len(self.parameter.upper_bound))
+        self.assertEqual(3, len(self.parameter.lower_bound))
+        self.assertEqual(3, len(self.parameter.initial_value))
+        self.assertListEqual([0.0, 0.0], self.parameter.upper_bound[1:])
+        self.assertListEqual([0.0, 0.0], self.parameter.lower_bound[1:])
+        self.assertListEqual([0.0, 0.0], self.parameter.initial_value[1:])
+
+        self.parameter.dimension = 2
+        self.assertEqual(2, self.parameter.dimension)
+        self.assertEqual(2, len(self.parameter.upper_bound))
+        self.assertEqual(2, len(self.parameter.lower_bound))
+        self.assertEqual(2, len(self.parameter.initial_value))
+        self.assertListEqual([0.0], self.parameter.upper_bound[1:])
+        self.assertListEqual([0.0], self.parameter.lower_bound[1:])
+        self.assertListEqual([0.0], self.parameter.initial_value[1:])
+
     def test_verify(self):
         parameter = RangedVectorMCOParameter(
             self.factory,
