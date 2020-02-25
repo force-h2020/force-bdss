@@ -9,6 +9,7 @@ from force_bdss.events.mco_events import (
     MCOStartEvent,
     WeightedMCOStartEvent,
     MCOFinishEvent,
+    MCORuntimeEvent
 )
 from force_bdss.ui_hooks.ui_notification_mixins import UIEventMixin
 
@@ -81,6 +82,17 @@ class TestMCOEvents(unittest.TestCase):
             },
         )
         self.assertIsInstance(event, UIEventMixin)
+
+    def test_getstate_finish_event(self):
+        event = MCORuntimeEvent()
+        self.assertDictEqual(
+            event.__getstate__(),
+            {
+                "model_data": {},
+                "id": "force_bdss.events.mco_events.MCORuntimeEvent",
+            },
+        )
+        self.assertFalse(isinstance(event, UIEventMixin))
 
     def test_serialize_start_event(self):
         event = MCOStartEvent(
