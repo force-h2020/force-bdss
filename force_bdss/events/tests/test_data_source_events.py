@@ -4,6 +4,7 @@ from force_bdss.events.data_source_events import (
     DataSourceStartEvent,
     DataSourceFinishEvent,
 )
+from force_bdss.events.mco_events import MCORuntimeEvent
 
 
 class TestDataSourceEvents(TestCase):
@@ -17,6 +18,7 @@ class TestDataSourceEvents(TestCase):
                       "DataSourceStartEvent",
             },
         )
+        self.assertIsInstance(event, MCORuntimeEvent)
 
     def test_getstate_finish_event(self):
         event = DataSourceFinishEvent()
@@ -28,3 +30,5 @@ class TestDataSourceEvents(TestCase):
                       "DataSourceFinishEvent",
             },
         )
+        self.assertIsInstance(event, MCORuntimeEvent)
+
