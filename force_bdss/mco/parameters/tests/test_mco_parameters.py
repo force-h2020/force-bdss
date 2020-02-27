@@ -1,5 +1,7 @@
 from unittest import TestCase, mock
 
+from traitsui.api import View
+
 from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.parameters.mco_parameters import (
     FixedMCOParameter,
@@ -59,6 +61,7 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(100.0, self.parameter.upper_bound)
         self.assertEqual(5, self.parameter.n_samples)
         self.assertEqual(50.05, self.parameter.initial_value)
+        self.assertIsInstance(self.parameter.default_traits_view(), View)
 
     def test_sample_values(self):
         for expected, actual in zip(
@@ -167,6 +170,7 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual([100.0], self.parameter.upper_bound)
         self.assertEqual(5, self.parameter.n_samples)
         self.assertEqual([50.05], self.parameter.initial_value)
+        self.assertIsInstance(self.parameter.default_traits_view(), View)
 
     def test_sample_values(self):
         for expected, actual in zip(
@@ -224,6 +228,15 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertListEqual([0.0], self.parameter.upper_bound[1:])
         self.assertListEqual([0.0], self.parameter.lower_bound[1:])
         self.assertListEqual([0.0], self.parameter.initial_value[1:])
+
+        # Test individual list changes
+        self.parameter.upper_bound[:] = self.parameter.upper_bound[:-1]
+        self.parameter.dimension = 3
+        self.assertEqual(3, len(self.parameter.upper_bound))
+
+        self.parameter.lower_bound.append(1.0)
+        self.parameter.dimension = 1
+        self.assertEqual(1, len(self.parameter.lower_bound))
 
     def test_verify(self):
 

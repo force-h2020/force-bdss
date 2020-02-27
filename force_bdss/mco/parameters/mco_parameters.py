@@ -204,8 +204,8 @@ class RangedVectorMCOParameter(RangedMCOParameter):
 
     @on_trait_change("dimension")
     def _update_bounds(self):
-        """Amends number of dimensions in vector in response to update
-        in UI."""
+        """Amends number of dimensions in each vector property in response
+        to update in UI."""
         for bound_vector in (
             self.lower_bound,
             self.upper_bound,
@@ -213,7 +213,7 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         ):
             if len(bound_vector) < self.dimension:
                 bound_vector.extend(
-                    [0.0 for _ in range(self.dimension - len(bound_vector))]
+                    [0.0] * (self.dimension - len(bound_vector))
                 )
             elif len(bound_vector) > self.dimension:
                 bound_vector[:] = bound_vector[: self.dimension]
@@ -237,8 +237,8 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         errors = super(RangedMCOParameter, self).verify()
 
         for name in ['initial_value', 'upper_bound', 'lower_bound']:
-            vector = getattr(self, name)
-            if len(vector) != self.dimension:
+            bound_vector = getattr(self, name)
+            if len(bound_vector) != self.dimension:
                 error = (
                     f'List attribute {name} must possess same length as '
                     f'determined by dimension attribute: {self.dimension}'
