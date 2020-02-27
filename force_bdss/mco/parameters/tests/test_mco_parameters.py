@@ -229,53 +229,35 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertListEqual([0.0], self.parameter.lower_bound[1:])
         self.assertListEqual([0.0], self.parameter.initial_value[1:])
 
-        # Test individual list changes
-        self.parameter.upper_bound[:] = self.parameter.upper_bound[:-1]
-        self.parameter.dimension = 3
-        self.assertEqual(3, len(self.parameter.upper_bound))
-
-        self.parameter.lower_bound.append(1.0)
-        self.parameter.dimension = 1
-        self.assertEqual(1, len(self.parameter.lower_bound))
-
     def test_verify(self):
 
         parameter = RangedVectorMCOParameter(
             self.factory,
             lower_bound=[10, 20],
             upper_bound=[20],
-            initial_value=[15],
-            name="name",
-            type="type",
-        )
-
-        errors = parameter.verify()
-        messages = [error.local_error for error in errors]
-        self.assertEqual(1, len(messages))
-        expected_message = (
-            'List attribute lower_bound must possess same length as '
-            'determined by dimension attribute: 1')
-
-        self.assertEqual(expected_message, messages[0])
-
-        parameter = RangedVectorMCOParameter(
-            self.factory,
-            lower_bound=[10],
-            upper_bound=[20],
             initial_value=[30],
             name="name",
             type="type",
         )
+
         errors = parameter.verify()
         messages = [error.local_error for error in errors]
-        self.assertEqual(1, len(messages))
+        self.assertEqual(2, len(messages))
+
+        expected_message = (
+            'List attribute lower_bound must possess same length as '
+            'determined by dimension attribute: 1')
+        self.assertEqual(expected_message, messages[0])
+
         expected_message = (
             "Initial values at indices [0] of the Ranged Vector parameter "
             "must be within the lower and the upper bounds."
         )
-        self.assertEqual(expected_message, messages[0])
+        self.assertEqual(expected_message, messages[1])
 
+        parameter.lower_bound[:] = parameter.lower_bound[:1]
         parameter.initial_value = [0]
+
         errors = parameter.verify()
         messages = [error.local_error for error in errors]
         self.assertEqual(1, len(messages))
