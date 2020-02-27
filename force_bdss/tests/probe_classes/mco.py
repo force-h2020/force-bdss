@@ -2,9 +2,12 @@ from traits.api import Bool, Int, Function, Any
 
 from force_bdss.core.data_value import DataValue
 from force_bdss.api import (
-    BaseMCOModel, BaseMCO, BaseMCOFactory,
-    BaseMCOParameter, BaseMCOParameterFactory,
-    BaseMCOCommunicator
+    BaseMCOModel,
+    BaseMCO,
+    BaseMCOFactory,
+    BaseMCOParameter,
+    BaseMCOParameterFactory,
+    BaseMCOCommunicator,
 )
 
 
@@ -31,7 +34,8 @@ class ProbeMCO(BaseMCO):
 
 
 class ProbeParameter(BaseMCOParameter):
-    pass
+
+    test_trait = Int(13, desc="Test trait", verify=True, transient=True)
 
 
 class ProbeParameterFactory(BaseMCOParameterFactory):
@@ -98,8 +102,8 @@ class ProbeMCOFactory(BaseMCOFactory):
             raise Exception("ProbeMCOFactory.create_communicator")
 
         return self.communicator_class(
-            self,
-            nb_output_data_values=self.nb_output_data_values)
+            self, nb_output_data_values=self.nb_output_data_values
+        )
 
     def create_model(self, model_data=None):
         if self.raises_on_create_model:
