@@ -9,11 +9,11 @@ from force_bdss.events.mco_events import MCORuntimeEvent
 
 class TestDataSourceEvents(TestCase):
     def test_getstate_start_event(self):
-        event = DataSourceStartEvent(name="name")
+        event = DataSourceStartEvent()
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {"name": "name"},
+                "model_data": {},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceStartEvent",
             },
@@ -21,11 +21,11 @@ class TestDataSourceEvents(TestCase):
         self.assertIsInstance(event, MCORuntimeEvent)
 
     def test_getstate_finish_event(self):
-        event = DataSourceFinishEvent(name="name")
+        event = DataSourceFinishEvent()
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {"name": "name"},
+                "model_data": {},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceFinishEvent",
             },

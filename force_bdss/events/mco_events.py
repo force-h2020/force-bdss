@@ -92,12 +92,9 @@ class MCOProgressEvent(BaseDriverEvent, UIEventMixin):
 
 class MCORuntimeEvent(BaseDriverEvent):
     """ The base class for the MCO events fired during the workflow
-     execution. For example, if a DataSource is designed to notify
-     the Workflow or the UI, this event would be an MCORuntimeEvent.
+    execution. This is a supplementary event type that is used to
+    expose data generated on the DataSource or ExecutionLayer level.
     """
-
-    #: An identification label (name) of the MCORuntimeEvent
-    name = Str(allow_none=False)
 
 
 class WeightedMCOStartEvent(MCOStartEvent):

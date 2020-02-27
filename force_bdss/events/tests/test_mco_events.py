@@ -84,11 +84,11 @@ class TestMCOEvents(unittest.TestCase):
         self.assertIsInstance(event, UIEventMixin)
 
     def test_getstate_runtime_event(self):
-        event = MCORuntimeEvent(name="name")
+        event = MCORuntimeEvent()
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {"name": "name"},
+                "model_data": {},
                 "id": "force_bdss.events.mco_events.MCORuntimeEvent",
             },
         )
