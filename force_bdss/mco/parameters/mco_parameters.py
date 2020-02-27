@@ -114,7 +114,7 @@ class RangedMCOParameter(BaseMCOParameter):
             or self.initial_value < self.lower_bound
         ):
             error = (
-                "Initial value of the Ranged parameter must be withing the "
+                "Initial value of the Ranged parameter must be within the "
                 "lower and the upper bounds."
             )
             errors.append(
@@ -235,7 +235,7 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         if failed_init_values:
             error = (
                 f"Initial values at indices {failed_init_values} of the "
-                "Ranged Vector parameter must be withing the lower and "
+                "Ranged Vector parameter must be within the lower and "
                 "the upper bounds."
             )
             errors.append(

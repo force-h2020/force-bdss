@@ -114,7 +114,7 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(1, len(messages))
         expected_message = (
             "Initial value of the Ranged parameter must be "
-            "withing the lower and the upper bounds."
+            "within the lower and the upper bounds."
         )
         self.assertEqual(expected_message, messages[0])
 
@@ -124,7 +124,7 @@ class TestRangedMCOParameter(TestCase):
         self.assertEqual(1, len(messages))
         expected_message = (
             "Initial value of the Ranged parameter must be "
-            "withing the lower and the upper bounds."
+            "within the lower and the upper bounds."
         )
         self.assertEqual(expected_message, messages[0])
 
@@ -239,7 +239,7 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual(1, len(messages))
         expected_message = (
             "Initial values at indices [0] of the Ranged Vector parameter "
-            "must be withing the lower and the upper bounds."
+            "must be within the lower and the upper bounds."
         )
         self.assertEqual(expected_message, messages[0])
 
@@ -249,7 +249,7 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual(1, len(messages))
         expected_message = (
             "Initial values at indices [0] of the Ranged Vector parameter "
-            "must be withing the lower and the upper bounds."
+            "must be within the lower and the upper bounds."
         )
         self.assertEqual(expected_message, messages[0])
 
