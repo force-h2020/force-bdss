@@ -3,11 +3,9 @@ from traits.api import Bool, Function, Int, on_trait_change
 from force_bdss.core.data_value import DataValue
 from force_bdss.core.slot import Slot
 from force_bdss.data_sources.base_data_source import BaseDataSource
-from force_bdss.data_sources.base_data_source_model import (
-    BaseDataSourceModel
-)
+from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.data_sources.base_data_source_factory import (
-    BaseDataSourceFactory
+    BaseDataSourceFactory,
 )
 from force_bdss.local_traits import CUBAType
 
@@ -54,6 +52,8 @@ class ProbeDataSourceModel(BaseDataSourceModel):
 
     input_slots_size = Int(1)
     output_slots_size = Int(1)
+
+    test_trait = Int(13, desc="Test trait", verify=True, transient=True)
 
     @on_trait_change(
         "input_slots_type,output_slots_type,"
