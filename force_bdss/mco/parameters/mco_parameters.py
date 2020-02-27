@@ -73,9 +73,13 @@ class RangedMCOParameter(BaseMCOParameter):
     )
 
     def _initial_value_default(self):
+        """Default initial value lies on midpoint between lower and
+        upper bounds"""
         return 0.5 * (self.lower_bound + self.upper_bound)
 
     def _get_sample_values(self):
+        """Return linearly spaced sample values between lower and
+        upper bounds"""
         return list(
             np.linspace(self.lower_bound, self.upper_bound, self.n_samples)
         )
@@ -107,7 +111,9 @@ class RangedMCOParameter(BaseMCOParameter):
         )
 
     def verify(self):
-        errors = super().verify()
+        """Overloads super method on BaseMCOParameter class to verify that
+        initial_value attribute lies between lower and upper bounds"""
+        errors = super(RangedMCOParameter, self).verify()
 
         if (
             self.initial_value > self.upper_bound
@@ -177,6 +183,8 @@ class RangedVectorMCOParameter(RangedMCOParameter):
     initial_value = List(Float(), verify=True)
 
     def _initial_value_default(self):
+        """Default initial values lie on midpoint between lower and
+        upper bounds for each vector"""
         return [
             0.5 * (lower_bound + upper_bound)
             for lower_bound, upper_bound in zip(
@@ -185,6 +193,8 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         ]
 
     def _get_sample_values(self):
+        """Return linearly spaced sample values between lower and
+        upper bounds for each vector"""
         return [
             list(np.linspace(lower_bound, upper_bound, self.n_samples))
             for lower_bound, upper_bound in zip(
@@ -194,6 +204,8 @@ class RangedVectorMCOParameter(RangedMCOParameter):
 
     @on_trait_change("dimension")
     def _update_bounds(self):
+        """Amends number of dimensions in vector in response to update
+        in UI."""
         for bound_vector in (
             self.lower_bound,
             self.upper_bound,
@@ -218,10 +230,13 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         )
 
     def verify(self):
-        errors = BaseMCOParameter.verify(self)
+        """Overloads super method on BaseMCOParameter class to verify that
+        all initial_value elements lie between lower and upper bounds."""
+        errors = super(RangedMCOParameter, self).verify()
 
         failed_init_values = []
         failed_bounds = []
+
         for dim in range(self.dimension):
             initial_value = self.initial_value[dim]
             upper_bound = self.upper_bound[dim]
