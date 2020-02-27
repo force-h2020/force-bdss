@@ -231,8 +231,26 @@ class RangedVectorMCOParameter(RangedMCOParameter):
 
     def verify(self):
         """Overloads super method on BaseMCOParameter class to verify that
-        all initial_value elements lie between lower and upper bounds."""
+        all initial_value elements lie between lower and upper bounds. Also
+        checks that lower_bound, upper_bound and initial_value vectors
+        have the expected dimensionality according to dimension attribute"""
         errors = super(RangedMCOParameter, self).verify()
+
+        for name in ['initial_value', 'upper_bound', 'lower_bound']:
+            vector = getattr(self, name)
+            if len(vector) != self.dimension:
+                error = (
+                    f'List attribute {name} must possess same length as '
+                    f'determined by dimension attribute: {self.dimension}'
+                )
+                errors.append(
+                    VerifierError(
+                        subject=self,
+                        trait_name=name,
+                        local_error=error,
+                        global_error=error,
+                    )
+                )
 
         failed_init_values = []
         failed_bounds = []

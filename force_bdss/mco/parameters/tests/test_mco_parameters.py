@@ -226,6 +226,25 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertListEqual([0.0], self.parameter.initial_value[1:])
 
     def test_verify(self):
+
+        parameter = RangedVectorMCOParameter(
+            self.factory,
+            lower_bound=[10, 20],
+            upper_bound=[20],
+            initial_value=[15],
+            name="name",
+            type="type",
+        )
+
+        errors = parameter.verify()
+        messages = [error.local_error for error in errors]
+        self.assertEqual(1, len(messages))
+        expected_message = (
+            'List attribute lower_bound must possess same length as '
+            'determined by dimension attribute: 1')
+
+        self.assertEqual(expected_message, messages[0])
+
         parameter = RangedVectorMCOParameter(
             self.factory,
             lower_bound=[10],
