@@ -1,11 +1,11 @@
-from .base_driver_event import BaseDriverEvent
+from .mco_events import MCORuntimeEvent
 
 
-class DataSourceStartEvent(BaseDriverEvent):
+class DataSourceStartEvent(MCORuntimeEvent):
     """ The Data Source driver should emit this event when the
     DataSource.run method is called."""
 
 
-class DataSourceFinishEvent(BaseDriverEvent):
+class DataSourceFinishEvent(MCORuntimeEvent):
     """ The Data Source driver should emit this event when the
     DataSource.run method finishes."""

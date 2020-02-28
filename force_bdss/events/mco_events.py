@@ -90,6 +90,13 @@ class MCOProgressEvent(BaseDriverEvent, UIEventMixin):
         return cls(**data)
 
 
+class MCORuntimeEvent(BaseDriverEvent):
+    """ The base class for the MCO events fired during the workflow
+    execution. This is a supplementary event type that is used to
+    expose data generated on the DataSource or ExecutionLayer level.
+    """
+
+
 class WeightedMCOStartEvent(MCOStartEvent):
     """Initializes reporting of weights generated during an MCO by a
     WeightedOptimizerEngine"""
