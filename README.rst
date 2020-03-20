@@ -23,7 +23,9 @@ Developer Notes
 
 The design of the BDSS command-line interface can be found `here <doc/source/design.rst>`_
 
-Please also read the `documentation <doc/source/plugin_development.rst>`_ regarding plugin development for the BDSS .
+Please also read the `documentation <doc/source/plugin_development.rst>`_ regarding plugin development for the BDSS,
+as well as the `developer guidelines <doc/source/developer_guidelines.rst>`_ for contributing code
+to FORCE projects in general.
 
 Documentation
 -------------
@@ -31,6 +33,3 @@ Documentation
 To build the Sphinx documentation in the ``doc/build`` directory run::
 
     python -m ci docs
-
-
-
