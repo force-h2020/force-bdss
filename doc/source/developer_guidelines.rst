@@ -1,13 +1,18 @@
 FORCE Project Developer Guidelines
 ==================================
 
-When contributing to any FORCE repo, please adhere to the following guidelines:
+When contributing to the FORCE project, please clone the relevant Git repository and perform all suggested
+changes on a new branch (there is no need to fork the repository). Some general guidelines are provided
+below.
 
-Mandatory
-~~~~~~~~~
+Continuous Integration
+----------------------
 
-#) Clone the relevant FORCE project repository and perform all suggested changes on a new branch
-   (there is no need to fork the repository).
+The FORCE project uses a TravisCI runner that will build and test any code pushed to a GitHub
+repository. These CI checks can also be performed locally whilst developing.
+
+Mandatory Checks
+~~~~~~~~~~~~~~~~
 
 #) Contribute unit tests for any fixes or new features using the ``unittest`` library. Each
    module should contain a ``test/`` folder with python files contributing ``unittest.TestCase``
@@ -25,8 +30,8 @@ Mandatory
    Note: If you enforce stricter style guidelines (such as Black), then this is fine as long as they
    also pass the Flake8 test.
 
-Optional
-~~~~~~~~
+Optional Checks
+~~~~~~~~~~~~~~
 
 4) Some FORCE projects will also build Sphinx documentation as part of the CI. If this is failing
    for any reason, you can run the following command to debug locally::
@@ -43,6 +48,8 @@ Optional
    to TravisCI, which will fail unless an appropriate token is set. This is unnecessary to simply
    view the coverage report and can be ignored.
 
+Pull Request Review
+-------------------
 
 When the CI tests are passing locally, push the branch to ``origin`` using::
 
@@ -50,5 +57,8 @@ When the CI tests are passing locally, push the branch to ``origin`` using::
 
 And create a GitHub pull request describing the changes made and the context for doing so. At the
 moment we do not have a template for these requests, but typically developers should try to include
-a both a 'Summary' section with a breif outline of the context, as well as a 'Changelog' section
+a both a 'Summary' section with a brief outline of the context, as well as a 'Changelog' section
 with itemized list of key changes made.
+
+Some projects will explicitly require at least one reviewer for a pull request to be merged. However,
+we strongly request that ANY code is reviewed before merging.
