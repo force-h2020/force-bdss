@@ -67,7 +67,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     num_points = PositiveInt(7)
 
     #: Algorithms available to work with
-    algorithms = Enum("SLSQP", "TNC")
+    algorithms = Enum("SLSQP", "TNC") #blabla
 
     #: Method to calculate KPIs normalization coefficients
     scaling_method = Str("sen_scaling_method")
