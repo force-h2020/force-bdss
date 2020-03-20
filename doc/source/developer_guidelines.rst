@@ -31,7 +31,7 @@ Mandatory Checks
    also pass the Flake8 test.
 
 Optional Checks
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 4) Some FORCE projects will also build Sphinx documentation as part of the CI. If this is failing
    for any reason, you can run the following command to debug locally::
