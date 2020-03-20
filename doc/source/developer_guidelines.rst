@@ -45,8 +45,8 @@ Optional Checks
       python -m ci coverage
 
    Note: when performing this command locally, the final step will attempt to upload the report
-   to TravisCI, which will fail unless an appropriate token is set. This is unnecessary to simply
-   view the coverage report and can be ignored.
+   to Codecov, which will fail unless an appropriate token is present. This is unnecessary to simply
+   view the coverage report and can be safely ignored.
 
 Pull Request Review
 -------------------
