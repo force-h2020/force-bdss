@@ -13,6 +13,7 @@ User Manual
    Installation instructions <installation>
    Design <design>
    Plugin development <plugin_development>
+   Contributing Code <developer_guidelines>
 
 
 API Reference
