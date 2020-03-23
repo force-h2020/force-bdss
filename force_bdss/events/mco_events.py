@@ -46,6 +46,9 @@ class MCOStartEvent(BaseDriverEvent, UIEventMixin):
 class MCOFinishEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event when the evaluation ends."""
 
+    def serialize(self):
+        raise NotImplementedError
+
 
 class MCOProgressEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event for every new point that is
