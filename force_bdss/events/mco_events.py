@@ -47,6 +47,11 @@ class MCOFinishEvent(BaseDriverEvent, UIEventMixin):
     """ The MCO driver should emit this event when the evaluation ends."""
 
     def serialize(self):
+        """
+        We don't expect these events to carry any information
+        that requires serialization.
+        :return:
+        """
         pass
 
 
