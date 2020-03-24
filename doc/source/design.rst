@@ -1,10 +1,24 @@
 FORCE BDSS Design
 =================
 
+The BDSS is an Envisage/Task application. it uses tasks to manage the plugin
+system, with stevedore to manage the additions.
+
+The main class is ``BDSSApplication``, which is in charge of loading the plugins,
+and also adding the relevant core plugins to make the whole system run.
+Specifically it loads:
+
+- The ``FactoryRegistryPlugin``, which is where all external plugins will put
+  their classes.
+- Depending on the --evaluate switch, a relevant execution plugin:
+    - ``OptimizeOperation``: Invokes the MCO.
+    - ``EvaluateOperation``: performs a single point evaluation, that is,
+      executes the pipeline only once.
+
 Application
 -----------
 
-The command line application invokes the ``BDSSApplication``, an ``envisage.Application`` subclass,
+The ``BDSSApplication`` is an ``envisage.Application`` subclass,
 which contains the following structure:
 
 .. image:: _images/bdss_application_design.svg
@@ -20,77 +34,27 @@ At the ``BDSSApplication`` level, there are three main attributes of type:
   environment, but is actually used by ``WorkflowReader`` to instantiate serialised
   ``Workflow`` objects from file.
 
-Workflow
---------
+Factories
+---------
 
-The ``Workflow`` contains a full description of the system to be optimised, the optimisation
-proceedure and any listener objects that are expected to react on events that are
-created during runtime.
+MCO Factory Classes
+~~~~~~~~~~~~~~~~~~~
 
-As shown above, the ``Workflow`` object of the application is based on three entities:
+.. image:: _images/mco_classes_design.svg
 
-- Multi Criteria Optimizer (MCO)
-- Data Sources
-- Notification Listeners
+The ``BaseMCOFactory`` fulfills the ``IMCOFactory`` interface, and is therefore able to be
+contributed and subsequently located by the ``BaseExtensionPlugin`` and ``FactoryRegistryPlugin``
+classes respectively. It is able to construct both ``BaseMCO`` and ``BaseMCOModel``
+subclasses and also contains references to a list of objects that fulfill the ``IMCOParameterFactory``
+interface.
 
-Addtionally, messages can be sent and recieved between the CLI ``force_bdss`` application
-and the ``force_wfmanager`` GUI via a subset of notification listener, known as a
-'UI Hook'.
-
-There are a few core assumptions about each of these entities:
-
-- The MCO provides numerical values and injects them into a pipeline
-  made of multiple layers. Each layer is composed of multiple data sources.
-  The MCO can execute this pipeline directly, or indirectly by invoking
-  the ``force_bdss`` with the option ``--evaluate``. This invocation will produce,
-  given a vector in the input space, a vector in the output space.
-- The Data Sources are entities that are arranged in layers. Each Data Source has
-  inputs and outputs, called slots. These slots may depend on the configuration
-  options of the specific data source. The pipeline is created by binding
-  data sources outputs on the layers above with the data sources inputs of a
-  given layer. Each output can be designated as a KPI and thus be transmitted
-  back to the MCO for optimization.
-- A Notification Listener listens to the state of the MCO (Started/New step
-  of the computation/Finished). It can be a remote database which is filled
-  with the MCO results during the computation (e.g. the GUI ``force_wfmanager``
-  has a notification listener in order to fill the result table).
-- UI Hooks permit to define additional operations which will be executed
-  at specific moments in the UI lifetime (before and after execution of the
-  BDSS, before saving the workflow). Those operations won't be executed by the
-  command line interface of the BDSS.
-
-The result can be represented with the following data flow
-
-1. The ``MCO`` produces and, potentially by means of a ``MCOCommunicator`` (if the
-   execution model is based on invoking ``force_bdss --evaluate``),
-   injects a given vector of MCO parameter values in the pipeline.
-2. These values are passed to one or more ``DataSources``, organised in ``ExecutionLayers``,
-   each performing some computation or data extraction and produces results.
-   ``ExecutionLayers`` are executed in order from top to bottom. There is no order among
-   ``DataSources`` on the same layer.
-3. Results that have been classified as KPIs are then returned to the MCO
-   (again, potentially via the ``MCOCommunicator``).
-4. The KPI values are then sent to the ``NotificationListeners`` with the
-   associated ``MCOParameter`` values
-5. The cycle repeats until all evaluations have been performed.
-
+BaseMCO Class
+~~~~~~~~~~~~~
 
 Current classes and brief description
 -------------------------------------
 
-The BDSS is an Envisage/Task application. it uses tasks to manage the plugin
-system, with stevedore to manage the additions.
 
-The main class is ``BDSSApplication``, which is in charge of loading the plugins,
-and also adding the relevant core plugins to make the whole system run.
-Specifically it loads:
-
-- The ``FactoryRegistryPlugin``, which is where all external plugins will put
-  their classes.
-- Depending on the --evaluate switch, a relevant execution plugin:
-    - ``OptimizeOperation``: Invokes the MCO.
-    - ``EvaluateOperation``: performs a single point evaluation, that is,
-      executes the pipeline only once.
 
 Note: the design requiring the ``--evaluate`` switch assumed a "Dakota" model of
 execution (external process controlled by Dakota). In the current Enthought Example plugin
