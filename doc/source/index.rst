@@ -11,7 +11,8 @@ User Manual
 
    Introduction <introduction>
    Installation instructions <installation>
-   Design <design>
+   Workflow representation <workflow_schema>
+   Design documentation <design>
    Plugin development <plugin_development>
    Contributing Code <developer_guidelines>
 
