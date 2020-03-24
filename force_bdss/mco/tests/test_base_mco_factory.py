@@ -2,7 +2,6 @@ import unittest
 
 from traits.trait_errors import TraitError
 
-from force_bdss.mco.base_mco_factory import BaseMCOFactory
 from force_bdss.mco.tests.test_base_mco import DummyMCO
 from force_bdss.mco.tests.test_base_mco_communicator import (
     DummyMCOCommunicator,
@@ -12,26 +11,6 @@ from force_bdss.tests.dummy_classes.mco import (
     DummyMCOModel,
     DummyMCOParameterFactory,
 )
-
-
-class MCOFactory(BaseMCOFactory):
-    def get_identifier(self):
-        return "dummy_mco_2"
-
-    def get_name(self):
-        return "Dummy MCO 2"
-
-    def get_model_class(self):
-        return DummyMCOModel
-
-    def get_communicator_class(self):
-        return DummyMCOCommunicator
-
-    def get_optimizer_class(self):
-        return DummyMCO
-
-    def get_parameter_factory_classes(self):
-        return [DummyMCOParameterFactory]
 
 
 class TestBaseMCOFactory(unittest.TestCase):
@@ -49,7 +28,7 @@ class TestBaseMCOFactory(unittest.TestCase):
         self.assertIsInstance(factory.create_model(), DummyMCOModel)
 
     def test_base_object_parameter_factories(self):
-        factory = MCOFactory(self.plugin)
+        factory = DummyMCOFactory(self.plugin)
         self.assertEqual(1, len(factory.parameter_factories))
         for parameter_factory in factory.parameter_factories:
             self.assertIsInstance(parameter_factory, DummyMCOParameterFactory)
