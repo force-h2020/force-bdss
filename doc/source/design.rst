@@ -44,6 +44,21 @@ Upon start up, the ``BDSSApplication`` performs the following process
 
 .. image:: _images/bdss_application_flowchart.svg
 
+Event Handling
+--------------
+
+The ``BaseDriverEvent`` class is the main object used to relay messages internally between
+components of the ``BDSSApplication``. The ``BaseModel.notify`` method is used to initiate the
+passing of any ``BaseDriverEvent`` instance, which can be passes to any bound classes that are
+listening above in the ``Workflow`` hierarchy. During runtime, the messages are relayed to the
+``BaseOperation`` class that is being performed by the ``BDSSApplication``, which broadcasts them
+to all ``BaseNotificationListener`` classes present.
+
+.. image:: _images/event_handling.svg
+
+Any actions that are required to be performed upon notification of a specific ``BaseDriverEvent``
+subclass are handled by the ``BaseNotificationListener.deliver`` method
+
 Factory Classes
 ---------------
 
@@ -121,7 +136,7 @@ Package Structure
 -----------------
 
 As well as a command line program, the BDSS also comes with a ``force_bdss`` package containing
-objects required by plugin developers. These should be publically accessed through the ``force_bdss.api``
+objects required by plugin developers. These should be publicly accessed through the ``force_bdss.api``
 module, but a brief explanation of the internal structure is provided below.
 
 The ``data_sources``, ``mco``, ``notification_listeners`` and ``ui_hooks`` packages, and
