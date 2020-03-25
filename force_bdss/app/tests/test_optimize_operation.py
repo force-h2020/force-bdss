@@ -26,7 +26,6 @@ class TestOptimizeOperation(TestCase):
     def test__init__(self):
 
         operation = OptimizeOperation()
-        self.assertIsNone(operation.mco)
         self.assertEqual([], operation.listeners)
 
         self.assertIsNone(operation.workflow_file)
@@ -188,9 +187,8 @@ class TestOptimizeOperation(TestCase):
     def test_create_mco(self):
 
         # Test normal operation
-        self.assertIsNone(self.operation.mco)
-        self.operation.mco = self.operation.create_mco()
-        self.assertIsInstance(self.operation.mco, BaseMCO)
+        mco = self.operation.create_mco()
+        self.assertIsInstance(mco, BaseMCO)
 
         # Now cause an exception to occur when BaseMCO is
         # created
@@ -240,7 +238,7 @@ class TestOptimizeOperation(TestCase):
 
     def test_progress_event_handling(self):
 
-        self.operation.mco = self.operation.create_mco()
+        self.operation._initialize_listeners()
         listener = self.operation.listeners[0]
 
         self.operation.workflow.mco_model.notify_progress_event(
@@ -258,40 +256,6 @@ class TestOptimizeOperation(TestCase):
         self.assertEqual(2, event.optimal_point[1].value, 2)
         self.assertEqual(3, event.optimal_kpis[0].value, 3)
         self.assertEqual(4, event.optimal_kpis[1].value, 4)
-
-    def test_deprecated_progress_event_handling(self):
-
-        # NOTE: this unit test should be removed alongside BaseMCO.event
-        expected_log = (
-            "force_bdss.mco.base_mco",
-            "WARNING",
-            "Use of the BaseMCO.event attribute is now deprecated and will"
-            " be removed in version 0.5.0. Please replace any uses of the "
-            "BaseMCO.notify and BaseMCO.notify_new_point method with the "
-            "equivalent BaseMCOModel.notify and "
-            "BaseMCOModel.notify_progress_event methods respectively",
-        )
-
-        self.operation.mco = self.operation.create_mco()
-        listener = self.operation.listeners[0]
-        with testfixtures.LogCapture() as capture:
-            self.operation.mco.notify_new_point(
-                [DataValue(value=2), DataValue(value=3)],
-                [DataValue(value=4), DataValue(value=5)],
-                weights=[1.5, 1.5],
-            )
-            self.assertIsInstance(
-                listener.deliver_call_args[0][0], MCOProgressEvent
-            )
-
-            event = listener.deliver_call_args[0][0]
-
-            capture.check(expected_log)
-
-            self.assertEqual(2, event.optimal_point[0].value)
-            self.assertEqual(3, event.optimal_point[1].value)
-            self.assertEqual(4, event.optimal_kpis[0].value)
-            self.assertEqual(5, event.optimal_kpis[1].value)
 
     def test_run_empty_workflow(self):
 

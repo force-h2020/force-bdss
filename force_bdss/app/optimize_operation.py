@@ -35,9 +35,6 @@ class OptimizeOperation(HasStrictTraits):
     #: The workflow instance.
     workflow = DelegatesTo("workflow_file")
 
-    #: The mco instance.
-    mco = Instance(BaseMCO)
-
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
@@ -64,23 +61,23 @@ class OptimizeOperation(HasStrictTraits):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
-        self.mco = self.create_mco()
+        mco = self.create_mco()
         self._deliver_start_event()
 
         try:
-            self.mco.run(self.workflow)
+            mco.run(self.workflow)
         except Exception:
             log.exception(
                 (
                     "Method run() of MCO with id '{}' from plugin '{}' "
                     "raised exception. This might indicate a "
                     "programming error in the plugin."
-                ).format(self.mco.factory.id, self.mco.factory.plugin_id)
+                ).format(mco.factory.id, mco.factory.plugin_id)
             )
             raise
         finally:
             self._deliver_finish_event()
-            self.destroy_mco()
+            self._finalize_listeners()
 
     def create_mco(self):
         """ Create the MCO from the model's factory. """
@@ -102,17 +99,13 @@ class OptimizeOperation(HasStrictTraits):
 
         return mco
 
-    def destroy_mco(self):
-        self._finalize_listeners()
-        self.mco = None
-
     def _deliver_start_event(self):
         self.workflow.mco_model.notify_start_event()
 
     def _deliver_finish_event(self):
         self.workflow.mco_model.notify_finish_event()
 
-    @on_trait_change("workflow_file:workflow:event,mco:event")
+    @on_trait_change("workflow_file:workflow:event")
     def _deliver_event(self, event):
         """ Events fired by the workflow_file.workflow are the communication
         entry points with the BDSS execution process.
@@ -144,7 +137,7 @@ class OptimizeOperation(HasStrictTraits):
         self._pause_event.wait()
 
         if self._stop_event.is_set():
-            self.destroy_mco()
+            self._finalize_listeners()
             sys.exit("BDSS stopped")
 
     def _finalize_listener(self, listener):
