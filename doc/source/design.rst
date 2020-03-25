@@ -57,7 +57,9 @@ to all ``BaseNotificationListener`` classes present.
 .. image:: _images/event_handling.svg
 
 Any actions that are required to be performed upon notification of a specific ``BaseDriverEvent``
-subclass are handled by the ``BaseNotificationListener.deliver`` method
+subclass are handled by the ``BaseNotificationListener.deliver`` method. After every broadcast,
+the ``OptimizeOperation`` checks its run time status to see whether the event has triggered
+a MCO 'pause' or 'stop' signal.
 
 Factory Classes
 ---------------
