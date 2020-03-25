@@ -1,3 +1,5 @@
+import abc
+
 from threading import Event as ThreadingEvent
 
 from traits.api import Instance, HasStrictTraits
@@ -49,4 +51,14 @@ class UIEventMixin:
 
     By default, the MCOStartEvent, MCOProgressEvent and MCOFinishEvent
     classes all inherit from UIEventMixin."""
-    pass
+
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def serialize(self):
+        """ Enforce requirement of serialize method on all subclasses:
+        MCOStartEvent
+        MCOFinishEvent
+        MCOProgressEvent
+        (cf. mco_events.py)
+        """

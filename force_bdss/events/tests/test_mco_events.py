@@ -117,6 +117,11 @@ class TestMCOEvents(unittest.TestCase):
             event.serialize(),
         )
 
+    def test_serialize_finish_event(self):
+        event = MCOFinishEvent()
+
+        self.assertIsNone(event.serialize(), None)
+
     def test_serialize_progress_event(self):
         event = MCOProgressEvent(
             optimal_kpis=[DataValue(value=10)],
