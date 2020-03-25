@@ -11,7 +11,6 @@ from traits.api import (
     provides,
 )
 
-from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener,
 )

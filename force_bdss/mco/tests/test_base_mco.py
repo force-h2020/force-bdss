@@ -5,6 +5,7 @@ from force_bdss.tests.dummy_classes.mco import DummyMCO
 
 from unittest import mock
 
+
 class TestBaseMultiCriteriaOptimizer(unittest.TestCase):
     def test_initialization(self):
         factory = mock.Mock(spec=IMCOFactory)
