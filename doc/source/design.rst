@@ -15,6 +15,12 @@ Specifically it loads:
     - ``EvaluateOperation``: performs a single point evaluation, that is,
       executes the pipeline only once.
 
+Note: the design requiring the ``--evaluate`` switch assumed a "Dakota" model of
+execution (external process controlled by Dakota). In the current Enthought Example plugin
+we use both the ``--evaluate`` strategy and direct control, where all the
+calculation is performed without spawning additional processes other than the
+initial ``force_bdss``.
+
 Application
 -----------
 
@@ -34,36 +40,72 @@ At the ``BDSSApplication`` level, there are three main attributes of type:
   environment, but is actually used by ``WorkflowReader`` to instantiate serialised
   ``Workflow`` objects from file.
 
-Factories
----------
+Upon start up, the ``BDSSApplication`` performs the following process
 
-MCO Factory Classes
-~~~~~~~~~~~~~~~~~~~
+.. image:: _images/bdss_application_flowchart.svg
+
+Factory Classes
+---------------
+
+All ``BaseFactory`` subclasses fulfill an ``IFactory`` interface, and are therefore able to be
+contributed and subsequently located by the ``BaseExtensionPlugin`` and ``FactoryRegistryPlugin``
+classes respectively
+
+MCO
+~~~
 
 .. image:: _images/mco_classes_design.svg
 
-The ``BaseMCOFactory`` fulfills the ``IMCOFactory`` interface, and is therefore able to be
-contributed and subsequently located by the ``BaseExtensionPlugin`` and ``FactoryRegistryPlugin``
-classes respectively. It is able to construct both ``BaseMCO`` and ``BaseMCOModel``
-subclasses and also contains references to a list of objects that fulfill the ``IMCOParameterFactory``
-interface.
+The ``BaseMCOFactory`` fulfills the ``IMCOFactory`` interface. It is able to construct both ``BaseMCO`` and
+``BaseMCOModel`` subclasses and also contains references to a list of objects that fulfill the
+``IMCOParameterFactory`` interface.
 
-BaseMCO Class
-~~~~~~~~~~~~~
+Likewise, the ``BaseMCOParameterFactory`` fulfills the ``IMCOParameterFactory`` interface and constructs
+``BaseMCOParameter`` subclasses. Consequently, each MCO must declare a set of parameter types that it is
+able to use.
 
-Current classes and brief description
--------------------------------------
+Data Sources
+~~~~~~~~~~~~
+
+.. image:: _images/data_source_classes_design.svg
+
+The ``BaseDataSourceFactory`` fulfills the ``IDataSourceFactory`` interface. It is able to construct both
+``BaseDataSource`` and ``BaseDataSourceModel`` subclasses
+
+Notification Listeners
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: _images/notification_listener_classes_design.svg
+
+The ``BaseNotificationListenerFactory`` fulfills the ``INotificationListenerFactory`` interface. It is able
+to construct both ``BaseNotificationListener`` and ``BaseNotificationListenerModel`` subclasses
 
 
+Model Classes
+-------------
 
-Note: the design requiring the ``--evaluate`` switch assumed a "Dakota" model of
-execution (external process controlled by Dakota). In the current Enthought Example plugin
-we use both the ``--evaluate`` strategy and direct control, where all the
-calculation is performed without spawning additional processes other than the
-initial ``force_bdss``.
+Each ``BaseModel`` class is designed to act as both a serializable and visual representation of
+a ``Workflow`` object. It contains any information that is exposed to the user and, since it
+inherits from ``HasTraits``, the UI components are provided by the TraitsUI library.
 
-The packages ``data_sources``, ``mco``, ``notification_listeners`` and ``ui_hooks``, as well as
-the ``base_extension_plugin``, contain the base classes that plugin developers need
+MCO
+~~~
+
+The ``BaseMCOModel`` class provides user input required by a ``BaseMCO`` class during runtime. It also
+contains references to and methods used to broadcast the MCO-related ``BaseDriverEvent`` subclasses:
+``MCOStartEvent``, ``MCOProgressEvent`` and ``MCOFinishEvent``.
+
+.. image:: _images/base_mco_run.svg
+
+Package Structure
+-----------------
+
+As well as a command line program, the BDSS also comes with a ``force_bdss`` package containing
+objects required by plugin developers. These should be publically accessed through the ``force_bdss.api``
+module, but a brief explanation of the internal structure is provided below.
+
+The ``data_sources``, ``mco``, ``notification_listeners`` and ``ui_hooks`` packages, and
+the ``base_extension_plugin`` class, contain all the base classes that plugin developers need
 to use in order to write a plugin. They have been coded to be as error tolerant
 as possible, and deliver robust error messages as much as possible.
 
@@ -87,16 +129,16 @@ Finally, ``core`` contains:
 - ``input/output_slot_info`` contain the ``_bound_`` information for slots. A
   ``DataSource`` provides slots (see slot module) but these are not bound to a
   specific "variable name". The ``SlotInfo`` classes provide this binding.
-- ``execution_layer`` contains the ``ExecutionLayer`` class, which provide the actual machinery that runs the pipeline.
+- ``execution_layer`` contains the ``ExecutionLayer`` class, which provides the actual machinery
+  that runs the pipeline.
 - ``verifier`` contains a verification function that checks if the workflow can
   run or has errors.
 
-Workflow Files
---------------
-
+Workflow JSON Files
+-------------------
 A ``Workflow`` object can be instantiated from an appropriately formatted workflow JSON file.
-Typically the structure of this JSON represents a serialised version of each object contained
-within the ``Workflow``. Currently the ``WorkflowReader`` supports two file versions: 1 and 1.1.
+Typically the structure of this JSON represents a serialised version of each object contained within
+the ``Workflow``. Currently the ``WorkflowReader`` supports two file versions: 1 and 1.1.
 There are only minor differences between both versions:
 
 1. ``Workflow.mco_model`` attribute data stored under ``mco`` key in version 1 vs ``mco_model`` key in 1.1
@@ -107,6 +149,9 @@ There are only minor differences between both versions:
    instance in the outer list, and therefore each dictionary element is also expected to contain a
    ``data_sources`` key with a list of ``DataSourceModel`` statuses.
 
+The ``WorkflowWriter`` will produce JSON files that conform to the latest available version (currently 1.1)
+by default.
+
 Future directions
 -----------------
 
@@ -114,7 +159,7 @@ The future design will probably need to address the following:
 
 - Check if the ``--evaluate`` strategy and design is still relevant. More MCOs are
   needed for reasonable conclusions.
-- IWM is going to provide a strict description of types (``emmc-info``, previously
+- IWM is going to provide a strict description of types (``osp-core``, previously
   known as ``simphony``). Currently, all type entries in the e.g. slots are simple
   strings as a workaround. This is supposed to change once IWM provides a
   comprehensive set of types.
