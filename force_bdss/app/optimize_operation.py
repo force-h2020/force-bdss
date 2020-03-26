@@ -179,8 +179,7 @@ class OptimizeOperation(HasStrictTraits):
                 raise
 
             try:
-                listener.set_stop_event(self._stop_event)
-                listener.set_pause_event(self._pause_event)
+                self._set_threading_events(listener)
             except AttributeError:
                 pass
 
