@@ -24,13 +24,21 @@ class INotificationListenerFactory(IFactory):
     )
 
     def get_model_class(self):
-        pass
+        """
+        :return: model class.
+        """
 
     def get_listener_class(self):
-        pass
+        """
+        :return: listener class.
+        """
 
     def create_listener(self):
-        pass
+        """
+        :return: listener.
+        """
 
     def create_model(self):
-        pass
+        """
+        :return: model.
+        """
