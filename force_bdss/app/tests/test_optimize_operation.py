@@ -12,6 +12,8 @@ from force_bdss.events.mco_events import (
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.tests import fixtures
 from force_bdss.tests.probe_classes.workflow_file import ProbeWorkflowFile
+from force_bdss.tests.probe_classes.notification_listener import (
+    ProbeUIEventNotificationListener)
 
 
 class TestOptimizeOperation(TestCase):
@@ -67,7 +69,7 @@ class TestOptimizeOperation(TestCase):
 
     def test__set_threading_events(self):
         factory = self.registry.notification_listener_factories[0]
-        factory.return_ui_event_listener = True
+        factory.listener_class = ProbeUIEventNotificationListener
         listener = factory.create_listener()
 
         self.operation._set_threading_events(listener)
@@ -126,11 +128,14 @@ class TestOptimizeOperation(TestCase):
         # Test setting of stop and pause threading events on
         # a UIEventNotificationMixin listener
         factory.raises_on_initialize_listener = False
-        factory.return_ui_event_listener = True
 
         with mock.patch(
                 'force_bdss.app.optimize_operation.OptimizeOperation'
                 '._set_threading_events') as mock_set_thread:
+            self.operation._initialize_listeners()
+            self.assertEqual(0, mock_set_thread.call_count)
+
+            factory.listener_class = ProbeUIEventNotificationListener
             self.operation._initialize_listeners()
             self.assertEqual(1, mock_set_thread.call_count)
 

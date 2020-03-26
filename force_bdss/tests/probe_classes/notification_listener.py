@@ -67,8 +67,6 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
     raises_on_finalize_listener = Bool(False)
     raises_on_deliver_listener = Bool(False)
 
-    return_ui_event_listener = Bool(False)
-
     def get_name(self):
         return "test_notification_listener"
 
@@ -76,9 +74,7 @@ class ProbeNotificationListenerFactory(BaseNotificationListenerFactory):
         return "probe_notification_listener"
 
     def get_listener_class(self):
-        if self.return_ui_event_listener:
-            return ProbeNotificationListener
-        return ProbeUIEventNotificationListener
+        return ProbeNotificationListener
 
     def get_model_class(self):
         return ProbeNotificationListenerModel
