@@ -20,7 +20,11 @@ class IDataSourceFactory(IFactory):
     )
 
     def get_data_source_class(self):
-        pass
+        """
+        :return: data source class.
+        """
 
     def get_model_class(self):
-        pass
+        """
+        :return: model class.
+        """
