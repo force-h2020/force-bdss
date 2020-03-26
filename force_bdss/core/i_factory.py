@@ -14,7 +14,11 @@ class IFactory(Interface):
     plugin_id = Str(allow_none=False)
 
     def get_name(self):
-        pass
+        """
+        :return: factory name.
+        """
 
     def get_identifier(self):
-        pass
+        """
+        :return: factory UID
+        """
