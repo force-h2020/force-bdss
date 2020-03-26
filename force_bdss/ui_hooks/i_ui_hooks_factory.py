@@ -18,7 +18,11 @@ class IUIHooksFactory(IFactory):
     plugin = Instance(Plugin, allow_none=False)
 
     def get_ui_hooks_manager_class(self):
-        pass
+        """
+        :return:  hooks manager class
+        """
 
     def create_ui_hooks_manager(self):
-        pass
+        """
+        :return: hooks manager
+        """
