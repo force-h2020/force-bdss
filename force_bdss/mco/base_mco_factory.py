@@ -6,8 +6,8 @@ from force_bdss.core.base_factory import BaseFactory
 from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.mco.base_mco_communicator import BaseMCOCommunicator
 from force_bdss.mco.base_mco_model import BaseMCOModel
-from force_bdss.mco.parameters.base_mco_parameter_factory import (
-    BaseMCOParameterFactory,
+from force_bdss.mco.parameters.i_mco_parameter_factory import (
+    IMCOParameterFactory,
 )
 
 from .i_mco_factory import IMCOFactory
@@ -33,10 +33,10 @@ class BaseMCOFactory(BaseFactory):
     communicator_class = Type(BaseMCOCommunicator, allow_none=False)
 
     #: The list of parameter factory classes this MCO supports.
-    parameter_factory_classes = List(Type(BaseMCOParameterFactory))
+    parameter_factory_classes = List(Type(IMCOParameterFactory))
 
     #: The instantiated parameter factories.
-    parameter_factories = List(Instance(BaseMCOParameterFactory))
+    parameter_factories = List(Instance(IMCOParameterFactory))
 
     def __init__(self, plugin, *args, **kwargs):
         super(BaseMCOFactory, self).__init__(plugin=plugin, *args, **kwargs)
