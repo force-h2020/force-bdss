@@ -128,12 +128,11 @@ class TestOptimizeOperation(TestCase):
         factory.raises_on_initialize_listener = False
         factory.return_ui_event_listener = True
 
-        self.operation._initialize_listeners()
-        listener = self.operation.listeners[0]
-        self.assertIs(self.operation._pause_event,
-                      listener._pause_event)
-        self.assertIs(self.operation._stop_event,
-                      listener._stop_event)
+        with mock.patch(
+                'force_bdss.app.optimize_operation.OptimizeOperation'
+                '._set_threading_events') as mock_set_thread:
+            self.operation._initialize_listeners()
+            self.assertEqual(1, mock_set_thread.call_count)
 
     def test__finalize_listeners(self):
 
