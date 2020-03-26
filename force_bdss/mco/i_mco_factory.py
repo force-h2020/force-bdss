@@ -26,22 +26,36 @@ class IMCOFactory(IFactory):
     )
 
     def get_model_class(self):
-        pass
+        """
+        :return: model class.
+        """
 
     def get_communicator_class(self):
-        pass
+        """
+        :return: model communicator class.
+        """
 
     def get_optimizer_class(self):
-        pass
+        """
+        :return: optimizer class
+        """
 
     def create_optimizer(self):
-        pass
+        """
+        :return: optimizer
+        """
 
     def create_model(self):
-        pass
+        """
+        :return: model
+        """
 
     def create_communicator(self):
-        pass
+        """
+        :return: communicator
+        """
 
     def parameter_factories(self):
-        pass
+        """
+        :return:
+        """
