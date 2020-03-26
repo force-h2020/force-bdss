@@ -65,6 +65,17 @@ class TestOptimizeOperation(TestCase):
                 ),
             )
 
+    def test__set_threading_events(self):
+        factory = self.registry.notification_listener_factories[0]
+        factory.return_ui_event_listener = True
+        listener = factory.create_listener()
+
+        self.operation._set_threading_events(listener)
+        self.assertIs(self.operation._pause_event,
+                      listener._pause_event)
+        self.assertIs(self.operation._stop_event,
+                      listener._stop_event)
+
     def test__initialize_listeners(self):
 
         # Test normal operation
@@ -111,6 +122,18 @@ class TestOptimizeOperation(TestCase):
                     "The listener will be dropped.",
                 )
             )
+
+        # Test setting of stop and pause threading events on
+        # a UIEventNotificationMixin listener
+        factory.raises_on_initialize_listener = False
+        factory.return_ui_event_listener = True
+
+        self.operation._initialize_listeners()
+        listener = self.operation.listeners[0]
+        self.assertIs(self.operation._pause_event,
+                      listener._pause_event)
+        self.assertIs(self.operation._stop_event,
+                      listener._stop_event)
 
     def test__finalize_listeners(self):
 

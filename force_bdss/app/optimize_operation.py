@@ -154,6 +154,12 @@ class OptimizeOperation(HasStrictTraits):
                 ).format(listener.factory.id, listener.factory.plugin_id)
             )
 
+    def _set_threading_events(self, listener):
+        """Assign stop and pause threading events to
+        a UIEventNotificationMixin listener"""
+        listener.set_stop_event(self._stop_event)
+        listener.set_pause_event(self._pause_event)
+
     def _initialize_listeners(self):
         listeners = []
 
