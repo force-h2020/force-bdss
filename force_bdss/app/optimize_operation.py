@@ -14,6 +14,10 @@ from traits.api import (
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener,
 )
+from force_bdss.ui_hooks.ui_notification_mixins import (
+    UIEventNotificationMixin
+)
+
 from .i_operation import IOperation
 from .workflow_file import WorkflowFile
 
@@ -178,10 +182,8 @@ class OptimizeOperation(HasStrictTraits):
                 )
                 raise
 
-            try:
+            if isinstance(listener, UIEventNotificationMixin):
                 self._set_threading_events(listener)
-            except AttributeError:
-                pass
 
             try:
                 listener.initialize(nl_model)
