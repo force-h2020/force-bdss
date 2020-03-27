@@ -35,9 +35,9 @@ class TestDataSourceEvents(TestCase):
     def test_serialize_finish_event(self):
         event = DataSourceFinishEvent()
 
-        self.assertIsNone(event.serialize(), None)
+        self.assertListEqual(event.serialize(), [])
 
     def test_serialize_start_event(self):
         event = DataSourceStartEvent()
 
-        self.assertIsNone(event.serialize(), None)
+        self.assertListEqual(event.serialize(), [])
