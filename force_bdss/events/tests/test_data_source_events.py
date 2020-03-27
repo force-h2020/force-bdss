@@ -13,7 +13,7 @@ class TestDataSourceEvents(TestCase):
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {},
+                "model_data": {"input_names": []},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceStartEvent",
             },
@@ -25,7 +25,7 @@ class TestDataSourceEvents(TestCase):
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {},
+                "model_data": {"output_names": []},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceFinishEvent",
             },
