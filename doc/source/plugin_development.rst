@@ -96,7 +96,7 @@ Many ``BaseModel`` subclasses also include a ``verify`` method, which is
 called before an MCO run starts to ensure that the execution will be successful.
 This verification step can also be triggered in the WfManager UI even before an MCO run is
 submitted. For ``BaseDataSourceModel`` subclasses it is automatically performed whenever the
-slots objects are updated, however developers can also include the `verify=True` metadata
+slots objects are updated, however developers can also include the ``verify=True`` metadata
 on any additional trait that requires verification. Including this in example above::
 
     class MyModel(BaseDataSourceModel):
