@@ -31,3 +31,13 @@ class TestDataSourceEvents(TestCase):
             },
         )
         self.assertIsInstance(event, MCORuntimeEvent)
+
+    def test_serialize_finish_event(self):
+        event = DataSourceFinishEvent()
+
+        self.assertIsNone(event.serialize(), None)
+
+    def test_serialize_start_event(self):
+        event = DataSourceStartEvent()
+
+        self.assertIsNone(event.serialize(), None)
