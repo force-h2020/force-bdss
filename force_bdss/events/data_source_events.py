@@ -14,12 +14,14 @@ class DataSourceStartEvent(MCORuntimeEvent):
     input_names = List(Str())
 
     def serialize(self):
-        """ Provides serialized form of DataSourceStartEvent for further data storage
+        """ Provides serialized form of DataSourceStartEvent for
+        further data storage
         (e.g. in csv format) or processing.
 
 
         Usage example:
-        For a custom DataSourceStartEvent subclass, this method can be overloaded.
+        For a custom DataSourceStartEvent subclass, this method
+        can be overloaded.
         An example of a custom `serialize` method would be:
         >>> class CustomDataSourceStartEvent(DataSourceStartEvent):
         >>>
@@ -42,12 +44,14 @@ class DataSourceFinishEvent(MCORuntimeEvent):
     output_names = List(Str())
 
     def serialize(self):
-        """ Provides serialized form of DataSourceStartEvent for further data storage
+        """ Provides serialized form of DataSourceStartEvent
+        for further data storage
         (e.g. in csv format) or processing.
 
 
         Usage example:
-        For a custom DataSourceStartEvent subclass, this method can be overloaded.
+        For a custom DataSourceStartEvent subclass, this method
+        can be overloaded.
         An example of a custom `serialize` method would be:
         >>> class CustomDataSourceStartEvent(DataSourceStartEvent):
         >>>
