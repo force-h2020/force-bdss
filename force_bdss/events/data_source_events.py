@@ -14,14 +14,14 @@ class DataSourceStartEvent(MCORuntimeEvent):
     input_names = List(Str())
 
     def serialize(self):
-        """ Provides serialized form of MCOStartEvent for further data storage
+        """ Provides serialized form of DataSourceStartEvent for further data storage
         (e.g. in csv format) or processing.
 
 
         Usage example:
-        For a custom MCOStartEvent subclass, this method can be overloaded.
+        For a custom DataSourceStartEvent subclass, this method can be overloaded.
         An example of a custom `serialize` method would be:
-        >>> class CustomMCOStartEvent(DataSourceStartEvent):
+        >>> class CustomDataSourceStartEvent(DataSourceStartEvent):
         >>>
         >>>     def serialize(self):
         >>>         custom_data = [f"{name} data" for name in self.kpi_names]
@@ -29,7 +29,7 @@ class DataSourceStartEvent(MCORuntimeEvent):
         >>>
 
         Returns:
-            List(Str): event parameters names and kpi names
+            List(Str): input names
         """
         return self.input_names
 
@@ -42,14 +42,14 @@ class DataSourceFinishEvent(MCORuntimeEvent):
     output_names = List(Str())
 
     def serialize(self):
-        """ Provides serialized form of MCOStartEvent for further data storage
+        """ Provides serialized form of DataSourceStartEvent for further data storage
         (e.g. in csv format) or processing.
 
 
         Usage example:
-        For a custom MCOStartEvent subclass, this method can be overloaded.
+        For a custom DataSourceStartEvent subclass, this method can be overloaded.
         An example of a custom `serialize` method would be:
-        >>> class CustomMCOStartEvent(DataSourceStartEvent):
+        >>> class CustomDataSourceStartEvent(DataSourceStartEvent):
         >>>
         >>>     def serialize(self):
         >>>         custom_data = [f"{name} data" for name in self.kpi_names]
@@ -57,6 +57,6 @@ class DataSourceFinishEvent(MCORuntimeEvent):
         >>>
 
         Returns:
-            List(Str): event parameters names and kpi names
+            List(Str): output names
         """
         return self.output_names
