@@ -44,6 +44,25 @@ Upon start up, the ``BDSSApplication`` performs the following process
 
 .. image:: _images/bdss_application_flowchart.svg
 
+Operations
+----------
+
+The ``IOperation`` interface defines the requirements for an operation that can be
+performed by the BDSS. Currently we have 2 classes that are able to provide this
+interface: ``EvaluateOperation`` and ``OptimizeOperation``.
+
+.. image:: _images/evaluate_operation.svg
+
+The ``EvaluateOperation`` (invoked by using the ``--evaluate`` flag with the ``force_bdss``
+command line application) is designed to work alongside a ``BaseMCOCommunicator`` subclass
+that determines how to send and receive MCO parameters and KPIs.
+
+.. image:: _images/optimize_operation.svg
+
+The ``OptimizeOperation`` (the default operation performed by the ``force_bdss``) is
+designed to work alongside a ``BaseMCO`` subclass, that defines an optimization method
+to be performed on a ``Workflow`` instance.
+
 Event Handling
 --------------
 
