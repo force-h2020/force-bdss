@@ -1,25 +1,18 @@
 import logging
+import sys
 
-from traits.api import DelegatesTo, HasStrictTraits, Instance, provides
-
+from traits.api import provides, on_trait_change
 from .i_operation import IOperation
-from .workflow_file import WorkflowFile
-
+from .base_operation import BaseOperation
 
 log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
-class EvaluateOperation(HasStrictTraits):
+class EvaluateOperation(BaseOperation):
     """Performs the evaluation of a single point in an MCO,
     based on the system described by a `Workflow` object.
     """
-
-    #: The workflow file being operated on.
-    workflow_file = Instance(WorkflowFile)
-
-    #: The workflow instance.
-    workflow = DelegatesTo('workflow_file')
 
     def run(self):
         """ Evaluate the workflow. """
@@ -47,3 +40,14 @@ class EvaluateOperation(HasStrictTraits):
         kpi_results = self.workflow.execute(mco_data_values)
 
         mco_communicator.send_to_mco(mco_model, kpi_results)
+
+    @on_trait_change("workflow_file:workflow:event,mco:event")
+    def _deliver_event(self, event):
+        """ Events fired by the workflow_file.workflow are the communication
+        entry points with the BDSS execution process.
+        Responds to thread events.
+        """
+        self._pause_event.wait()
+
+        if self._stop_event.is_set():
+            sys.exit("BDSS stopped")
