@@ -1,10 +1,7 @@
 import logging
 import sys
-from threading import Event as ThreadingEvent
 
 from traits.api import (
-    DelegatesTo,
-    HasStrictTraits,
     Instance,
     List,
     on_trait_change,
@@ -16,44 +13,23 @@ from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener,
 )
 from .i_operation import IOperation
-from .workflow_file import WorkflowFile
-
+from .base_operation import BaseOperation
 
 log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
-class OptimizeOperation(HasStrictTraits):
+class OptimizeOperation(BaseOperation):
     """Performs a full MCO run on a system described by a `Workflow`
     object, based on the format given by a `BaseMCO` class. Contains
     optional `NotificationListener` classes in order to broadcast
     information during the MCO run."""
-
-    #: The workflow file being operated on.
-    workflow_file = Instance(WorkflowFile)
-
-    #: The workflow instance.
-    workflow = DelegatesTo("workflow_file")
 
     #: The mco instance.
     mco = Instance(BaseMCO)
 
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
-
-    #: Threading Event instance that indicates if the optimization operation
-    #: should be stopped.
-    _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
-
-    #: Threading Event instance that indicates if the optimization operation
-    #: should be paused and then resumed.
-    _pause_event = Instance(ThreadingEvent, visible=False, transient=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._stop_event = ThreadingEvent()
-        self._pause_event = ThreadingEvent()
-        self._pause_event.set()
 
     def run(self):
         """ Create and run the optimizer. """
@@ -147,21 +123,6 @@ class OptimizeOperation(HasStrictTraits):
             self.destroy_mco()
             sys.exit("BDSS stopped")
 
-    def _finalize_listener(self, listener):
-        """Helper method. Finalizes a listener and handles possible
-        exceptions. it does _not_ remove the listener from the listener
-        list.
-        """
-        try:
-            listener.finalize()
-        except Exception:
-            log.exception(
-                (
-                    "Exception while finalizing listener '{}'"
-                    " in plugin '{}'."
-                ).format(listener.factory.id, listener.factory.plugin_id)
-            )
-
     def _initialize_listeners(self):
         listeners = []
 
@@ -200,6 +161,21 @@ class OptimizeOperation(HasStrictTraits):
             listeners.append(listener)
 
         self.listeners = listeners
+
+    def _finalize_listener(self, listener):
+        """Helper method. Finalizes a listener and handles possible
+        exceptions. it does _not_ remove the listener from the listener
+        list.
+        """
+        try:
+            listener.finalize()
+        except Exception:
+            log.exception(
+                (
+                    "Exception while finalizing listener '{}'"
+                    " in plugin '{}'."
+                ).format(listener.factory.id, listener.factory.plugin_id)
+            )
 
     def _finalize_listeners(self):
         # finalize listeners
