@@ -40,14 +40,3 @@ class EvaluateOperation(BaseOperation):
         kpi_results = self.workflow.execute(mco_data_values)
 
         mco_communicator.send_to_mco(mco_model, kpi_results)
-
-    @on_trait_change("workflow_file:workflow:event,mco:event")
-    def _deliver_event(self, event):
-        """ Events fired by the workflow_file.workflow are the communication
-        entry points with the BDSS execution process.
-        Responds to thread events.
-        """
-        self._pause_event.wait()
-
-        if self._stop_event.is_set():
-            sys.exit("BDSS stopped")

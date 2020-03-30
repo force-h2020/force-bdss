@@ -41,8 +41,3 @@ class BaseOperation(HasStrictTraits):
 
     def run(self):
         """ Evaluate the workflow. """
-
-    def _deliver_event(self, event):
-        """ Events fired by the workflow_file.workflow are the communication
-        entry points with the BDSS execution process.
-        """
