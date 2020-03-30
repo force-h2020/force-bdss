@@ -22,6 +22,10 @@ class EvaluateOperation(BaseOperation):
 
         mco_factory = mco_model.factory
 
+        # Set up listeners
+        self._initialize_listeners()
+        self._deliver_start_event()
+
         log.info("Creating communicator")
         try:
             mco_communicator = mco_factory.create_communicator()
@@ -37,5 +41,8 @@ class EvaluateOperation(BaseOperation):
         mco_data_values = mco_communicator.receive_from_mco(mco_model)
 
         kpi_results = self.workflow.execute(mco_data_values)
-
         mco_communicator.send_to_mco(mco_model, kpi_results)
+
+        # Tear down listeners
+        self._deliver_finish_event()
+        self._finalize_listeners()
