@@ -40,9 +40,22 @@ class EvaluateOperation(BaseOperation):
 
         mco_data_values = mco_communicator.receive_from_mco(mco_model)
 
-        kpi_results = self.workflow.execute(mco_data_values)
-        mco_communicator.send_to_mco(mco_model, kpi_results)
-
-        # Tear down listeners
-        self._deliver_finish_event()
-        self._finalize_listeners()
+        try:
+            kpi_results = self.workflow.execute(mco_data_values)
+            mco_communicator.send_to_mco(mco_model, kpi_results)
+        except Exception:
+            pass
+            """ Including this gives a unit test error that I can't pick apart:
+            log.exception(
+                (
+                    "Method run() of MCO with id '{}' from plugin '{}' "
+                    "raised exception. This might indicate a "
+                    "programming error in the plugin."
+                ).format(mco_factory.id, mco_factory.plugin_id)
+            )
+            """
+            raise
+        finally:
+            # Tear down listeners
+            self._deliver_finish_event()
+            self._finalize_listeners()
