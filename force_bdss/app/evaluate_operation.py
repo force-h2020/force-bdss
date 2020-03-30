@@ -1,7 +1,6 @@
 import logging
-import sys
 
-from traits.api import provides, on_trait_change
+from traits.api import provides
 from .i_operation import IOperation
 from .base_operation import BaseOperation
 
