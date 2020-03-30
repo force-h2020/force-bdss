@@ -8,10 +8,13 @@ from traits.api import (
     provides,
 )
 
-from force_bdss.mco.base_mco import BaseMCO
 from force_bdss.notification_listeners.base_notification_listener import (
     BaseNotificationListener,
 )
+from force_bdss.ui_hooks.ui_notification_mixins import (
+    UIEventNotificationMixin
+)
+
 from .i_operation import IOperation
 from .base_operation import BaseOperation
 
@@ -25,9 +28,6 @@ class OptimizeOperation(BaseOperation):
     optional `NotificationListener` classes in order to broadcast
     information during the MCO run."""
 
-    #: The mco instance.
-    mco = Instance(BaseMCO)
-
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
 
@@ -40,23 +40,27 @@ class OptimizeOperation(BaseOperation):
                 log.error(error.local_error)
             raise RuntimeError("Workflow file has errors.")
 
-        self.mco = self.create_mco()
+        mco = self.create_mco()
+
+        # Set up listeners
+        self._initialize_listeners()
         self._deliver_start_event()
 
         try:
-            self.mco.run(self.workflow)
+            mco.run(self.workflow)
         except Exception:
             log.exception(
                 (
                     "Method run() of MCO with id '{}' from plugin '{}' "
                     "raised exception. This might indicate a "
                     "programming error in the plugin."
-                ).format(self.mco.factory.id, self.mco.factory.plugin_id)
+                ).format(mco.factory.id, mco.factory.plugin_id)
             )
             raise
         finally:
+            # Tear down listeners
             self._deliver_finish_event()
-            self.destroy_mco()
+            self._finalize_listeners()
 
     def create_mco(self):
         """ Create the MCO from the model's factory. """
@@ -74,13 +78,7 @@ class OptimizeOperation(BaseOperation):
             )
             raise
 
-        self._initialize_listeners()
-
         return mco
-
-    def destroy_mco(self):
-        self._finalize_listeners()
-        self.mco = None
 
     def _deliver_start_event(self):
         self.workflow.mco_model.notify_start_event()
@@ -88,7 +86,7 @@ class OptimizeOperation(BaseOperation):
     def _deliver_finish_event(self):
         self.workflow.mco_model.notify_finish_event()
 
-    @on_trait_change("workflow_file:workflow:event,mco:event")
+    @on_trait_change("workflow_file:workflow:event")
     def _deliver_event(self, event):
         """ Events fired by the workflow_file.workflow are the communication
         entry points with the BDSS execution process.
@@ -120,8 +118,14 @@ class OptimizeOperation(BaseOperation):
         self._pause_event.wait()
 
         if self._stop_event.is_set():
-            self.destroy_mco()
+            self._finalize_listeners()
             sys.exit("BDSS stopped")
+
+    def _set_threading_events(self, listener):
+        """Assign stop and pause threading events to
+        a UIEventNotificationMixin listener"""
+        listener.set_stop_event(self._stop_event)
+        listener.set_pause_event(self._pause_event)
 
     def _initialize_listeners(self):
         listeners = []
@@ -142,13 +146,9 @@ class OptimizeOperation(BaseOperation):
                 raise
 
             try:
-                listener.set_stop_event(self._stop_event)
-                listener.set_pause_event(self._pause_event)
-            except AttributeError:
-                pass
-
-            try:
                 listener.initialize(nl_model)
+                if isinstance(listener, UIEventNotificationMixin):
+                    self._set_threading_events(listener)
             except Exception:
                 log.exception(
                     (
