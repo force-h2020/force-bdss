@@ -13,7 +13,7 @@ class TestDataSourceEvents(TestCase):
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {},
+                "model_data": {"input_names": []},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceStartEvent",
             },
@@ -25,9 +25,19 @@ class TestDataSourceEvents(TestCase):
         self.assertDictEqual(
             event.__getstate__(),
             {
-                "model_data": {},
+                "model_data": {"output_names": []},
                 "id": "force_bdss.events.data_source_events."
                 "DataSourceFinishEvent",
             },
         )
         self.assertIsInstance(event, MCORuntimeEvent)
+
+    def test_serialize_finish_event(self):
+        event = DataSourceFinishEvent()
+
+        self.assertListEqual(event.serialize(), [])
+
+    def test_serialize_start_event(self):
+        event = DataSourceStartEvent()
+
+        self.assertListEqual(event.serialize(), [])

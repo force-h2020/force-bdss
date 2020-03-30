@@ -1,25 +1,17 @@
 import logging
 
-from traits.api import DelegatesTo, HasStrictTraits, Instance, provides
-
+from traits.api import provides
 from .i_operation import IOperation
-from .workflow_file import WorkflowFile
-
+from .base_operation import BaseOperation
 
 log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
-class EvaluateOperation(HasStrictTraits):
+class EvaluateOperation(BaseOperation):
     """Performs the evaluation of a single point in an MCO,
     based on the system described by a `Workflow` object.
     """
-
-    #: The workflow file being operated on.
-    workflow_file = Instance(WorkflowFile)
-
-    #: The workflow instance.
-    workflow = DelegatesTo('workflow_file')
 
     def run(self):
         """ Evaluate the workflow. """

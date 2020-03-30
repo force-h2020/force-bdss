@@ -1,10 +1,7 @@
 import logging
 import sys
-from threading import Event as ThreadingEvent
 
 from traits.api import (
-    DelegatesTo,
-    HasStrictTraits,
     Instance,
     List,
     on_trait_change,
@@ -19,41 +16,20 @@ from force_bdss.ui_hooks.ui_notification_mixins import (
 )
 
 from .i_operation import IOperation
-from .workflow_file import WorkflowFile
-
+from .base_operation import BaseOperation
 
 log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
-class OptimizeOperation(HasStrictTraits):
+class OptimizeOperation(BaseOperation):
     """Performs a full MCO run on a system described by a `Workflow`
     object, based on the format given by a `BaseMCO` class. Contains
     optional `NotificationListener` classes in order to broadcast
     information during the MCO run."""
 
-    #: The workflow file being operated on.
-    workflow_file = Instance(WorkflowFile)
-
-    #: The workflow instance.
-    workflow = DelegatesTo("workflow_file")
-
     #: The notification listener instances.
     listeners = List(Instance(BaseNotificationListener))
-
-    #: Threading Event instance that indicates if the optimization operation
-    #: should be stopped.
-    _stop_event = Instance(ThreadingEvent, visible=False, transient=True)
-
-    #: Threading Event instance that indicates if the optimization operation
-    #: should be paused and then resumed.
-    _pause_event = Instance(ThreadingEvent, visible=False, transient=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._stop_event = ThreadingEvent()
-        self._pause_event = ThreadingEvent()
-        self._pause_event.set()
 
     def run(self):
         """ Create and run the optimizer. """
@@ -65,6 +41,9 @@ class OptimizeOperation(HasStrictTraits):
             raise RuntimeError("Workflow file has errors.")
 
         mco = self.create_mco()
+
+        # Set up listeners
+        self._initialize_listeners()
         self._deliver_start_event()
 
         try:
@@ -79,6 +58,7 @@ class OptimizeOperation(HasStrictTraits):
             )
             raise
         finally:
+            # Tear down listeners
             self._deliver_finish_event()
             self._finalize_listeners()
 
@@ -97,8 +77,6 @@ class OptimizeOperation(HasStrictTraits):
                 ).format(mco_factory.id, mco_factory.plugin_id)
             )
             raise
-
-        self._initialize_listeners()
 
         return mco
 
@@ -143,21 +121,6 @@ class OptimizeOperation(HasStrictTraits):
             self._finalize_listeners()
             sys.exit("BDSS stopped")
 
-    def _finalize_listener(self, listener):
-        """Helper method. Finalizes a listener and handles possible
-        exceptions. it does _not_ remove the listener from the listener
-        list.
-        """
-        try:
-            listener.finalize()
-        except Exception:
-            log.exception(
-                (
-                    "Exception while finalizing listener '{}'"
-                    " in plugin '{}'."
-                ).format(listener.factory.id, listener.factory.plugin_id)
-            )
-
     def _set_threading_events(self, listener):
         """Assign stop and pause threading events to
         a UIEventNotificationMixin listener"""
@@ -182,11 +145,10 @@ class OptimizeOperation(HasStrictTraits):
                 )
                 raise
 
-            if isinstance(listener, UIEventNotificationMixin):
-                self._set_threading_events(listener)
-
             try:
                 listener.initialize(nl_model)
+                if isinstance(listener, UIEventNotificationMixin):
+                    self._set_threading_events(listener)
             except Exception:
                 log.exception(
                     (
@@ -199,6 +161,21 @@ class OptimizeOperation(HasStrictTraits):
             listeners.append(listener)
 
         self.listeners = listeners
+
+    def _finalize_listener(self, listener):
+        """Helper method. Finalizes a listener and handles possible
+        exceptions. it does _not_ remove the listener from the listener
+        list.
+        """
+        try:
+            listener.finalize()
+        except Exception:
+            log.exception(
+                (
+                    "Exception while finalizing listener '{}'"
+                    " in plugin '{}'."
+                ).format(listener.factory.id, listener.factory.plugin_id)
+            )
 
     def _finalize_listeners(self):
         # finalize listeners

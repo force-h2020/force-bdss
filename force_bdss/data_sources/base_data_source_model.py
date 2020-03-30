@@ -2,7 +2,7 @@ from copy import deepcopy
 from logging import getLogger
 
 from traits.api import (
-    Instance, List, Event, on_trait_change
+    Instance, List, Event, on_trait_change, Type
 )
 
 from force_bdss.core.base_model import BaseModel
@@ -10,6 +10,10 @@ from force_bdss.core.input_slot_info import InputSlotInfo
 from force_bdss.core.output_slot_info import OutputSlotInfo
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
+from force_bdss.events.data_source_events import (
+    DataSourceStartEvent,
+    DataSourceFinishEvent
+)
 
 
 logger = getLogger(__name__)
@@ -45,6 +49,14 @@ class BaseDataSourceModel(BaseModel):
     #: option in your model implies a change in the slots. The UI will detect
     #: this and adapt the visual entries.
     changes_slots = Event()
+
+    #: Type of the Data Source Start event
+    _start_event_type = Type(DataSourceStartEvent,
+                             visible=False, transient=True)
+
+    #: Type of the Data Source Finish event
+    _finish_event_type = Type(DataSourceFinishEvent,
+                              visible=False, transient=True)
 
     def verify(self):
         """ Verify the data source model.
