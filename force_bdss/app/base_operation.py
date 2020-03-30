@@ -41,3 +41,6 @@ class BaseOperation(HasStrictTraits):
 
     def run(self):
         """ Evaluate the workflow. """
+        raise NotImplementedError(
+            "{} must implement run".format(
+                self.__class__))
