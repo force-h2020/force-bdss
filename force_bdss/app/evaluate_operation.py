@@ -22,6 +22,10 @@ class EvaluateOperation(BaseOperation):
 
         mco_factory = mco_model.factory
 
+        # Set up listeners
+        self._initialize_listeners()
+        self._deliver_start_event()
+
         log.info("Creating communicator")
         try:
             mco_communicator = mco_factory.create_communicator()
@@ -34,8 +38,16 @@ class EvaluateOperation(BaseOperation):
                     mco_factory.plugin_id))
             return False
 
-        mco_data_values = mco_communicator.receive_from_mco(mco_model)
-
-        kpi_results = self.workflow.execute(mco_data_values)
-
-        mco_communicator.send_to_mco(mco_model, kpi_results)
+        try:
+            mco_data_values = mco_communicator.receive_from_mco(mco_model)
+            kpi_results = self.workflow.execute(mco_data_values)
+            mco_communicator.send_to_mco(mco_model, kpi_results)
+        except Exception:
+            # Simply propagate any error message that is raised, and
+            # ensure that listener and event objects are correctly
+            # teared down afterwards.
+            raise
+        finally:
+            # Tear down listeners
+            self._deliver_finish_event()
+            self._finalize_listeners()
