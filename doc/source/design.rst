@@ -48,8 +48,9 @@ Operations
 ----------
 
 The ``IOperation`` interface defines the requirements for an operation that can be
-performed by the BDSS. Currently we have 2 classes that are able to provide this
-interface: ``EvaluateOperation`` and ``OptimizeOperation``.
+performed by the BDSS. The ``BaseOperation`` class provides this interface and contains useful
+routines that are used to set up both internal and external communication routes.
+Currently we have 2 subclasses of this base class: ``EvaluateOperation`` and ``OptimizeOperation``.
 
 .. image:: _images/evaluate_operation.svg
 
@@ -71,7 +72,7 @@ components of the ``BDSSApplication``. It can also be serialized in order to be 
 external programs (i.e. the ``force_wfmanager``) as a JSON.
 
 Any events that are created during runtime are propagated through the ``Workflow`` object
-hierarchy, up to the ``IOperation`` class that is being performed by the ``BDSSApplication``,
+hierarchy, up to the ``BaseOperation`` class that is being performed by the ``BDSSApplication``,
 before finally being broadcast to all ``BaseNotificationListener`` classes present. Consequently,
 the ``BaseModel`` class contains an ``event`` attribute, as well as a ``notify`` method that is used to
 set it. Listeners can then detect changes in any ``BaseModel.event`` subclass, and
