@@ -64,6 +64,21 @@ class TestEvaluateOperation(TestCase):
                  'INFO', 'Aggregating KPI data')
             )
 
+    def test_run_missing_mco(self):
+        # Test for missing MCO
+        self.operation.workflow.mco_model = None
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaisesRegex(
+                    RuntimeError, "Workflow file has errors"
+            ):
+                self.operation.run()
+            capture.check(
+                ('force_bdss.app.base_operation',
+                  'ERROR',
+                  'Unable to execute workflow due to verification errors:'),
+                 ('force_bdss.app.base_operation', 'ERROR',
+                  'Workflow has no MCO'))
+
     def test_run_broken_mco_communicator(self):
         # Test for broken MCO communicator
         factory = self.registry.mco_factories[0]
