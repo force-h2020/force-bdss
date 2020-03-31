@@ -13,13 +13,13 @@ class EvaluateOperation(BaseOperation):
     based on the system described by a `Workflow` object.
     """
 
-    def run(self, do_verify=True):
+    def run(self):
 
         """verify the workflow.
         Do not do use this [run(do_verify=False)] on unit tests :
         use OptimizeOperation.run() to test verification.
         """
-        super().run(do_verify=do_verify)
+        self.verify_workflow()
 
         """ Evaluate the workflow. """
         mco_model = self.workflow.mco_model

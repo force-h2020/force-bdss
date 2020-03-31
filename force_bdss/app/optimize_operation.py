@@ -16,7 +16,7 @@ class OptimizeOperation(BaseOperation):
 
     def run(self):
         """ Verify the workflow """
-        super().run(do_verify=True)
+        self.verify_workflow()
 
         """ Create and run the optimizer. """
         mco = self.create_mco()
