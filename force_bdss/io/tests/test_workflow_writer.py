@@ -8,7 +8,6 @@ from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.tests.dummy_classes.factory_registry import (
     DummyFactoryRegistry,
 )
-
 from force_bdss.io.workflow_writer import (
     WorkflowWriter,
 )

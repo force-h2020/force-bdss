@@ -35,7 +35,7 @@ class TestCLIExecution(unittest.TestCase):
                 stderr=devnull)
             proc.communicate(b"1")
             retcode = proc.wait()
-            self.assertEqual(retcode, 0)
+            self.assertEqual(retcode, 1)
 
     def test_unsupported_file_input(self):
         with cd(fixtures.dirpath()):
