@@ -99,7 +99,7 @@ class TestEvaluateOperation(TestCase):
                     r"parameters specified \(0 values\). This is either "
                     "a MCO plugin error or the workflow file is "
                     "corrupted.")):
-                self.operation.run()  # fails
+                self.operation.run()
 
     def test_error_for_missing_ds_output_names(self):
 
@@ -116,7 +116,7 @@ class TestEvaluateOperation(TestCase):
                     r"The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
                     " the number of user-defined names")):
-                self.operation.run()   # fails
+                self.operation.run()
 
     def test_error_for_incorrect_output_slots(self):
 
