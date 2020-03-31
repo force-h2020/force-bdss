@@ -89,13 +89,16 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow.mco_model = factory.create_model()
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with (self.assertRaisesRegex(
+                    RuntimeError,
+                    "Workflow file has errors.") or
+                  self.assertRaisesRegex(
                     RuntimeError,
                     r"The number of data values returned by the MCO "
                     r"\(1 values\) does not match the number of "
                     r"parameters specified \(0 values\). This is either "
                     "a MCO plugin error or the workflow file is "
-                    "corrupted."):
+                    "corrupted.")):
                 self.operation.run()  # fails
 
     def test_error_for_missing_ds_output_names(self):
@@ -105,11 +108,14 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow_file.read()
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with (self.assertRaisesRegex(
+                    RuntimeError,
+                    "Workflow file has errors.") or
+                  self.assertRaisesRegex(
                     RuntimeError,
                     r"The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
-                    " the number of user-defined names"):
+                    " the number of user-defined names")):
                 self.operation.run()   # fails
 
     def test_error_for_incorrect_output_slots(self):
