@@ -15,14 +15,10 @@ class OptimizeOperation(BaseOperation):
     information during the MCO run."""
 
     def run(self):
-        """ Create and run the optimizer. """
-        self.workflow_file.verify()
-        if len(self.workflow_file.errors) != 0:
-            log.error("Unable to execute workflow due to verification errors:")
-            for error in self.workflow_file.errors:
-                log.error(error.local_error)
-            raise RuntimeError("Workflow file has errors.")
+        """ Verify the workflow """
+        super().run(do_verify=True)
 
+        """ Create and run the optimizer. """
         mco = self.create_mco()
 
         # Set up listeners

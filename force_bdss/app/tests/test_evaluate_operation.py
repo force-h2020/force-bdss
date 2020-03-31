@@ -68,7 +68,7 @@ class TestEvaluateOperation(TestCase):
         # Test for missing MCO
         self.operation.workflow.mco_model = None
         with testfixtures.LogCapture() as capture:
-            self.operation.run()
+            self.operation.run(do_verify=False)
             capture.check(
                 ('force_bdss.app.evaluate_operation',
                  'INFO',
@@ -107,7 +107,7 @@ class TestEvaluateOperation(TestCase):
                     r"parameters specified \(0 values\). This is either "
                     "a MCO plugin error or the workflow file is "
                     "corrupted."):
-                self.operation.run()
+                self.operation.run(do_verify=False)
 
     def test_error_for_incorrect_output_slots(self):
 
@@ -175,7 +175,7 @@ class TestEvaluateOperation(TestCase):
                     r"The number of data values \(2 values\)"
                     " returned by 'test_data_source' does not match"
                     " the number of user-defined names"):
-                self.operation.run()
+                self.operation.run(do_verify=False)
 
     def test_data_source_broken(self):
 
@@ -184,7 +184,7 @@ class TestEvaluateOperation(TestCase):
 
         with testfixtures.LogCapture() as capture:
             with self.assertRaises(Exception):
-                self.operation.run()
+                self.operation.run(do_verify=False)
             capture.check(
                 ('force_bdss.app.evaluate_operation',
                  'INFO',

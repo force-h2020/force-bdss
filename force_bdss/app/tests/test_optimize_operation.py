@@ -44,27 +44,6 @@ class TestOptimizeOperation(TestCase):
         operation.workflow_file.read()
         self.assertIsNotNone(operation.workflow)
 
-    def test_run_missing_mco(self):
-        # Test for missing MCO
-        self.operation.workflow.mco_model = None
-        with testfixtures.LogCapture() as capture:
-            with self.assertRaisesRegex(
-                RuntimeError, "Workflow file has errors"
-            ):
-                self.operation.run()
-            capture.check(
-                (
-                    "force_bdss.app.optimize_operation",
-                    "ERROR",
-                    "Unable to execute workflow due to verification errors:",
-                ),
-                (
-                    "force_bdss.app.optimize_operation",
-                    "ERROR",
-                    "Workflow has no MCO",
-                ),
-            )
-
     def test__set_threading_events(self):
         factory = self.registry.notification_listener_factories[0]
         factory.listener_class = ProbeUIEventNotificationListener
@@ -149,34 +128,20 @@ class TestOptimizeOperation(TestCase):
         self.assertEqual(3, event.optimal_kpis[0].value, 3)
         self.assertEqual(4, event.optimal_kpis[1].value, 4)
 
-    def test_run_empty_workflow(self):
+    def test_terminating_workflow(self):
+        self.operation._stop_event.set()
+        self.operation._initialize_listeners()
+        with mock.patch(
+            "force_bdss.app.optimize_operation.OptimizeOperation"
+            "._finalize_listeners"
+        ) as mock_call:
+            with self.assertRaisesRegex(SystemExit, "BDSS stopped"):
+                self.operation._deliver_start_event()
+            mock_call.assert_called_once()
 
-        # Load a blank workflow
-        self.operation.workflow_file = ProbeWorkflowFile(
-            path=fixtures.get("test_empty.json")
-        )
-        self.operation.workflow_file.read()
-
-        with testfixtures.LogCapture() as capture:
-            with self.assertRaises(RuntimeError):
-                self.operation.run()
-            capture.check(
-                (
-                    "force_bdss.app.optimize_operation",
-                    "ERROR",
-                    "Unable to execute workflow due to verification errors:",
-                ),
-                (
-                    "force_bdss.app.optimize_operation",
-                    "ERROR",
-                    "Workflow has no MCO",
-                ),
-                (
-                    "force_bdss.app.optimize_operation",
-                    "ERROR",
-                    "Workflow has no execution layers",
-                ),
-            )
+    ##############################################
+    # RUN TESTS: POSSIBLY COMMON WITH EVALUATE OPERATION
+    ##############################################
 
     def test_non_valid_file(self):
 
@@ -191,39 +156,77 @@ class TestOptimizeOperation(TestCase):
                 self.operation.run()
             capture.check(
                 (
-                    "force_bdss.app.optimize_operation",
+                    "force_bdss.app.base_operation",
                     "ERROR",
-                    "Unable to execute workflow due to verification errors:",
+                    "Unable to execute workflow due to verification errors:"
                 ),
                 (
-                    "force_bdss.app.optimize_operation",
+                    "force_bdss.app.base_operation",
                     "ERROR",
-                    "The MCO has no defined parameters",
+                    "The MCO has no defined parameters"
                 ),
                 (
-                    "force_bdss.app.optimize_operation",
+                    "force_bdss.app.base_operation",
                     "ERROR",
-                    "The MCO has no defined KPIs",
+                    "The MCO has no defined KPIs"
                 ),
                 (
-                    "force_bdss.app.optimize_operation",
+                    "force_bdss.app.base_operation",
                     "ERROR",
-                    "The number of input slots is incorrect.",
+                    "The number of input slots is incorrect."
                 ),
                 (
-                    "force_bdss.app.optimize_operation",
+                    "force_bdss.app.base_operation",
                     "ERROR",
-                    "The number of output slots is incorrect.",
-                ),
+                    "The number of output slots is incorrect."
+                )
             )
 
-    def test_terminating_workflow(self):
-        self.operation._stop_event.set()
-        self.operation._initialize_listeners()
-        with mock.patch(
-            "force_bdss.app.optimize_operation.OptimizeOperation"
-            "._finalize_listeners"
-        ) as mock_call:
-            with self.assertRaisesRegex(SystemExit, "BDSS stopped"):
-                self.operation._deliver_start_event()
-            mock_call.assert_called_once()
+    def test_run_empty_workflow(self):
+        # Load a blank workflow
+        self.operation.workflow_file = ProbeWorkflowFile(
+            path=fixtures.get("test_empty.json")
+        )
+        self.operation.workflow_file.read()
+
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaises(RuntimeError):
+                self.operation.run()
+            capture.check(
+                (
+                    "force_bdss.app.base_operation",
+                    "ERROR",
+                    "Unable to execute workflow due to verification errors:"
+                ),
+                (
+                    "force_bdss.app.base_operation",
+                    "ERROR",
+                    "Workflow has no MCO"
+                ),
+                (
+                    "force_bdss.app.base_operation",
+                    "ERROR",
+                    "Workflow has no execution layers"
+                )
+            )
+
+    def test_run_missing_mco(self):
+        # Test for missing MCO
+        self.operation.workflow.mco_model = None
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaisesRegex(
+                RuntimeError, "Workflow file has errors"
+            ):
+                self.operation.run()
+            capture.check(
+                (
+                    "force_bdss.app.base_operation",
+                    "ERROR",
+                    "Unable to execute workflow due to verification errors:"
+                ),
+                (
+                    "force_bdss.app.base_operation",
+                    "ERROR",
+                    "Workflow has no MCO"
+                )
+            )
