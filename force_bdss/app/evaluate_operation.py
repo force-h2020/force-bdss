@@ -14,19 +14,14 @@ class EvaluateOperation(BaseOperation):
     """
 
     def run(self):
-
-        """verify the workflow.
-        Do not do use this [run(do_verify=False)] on unit tests :
-        use OptimizeOperation.run() to test verification.
+        """ Evaluate the workflow.
         """
+
+        # Verify the workflow
         self.verify_workflow()
 
-        """ Evaluate the workflow. """
+        # optimizer model and factory
         mco_model = self.workflow.mco_model
-        if mco_model is None:
-            log.info("No MCO defined. Nothing to do. Exiting.")
-            return
-
         mco_factory = mco_model.factory
 
         # Set up listeners

@@ -15,10 +15,13 @@ class OptimizeOperation(BaseOperation):
     information during the MCO run."""
 
     def run(self):
-        """ Verify the workflow """
+        """ Create and run the optimizer.
+        """
+
+        # Verify the workflow
         self.verify_workflow()
 
-        """ Create and run the optimizer. """
+        # Create the optimizer
         mco = self.create_mco()
 
         # Set up listeners
