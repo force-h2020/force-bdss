@@ -68,12 +68,17 @@ class TestEvaluateOperation(TestCase):
         # Test for missing MCO
         self.operation.workflow.mco_model = None
         with testfixtures.LogCapture() as capture:
-            self.operation.run()
+            with (self.assertRaisesRegex(
+                    RuntimeError, "Workflow file has errors"
+            )):
+                self.operation.run()
             capture.check(
-                ('force_bdss.app.evaluate_operation',
-                 'INFO',
-                 'No MCO defined. Nothing to do. Exiting.'),
-            )
+                ('force_bdss.app.base_operation',
+                 'ERROR',
+                 'Unable to execute workflow due to verification errors:'),
+                ('force_bdss.app.base_operation', 'ERROR',
+                 'Workflow has no MCO'),
+                )
 
     def test_run_broken_mco_communicator(self):
         # Test for broken MCO communicator
@@ -100,13 +105,16 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow.mco_model = factory.create_model()
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with (self.assertRaisesRegex(
+                    RuntimeError,
+                    "Workflow file has errors.") or
+                  self.assertRaisesRegex(
                     RuntimeError,
                     r"The number of data values returned by the MCO "
                     r"\(1 values\) does not match the number of "
                     r"parameters specified \(0 values\). This is either "
                     "a MCO plugin error or the workflow file is "
-                    "corrupted."):
+                    "corrupted.")):
                 self.operation.run()
 
     def test_error_for_incorrect_output_slots(self):
@@ -163,20 +171,6 @@ class TestEvaluateOperation(TestCase):
                     " return the appropriate entity."):
                 self.operation.run()
 
-    def test_error_for_missing_ds_output_names(self):
-
-        factory = self.registry.data_source_factories[0]
-        factory.output_slots_size = 2
-        self.operation.workflow_file.read()
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                    RuntimeError,
-                    r"The number of data values \(2 values\)"
-                    " returned by 'test_data_source' does not match"
-                    " the number of user-defined names"):
-                self.operation.run()
-
     def test_data_source_broken(self):
 
         factory = self.registry.data_source_factories[0]
@@ -186,14 +180,11 @@ class TestEvaluateOperation(TestCase):
             with self.assertRaises(Exception):
                 self.operation.run()
             capture.check(
-                ('force_bdss.app.evaluate_operation',
-                 'INFO',
-                 'Creating communicator'),
-                ('force_bdss.core.workflow', 'INFO',
-                 'Computing data layer 0'),
-                ('force_bdss.core.execution_layer', 'ERROR',
-                 'Unable to create data source from factory '
-                 "'force.bdss.enthought.plugin.test.v0"
-                 ".factory.probe_data_source' in plugin "
-                 "'force.bdss.enthought.plugin.test.v0'. "
-                 "This may indicate a programming error in the plugin"))
+                 ('force_bdss.data_sources.base_data_source_model',
+                  'ERROR',
+                  'Unable to create data source from factory '
+                  "'force.bdss.enthought.plugin.test.v0.factory."
+                  "probe_data_source', plugin "
+                  "'force.bdss.enthought.plugin.test.v0'. "
+                  "This might indicate a  programming "
+                  'error'))

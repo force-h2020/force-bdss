@@ -14,12 +14,14 @@ class EvaluateOperation(BaseOperation):
     """
 
     def run(self):
-        """ Evaluate the workflow. """
-        mco_model = self.workflow.mco_model
-        if mco_model is None:
-            log.info("No MCO defined. Nothing to do. Exiting.")
-            return
+        """ Evaluate the workflow.
+        """
 
+        # Verify the workflow
+        self.verify_workflow()
+
+        # optimizer model and factory
+        mco_model = self.workflow.mco_model
         mco_factory = mco_model.factory
 
         # Set up listeners
