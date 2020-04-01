@@ -33,7 +33,8 @@ class BadDataSource(DummyDataSource):
 
 class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
     def setUp(self):
-        self.mock_factory = mock.Mock(spec=BaseDataSourceFactory)
+        self.mock_factory = mock.Mock(
+            spec=BaseDataSourceFactory, plugin_id='dummy_id')
         self.mock_factory.id = "id"
 
     def test_getstate(self):
@@ -82,12 +83,13 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             model.c = 5
 
     def test_bad_factory(self):
-        def create_data_source(self):
+        def create_data_source():
             raise Exception("Bad data source factory")
 
         self.mock_factory.create_data_source = create_data_source
         model = DummyDataSourceModel(self.mock_factory)
-        with self.assertRaises(Exception):
+        with self.assertRaisesRegex(
+                Exception, "Bad data source factory"):
             model.verify()
 
     def test_bad_slots(self):
@@ -95,7 +97,8 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
             return_value=BadDataSource(self.mock_factory)
         )
         model = DummyDataSourceModel(self.mock_factory)
-        with self.assertRaises(Exception):
+        with self.assertRaisesRegex(
+                Exception, "bad slots"):
             model.verify()
 
     def test_from_json(self):
