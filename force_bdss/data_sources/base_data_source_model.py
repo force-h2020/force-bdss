@@ -110,6 +110,13 @@ class BaseDataSourceModel(BaseModel):
             errors += input_slot.verify()
 
         if len(output_slots) != len(self.output_slot_info):
+            error_txt = (
+                "The number of data values ({} values) returned"
+                " by '{}' does not match the number"
+                " of user-defined names specified ({} values)."
+                " This is either a plugin error or a file"
+                " error."
+            ).format(len(res), factory.name, len(model.output_slot_info))
             errors.append(
                 VerifierError(
                     subject=self,
