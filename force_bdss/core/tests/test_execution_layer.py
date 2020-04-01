@@ -36,8 +36,6 @@ class TestExecutionLayer(TestCase, UnittestTools):
         messages = [error.local_error for error in errors]
 
         self.assertEqual(4, len(messages))
-        self.assertIn("The number of input slots is incorrect.", messages)
-        self.assertIn("The number of output slots is incorrect.", messages)
 
         self.layer.data_sources = []
         errors = self.layer.verify()
@@ -141,27 +139,6 @@ class TestExecutionLayer(TestCase, UnittestTools):
                 " by 'test_data_source' does not match the number"
                 r" of output slots it specifies \(1 values\)."
                 " This is likely a plugin error.",
-            ):
-                self.layer.execute_layer(data_values)
-
-    def test_error_for_output_slot_info(self):
-        data_values = [DataValue(name="foo")]
-        self.layer.data_sources[0].input_slot_info = [
-            InputSlotInfo(name="foo")
-        ]
-        self.layer.data_sources[0].output_slot_info = [
-            OutputSlotInfo(name="one"),
-            OutputSlotInfo(name="too_many"),
-        ]
-
-        with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
-                RuntimeError,
-                r"The number of data values \(1 values\) returned"
-                " by 'test_data_source' does not match the number"
-                r" of user-defined names specified \(2 values\)."
-                " This is either a plugin error or a file"
-                " error.",
             ):
                 self.layer.execute_layer(data_values)
 
