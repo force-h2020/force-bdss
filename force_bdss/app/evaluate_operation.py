@@ -1,34 +1,32 @@
 import logging
 
-from traits.api import DelegatesTo, HasStrictTraits, Instance, provides
-
+from traits.api import provides
 from .i_operation import IOperation
-from .workflow_file import WorkflowFile
-
+from .base_operation import BaseOperation
 
 log = logging.getLogger(__name__)
 
 
 @provides(IOperation)
-class EvaluateOperation(HasStrictTraits):
+class EvaluateOperation(BaseOperation):
     """Performs the evaluation of a single point in an MCO,
     based on the system described by a `Workflow` object.
     """
 
-    #: The workflow file being operated on.
-    workflow_file = Instance(WorkflowFile)
-
-    #: The workflow instance.
-    workflow = DelegatesTo('workflow_file')
-
     def run(self):
-        """ Evaluate the workflow. """
-        mco_model = self.workflow.mco_model
-        if mco_model is None:
-            log.info("No MCO defined. Nothing to do. Exiting.")
-            return
+        """ Evaluate the workflow.
+        """
 
+        # Verify the workflow
+        self.verify_workflow()
+
+        # optimizer model and factory
+        mco_model = self.workflow.mco_model
         mco_factory = mco_model.factory
+
+        # Set up listeners
+        self._initialize_listeners()
+        self._deliver_start_event()
 
         log.info("Creating communicator")
         try:
@@ -42,8 +40,16 @@ class EvaluateOperation(HasStrictTraits):
                     mco_factory.plugin_id))
             return False
 
-        mco_data_values = mco_communicator.receive_from_mco(mco_model)
-
-        kpi_results = self.workflow.execute(mco_data_values)
-
-        mco_communicator.send_to_mco(mco_model, kpi_results)
+        try:
+            mco_data_values = mco_communicator.receive_from_mco(mco_model)
+            kpi_results = self.workflow.execute(mco_data_values)
+            mco_communicator.send_to_mco(mco_model, kpi_results)
+        except Exception:
+            # Simply propagate any error message that is raised, and
+            # ensure that listener and event objects are correctly
+            # teared down afterwards.
+            raise
+        finally:
+            # Tear down listeners
+            self._deliver_finish_event()
+            self._finalize_listeners()

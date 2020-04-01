@@ -5,6 +5,9 @@ from force_bdss.api import (
     BaseNotificationListenerModel,
     BaseNotificationListenerFactory,
 )
+from force_bdss.ui_hooks.ui_notification_mixins import (
+    UIEventNotificationMixin
+)
 
 
 def pass_function(*args, **kwargs):
@@ -41,6 +44,11 @@ class ProbeNotificationListener(BaseNotificationListener):
     def finalize(self):
         self.finalize_called = True
         self.finalize_function()
+
+
+class ProbeUIEventNotificationListener(ProbeNotificationListener,
+                                       UIEventNotificationMixin):
+    pass
 
 
 class ProbeNotificationListenerModel(BaseNotificationListenerModel):
