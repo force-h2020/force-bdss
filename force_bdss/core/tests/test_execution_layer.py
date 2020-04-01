@@ -36,8 +36,6 @@ class TestExecutionLayer(TestCase, UnittestTools):
         messages = [error.local_error for error in errors]
 
         self.assertEqual(4, len(messages))
-        self.assertIn("The number of input slots is incorrect.", messages)
-        self.assertIn("The number of output slots is incorrect.", messages)
 
         self.layer.data_sources = []
         errors = self.layer.verify()
