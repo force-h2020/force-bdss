@@ -138,6 +138,22 @@ class BaseDataSourceModel(BaseModel):
 
         return errors
 
+    def notify_start_event(self):
+        """ Creates base event indicating the start of the MCO."""
+        self.notify(
+            self._start_event_type(
+                input_names=list(p.name for p in self.input_slot_info)
+            )
+        )
+
+    def notify_finish_event(self):
+        """ Creates base event indicating the finished MCO."""
+        self.notify(
+            self._finish_event_type(
+                output_names=list(p.name for p in self.output_slot_info)
+            )
+        )
+
     @on_trait_change("+changes_slots")
     def _trigger_changes_slots(self, obj, name, new):
         changes_slots = self.traits()[name].changes_slots

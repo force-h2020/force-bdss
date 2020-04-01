@@ -2,10 +2,6 @@ import abc
 from traits.api import ABCHasStrictTraits, Instance
 
 from force_bdss.data_sources.i_data_source_factory import IDataSourceFactory
-from force_bdss.events.data_source_events import (
-    DataSourceStartEvent,
-    DataSourceFinishEvent,
-)
 
 
 class BaseDataSource(ABCHasStrictTraits):
@@ -26,9 +22,9 @@ class BaseDataSource(ABCHasStrictTraits):
         Sends BaseDriverEvent event before and after the DataSource execution,
         such that the Workflow can be interacted with during its execution.
         """
-        model.notify(DataSourceStartEvent())
+        model.notify_start_event()
         result = self.run(model, parameters)
-        model.notify(DataSourceFinishEvent())
+        model.notify_finish_event()
         return result
 
     @abc.abstractmethod

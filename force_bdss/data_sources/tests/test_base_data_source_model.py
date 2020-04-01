@@ -129,3 +129,8 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
                 "output_slot_info": [{"name": "baz"}, {"name": "quux"}],
             },
         )
+        # Test notification events
+        with self.assertTraitChanges(model, "event", count=1):
+            model.notify_start_event()
+        with self.assertTraitChanges(model, "event", count=1):
+            model.notify_finish_event()
