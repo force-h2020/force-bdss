@@ -76,7 +76,7 @@ class BaseDataSourceModel(BaseModel):
         except Exception:
             logger.exception(
                 "Unable to create data source from factory '%s', plugin "
-                "'%s'. This might indicate a  programming error",
+                "'%s'. This might indicate a programming error",
                 self.factory.id,
                 self.factory.plugin_id,
             )

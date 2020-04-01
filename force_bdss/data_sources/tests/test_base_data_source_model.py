@@ -1,4 +1,5 @@
 import unittest
+import testfixtures
 
 from traits.api import Int
 from traits.testing.api import UnittestTools
@@ -88,18 +89,27 @@ class TestBaseDataSourceModel(unittest.TestCase, UnittestTools):
 
         self.mock_factory.create_data_source = create_data_source
         model = DummyDataSourceModel(self.mock_factory)
-        with self.assertRaisesRegex(
-                Exception, "Bad data source factory"):
-            model.verify()
+        with testfixtures.LogCapture() as capture:
+            with self.assertRaisesRegex(
+                    Exception, "Bad data source factory"):
+                model.verify()
+            capture.check(
+                ("force_bdss.data_sources.base_data_source_model",
+                 "ERROR",
+                 "Unable to create data source from factory "
+                 "'id', plugin 'dummy_id'. This "
+                 "might indicate a programming error")
+            )
 
     def test_bad_slots(self):
         self.mock_factory.create_data_source = mock.MagicMock(
             return_value=BadDataSource(self.mock_factory)
         )
         model = DummyDataSourceModel(self.mock_factory)
-        with self.assertRaisesRegex(
-                Exception, "bad slots"):
-            model.verify()
+        with testfixtures.LogCapture():
+            with self.assertRaisesRegex(
+                    Exception, "bad slots"):
+                model.verify()
 
     def test_from_json(self):
         registry = DummyFactoryRegistry()
