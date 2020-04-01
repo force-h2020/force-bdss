@@ -51,10 +51,19 @@ class BaseOperation(HasStrictTraits):
         self._pause_event.set()
 
     def run(self):
-        """ Evaluate the workflow. """
+        """ Evaluate the workflow."""
         raise NotImplementedError(
             "{} must implement run".format(
                 self.__class__))
+
+    def verify_workflow(self):
+        self.workflow_file.verify()
+        if len(self.workflow_file.errors) != 0:
+            log.error("Unable to execute workflow due to "
+                      "verification errors:")
+            for error in self.workflow_file.errors:
+                log.error(error.local_error)
+            raise RuntimeError("Workflow file has errors.")
 
     def _deliver_start_event(self):
         self.workflow.mco_model.notify_start_event()

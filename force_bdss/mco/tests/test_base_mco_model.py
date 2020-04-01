@@ -63,6 +63,14 @@ class TestBaseMCOModel(unittest.TestCase, UnittestTools):
                 "kpis": [],
             },
         )
+        with self.assertRaisesRegex(
+                RuntimeError,
+                "The number of data values returned by"
+                r" the MCO \(0 values\) does not match the"
+                r" number of parameters specified \(1 values\)."
+                " This is either a MCO plugin error or the workflow"
+                " file is corrupted."):
+            mco_model.bind_parameters([])
 
     def test_notify_events(self):
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))

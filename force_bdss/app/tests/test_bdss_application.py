@@ -109,12 +109,12 @@ class TestBDSSApplication(unittest.TestCase):
                 with self.assertRaises(Exception):
                     app._run_workflow()
             capture.check(
-                ('force_bdss.app.optimize_operation',
+                ('force_bdss.app.base_operation',
                  'ERROR',
                  'Unable to execute workflow due to verification errors:'),
-                ('force_bdss.app.optimize_operation',
+                ('force_bdss.app.base_operation',
                  'ERROR', 'Workflow has no MCO'),
-                ('force_bdss.app.optimize_operation',
+                ('force_bdss.app.base_operation',
                  'ERROR',
                  'Workflow has no execution layers'),
                 ('force_bdss.app.bdss_application',
