@@ -186,5 +186,5 @@ class TestEvaluateOperation(TestCase):
                   "'force.bdss.enthought.plugin.test.v0.factory."
                   "probe_data_source', plugin "
                   "'force.bdss.enthought.plugin.test.v0'. "
-                  "This might indicate a  programming "
+                  "This might indicate a programming "
                   'error'))
