@@ -124,9 +124,14 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow_file.read()
 
         with testfixtures.LogCapture():
-            with self.assertRaisesRegex(
+            with (self.assertRaisesRegex(
+                      RuntimeError,
+                      "Workflow file has errors.") or
+                  self.assertRaisesRegex(
                     RuntimeError,
-                    "Workflow file has errors."):
+                    r"The number of data values \(2 values\)"
+                    " returned by 'test_data_source' does not match"
+                    " the number of user-defined names")):
                 self.operation.run()
 
     def test_error_for_incorrect_output_slots(self):
