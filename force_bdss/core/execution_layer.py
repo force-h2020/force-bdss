@@ -96,18 +96,6 @@ class ExecutionLayer(EventNotifierMixin, HasStrictTraits):
                 log.error(error_txt)
                 raise RuntimeError(error_txt)
 
-            if len(res) != len(model.output_slot_info):
-                error_txt = (
-                    "The number of data values ({} values) returned"
-                    " by '{}' does not match the number"
-                    " of user-defined names specified ({} values)."
-                    " This is either a plugin error or a file"
-                    " error."
-                ).format(len(res), factory.name, len(model.output_slot_info))
-
-                log.error(error_txt)
-                raise RuntimeError(error_txt)
-
             for idx, dv in enumerate(res):
                 if not isinstance(dv, DataValue):
                     error_txt = (
