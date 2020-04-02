@@ -173,13 +173,20 @@ class TestOptimizeOperation(TestCase):
                 (
                     "force_bdss.app.base_operation",
                     "ERROR",
-                    "The number of input slots is incorrect."
+                    "The number of input slots (1 values) returned by "
+                    "'test_data_source' does "
+                    'not match the number of user-defined names specified '
+                    '(0 values). This is '
+                    'either a plugin error or a file error.'
                 ),
                 (
-                    "force_bdss.app.base_operation",
-                    "ERROR",
-                    "The number of output slots is incorrect."
-                )
+                    'force_bdss.app.base_operation',
+                    'ERROR',
+                    "The number of output slots (1 values) returned by "
+                    "'test_data_source' does "
+                    'not match the number of user-defined names specified '
+                    '(0 values). This is '
+                    'either a plugin error or a file error.')
             )
 
     def test_run_empty_workflow(self):
