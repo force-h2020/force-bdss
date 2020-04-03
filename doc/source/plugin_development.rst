@@ -279,7 +279,17 @@ can then be made discoverable by ``force-wfmanager`` using the ``envisage``
 
 Make sure to import the module containing the data view class from inside
 ``get_service_offer_factories``: this ensures that running BDSS without a GUI
-application doesn't import the graphical stack. Also, multiple types of plugin
+application doesn't import the graphical stack.
+
+Custom UI classes
+~~~~~~~~~~~~~~~~~
+
+There are currently two types of custom UI object that may be contributed by a
+plugin: ``IBasePlot`` and ``IContributedUI``. These interfaces represent requirements
+for any UI feature that can be used to display MCO data or a present a simplified
+workflow builder respectively.
+
+Also, multiple types of plugin
 contributed UI objects can be imported in the same call. For instance::
 
     def get_service_offer_factories(self):
