@@ -9,8 +9,6 @@ class INotificationListenerFactory(IFactory):
 
     Refer to the BaseNotificationListenerFactory for documentation.
     """
-    ui_visible = Bool()
-
     listener_class = Type(
         "force_bdss.notification_listeners"
         ".base_notification_listener.BaseNotificationListener",
