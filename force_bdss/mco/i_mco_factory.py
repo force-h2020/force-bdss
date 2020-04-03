@@ -1,4 +1,4 @@
-from traits.api import Type
+from traits.api import Type, List
 
 from force_bdss.core.i_factory import IFactory
 
@@ -25,6 +25,10 @@ class IMCOFactory(IFactory):
         allow_none=False
     )
 
+    parameter_factory_classes = List(Type(
+        "force_bdss.mco.parameters.i_mco_parameter_factory"
+        ".IMCOParameterFactory"))
+
     def get_model_class(self):
         """
         :return: model class.
@@ -40,6 +44,10 @@ class IMCOFactory(IFactory):
         :return: optimizer class
         """
 
+    def get_parameter_factory_classes(self):
+        """Returns a list of classes that provide the
+        IMCOParameterFactory interface"""
+
     def create_optimizer(self):
         """
         :return: optimizer
@@ -53,9 +61,4 @@ class IMCOFactory(IFactory):
     def create_communicator(self):
         """
         :return: communicator
-        """
-
-    def parameter_factories(self):
-        """
-        :return:
         """
