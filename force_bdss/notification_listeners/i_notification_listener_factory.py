@@ -1,4 +1,4 @@
-from traits.api import Type, Bool
+from traits.api import Type
 
 from force_bdss.core.i_factory import IFactory
 
