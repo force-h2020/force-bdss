@@ -26,11 +26,6 @@ class BaseMCOParameterFactory(BaseFactory):
         allow_none=False
     )
 
-    def get_model_class(self):
-        raise NotImplementedError(
-            "get_model_class was not implemented in factory {}".format(
-                self.__class__))
-
     def __init__(self, mco_factory, *args, **kwargs):
         super(BaseMCOParameterFactory, self).__init__(
             plugin={'id': mco_factory.plugin_id,
@@ -40,6 +35,11 @@ class BaseMCOParameterFactory(BaseFactory):
             **kwargs)
 
         self.model_class = self.get_model_class()
+
+    def get_model_class(self):
+        raise NotImplementedError(
+            "get_model_class was not implemented in factory {}".format(
+                self.__class__))
 
     def create_model(self, data_values=None):
         """Creates the instance of the model class and returns it.
