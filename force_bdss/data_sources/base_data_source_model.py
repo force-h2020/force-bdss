@@ -76,7 +76,7 @@ class BaseDataSourceModel(BaseModel):
         except Exception:
             logger.exception(
                 "Unable to create data source from factory '%s', plugin "
-                "'%s'. This might indicate a  programming error",
+                "'%s'. This might indicate a programming error",
                 self.factory.id,
                 self.factory.plugin_id,
             )
@@ -94,12 +94,21 @@ class BaseDataSourceModel(BaseModel):
             )
             raise
 
+        factory = self.factory
         errors = []
         if len(input_slots) != len(self.input_slot_info):
+            local_error_txt = (
+                "The number of input slots ({} values) returned"
+                " by '{}' does not match the number"
+                " of user-defined names specified ({} values)."
+                " This is either a plugin error or a file"
+                " error."
+            ).format(len(input_slots), factory.name,
+                     len(self.input_slot_info))
             errors.append(
                 VerifierError(
                     subject=self,
-                    local_error="The number of input slots is incorrect.",
+                    local_error=local_error_txt,
                     global_error=(
                         "A data source model has incorrect number "
                         "of input slots."
@@ -110,14 +119,20 @@ class BaseDataSourceModel(BaseModel):
             errors += input_slot.verify()
 
         if len(output_slots) != len(self.output_slot_info):
+            local_error_txt = (
+                "The number of output slots ({} values) returned"
+                " by '{}' does not match the number"
+                " of user-defined names specified ({} values)."
+                " This is either a plugin error or a file"
+                " error."
+            ).format(len(output_slots), factory.name,
+                     len(self.output_slot_info))
             errors.append(
                 VerifierError(
                     subject=self,
-                    local_error="The number of output slots is incorrect.",
-                    global_error=(
-                        "A data source model has incorrect number "
-                        "of output slots."
-                    ),
+                    local_error=local_error_txt,
+                    global_error="A data source model has incorrect number "
+                                 "of output slots."
                 )
             )
 
