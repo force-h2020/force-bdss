@@ -111,18 +111,31 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         """
         #: Get scaling factors and non-zero weight combinations for each KPI
         scaling_factors = self.get_scaling_factors()
-        for weights in self.weights_samples():
-            log.info("Doing MCO run with weights: {}".format(weights))
 
-            scaled_weights = [
-                weight * scale
-                for weight, scale in zip(weights, scaling_factors)
-            ]
+        # the switch here could be an extra search mode (e.g. "no search")
+        # in addition to, or substituting for, num_points.
+        if self.num_points > 1:
+            # weights = scaling factors * sample
+            for weights in self.weights_samples():
+                log.info("Doing MCO run with weights: {}".format(weights))
 
+                scaled_weights = [
+                    weight * scale
+                    for weight, scale in zip(weights, scaling_factors)
+                ]
+
+                optimal_point, optimal_kpis = self._weighted_optimize(
+                    scaled_weights
+                )
+                yield optimal_point, optimal_kpis, scaled_weights
+
+        else:
+            # weights = scaling factors
+            log.info("Doing MCO run without weights.")
             optimal_point, optimal_kpis = self._weighted_optimize(
-                scaled_weights
+                scaling_factors
             )
-            yield optimal_point, optimal_kpis, scaled_weights
+            yield optimal_point, optimal_kpis, scaling_factors
 
     def _weighted_optimize(self, weights):
         """ Performs single scipy.minimize operation on the dot product of
