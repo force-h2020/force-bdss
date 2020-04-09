@@ -57,9 +57,11 @@ Consequently, each MCO must declare a set of parameter types that it is able to 
 
 The ``BaseMCOModel`` class provides user input required by a ``BaseMCO`` class during runtime. It also
 contains references to, and methods used to broadcast the MCO-related ``BaseDriverEvent`` subclasses:
-``MCOStartEvent``, ``MCOProgressEvent`` and ``MCOFinishEvent``. The ``BaseMCO`` class' only job is to
-provide the the implementation of any optimization algorithm that will be performed during the ``BaseMCO.run`` method.
-This method takes in one argument, which must fulfill the ``IEvaluator`` interface.
+``MCOStartEvent``, ``MCOProgressEvent`` and ``MCOFinishEvent``. The variables designated as KPIs are represented
+by a list of ``KPISpecification`` objects, which also provide scaling instructions in order to convert them into
+comparable unit-less values. The ``BaseMCO`` class' only job is to provide the the implementation of any
+optimization algorithm that will be performed during the ``BaseMCO.run`` method. This method takes in one argument,
+which must fulfill the ``IEvaluator`` interface.
 
 .. image:: _images/i_evaluator_uml.svg
 
