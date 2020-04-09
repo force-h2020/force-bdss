@@ -28,3 +28,11 @@ class IDataSourceFactory(IFactory):
         """
         :return: model class.
         """
+
+    def create_data_source(self):
+        """Returns an instance of subclass BaseDataSource
+        """
+
+    def create_model(self):
+        """Returns an instance of subclass BaseDataSourceModel
+        """

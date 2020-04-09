@@ -1,4 +1,4 @@
-from traits.api import Type, Bool
+from traits.api import Type
 
 from force_bdss.core.i_factory import IFactory
 
@@ -9,8 +9,6 @@ class INotificationListenerFactory(IFactory):
 
     Refer to the BaseNotificationListenerFactory for documentation.
     """
-    ui_visible = Bool()
-
     listener_class = Type(
         "force_bdss.notification_listeners"
         ".base_notification_listener.BaseNotificationListener",

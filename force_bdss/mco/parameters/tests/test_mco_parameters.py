@@ -210,24 +210,28 @@ class TestRangedVectorMCOParameter(TestCase):
         self.assertEqual(1, len(self.parameter.upper_bound))
         self.assertEqual(1, len(self.parameter.lower_bound))
         self.assertEqual(1, len(self.parameter.initial_value))
+        self.assertListEqual([100.0], self.parameter.upper_bound)
+        self.assertListEqual([0.1], self.parameter.lower_bound)
+        self.assertListEqual([50.05], self.parameter.initial_value)
 
         self.parameter.dimension = 3
         self.assertEqual(3, self.parameter.dimension)
         self.assertEqual(3, len(self.parameter.upper_bound))
         self.assertEqual(3, len(self.parameter.lower_bound))
         self.assertEqual(3, len(self.parameter.initial_value))
-        self.assertListEqual([0.0, 0.0], self.parameter.upper_bound[1:])
-        self.assertListEqual([0.0, 0.0], self.parameter.lower_bound[1:])
-        self.assertListEqual([0.0, 0.0], self.parameter.initial_value[1:])
+        self.assertListEqual([100.0, 0.0, 0.0], self.parameter.upper_bound)
+        self.assertListEqual([0.1, 0.0, 0.0], self.parameter.lower_bound)
+        self.assertListEqual([50.05, 0.0, 0.0], self.parameter.initial_value)
 
+        self.parameter.upper_bound = [100.0, 0.0]
         self.parameter.dimension = 2
         self.assertEqual(2, self.parameter.dimension)
         self.assertEqual(2, len(self.parameter.upper_bound))
         self.assertEqual(2, len(self.parameter.lower_bound))
         self.assertEqual(2, len(self.parameter.initial_value))
-        self.assertListEqual([0.0], self.parameter.upper_bound[1:])
-        self.assertListEqual([0.0], self.parameter.lower_bound[1:])
-        self.assertListEqual([0.0], self.parameter.initial_value[1:])
+        self.assertListEqual([100.0, 0.0], self.parameter.upper_bound)
+        self.assertListEqual([0.1, 0.0], self.parameter.lower_bound)
+        self.assertListEqual([50.05, 0.0], self.parameter.initial_value)
 
     def test_verify(self):
 
