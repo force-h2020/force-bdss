@@ -20,3 +20,8 @@ subclass are handled by the ``BaseNotificationListener.deliver`` method.
 In this way, we can also use ``BaseDriverEvents`` to control the progress of an MCO run,
 since after every broadcast, the ``OptimizeOperation`` checks its run time status to see whether
 the event has triggered a MCO 'pause' or 'stop' signal.
+
+Additionally, the ``BaseDataSource._run`` method shadows the ``BaseDataSource.run`` method in order to
+signal the beginning and end of a data source execution. By doing so,
+we are able to pause and stop and MCO run between each ``run`` method invocation, which represents
+a black box operation.

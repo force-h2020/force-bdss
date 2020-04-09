@@ -47,7 +47,7 @@ There are a few core assumptions about each of these entities:
 The specifications above can be performed by the ``Workflow`` class, a concrete
 implementation of a pipeline for the BDSS:
 
-.. image:: _images/workflow_design.svg
+.. image:: _images/workflow_uml.svg
 
 -  The ``Workflow.mco_model`` attribute refers to a ``BaseMCOModel`` instance that
    defines user-inputted parameters for the MCO. It contains a list of ``BaseMCOParameter``
@@ -64,6 +64,8 @@ implementation of a pipeline for the BDSS:
 -  The ``Workflow.notification_listeners`` attribute contains a list of
    ``BaseNotificationListener`` instances that define user-inputted parameters for each
    notification listener that will be active during the MCO run.
+
+.. image:: _images/workflow_design.svg
 
 During an Force BDSS run, the ``Workflow`` object is used to initialise the MCO and also
 perform each calculation of the system state for a given set of input parameter values.
