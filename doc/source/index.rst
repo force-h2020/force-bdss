@@ -7,11 +7,10 @@ User Manual
 ===========
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    Introduction <introduction>
    Installation instructions <installation>
-   Workflow representation <workflow_schema>
    Design documentation <design>
    Plugin development <plugin_development>
    Contributing Code <developer_guidelines>

@@ -77,3 +77,22 @@ This is carried out by the following steps:
 #. Both parameter and KPI values can then be broadcast to any ``BaseNotificationListener``
    instances active using the ``Workflow.mco_model.notify_progress_event`` method.
 #. Iterate steps 2 and 3 until all evaluations have been performed and the MCO has finished.
+
+
+Workflow JSON Files
+-------------------
+A ``Workflow`` object can be instantiated from an appropriately formatted workflow JSON file.
+Typically the structure of this JSON represents a serialised version of each object contained within
+the ``Workflow``. Currently the ``WorkflowReader`` supports two file versions: 1 and 1.1.
+There are only minor differences between both versions:
+
+1. ``Workflow.mco_model`` attribute data stored under ``mco`` key in version 1 vs ``mco_model`` key in 1.1
+2. ``Workflow.execution_layers`` attribute data represented as a list of lists in version 1 vs
+   a list of dictionaries in version 1.1. In version 1, each element in the outer list implicitly represents
+   an execution layer, whilst each element in the the inner list represents the serialised status of a
+   ``DataSourceModel`` instance. In version 1.1, we explicitly include the status of each ``ExecutionLayer``
+   instance in the outer list, and therefore each dictionary element is also expected to contain a
+   ``data_sources`` key with a list of ``DataSourceModel`` statuses.
+
+The ``WorkflowWriter`` will produce JSON files that conform to the latest available version (currently 1.1)
+by default.
