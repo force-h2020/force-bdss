@@ -9,6 +9,7 @@ system, with stevedore to manage the additions.
         Class Diagrams <class_diagrams>
         Workflow representation <workflow_schema>
         Event Handling <event_handling>
+        Verification <verification>
         Package Structure <package_structure>
 
 Future directions
