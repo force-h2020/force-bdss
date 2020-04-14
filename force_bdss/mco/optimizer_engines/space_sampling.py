@@ -5,22 +5,6 @@ from traits.api import ABCHasStrictTraits, Bool, ListFloat
 from force_bdss.local_traits import PositiveInt
 
 
-def resolution_to_sample_size(space_dimension, n_points):
-    """ Calculates what is the exact number of space samples (vectors
-    of dimension `space_dimension`) we should pick, in order to have
-    an effective sampling resolution of `nof_points` per dimension.
-    This method unifies the number of samples from stochastic space
-    search models and the number of samples from the uniform-along-each-axis
-    sampling.
-    """
-    samples_total = (
-        np.math.factorial(space_dimension + n_points - 2)
-        / np.math.factorial(space_dimension - 1)
-        / np.math.factorial(n_points - 1)
-    )
-    return int(samples_total)
-
-
 class SpaceSampler(ABCHasStrictTraits):
     """ Base class for search space sampling from various distributions.
 
@@ -101,8 +85,7 @@ class DirichletSpaceSampler(SpaceSampler):
         return self._distribution_function(self.alpha).tolist()
 
     def generate_space_sample(self):
-        n_points = resolution_to_sample_size(self.dimension, self.resolution)
-        for _ in range(n_points):
+        for _ in range(self.resolution):
             yield self._get_sample_point()
 
 
@@ -119,8 +102,8 @@ class UniformSpaceSampler(SpaceSampler):
     for x being 0.0, 0.5 and 1.0.
 
     Parameter `with_zero_values` controls the presence of zero valued entries.
-    If `with_zero_values` parameter is set to False, then ensure
-    `resolution > dimension` in order for the generator to return any values.
+    If `with_zero_values` parameter is set to False, then no zero valued weights
+    will be included, though the number of points sampled will remain the same.
     """
 
     #: Controls whether zero entries can appear in sample vector
@@ -136,8 +119,11 @@ class UniformSpaceSampler(SpaceSampler):
             Yields all the possible combinations satisfying the requirement
             that the sum of all the weights must always be 1.0
         """
+        n_combinations = self.resolution - 1
+        if not self.with_zero_values:
+            n_combinations += self.dimension
 
-        scaling = 1.0 / (self.resolution - 1)
+        scaling = 1.0 / n_combinations
         for int_w in self._int_weights():
             yield [scaling * val for val in int_w]
 
@@ -150,6 +136,9 @@ class UniformSpaceSampler(SpaceSampler):
 
         if resolution is None:
             resolution = self.resolution
+
+            if not self.with_zero_values:
+                resolution += dimension
 
         if dimension == 1:
             yield [resolution - 1]
