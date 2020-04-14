@@ -59,6 +59,7 @@ version = ".".join(RELEASE.split(".")[0:3])
 release = RELEASE
 pygments_style = 'sphinx'
 html_theme = 'classic'
+html_theme_options = {'body_max_width': '80%'}
 html_static_path = ['_static']
 html_logo = '_static/force_logo.png'
 htmlhelp_basename = 'FORCEdoc'
