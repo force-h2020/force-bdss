@@ -102,8 +102,9 @@ class UniformSpaceSampler(SpaceSampler):
     for x being 0.0, 0.5 and 1.0.
 
     Parameter `with_zero_values` controls the presence of zero valued entries.
-    If `with_zero_values` parameter is set to False, then no zero valued weights
-    will be included, though the number of points sampled will remain the same.
+    If `with_zero_values` parameter is set to False, then no zero valued
+    weights will be included, though the number of points sampled will remain
+    the same.
     """
 
     #: Controls whether zero entries can appear in sample vector
