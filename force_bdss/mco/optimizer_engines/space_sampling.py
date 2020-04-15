@@ -2,6 +2,7 @@ import abc
 import numpy as np
 
 from traits.api import ABCHasStrictTraits, Bool, ListFloat
+
 from force_bdss.local_traits import PositiveInt
 
 
@@ -137,13 +138,21 @@ class UniformSpaceSampler(SpaceSampler):
             Yields all the possible combinations satisfying the requirement
             that the sum of all the weights must always be 1.0
         """
-        n_combinations = self.resolution - 1
+        n_combinations = self.resolution
         if not self.with_zero_values:
             n_combinations += self.dimension
 
-        scaling = 1.0 / n_combinations
-        for int_w in self._int_weights():
-            yield [scaling * val for val in int_w]
+        # If we are only returning one weight combination, it must
+        # equal 1.0 since the weights are all normalised. No zero
+        # values will be allowed in this case.
+        try:
+            scaling = 1.0 / (n_combinations - 1)
+        except ZeroDivisionError:
+            yield [1.0]
+
+        else:
+            for int_w in self._int_weights():
+                yield [scaling * val for val in int_w]
 
     def _int_weights(self, resolution=None, dimension=None):
         """Helper routine for the `_get_sample_point`. Generates integer values
