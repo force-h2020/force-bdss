@@ -5,6 +5,22 @@ from traits.api import ABCHasStrictTraits, Bool, ListFloat
 from force_bdss.local_traits import PositiveInt
 
 
+def resolution_to_sample_size(space_dimension, n_points):
+    """ Calculates what is the exact number of space samples (vectors
+    of dimension `space_dimension`) we should pick, in order to have
+    an effective sampling resolution of `nof_points` per dimension.
+    This method unifies the number of samples from stochastic space
+    search models and the number of samples from the uniform-along-each-axis
+    sampling.
+    """
+    samples_total = (
+            np.math.factorial(space_dimension + n_points - 2)
+            / np.math.factorial(space_dimension - 1)
+            / np.math.factorial(n_points - 1)
+    )
+    return int(samples_total)
+
+
 class SpaceSampler(ABCHasStrictTraits):
     """ Base class for search space sampling from various distributions.
 
@@ -85,7 +101,8 @@ class DirichletSpaceSampler(SpaceSampler):
         return self._distribution_function(self.alpha).tolist()
 
     def generate_space_sample(self):
-        for _ in range(self.resolution):
+        n_points = resolution_to_sample_size(self.dimension, self.resolution)
+        for _ in range(n_points):
             yield self._get_sample_point()
 
 
