@@ -55,10 +55,6 @@ When the CI tests are passing locally, push the branch to ``origin`` using::
 
    git push --set-upstream origin <branch-name>
 
-And create a GitHub pull request describing the changes made and the context for doing so. At the
-moment we do not have a template for these requests, but typically developers should try to include
-a both a 'Summary' section with a brief outline of the context, as well as a 'Changelog' section
-with itemized list of key changes made.
-
-Some projects will explicitly require at least one reviewer for a pull request to be merged. However,
+And create a GitHub pull request describing the changes made and the context for doing so by following
+the pull request template provided. Some projects will explicitly require at least one reviewer for a pull request to be merged. However,
 we strongly request that ANY code is reviewed before merging.
