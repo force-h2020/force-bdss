@@ -56,5 +56,8 @@ When the CI tests are passing locally, push the branch to ``origin`` using::
    git push --set-upstream origin <branch-name>
 
 And create a GitHub pull request describing the changes made and the context for doing so by following
-the pull request template provided. Some projects will explicitly require at least one reviewer for a pull request to be merged. However,
-we strongly request that ANY code is reviewed before merging.
+the pull request template provided. Some repositories are protected and will explicitly require at least one reviewer
+for a pull request to be merged. However, we strongly request that ANY code is reviewed before merging.
+
+When reviewing, try to ensure that the PR creator remains the only committer to the PR branch. A reviewer
+can make a new PR against the PR branch if they want to suggest extensive changes.
