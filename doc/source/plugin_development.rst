@@ -186,14 +186,13 @@ is provided that uses the ``SciPy`` library as a backend.
 The ``SpaceSampler`` abstract class also acts as a utility class in order to sample
 vectors of values from a given distribution. Implementations of this class could be used to either provide
 trial parameter sets to feed into an optimiser as initial points, or importance weights to apply to each KPI.
-The base class must simply define the following methods::
+The base class must define the following methods::
 
     def _get_sample_point(self):
     def generate_space_sample(self, *args, **kwargs):
 
 Two concrete implementations of this class are provided: ``UniformSpaceSampler``, which performs a grid
 search and ``DirichletSpaceSampler``, which samples random points from the Dirichlet distribution.
-
 
 MCO Communicator
 ^^^^^^^^^^^^^^^^
@@ -248,7 +247,6 @@ the method::
 
     get_listener_class()
      return the notification listener object class.
-
 
 The NotificationListener class must reimplement the following methods, that
 are invoked in specific lifetime events of the BDSS::
