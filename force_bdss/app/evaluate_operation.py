@@ -20,25 +20,12 @@ class EvaluateOperation(BaseOperation):
         # Verify the workflow
         self.verify_workflow()
 
-        # optimizer model and factory
+        # Obtain MCO model and communicator
         mco_model = self.workflow.mco_model
-        mco_factory = mco_model.factory
+        mco_communicator = self.create_mco_communicator()
 
         # Set up listeners
         self._initialize_listeners()
-        self._deliver_start_event()
-
-        log.info("Creating communicator")
-        try:
-            mco_communicator = mco_factory.create_communicator()
-        except Exception:
-            log.exception((
-                "Unable to create communicator from MCO factory '{}'"
-                " in plugin '{}'. This may indicate a programming "
-                "error in the plugin").format(
-                    mco_factory.id,
-                    mco_factory.plugin_id))
-            return False
 
         try:
             mco_data_values = mco_communicator.receive_from_mco(mco_model)
@@ -51,5 +38,23 @@ class EvaluateOperation(BaseOperation):
             raise
         finally:
             # Tear down listeners
-            self._deliver_finish_event()
             self._finalize_listeners()
+
+    def create_mco_communicator(self):
+        """Create BaseMCOCommunicator instance associated with
+        the BaseMCOModel subclass in the Workflow"""
+        mco_factory = self.workflow.mco_model.factory
+
+        log.info("Creating communicator")
+        try:
+            mco_communicator = mco_factory.create_communicator()
+        except Exception:
+            log.exception((
+                "Unable to create communicator from MCO factory '{}'"
+                " in plugin '{}'. This may indicate a programming "
+                "error in the plugin").format(
+                    mco_factory.id,
+                    mco_factory.plugin_id))
+            raise
+
+        return mco_communicator
