@@ -8,7 +8,8 @@ module, but a brief explanation of the internal structure is provided below.
 The ``data_sources``, ``mco``, ``notification_listeners`` and ``ui_hooks`` packages, and
 the ``base_extension_plugin`` class, contain all the base classes that plugin developers need
 to use in order to write a plugin. They have been coded to be as error tolerant
-as possible, and deliver robust error messages as much as possible.
+as possible, and deliver robust error messages as much as possible. Further information regarding these
+classes can be found in the plugin development `documentation <plugin_develpment.rst>`_
 
 The ``io`` package contains the reader and writer for the model. It simply
 serializes the model objects and dumps them to JSON, or vice-versa. Note that
