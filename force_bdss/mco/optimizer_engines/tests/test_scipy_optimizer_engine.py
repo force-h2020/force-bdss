@@ -15,7 +15,7 @@ class DummyOptimizerEngine(MixinDummyOptimizerEngine, ScipyOptimizerEngine):
     pass
 
 
-class TestWeightedOptimizer(TestCase):
+class TestScipyOptimizer(TestCase):
     def setUp(self):
         self.plugin = {"id": "pid", "name": "Plugin"}
         self.factory = DummyMCOFactory(self.plugin)
@@ -71,3 +71,18 @@ class TestWeightedOptimizer(TestCase):
             self.assertAlmostEqual(0.67, optimal_point[1])
             for kpi in optimal_kpis:
                 self.assertAlmostEqual(0.0, kpi)
+
+    def test_scalar_score(self):
+        kpis = self.mocked_optimizer._score([0.0, 0.0])
+        self.assertAlmostEqual(
+            kpis[0] + kpis[1],
+            self.mocked_optimizer._scalar_score([0.0, 0.0])
+        )
+
+    def test_scipy_optimize(self):
+        optimal_point, optimal_kpis = self.mocked_optimizer._scipy_optimize(
+            self.mocked_optimizer._scalar_score)
+        self.assertAlmostEqual(0.33, optimal_point[0])
+        self.assertAlmostEqual(0.67, optimal_point[1])
+        for kpi in optimal_kpis:
+            self.assertAlmostEqual(0.0, kpi)
