@@ -20,9 +20,6 @@ class ScipyOptimizerEngine(BaseOptimizerEngine):
     #: Optimizer name
     name = Str("Scipy_Optimizer")
 
-    #: Search grid resolution per KPI
-    num_points = PositiveInt(7)
-
     #: Algorithms available to work with
     algorithms = Enum("SLSQP", "Nelder-Mead", "Powell", "CG", "BFGS",
                       "Newton-CG", "L-BFGS-B", "TNC", "COBYLA",
@@ -56,13 +53,13 @@ class ScipyOptimizerEngine(BaseOptimizerEngine):
         optimal_point, optimal_kpis = self._scipy_optimize(
             self._scalar_score
         )
-        yield optimal_point, optimal_kpis
+        yield optimal_point, optimal_kpis, []
 
     def _scalar_score(self, input_point):
         """ The sum of the objectives/kpis, so they can be
         optimized by scipy.
         """
-        return np.sum(self._score(input_point))
+        return np.sum(self._minimization_score(self._score(input_point)))
 
     def _scipy_optimize(self, func):
         """ The core functionality offered by this class.
