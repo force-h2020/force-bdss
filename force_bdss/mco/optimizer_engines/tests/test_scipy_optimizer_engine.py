@@ -2,9 +2,12 @@ from unittest import TestCase
 
 from force_bdss.api import (
     KPISpecification,
-    ScipyOptimizerEngine,
     RangedMCOParameterFactory,
 )
+from force_bdss.mco.optimizer_engines.scipy_optimizer_engine import (
+    ScipyOptimizerEngine
+)
+
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     MixinDummyOptimizerEngine,
