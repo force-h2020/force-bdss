@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 
 from scipy import optimize as scipy_optimize
 
@@ -52,13 +53,16 @@ class ScipyOptimizerEngine(BaseOptimizerEngine):
         optimization result: tuple(np.array, np.array, list)
             Point of evaluation, objective value, dummy list of weights
         """
-        #: Get scaling factors and non-zero weight combinations for each KPI
-        scaling_factors = self.get_scaling_factors()
-
         optimal_point, optimal_kpis = self._scipy_optimize(
-            self._score
+            self._scalar_score
         )
-        yield optimal_point, optimal_kpis, scaling_factors
+        yield optimal_point, optimal_kpis
+
+    def _scalar_score(self, input_point):
+        """ The sum of the objectives/kpis, so they can be
+        optimized by scipy.
+        """
+        return np.sum(self._score(input_point))
 
     def _scipy_optimize(self, func):
         """ The core functionality offered by this class.
