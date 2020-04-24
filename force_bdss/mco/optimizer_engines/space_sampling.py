@@ -42,12 +42,6 @@ class SpaceSampler(ABCHasStrictTraits):
         super().__init__(dimension=dimension, resolution=resolution, **kwargs)
 
     @abc.abstractmethod
-    def _get_sample_point(self):
-        """ Internal generator of sample points from the distribution.
-        Returns or yields a sampled point.
-        """
-
-    @abc.abstractmethod
     def generate_space_sample(self, *args, **kwargs):
         """ Generates search space samples. The number of returned points
         is calculated here, if `_get_sample_point` method is a random
@@ -58,6 +52,12 @@ class SpaceSampler(ABCHasStrictTraits):
         generator
             random samples of vector satisfying the sum(p) = 1 and
             distribution constraints
+        """
+
+    @abc.abstractmethod
+    def _get_sample_point(self):
+        """ Internal generator of sample points from the distribution.
+        Returns or yields a sampled point.
         """
 
 
@@ -98,13 +98,13 @@ class DirichletSpaceSampler(SpaceSampler):
 
         self.alpha = [_centering_coef] * self.dimension
 
-    def _get_sample_point(self):
-        return self._distribution_function(self.alpha).tolist()
-
     def generate_space_sample(self):
         n_points = resolution_to_sample_size(self.dimension, self.resolution)
         for _ in range(n_points):
             yield self._get_sample_point()
+
+    def _get_sample_point(self):
+        return self._distribution_function(self.alpha).tolist()
 
 
 class UniformSpaceSampler(SpaceSampler):
