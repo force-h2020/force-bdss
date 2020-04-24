@@ -22,17 +22,4 @@ class IOptimizer(Interface):
     @abc.abstractmethod
     def optimize_function(self, func, x0, bounds):
         """ Optimize a function, according to the library (scipy/etc).
-
-        Parameters
-        ----------
-        func: Callable
-            The function to be optimized.
-        x0: np.array
-            initial point
-        bounds: tuple
-            parameter bounds
-        Return
-        ------
-        Tuple
-            optimal_point
         """
