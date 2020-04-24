@@ -58,23 +58,6 @@ def sen_scaling_method(dimension, weighted_optimize):
 
 class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
     """ Performs multi-objective optimization by weighting.
-
-    Notes
-    ----------------
-    BaseOptimizerEngine provides the optimizer-engine.
-
-    ScipyOptimizer provides the actual optimizer to be used by the engine. It
-    provides the optimize_function() method (as required by the IOptimizer).
-
-    To use a different optimizer (e.g. nevergrad):
-    1) Create another optimizer: a class (MyOptimizer) that implements the
-    IOptimizer interface and so contributes optimize_function().
-    2) Create an empty subclass of WeightedOptimizerEngine that also inherits
-    MyOptimizer. i.e.
-    class MyNewOptimizer(MyOptimizer, WeightedOptimizerEngine):
-        pass
-    As MyOptimizer comes first, its optimize_function() will be called
-    instead of ScipyOptimizer.optimize_function()
     """
 
     #: Optimizer name
