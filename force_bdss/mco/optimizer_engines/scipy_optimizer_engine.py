@@ -5,7 +5,6 @@ from scipy import optimize as scipy_optimize
 
 from traits.api import Enum, Str, Property
 
-from force_bdss.api import PositiveInt
 from .base_optimizer_engine import BaseOptimizerEngine
 
 log = logging.getLogger(__name__)
