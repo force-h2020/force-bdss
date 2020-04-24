@@ -2,6 +2,7 @@ import abc
 import numpy as np
 
 from traits.api import ABCHasStrictTraits, Bool, ListFloat
+
 from force_bdss.local_traits import PositiveInt
 
 
@@ -14,9 +15,9 @@ def resolution_to_sample_size(space_dimension, n_points):
     sampling.
     """
     samples_total = (
-        np.math.factorial(space_dimension + n_points - 2)
-        / np.math.factorial(space_dimension - 1)
-        / np.math.factorial(n_points - 1)
+            np.math.factorial(space_dimension + n_points - 2)
+            / np.math.factorial(space_dimension - 1)
+            / np.math.factorial(n_points - 1)
     )
     return int(samples_total)
 
@@ -119,8 +120,9 @@ class UniformSpaceSampler(SpaceSampler):
     for x being 0.0, 0.5 and 1.0.
 
     Parameter `with_zero_values` controls the presence of zero valued entries.
-    If `with_zero_values` parameter is set to False, then ensure
-    `resolution > dimension` in order for the generator to return any values.
+    If `with_zero_values` parameter is set to False, then no zero valued
+    weights will be included, though the number of points sampled will remain
+    the same.
     """
 
     #: Controls whether zero entries can appear in sample vector
@@ -136,10 +138,21 @@ class UniformSpaceSampler(SpaceSampler):
             Yields all the possible combinations satisfying the requirement
             that the sum of all the weights must always be 1.0
         """
+        n_combinations = self.resolution
+        if not self.with_zero_values:
+            n_combinations += self.dimension
 
-        scaling = 1.0 / (self.resolution - 1)
-        for int_w in self._int_weights():
-            yield [scaling * val for val in int_w]
+        # If we are only returning one weight combination, it must
+        # equal 1.0 since the weights are all normalised. No zero
+        # values will be allowed in this case.
+        try:
+            scaling = 1.0 / (n_combinations - 1)
+        except ZeroDivisionError:
+            yield [1.0]
+
+        else:
+            for int_w in self._int_weights():
+                yield [scaling * val for val in int_w]
 
     def _int_weights(self, resolution=None, dimension=None):
         """Helper routine for the `_get_sample_point`. Generates integer values
@@ -150,6 +163,9 @@ class UniformSpaceSampler(SpaceSampler):
 
         if resolution is None:
             resolution = self.resolution
+
+            if not self.with_zero_values:
+                resolution += dimension
 
         if dimension == 1:
             yield [resolution - 1]

@@ -86,7 +86,8 @@ class TestEvaluateOperation(TestCase):
         factory.raises_on_create_communicator = True
 
         with testfixtures.LogCapture() as capture:
-            self.assertFalse(self.operation.run())
+            with self.assertRaises(Exception):
+                self.assertFalse(self.operation.create_mco_communicator())
             capture.check(
                 ('force_bdss.app.evaluate_operation',
                  'INFO',
@@ -105,16 +106,9 @@ class TestEvaluateOperation(TestCase):
         self.operation.workflow.mco_model = factory.create_model()
 
         with testfixtures.LogCapture():
-            with (self.assertRaisesRegex(
+            with self.assertRaisesRegex(
                     RuntimeError,
-                    "Workflow file has errors.") or
-                  self.assertRaisesRegex(
-                    RuntimeError,
-                    r"The number of data values returned by the MCO "
-                    r"\(1 values\) does not match the number of "
-                    r"parameters specified \(0 values\). This is either "
-                    "a MCO plugin error or the workflow file is "
-                    "corrupted.")):
+                    "Workflow file has errors."):
                 self.operation.run()
 
     def test_error_for_incorrect_output_slots(self):
@@ -186,5 +180,5 @@ class TestEvaluateOperation(TestCase):
                   "'force.bdss.enthought.plugin.test.v0.factory."
                   "probe_data_source', plugin "
                   "'force.bdss.enthought.plugin.test.v0'. "
-                  "This might indicate a  programming "
+                  "This might indicate a programming "
                   'error'))

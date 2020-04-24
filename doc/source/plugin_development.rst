@@ -96,7 +96,7 @@ Many ``BaseModel`` subclasses also include a ``verify`` method, which is
 called before an MCO run starts to ensure that the execution will be successful.
 This verification step can also be triggered in the WfManager UI even before an MCO run is
 submitted. For ``BaseDataSourceModel`` subclasses it is automatically performed whenever the
-slots objects are updated, however developers can also include the `verify=True` metadata
+slots objects are updated, however developers can also include the ``verify=True`` metadata
 on any additional trait that requires verification. Including this in example above::
 
     class MyModel(BaseDataSourceModel):
@@ -165,6 +165,35 @@ Must return classes of the MCO and the MCOCommunicator. Finally::
 
 Must return a list of classes of the parameter factories.
 
+Optimizer Engines
+~~~~~~~~~~~~~~~~~
+
+The ``force_bdss.api`` package offers the ``BaseOptimizerEngine`` and
+``SpaceSampler`` abstract classes, both of which are designed as utility objects for backend developers.
+
+The ``BaseOptimizerEngine`` class provides a schema that can easily be reimplemented to
+act as an interface between the BDSS and an external optimization library. Although it is not strictly
+required to run an MCO, it is expected that a developer would import the object into a ``BaseMCO.run``
+implementation, whilst providing any relevant pre and post processing of information for the specific used
+case that the MCO is solving. The base class must simply define the following method::
+
+    def optimize(self):
+
+Which is expected to act as a generator, yielding values corresponding to optimised input parameters
+and their corresponding KPIs. A concrete implementation of this base class, the ``WeightedOptimizerEngine``,
+is provided that uses the ``SciPy`` library as a backend.
+
+The ``SpaceSampler`` abstract class also acts as a utility class in order to sample
+vectors of values from a given distribution. Implementations of this class could be used to either provide
+trial parameter sets to feed into an optimiser as initial points, or importance weights to apply to each KPI.
+The base class must define the following methods::
+
+    def _get_sample_point(self):
+    def generate_space_sample(self, *args, **kwargs):
+
+Two concrete implementations of this class are provided: ``UniformSpaceSampler``, which performs a grid
+search and ``DirichletSpaceSampler``, which samples random points from the Dirichlet distribution.
+
 MCO Communicator
 ^^^^^^^^^^^^^^^^
 
@@ -218,7 +247,6 @@ the method::
 
     get_listener_class()
      return the notification listener object class.
-
 
 The NotificationListener class must reimplement the following methods, that
 are invoked in specific lifetime events of the BDSS::
@@ -279,7 +307,17 @@ can then be made discoverable by ``force-wfmanager`` using the ``envisage``
 
 Make sure to import the module containing the data view class from inside
 ``get_service_offer_factories``: this ensures that running BDSS without a GUI
-application doesn't import the graphical stack. Also, multiple types of plugin
+application doesn't import the graphical stack.
+
+Custom UI classes
+~~~~~~~~~~~~~~~~~
+
+There are currently two types of custom UI object that may be contributed by a
+plugin: ``IBasePlot`` and ``IContributedUI``. These interfaces represent requirements
+for any UI feature that can be used to display MCO data or a present a simplified
+workflow builder respectively.
+
+Also, multiple types of plugin
 contributed UI objects can be imported in the same call. For instance::
 
     def get_service_offer_factories(self):

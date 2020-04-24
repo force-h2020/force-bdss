@@ -1,4 +1,4 @@
-from traits.api import Interface, Str
+from traits.api import Interface, Str, Bool
 
 
 class IFactory(Interface):
@@ -12,6 +12,8 @@ class IFactory(Interface):
     name = Str()
 
     plugin_id = Str(allow_none=False)
+
+    ui_visible = Bool()
 
     def get_name(self):
         """
