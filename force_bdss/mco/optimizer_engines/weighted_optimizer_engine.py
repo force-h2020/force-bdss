@@ -2,16 +2,17 @@ import logging
 from functools import partial
 import numpy as np
 
-from traits.api import Enum, Str
+from traits.api import Enum, Str, Property
 
 from force_bdss.api import PositiveInt
-
-from .scipy_optimizer_engine import ScipyOptimizerEngine
 
 from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
 )
+
+from .base_optimizer_engine import BaseOptimizerEngine
+from .scipy_optimizer import ScipyOptimizer
 
 log = logging.getLogger(__name__)
 
@@ -55,14 +56,39 @@ def sen_scaling_method(dimension, weighted_optimize):
     return scaling_factors
 
 
-class WeightedOptimizerEngine(ScipyOptimizerEngine):
-    """ Performs local optimization of multiobjective function using scipy.
-    The multiobjective function is converted to a scalar by dot product
-    with a weights vector (`weighted_score`).
+class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
+    """ Performs multi-objective optimization by weighting.
+
+    Notes
+    ----------------
+    BaseOptimizerEngine provides the optimizer-engine.
+
+    ScipyOptimizer provides the actual optimizer to be used by the engine. It
+    provides the optimize_function() method (as required by the IOptimizer).
+
+    To use a different optimizer (e.g. nevergrad):
+    1) Create another optimizer: a class (MyOptimizer) that implements the
+    IOptimizer interface and so contributes optimize_function().
+    2) Create an empty subclass of WeightedOptimizerEngine that also inherits
+    MyOptimizer. i.e.
+    class MyNewOptimizer(MyOptimizer, WeightedOptimizerEngine):
+        pass
+    As MyOptimizer comes first, its optimize_function() will be called
+    instead of ScipyOptimizer.optimize_function()
     """
 
     #: Optimizer name
     name = Str("Weighted_Optimizer")
+
+    #: Default (initial) guess on input parameter values
+    initial_parameter_value = Property(
+        depends_on="parameters.[initial_value]", visible=False
+    )
+
+    #: Input parameter bounds. Defines the search space.
+    parameter_bounds = Property(
+        depends_on="parameters.[lower_bound, upper_bound]", visible=False
+    )
 
     #: Search grid resolution per KPI
     num_points = PositiveInt(7)
@@ -72,6 +98,12 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
 
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
+
+    def _get_initial_parameter_value(self):
+        return [p.initial_value for p in self.parameters]
+
+    def _get_parameter_bounds(self):
+        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
     def weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
@@ -88,6 +120,7 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
         optimization result: tuple(np.array, np.array, list)
             Point of evaluation, objective value, dummy list of weights
         """
+
         #: Get scaling factors and non-zero weight combinations for each KPI
         scaling_factors = self.get_scaling_factors()
         for weights in self.weights_samples():
@@ -101,6 +134,7 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
             optimal_point, optimal_kpis = self._weighted_optimize(
                 scaled_weights
             )
+
             yield optimal_point, optimal_kpis, scaled_weights
 
     def _weighted_optimize(self, weights):
@@ -125,7 +159,19 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
 
         weighted_score_func = partial(self.weighted_score, weights=weights)
 
-        return self._scipy_optimize(weighted_score_func)
+        # use default .optimize_function
+        optimal_point = self.optimize_function(
+            weighted_score_func,
+            self.initial_parameter_value,
+            self.parameter_bounds)
+        optimal_kpis = self._score(optimal_point)
+
+        log.info(
+            "Optimal point : {}".format(optimal_point)
+            + "KPIs at optimal point : {}".format(optimal_kpis)
+        )
+
+        return optimal_point, optimal_kpis
 
     def get_scaling_factors(self):
         """ Calculates scaling factors for KPIs, defined in MCO.
