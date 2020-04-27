@@ -70,7 +70,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     Pareto-efficient set is found.
 
     The weights are calculated by:
-    1) For each objective calculate a "scale" by Sen's method. Optimize each
+    1) For each objective calculate a "scale" by Sen's method: Optimize each
     objective individually to find both it's minimum and maximum. Use these
     to calculate its "scale".
     2) weight = scale x uniform-random-variate[0, 1)
