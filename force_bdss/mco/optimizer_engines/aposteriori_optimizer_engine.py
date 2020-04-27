@@ -9,7 +9,13 @@ log = logging.getLogger(__name__)
 
 
 class AposterioriOptimizerEngine(BaseOptimizerEngine):
-    """ Performs multi-objective optimization by weighting.
+    """ A posteriori multi-objective optimization.
+
+    Notes
+    -----
+    A multi-objective function is optimized using the a posteriori
+    method of a multi-objective optimizer (e.g. Nevergrad).
+    The optimization result is some part of the Pareto-efficient set.
     """
 
     #: Optimizer name
@@ -32,13 +38,14 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
         return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
     def optimize(self, *vargs):
-        """ Generates optimization results with weighted optimization.
+        """ Generates optimization results.
 
         Yields
         ----------
         optimization result: tuple(np.array, np.array, list)
-            Point of evaluation, objective value, dummy list of weights
+            Point of evaluation, objective value
         """
+        #:
         pareto = self.optimize_function(
             self._score,
             self.parameters,

@@ -11,7 +11,7 @@ from scipy import optimize as scipy_optimize
 
 @provides(IOptimizer)
 class ScipyOptimizer(HasStrictTraits):
-    """ Performs optimization of a scalar function using scipy.
+    """ Optimization of a scalar function using scipy.
     """
 
     #: Algorithms available to work with
@@ -21,8 +21,7 @@ class ScipyOptimizer(HasStrictTraits):
                       "trust-ncg", "trust-exact", "trust-krylov")
 
     def optimize_function(self, func, x0, bounds):
-        """ The core functionality offered by this class.
-        Minimizes the function passed.
+        """ Minimize the passed function.
         """
         optimization_result = scipy_optimize.minimize(
             func,

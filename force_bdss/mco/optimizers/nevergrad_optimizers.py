@@ -64,7 +64,7 @@ def create_instrumentation_variable(parameter):
 
 @provides(IOptimizer)
 class NevergradScalarOptimizer(HasStrictTraits):
-    """ Performs optimization of a scalar function using nevergrad.
+    """ Optimization of a scalar function using nevergrad.
     """
 
     #: Algorithms available to work with
@@ -77,8 +77,7 @@ class NevergradScalarOptimizer(HasStrictTraits):
         return "TwoPointsDE"
 
     def optimize_function(self, func, x0, bounds=()):
-        """ The core functionality offered by this class.
-        Minimizes the function passed.
+        """ Minimize the passed function.
         """
         # Create parameterization.
         instrumentation = ng.p.Instrumentation(
@@ -99,8 +98,8 @@ class NevergradScalarOptimizer(HasStrictTraits):
 
 @provides(IOptimizer)
 class NevergradMultiOptimizer(HasStrictTraits):
-    """ Performs optimization of a multi-objective function using nevergrad.
-        """
+    """ Optimization of a multi-objective function using nevergrad.
+    """
 
     #: Algorithms available to work with
     algorithms = Enum(*ng.optimizers.registry.keys())
@@ -112,8 +111,7 @@ class NevergradMultiOptimizer(HasStrictTraits):
         return "TwoPointsDE"
 
     def optimize_function(self, func, x0, bounds=()):
-        """ The core functionality offered by this class.
-        Minimizes the function passed.
+        """ Minimize the passed function.
         """
         # create multi-objective function object
         mfunc = MultiobjectiveFunction(

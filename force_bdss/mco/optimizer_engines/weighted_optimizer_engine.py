@@ -57,7 +57,23 @@ def sen_scaling_method(dimension, weighted_optimize):
 
 
 class WeightedOptimizerEngine(BaseOptimizerEngine):
-    """ Performs multi-objective optimization by weighting.
+    """ A priori multi-objective optimization.
+
+    Notes
+    -----
+    A multi-objective function is optimized by the a priori method of
+    weighting/scalarisation. That is:
+    1) Create a single objective from the weighted sum of the mutiple
+    objectives.
+    2) The single-objective function is optimized.
+    3) By sampling a range of weight combinations, part or all of the
+    Pareto-efficient set is found.
+
+    The weights are calculated by:
+    1) For each objective calculate a "scale" by Sen's method. Optimize each
+    objective individually to find both it's minimum and maximum. Use these
+    to calculate its "scale".
+    2) weight = scale x uniform-random-variate[0, 1)
     """
 
     #: Optimizer name
@@ -89,12 +105,12 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
     def optimize(self, *vargs):
-        """ Generates optimization results with weighted optimization.
+        """ Generates optimization results.
 
         Yields
         ----------
         optimization result: tuple(np.array, np.array, list)
-            Point of evaluation, objective value, dummy list of weights
+            Point of evaluation, objective value, weights
         """
 
         #: Get scaling factors and non-zero weight combinations for each KPI
