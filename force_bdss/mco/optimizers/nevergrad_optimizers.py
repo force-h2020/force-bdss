@@ -9,6 +9,7 @@ from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
 import nevergrad as ng
 from nevergrad.parametrization import core as ng_core
+from nevergrad.functions import MultiobjectiveFunction
 
 import logging
 log = logging.getLogger(__name__)
@@ -115,7 +116,7 @@ class NevergradMultiOptimizer(HasStrictTraits):
         Minimizes the function passed.
         """
         # create multi-objective function object
-        mfunc = ng.functions.MultiobjectiveFunction(
+        mfunc = MultiobjectiveFunction(
             multiobjective_function=func,
         )
 
