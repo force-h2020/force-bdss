@@ -1,12 +1,13 @@
 import logging
 from functools import partial
 import numpy as np
-from scipy import optimize as scipy_optimize
 
-from traits.api import Enum, Str, Property
+from traits.api import Enum, Str
 
 from force_bdss.api import PositiveInt
-from .base_optimizer_engine import BaseOptimizerEngine
+
+from .scipy_optimizer_engine import ScipyOptimizerEngine
+
 from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
@@ -54,7 +55,7 @@ def sen_scaling_method(dimension, weighted_optimize):
     return scaling_factors
 
 
-class WeightedOptimizerEngine(BaseOptimizerEngine):
+class WeightedOptimizerEngine(ScipyOptimizerEngine):
     """ Performs local optimization of multiobjective function using scipy.
     The multiobjective function is converted to a scalar by dot product
     with a weights vector (`weighted_score`).
@@ -66,33 +67,11 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Search grid resolution per KPI
     num_points = PositiveInt(7)
 
-    #: Algorithms available to work with
-    algorithms = Enum("SLSQP", "Nelder-Mead", "Powell", "CG", "BFGS",
-                      "Newton-CG", "L-BFGS-B", "TNC", "COBYLA",
-                      "trust-constr", "dogleg",
-                      "trust-ncg", "trust-exact", "trust-krylov")
-
     #: Method to calculate KPIs normalization coefficients
     scaling_method = Str("sen_scaling_method")
 
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
-
-    #: Default (initial) guess on input parameter values
-    initial_parameter_value = Property(
-        depends_on="parameters.[initial_value]", visible=False
-    )
-
-    #: Input parameter bounds. Defines the search space.
-    parameter_bounds = Property(
-        depends_on="parameters.[lower_bound, upper_bound]", visible=False
-    )
-
-    def _get_initial_parameter_value(self):
-        return [p.initial_value for p in self.parameters]
-
-    def _get_parameter_bounds(self):
-        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
     def weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
@@ -146,21 +125,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
         weighted_score_func = partial(self.weighted_score, weights=weights)
 
-        optimization_result = scipy_optimize.minimize(
-            weighted_score_func,
-            self.initial_parameter_value,
-            method=self.algorithms,
-            bounds=self.parameter_bounds,
-        )
-        optimal_point = optimization_result.x
-        optimal_kpis = self._score(optimal_point)
-
-        log.info(
-            "Optimal point : {}".format(optimal_point)
-            + "KPIs at optimal point : {}".format(optimal_kpis)
-        )
-
-        return optimal_point, optimal_kpis
+        return self._scipy_optimize(weighted_score_func)
 
     def get_scaling_factors(self):
         """ Calculates scaling factors for KPIs, defined in MCO.
