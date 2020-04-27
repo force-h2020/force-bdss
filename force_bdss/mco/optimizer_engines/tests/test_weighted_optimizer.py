@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from force_bdss.api import (
     KPISpecification,
-    WeightedOptimizerEngine,
     RangedMCOParameterFactory,
 )
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
@@ -17,8 +16,17 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
     DirichletSpaceSampler,
 )
 
+from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
+    WeightedOptimizerEngine
+)
+from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
-class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedOptimizerEngine):
+
+class WeightedScipyEngine(ScipyOptimizer, WeightedOptimizerEngine):
+    pass
+
+
+class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
     pass
 
 
@@ -60,7 +68,7 @@ class TestWeightedOptimizer(TestCase):
             for _ in self.parameters
         ]
 
-        self.optimizer = WeightedOptimizerEngine(
+        self.optimizer = WeightedScipyEngine(
             parameters=self.parameters, kpis=self.kpis
         )
         self.mocked_optimizer = DummyOptimizerEngine(
@@ -68,7 +76,7 @@ class TestWeightedOptimizer(TestCase):
         )
 
     def test_init(self):
-        self.assertIsInstance(self.optimizer, WeightedOptimizerEngine)
+        self.assertIsInstance(self.optimizer, WeightedScipyEngine)
         self.assertEqual("Weighted_Optimizer", self.optimizer.name)
         self.assertIs(self.optimizer.single_point_evaluator, None)
         self.assertEqual("SLSQP", self.optimizer.algorithms)

@@ -1,23 +1,17 @@
-import logging
-
-from scipy import optimize as scipy_optimize
-
 from traits.api import (
     Enum,
     provides,
     HasStrictTraits
 )
 
-from .i_optimizer import IOptimizer
+from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
-log = logging.getLogger(__name__)
+from scipy import optimize as scipy_optimize
 
 
 @provides(IOptimizer)
 class ScipyOptimizer(HasStrictTraits):
-    """ Performs local optimization of multiobjective function using scipy.
-    The multiobjective function is converted to a scalar by dot product
-    with a weights vector (`weighted_score`).
+    """ Performs optimization of a scalar function using scipy.
     """
 
     #: Algorithms available to work with

@@ -37,6 +37,7 @@ from .mco.base_mco import BaseMCO  # noqa
 from .mco.base_mco_factory import BaseMCOFactory  # noqa
 from .mco.i_evaluator import IEvaluator  # noqa
 from .mco.i_mco_factory import IMCOFactory  # noqa
+from .mco.optimizers.i_optimizer import IOptimizer  # noqa
 from .mco.parameters.base_mco_parameter_factory import BaseMCOParameterFactory  # noqa
 from .mco.parameters.base_mco_parameter import BaseMCOParameter  # noqa
 from .mco.parameters.mco_parameters import FixedMCOParameterFactory, RangedMCOParameterFactory, ListedMCOParameterFactory, CategoricalMCOParameterFactory, RangedVectorMCOParameterFactory  # noqa

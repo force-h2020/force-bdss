@@ -1,4 +1,5 @@
 import logging
+import abc
 from functools import partial
 import numpy as np
 
@@ -12,7 +13,6 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
 )
 
 from .base_optimizer_engine import BaseOptimizerEngine
-from .scipy_optimizer import ScipyOptimizer
 
 log = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ def sen_scaling_method(dimension, weighted_optimize):
     return scaling_factors
 
 
-class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
+class WeightedOptimizerEngine(BaseOptimizerEngine):
     """ Performs multi-objective optimization by weighting.
     """
 
@@ -88,14 +88,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
     def _get_parameter_bounds(self):
         return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
-    def weighted_score(self, input_point, weights):
-        """ Calculates the weighted score of the KPI vector at `input_point`,
-        by taking dot product with a vector of `weights`."""
-        score = np.dot(weights, self._score(input_point))
-        log.info("Weighted score: {}".format(score))
-        return score
-
-    def optimize(self):
+    def optimize(self, *vargs):
         """ Generates optimization results with weighted optimization.
 
         Yields
@@ -119,6 +112,20 @@ class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
             )
 
             yield optimal_point, optimal_kpis, scaled_weights
+
+    @abc.abstractmethod
+    def optimize_function(self, func, x0, bounds):
+        """ A wrapper for the optimizer. Any subclass of this class
+        can implement this function by also inheriting a mixin class
+        implementing the IOptimizer interface.
+        """
+
+    def weights_samples(self, **kwargs):
+        """ Generates necessary number of search space sample points
+        from the `space_search_mode` search strategy."""
+        return self._space_search_distribution(
+            **kwargs
+        ).generate_space_sample()
 
     def _weighted_optimize(self, weights):
         """ Performs single scipy.minimize operation on the dot product of
@@ -155,6 +162,13 @@ class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
         )
 
         return optimal_point, optimal_kpis
+
+    def weighted_score(self, input_point, weights):
+        """ Calculates the weighted score of the KPI vector at `input_point`,
+        by taking dot product with a vector of `weights`."""
+        score = np.dot(weights, self._score(input_point))
+        log.info("Weighted score: {}".format(score))
+        return score
 
     def get_scaling_factors(self):
         """ Calculates scaling factors for KPIs, defined in MCO.
@@ -204,10 +218,3 @@ class WeightedOptimizerEngine(BaseOptimizerEngine, ScipyOptimizer):
         else:
             raise NotImplementedError
         return distribution(len(self.kpis), self.num_points, **kwargs)
-
-    def weights_samples(self, **kwargs):
-        """ Generates necessary number of search space sample points
-        from the `space_search_mode` search strategy."""
-        return self._space_search_distribution(
-            **kwargs
-        ).generate_space_sample()
