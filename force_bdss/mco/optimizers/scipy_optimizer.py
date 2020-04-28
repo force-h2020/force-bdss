@@ -1,3 +1,4 @@
+from typing import Callable
 from traits.api import (
     Enum,
     provides,
@@ -20,14 +21,14 @@ class ScipyOptimizer(HasStrictTraits):
                       "trust-constr", "dogleg",
                       "trust-ncg", "trust-exact", "trust-krylov")
 
-    def optimize_function(self, func, x0, bounds):
+    def optimize_function(self, func: Callable, x0: list, bounds: list):
         """ Minimize the passed function.
         """
         optimization_result = scipy_optimize.minimize(
             func,
             x0,
             method=self.algorithms,
-            bounds=bounds,
+            bounds=tuple(bounds),
         )
         optimal_point = optimization_result.x
 

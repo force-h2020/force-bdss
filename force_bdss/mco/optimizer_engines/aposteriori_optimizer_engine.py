@@ -45,11 +45,11 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
         optimization result: tuple(np.array, np.array, list)
             Point of evaluation, objective value
         """
-        #:
+        #: get pareto set
         pareto = self.optimize_function(
             self._score,
-            self.parameters,
-            ()
+            self.initial_parameter_value,
+            self.parameter_bounds
         )
         for optimal_point in pareto:
             optimal_kpis = self._score(optimal_point)
