@@ -19,11 +19,15 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     WeightedOptimizerEngine
 )
+from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
 
-class WeightedScipyEngine(ScipyOptimizer, WeightedOptimizerEngine):
-    pass
+class WeightedScipyEngine(WeightedOptimizerEngine):
+
+    def __init__(self, *args, **kwargs):
+        optimizer = ScipyOptimizer()
+        super().__init__(*args, optimizer=optimizer, **kwargs)
 
 
 class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
@@ -79,7 +83,7 @@ class TestWeightedOptimizer(TestCase):
         self.assertIsInstance(self.optimizer, WeightedScipyEngine)
         self.assertEqual("Weighted_Optimizer", self.optimizer.name)
         self.assertIs(self.optimizer.single_point_evaluator, None)
-        self.assertEqual("SLSQP", self.optimizer.algorithms)
+        self.assertEqual("SLSQP", self.optimizer.optimizer.algorithms)
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
 
@@ -94,10 +98,10 @@ class TestWeightedOptimizer(TestCase):
 
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
+        optimizer = state.pop('optimizer')
         self.assertDictEqual(
             {
                 "name": "Weighted_Optimizer",
-                "algorithms": "SLSQP",
                 "num_points": 7,
                 "space_search_mode": "Uniform",
                 "verbose_run": False,
@@ -105,6 +109,7 @@ class TestWeightedOptimizer(TestCase):
             },
             state,
         )
+        self.assertIsInstance(optimizer, IOptimizer)
 
     def test__space_search_distribution(self):
         for strategy, klass in (
