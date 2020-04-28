@@ -90,6 +90,8 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
 
+    #: IOptimizer class that provides library backend for optimizing a
+    #: callable
     optimizer = Instance(IOptimizer)
 
     def optimize(self, *vargs):

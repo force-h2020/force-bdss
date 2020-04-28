@@ -22,6 +22,8 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
     #: Optimizer name
     name = Str("APosteriori_Optimizer")
 
+    #: IOptimizer class that provides library backend for optimizing a
+    #: callable
     optimizer = Instance(IOptimizer)
 
     def optimize(self, *vargs):
