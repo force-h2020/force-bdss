@@ -19,7 +19,6 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     WeightedOptimizerEngine
 )
-from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
 
