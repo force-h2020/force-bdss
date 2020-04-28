@@ -22,8 +22,12 @@ from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
 from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
 
-class WeightedScipyEngine(ScipyOptimizer, WeightedOptimizerEngine):
-    pass
+class WeightedScipyEngine(WeightedOptimizerEngine):
+    """Provide a ScipyOptimizer instance as the default optimizer
+    attribute
+    """
+    def _optimizer_default(self):
+        return ScipyOptimizer()
 
 
 class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
@@ -59,8 +63,6 @@ class TestWeightedOptimizer(TestCase):
         self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
 
-        self.kpis = self.kpis
-
         self.parameters = [
             RangedMCOParameterFactory(self.factory).create_model(
                 {"lower_bound": 0.0, "upper_bound": 1.0}
@@ -79,25 +81,15 @@ class TestWeightedOptimizer(TestCase):
         self.assertIsInstance(self.optimizer, WeightedScipyEngine)
         self.assertEqual("Weighted_Optimizer", self.optimizer.name)
         self.assertIs(self.optimizer.single_point_evaluator, None)
-        self.assertEqual("SLSQP", self.optimizer.algorithms)
+        self.assertEqual("SLSQP", self.optimizer.optimizer.algorithms)
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
-
-        self.assertListEqual(
-            self.optimizer.initial_parameter_value,
-            [0.5] * len(self.parameters),
-        )
-        self.assertListEqual(
-            self.optimizer.parameter_bounds,
-            [(0.0, 1.0)] * len(self.parameters),
-        )
 
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
         self.assertDictEqual(
             {
                 "name": "Weighted_Optimizer",
-                "algorithms": "SLSQP",
                 "num_points": 7,
                 "space_search_mode": "Uniform",
                 "verbose_run": False,

@@ -1,7 +1,7 @@
 import abc
 import logging
 
-from traits.api import ABCHasStrictTraits, List, Instance, Bool
+from traits.api import ABCHasStrictTraits, List, Instance, Bool, Property
 
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
@@ -36,9 +36,25 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         IEvaluator, visible=False, transient=True
     )
 
+    #: Default (initial) guess on input parameter values
+    initial_parameter_value = Property(
+        depends_on="parameters.[initial_value]", visible=False
+    )
+
+    #: Input parameter bounds. Defines the search space.
+    parameter_bounds = Property(
+        depends_on="parameters.[lower_bound, upper_bound]", visible=False
+    )
+
     #: Yield data points on each workflow evaluation, or return filtered
     #: data, e.g. Pareto front only
     verbose_run = Bool(False)
+
+    def _get_initial_parameter_value(self):
+        return [p.initial_value for p in self.parameters]
+
+    def _get_parameter_bounds(self):
+        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
     @abc.abstractmethod
     def optimize(self):
