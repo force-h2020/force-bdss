@@ -1,9 +1,9 @@
 import logging
-import abc
 from functools import partial
+
 import numpy as np
 
-from traits.api import Enum, Str, Property
+from traits.api import Enum, Str, Instance
 
 from force_bdss.api import PositiveInt
 
@@ -11,6 +11,7 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
 )
+from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
 from .base_optimizer_engine import BaseOptimizerEngine
 
@@ -80,16 +81,6 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Optimizer name
     name = Str("Weighted_Optimizer")
 
-    #: Default (initial) guess on input parameter values
-    initial_parameter_value = Property(
-        depends_on="parameters.[initial_value]", visible=False
-    )
-
-    #: Input parameter bounds. Defines the search space.
-    parameter_bounds = Property(
-        depends_on="parameters.[lower_bound, upper_bound]", visible=False
-    )
-
     #: Search grid resolution per KPI
     num_points = PositiveInt(7)
 
@@ -99,11 +90,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
 
-    def _get_initial_parameter_value(self):
-        return [p.initial_value for p in self.parameters]
-
-    def _get_parameter_bounds(self):
-        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
+    optimizer = Instance(IOptimizer)
 
     def optimize(self, *vargs):
         """ Generates optimization results.
@@ -129,13 +116,6 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             )
 
             yield optimal_point, optimal_kpis, scaled_weights
-
-    @abc.abstractmethod
-    def optimize_function(self, func, x0, bounds):
-        """ A wrapper for the optimizer. Any subclass of this class
-        can implement this function by also inheriting a mixin class
-        implementing the IOptimizer interface.
-        """
 
     def weights_samples(self, **kwargs):
         """ Generates necessary number of search space sample points
@@ -164,10 +144,11 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             + "Bounds: {}".format(self.parameter_bounds)
         )
 
-        weighted_score_func = partial(self.weighted_score, weights=weights)
+        weighted_score_func = partial(
+            self.weighted_score, weights=weights)
 
         # use default .optimize_function
-        optimal_point = self.optimize_function(
+        optimal_point = self.optimizer.optimize_function(
             weighted_score_func,
             self.initial_parameter_value,
             self.parameter_bounds)

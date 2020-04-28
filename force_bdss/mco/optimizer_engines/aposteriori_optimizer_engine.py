@@ -1,7 +1,8 @@
 import logging
-import abc
 
-from traits.api import Str, Property
+from traits.api import Str, Instance
+
+from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
 from .base_optimizer_engine import BaseOptimizerEngine
 
@@ -21,21 +22,7 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
     #: Optimizer name
     name = Str("APosteriori_Optimizer")
 
-    #: Default (initial) guess on input parameter values
-    initial_parameter_value = Property(
-        depends_on="parameters.[initial_value]", visible=False
-    )
-
-    #: Input parameter bounds. Defines the search space.
-    parameter_bounds = Property(
-        depends_on="parameters.[lower_bound, upper_bound]", visible=False
-    )
-
-    def _get_initial_parameter_value(self):
-        return [p.initial_value for p in self.parameters]
-
-    def _get_parameter_bounds(self):
-        return [(p.lower_bound, p.upper_bound) for p in self.parameters]
+    optimizer = Instance(IOptimizer)
 
     def optimize(self, *vargs):
         """ Generates optimization results.
@@ -46,7 +33,7 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
             Point of evaluation, objective value
         """
         #:
-        pareto = self.optimize_function(
+        pareto = self.optimizer.optimize_function(
             self._score,
             self.parameters,
             ()
@@ -58,10 +45,3 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
     def unpacked_score(self, *unpacked_input):
         packed_input = list(unpacked_input)
         return self._score(packed_input)
-
-    @abc.abstractmethod
-    def optimize_function(self, func, x0, bounds):
-        """ A wrapper for the optimizer. Any subclass of this class
-        can implement this function by also inheriting a mixin class
-        implementing the IOptimizer interface.
-        """
