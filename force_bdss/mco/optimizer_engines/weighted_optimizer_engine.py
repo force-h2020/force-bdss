@@ -63,7 +63,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     -----
     A multi-objective function is optimized by the a priori method of
     weighting/scalarisation. That is:
-    1) Create a single objective from the weighted sum of the mutiple
+    1) Create a single objective from the weighted sum of the muLtiple
     objectives.
     2) The single-objective function is optimized.
     3) By sampling a range of weight combinations, part or all of the
@@ -73,7 +73,8 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     1) For each objective calculate a "scale" by Sen's method: Optimize each
     objective individually to find both it's minimum and maximum. Use these
     to calculate its "scale".
-    2) weight = scale x uniform-random-variate[0, 1)
+    2) weight = scale x uniform-random-variate[0, 1), where
+    SUM(variates) over objectives = 1.0
     """
 
     #: Optimizer name
