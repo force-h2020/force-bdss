@@ -17,7 +17,6 @@ class TestBaseOptimizerEngine(TestCase):
         workflow_file.read()
         self.workflow = workflow_file.workflow
 
-        self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
         self.optimizer_engine = EmptyOptimizerEngine(
             single_point_evaluator=self.workflow
