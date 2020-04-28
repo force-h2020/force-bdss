@@ -19,8 +19,11 @@ DEV_DEPS = ["flake8==3.7.7-1",
 PIP_DEPS = ["stevedore==1.32.0"]
 
 ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
-                        "scipy>=1.2.1",
-                        "nevergrad>=0.3.2"]
+                        "scipy>=1.2.1"]
+
+ADDITIONAL_PIP_DEPS = [
+    "nevergrad==0.4.0"
+]
 
 
 @click.group()
