@@ -24,7 +24,7 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
 
     #: IOptimizer class that provides library backend for optimizing a
     #: callable
-    optimizer = Instance(IOptimizer)
+    optimizer = Instance(IOptimizer, transient=True)
 
     def optimize(self, *vargs):
         """ Generates optimization results.
