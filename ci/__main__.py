@@ -16,14 +16,11 @@ DEV_DEPS = ["flake8==3.7.7-1",
             "coverage==4.3.4-1",
             "testfixtures==4.10.0-1"]
 
-PIP_DEPS = ["stevedore==1.32.0"]
+PIP_DEPS = ["stevedore==1.32.0",
+            "nevergrad==0.4.0"]
 
 ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
                         "scipy>=1.2.1"]
-
-ADDITIONAL_PIP_DEPS = [
-    "nevergrad==0.4.0"
-]
 
 
 @click.group()
