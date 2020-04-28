@@ -20,7 +20,7 @@ PIP_DEPS = ["stevedore==1.32.0"]
 
 ADDITIONAL_CORE_DEPS = ["numpy==1.15.4-2",
                         "scipy>=1.2.1",
-                        "nevergrad==0.4.0"]
+                        "nevergrad>=0.3.2"]
 
 
 @click.group()
