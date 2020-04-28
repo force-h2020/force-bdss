@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from force_bdss.core.kpi_specification import KPISpecification
+from force_bdss.api import KPISpecification, RangedMCOParameterFactory
+from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.tests.dummy_classes.optimizer_engine import (
     EmptyOptimizerEngine,
 )
@@ -10,9 +11,14 @@ from force_bdss.tests import fixtures
 
 class TestBaseOptimizerEngine(TestCase):
     def setUp(self):
+        self.plugin = {"id": "pid", "name": "Plugin"}
+        self.factory = DummyMCOFactory(self.plugin)
         workflow_file = ProbeWorkflowFile(path=fixtures.get("test_probe.json"))
         workflow_file.read()
         self.workflow = workflow_file.workflow
+
+        self.kpis = [KPISpecification(), KPISpecification()]
+        self.parameters = [1, 1, 1, 1]
         self.optimizer_engine = EmptyOptimizerEngine(
             single_point_evaluator=self.workflow
         )
@@ -30,6 +36,23 @@ class TestBaseOptimizerEngine(TestCase):
         point = [1.0]
         self.assertListEqual(
             self.workflow.evaluate(point), self.optimizer_engine._score(point)
+        )
+
+    def test_parameter_bounds(self):
+        self.optimizer_engine.parameters = [
+            RangedMCOParameterFactory(self.factory).create_model(
+                {"lower_bound": 0.0, "upper_bound": 1.0}
+            )
+            for _ in self.parameters
+        ]
+
+        self.assertListEqual(
+            self.optimizer_engine.initial_parameter_value,
+            [0.5] * len(self.parameters),
+        )
+        self.assertListEqual(
+            self.optimizer_engine.parameter_bounds,
+            [(0.0, 1.0)] * len(self.parameters),
         )
 
     def test__minimization_score(self):

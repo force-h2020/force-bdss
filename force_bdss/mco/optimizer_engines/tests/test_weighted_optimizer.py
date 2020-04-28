@@ -24,10 +24,11 @@ from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
 
 class WeightedScipyEngine(WeightedOptimizerEngine):
-
-    def __init__(self, *args, **kwargs):
-        optimizer = ScipyOptimizer()
-        super().__init__(*args, optimizer=optimizer, **kwargs)
+    """Provide a ScipyOptimizer instance as the default optimizer
+    attribute
+    """
+    def _optimizer_default(self):
+        return ScipyOptimizer()
 
 
 class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
@@ -63,8 +64,6 @@ class TestWeightedOptimizer(TestCase):
         self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
 
-        self.kpis = self.kpis
-
         self.parameters = [
             RangedMCOParameterFactory(self.factory).create_model(
                 {"lower_bound": 0.0, "upper_bound": 1.0}
@@ -87,18 +86,8 @@ class TestWeightedOptimizer(TestCase):
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
 
-        self.assertListEqual(
-            self.optimizer.initial_parameter_value,
-            [0.5] * len(self.parameters),
-        )
-        self.assertListEqual(
-            self.optimizer.parameter_bounds,
-            [(0.0, 1.0)] * len(self.parameters),
-        )
-
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
-        optimizer = state.pop('optimizer')
         self.assertDictEqual(
             {
                 "name": "Weighted_Optimizer",
@@ -109,7 +98,6 @@ class TestWeightedOptimizer(TestCase):
             },
             state,
         )
-        self.assertIsInstance(optimizer, IOptimizer)
 
     def test__space_search_distribution(self):
         for strategy, klass in (

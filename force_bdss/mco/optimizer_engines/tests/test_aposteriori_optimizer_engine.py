@@ -17,11 +17,12 @@ from force_bdss.mco.optimizers.scipy_optimizer import (
 )
 
 
-class AposterioriScipyEngine(ScipyOptimizer, AposterioriOptimizerEngine):
-    """This needs to be a mixin with an a posteriori optimiser, to test
-    the optimize routine.
+class AposterioriScipyEngine(AposterioriOptimizerEngine):
+    """Provide a ScipyOptimizer instance as the default optimizer
+    attribute
     """
-    pass
+    def _optimizer_default(self):
+        return ScipyOptimizer()
 
 
 class DummyOptimizerEngine(MixinDummyOptimizerEngine, AposterioriScipyEngine):
@@ -36,8 +37,6 @@ class TestAposterioriEngine(TestCase):
 
         self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
-
-        self.kpis = self.kpis
 
         self.parameters = [
             RangedMCOParameterFactory(self.factory).create_model(
@@ -57,24 +56,14 @@ class TestAposterioriEngine(TestCase):
         self.assertIsInstance(self.optimizer, AposterioriScipyEngine)
         self.assertEqual("APosteriori_Optimizer", self.optimizer.name)
         self.assertIs(self.optimizer.single_point_evaluator, None)
-        self.assertEqual("SLSQP", self.optimizer.algorithms)
-
-        self.assertListEqual(
-            self.optimizer.initial_parameter_value,
-            [0.5] * len(self.parameters),
-        )
-        self.assertListEqual(
-            self.optimizer.parameter_bounds,
-            [(0.0, 1.0)] * len(self.parameters),
-        )
+        self.assertIsInstance(self.optimizer.optimizer, ScipyOptimizer)
+        self.assertEqual("SLSQP", self.optimizer.optimizer.algorithms)
 
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
         self.assertDictEqual(
             {
                 "name": "APosteriori_Optimizer",
-                "algorithms": "SLSQP",
-                "optimizer": None,
                 "verbose_run": False
             },
             state,
@@ -83,3 +72,6 @@ class TestAposterioriEngine(TestCase):
     def test_optimize(self):
         """ To test this we need an a posteriori optimizer installed in bdss.
         """
+        # NOTE: we can use a dummy IOptimize class here to check the
+        # values that should be returned from calling
+        # AposterioriOptimizerEngine.optimize
