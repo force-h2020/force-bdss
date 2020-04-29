@@ -49,9 +49,10 @@ class ScipyOptimizer(HasStrictTraits):
             A float if the parameter is a RangedMCO type.
             A list if the parameter is a RangedVector type.
 
-        Exceptions
-        ----------
-        If params has no RangedMCO or RangedVector.
+        Exception
+        ---------
+        ScipyTypeError
+            If params has no RangedMCO or RangedVector.
         """
         #: verify that all parameters are Ranged or RangedVector
         #: (see the notes for this method)
@@ -113,13 +114,13 @@ class ScipyOptimizer(HasStrictTraits):
         """ Verify that all the MCO parameters are either
             Ranged or RangedVector.
 
-        Parameter
+        Parameters
         ---------
         params: list of MCOParameter
             The MCO parameter objects corresponding to the parameters.
 
-        Exceptions
-        ----------
+        Exception
+        ---------
         ScipyTypeError
             If any of the parameters are not Ranged or RangedVector.
 
@@ -145,8 +146,8 @@ class ScipyOptimizer(HasStrictTraits):
     def get_initial_values(params):
         """ Get initial values ("x0") as a numpy array.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         params: list of MCOParameter
             The MCO parameter objects corresponding to the x0.
 
@@ -173,8 +174,8 @@ class ScipyOptimizer(HasStrictTraits):
     def get_bounds(params):
         """ Get bounds as a list.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         params: list of MCOParameter
             The MCO parameter objects corresponding to the x0.
 
