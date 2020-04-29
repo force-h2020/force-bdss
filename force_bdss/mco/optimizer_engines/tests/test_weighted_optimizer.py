@@ -144,8 +144,8 @@ class TestWeightedOptimizer(TestCase):
 
     def test__weighted_optimize(self):
         for point, kpis in self.mocked_optimizer._weighted_optimize(
-                [1.0 for _ in range(self.mocked_optimizer.dimension)]
-            ):
+                    [1.0 for _ in range(self.mocked_optimizer.dimension)]
+                ):
             for kpi in kpis:
                 self.assertAlmostEqual(0.0, kpi)
 
