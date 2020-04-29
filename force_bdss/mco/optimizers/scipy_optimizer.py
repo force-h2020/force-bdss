@@ -1,6 +1,5 @@
 import numpy as np
 from functools import partial
-from itertools import chain
 from traits.api import (
     Enum,
     provides,
@@ -66,6 +65,9 @@ class ScipyOptimizer(HasStrictTraits):
         x0 = self.get_initial_values(params)
         bounds = self.get_bounds(params)
 
+        print(x0)
+        print(bounds)
+
         #: optimize the function
         optimization_result = scipy_optimize.minimize(
             tfunc,
@@ -102,6 +104,7 @@ class ScipyOptimizer(HasStrictTraits):
         param_values = self.translate_array_to_mco(array, params)
 
         #: Call the function that takes a list of MCO parameter values
+        print(param_values)
         objective = func(param_values)
 
         #: Translate the objective (kpis) into a scalar if it is not.
@@ -162,10 +165,10 @@ class ScipyOptimizer(HasStrictTraits):
 
         initial_values = []
         for i, p in enumerate(params):
-            if isinstance(p, RangedMCOParameter):
-                initial_values.append(p.initial_value)
-            elif isinstance(p, RangedVectorMCOParameter):
+            if isinstance(p, RangedVectorMCOParameter):
                 initial_values.extend(p.initial_value)
+            elif isinstance(p, RangedMCOParameter):
+                initial_values.append(p.initial_value)
 
         return np.array(initial_values)
 
@@ -189,10 +192,10 @@ class ScipyOptimizer(HasStrictTraits):
         """
         bounds = []
         for i, p in enumerate(params):
-            if isinstance(p, RangedMCOParameter):
-                bounds.append((p.lower_bound, p.upper_bound))
-            elif isinstance(p, RangedVectorMCOParameter):
+            if isinstance(p, RangedVectorMCOParameter):
                 bounds.extend(list(zip(p.lower_bound, p.upper_bound)))
+            elif isinstance(p, RangedMCOParameter):
+                bounds.append((p.lower_bound, p.upper_bound))
 
         return bounds
 
@@ -229,10 +232,10 @@ class ScipyOptimizer(HasStrictTraits):
         for i, p in enumerate(params):
             if i >= len(param_values):
                 break
-            if isinstance(p, RangedMCOParameter):
-                array_values.append(param_values[i])
-            elif isinstance(p, RangedVectorMCOParameter):
+            if isinstance(p, RangedVectorMCOParameter):
                 array_values.extend(param_values[i])
+            elif isinstance(p, RangedMCOParameter):
+                array_values.append(param_values[i])
 
         return np.array(array_values)
 
@@ -270,13 +273,13 @@ class ScipyOptimizer(HasStrictTraits):
         for p in params:
             if i >= len(array):
                 break
-            elif isinstance(p, RangedMCOParameter):
-                param_values.append(array[i])
-                i += 1
-            elif isinstance(p, RangedVectorMCOParameter):
-                if i + p.dimension >= len(array):
+            if isinstance(p, RangedVectorMCOParameter):
+                if i + p.dimension > len(array):
                     break
                 param_values.append(array[i: i + p.dimension].tolist())
                 i += p.dimension
+            elif isinstance(p, RangedMCOParameter):
+                param_values.append(array[i])
+                i += 1
 
         return param_values

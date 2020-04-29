@@ -143,14 +143,14 @@ class TestWeightedOptimizer(TestCase):
         )
 
     def test__weighted_optimize(self):
-        optimal_point, optimal_kpis = self.mocked_optimizer._weighted_optimize(
-            [1.0 for _ in range(self.mocked_optimizer.dimension)]
-        )
-        for kpi in optimal_kpis:
-            self.assertAlmostEqual(0.0, kpi)
+        for point, kpis in self.mocked_optimizer._weighted_optimize(
+                [1.0 for _ in range(self.mocked_optimizer.dimension)]
+            ):
+            for kpi in kpis:
+                self.assertAlmostEqual(0.0, kpi)
 
-        self.assertAlmostEqual(0.33, optimal_point[0])
-        self.assertAlmostEqual(0.67, optimal_point[1])
+            self.assertAlmostEqual(0.33, point[0])
+            self.assertAlmostEqual(0.67, point[1])
 
     def test_weights_samples(self):
         samples_default = list(self.optimizer.weights_samples())
