@@ -65,9 +65,6 @@ class ScipyOptimizer(HasStrictTraits):
         x0 = self.get_initial_values(params)
         bounds = self.get_bounds(params)
 
-        print(x0)
-        print(bounds)
-
         #: optimize the function
         optimization_result = scipy_optimize.minimize(
             tfunc,
