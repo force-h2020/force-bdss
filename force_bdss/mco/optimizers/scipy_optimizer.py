@@ -218,9 +218,10 @@ class ScipyOptimizer(HasStrictTraits):
 
         Example
         -------
-        params = [RangedMCOParameter(),
-                 RangedVectorMCOParameter(dimension=3)
-                 RangedMCOParameter()]
+        params =
+        [RangedMCOParameter(),
+        RangedVectorMCOParameter(dimension=3)
+        RangedMCOParameter()]
         param_values = [21, [2, 75, 10], 31]
         array = nd.array([21, 2, 75, 10, 31])
 
@@ -228,6 +229,7 @@ class ScipyOptimizer(HasStrictTraits):
         -----
         MCO parameter types other than Ranged and RangedVector are ignored.
         """
+
         array_values = []
         for i, p in enumerate(params):
             if i >= len(param_values):
@@ -259,15 +261,17 @@ class ScipyOptimizer(HasStrictTraits):
         Example
         -------
         array = nd.array([21, 2, 75, 10, 31])
-        params = [RangedMCOParameter(),
-                 RangedVectorMCOParameter(dimension=3)
-                 RangedMCOParameter()]
+        params =
+        [RangedMCOParameter(),
+        RangedVectorMCOParameter(dimension=3)
+        RangedMCOParameter()]
         param_values = [21, [2, 75, 10], 31]
 
         Notes
         -----
         MCO parameter types other than Ranged and RangedVector are ignored.
         """
+
         param_values = []
         i = 0
         for p in params:
