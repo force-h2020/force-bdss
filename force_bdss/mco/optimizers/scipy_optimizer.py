@@ -101,7 +101,6 @@ class ScipyOptimizer(HasStrictTraits):
         param_values = self.translate_array_to_mco(array, params)
 
         #: Call the function that takes a list of MCO parameter values
-        print(param_values)
         objective = func(param_values)
 
         #: Translate the objective (kpis) into a scalar if it is not.
