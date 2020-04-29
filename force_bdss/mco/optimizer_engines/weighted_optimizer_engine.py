@@ -50,8 +50,8 @@ def sen_scaling_method(dimension, weighted_optimize):
 
         log.info(f"Doing extrema MCO run with weights: {weights}")
 
-        _, optimal_kpis = weighted_optimize(weights)
-        extrema[i] += np.asarray(optimal_kpis)
+        for _, optimal_kpis in weighted_optimize(weights):
+            extrema[i] += np.asarray(optimal_kpis)
 
     scaling_factors = np.reciprocal(extrema.max(0) - extrema.min(0))
     return scaling_factors
@@ -103,21 +103,22 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             Point of evaluation, objective value, weights
         """
 
-        #: Get scaling factors and non-zero weight combinations for each KPI
+        #: Get non-zero weight combinations for each KPI
         scaling_factors = self.get_scaling_factors()
+
+        #: loop through weight combinations
         for weights in self.weights_samples():
             log.info("Doing MCO run with weights: {}".format(weights))
 
+            #: multiply weights by scales
             scaled_weights = [
                 weight * scale
                 for weight, scale in zip(weights, scaling_factors)
             ]
 
-            optimal_point, optimal_kpis = self._weighted_optimize(
-                scaled_weights
-            )
-
-            yield optimal_point, optimal_kpis, scaled_weights
+            #: optimize
+            for point, kpis in self._weighted_optimize(scaled_weights):
+                yield point, kpis, scaled_weights
 
     def weights_samples(self, **kwargs):
         """ Generates necessary number of search space sample points
@@ -146,22 +147,24 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             + "Bounds: {}".format(self.parameter_bounds)
         )
 
+        # partial of objective function.
         weighted_score_func = partial(
             self.weighted_score, weights=weights)
 
-        # use default .optimize_function
-        optimal_point = self.optimizer.optimize_function(
-            weighted_score_func,
-            self.initial_parameter_value,
-            self.parameter_bounds)
-        optimal_kpis = self._score(optimal_point)
+        # optimize and evaluate
+        for point in self.optimizer.optimize_function(
+                weighted_score_func,
+                self.parameters):
 
-        log.info(
-            "Optimal point : {}".format(optimal_point)
-            + "KPIs at optimal point : {}".format(optimal_kpis)
-        )
+            # evaluate the function at the optimal point
+            kpis = self._score(point)
 
-        return optimal_point, optimal_kpis
+            log.info(
+                "Optimal point : {}".format(point)
+                + "KPIs at optimal point : {}".format(kpis)
+            )
+
+            yield point, kpis
 
     def weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
