@@ -115,9 +115,9 @@ class ScipyOptimizer(HasStrictTraits):
             Ranged or RangedVector.
 
         Parameters
-        ---------
+        ----------
         params: list of MCOParameter
-            The MCO parameter objects corresponding to the parameters.
+        The MCO parameter objects corresponding to the parameters.
 
         Exception
         ---------
