@@ -44,8 +44,8 @@ class ScipyOptimizer(HasStrictTraits):
 
         Yields
         ------
-        float or list:
-            The parameter values (one yield per parameter).
+        list of float or list:
+            The list of parameter values.
             A float if the parameter is a RangedMCO type.
             A list if the parameter is a RangedVector type.
 
