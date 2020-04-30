@@ -13,7 +13,7 @@ class DummyMCOModel(BaseMCOModel):
 
 
 @provides(IEvaluator)
-class ProbeIEvaluator:
+class ProbeEvaluator:
 
     mco_model = Instance(DummyMCOModel)
 

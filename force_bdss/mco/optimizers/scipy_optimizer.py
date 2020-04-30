@@ -39,6 +39,8 @@ class ScipyOptimizer(HasStrictTraits):
         func: Callable
             The MCO function to optimize
             Takes a list of MCO parameter values.
+            Should return a scalar (i.e. a single-objective). If not the
+            return (objectives) will be summed.
         params: list of MCOParameter
             The MCO parameter objects corresponding to the parameter values.
 
@@ -93,8 +95,10 @@ class ScipyOptimizer(HasStrictTraits):
 
         Return
         ------
-        array: numpy.array
-            The optimized
+        objective: float
+            The result of the objective function. Should be a scalar. If
+            it is not scalar (a list of kpis for a multiobjective function),
+            then these will be summed.
         """
 
         # Translate the numpy array into an MCO parameter list
@@ -103,8 +107,9 @@ class ScipyOptimizer(HasStrictTraits):
         # Call the function that takes a list of MCO parameter values
         objective = func(param_values)
 
-        # Translate the objective (kpis) into a scalar if it is not.
-        # ??????????
+        # If objective is not scalar (i.e. > 1 kpi), return its sum.
+        if not np.isscalar(objective):
+            return np.sum(objective)
 
         return objective
 

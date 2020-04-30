@@ -5,8 +5,8 @@ from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
 from force_bdss.mco.optimizer_engines.aposteriori_optimizer_engine import (
     AposterioriOptimizerEngine
 )
-from force_bdss.tests.probe_classes.i_optimizer import ProbeIOptimizer
-from force_bdss.tests.probe_classes.i_evaluator import ProbeIEvaluator
+from force_bdss.tests.probe_classes.optimizer import ProbeOptimizer
+from force_bdss.tests.probe_classes.evaluator import ProbeEvaluator
 
 
 class TestAposterioriEngine(TestCase):
@@ -20,15 +20,15 @@ class TestAposterioriEngine(TestCase):
             )]*4
 
         self.engine = AposterioriOptimizerEngine(
-            single_point_evaluator=ProbeIEvaluator(),
-            optimizer=ProbeIOptimizer(),
+            single_point_evaluator=ProbeEvaluator(),
+            optimizer=ProbeOptimizer(),
             parameters=self.parameters
         )
 
     def test_init(self):
         self.assertIsInstance(self.engine, AposterioriOptimizerEngine)
         self.assertEqual("APosteriori_Optimizer", self.engine.name)
-        self.assertIsInstance(self.engine.optimizer, ProbeIOptimizer)
+        self.assertIsInstance(self.engine.optimizer, ProbeOptimizer)
 
     def test___getstate__(self):
         state = self.engine.__getstate__()

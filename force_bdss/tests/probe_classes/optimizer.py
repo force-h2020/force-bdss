@@ -16,7 +16,7 @@ from force_bdss.mco.parameters.mco_parameters import (
 
 
 @provides(IOptimizer)
-class ProbeIOptimizer(HasStrictTraits):
+class ProbeOptimizer(HasStrictTraits):
 
     def optimize_function(self, func, params):
 

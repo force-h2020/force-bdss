@@ -36,8 +36,18 @@ class TestScipyOptimizer(TestCase):
             initial_value=[1, 1]
         )]
 
+        # test single-objective (scalar) function
         for point in self.optimizer.optimize_function(
                     lambda arg: arg[0][0]**2 + arg[0][1]**2,
+                    params
+                ):
+            x, y = point[0]
+            self.assertAlmostEqual(x, 0.0)
+            self.assertAlmostEqual(y, 0.0)
+
+        # test multi-objective function (objectives should be summed)
+        for point in self.optimizer.optimize_function(
+                    lambda arg: [arg[0][0]**2, arg[0][1]**2],
                     params
                 ):
             x, y = point[0]
