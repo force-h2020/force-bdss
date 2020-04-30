@@ -54,19 +54,18 @@ class ScipyOptimizer(HasStrictTraits):
         ScipyTypeError
             If params has no RangedMCO or RangedVector.
         """
-        #: verify that all parameters are Ranged or RangedVector
-        #: (see the notes for this method)
+        # verify that all parameters are Ranged or RangedVector
+        # (see the notes for this method)
         self.verify_mco_parameters(params)
 
-        #: create a "translated" function that only takes a single
-        #: numpy array as the parameter argument.
+        # create a "translated" function that only takes a single
+        # numpy array as the parameter argument.
         tfunc = partial(self.translated_function, func=func, params=params)
 
-        #: get the intitial parameter values and their bounds.
-        x0 = self.get_initial_values(params)
-        bounds = self.get_bounds(params)
+        # get the intitial parameter values and their bounds.
+        x0, bounds = self.get_initial_and_bounds(params)
 
-        #: optimize the function
+        # optimize the function
         optimization_result = scipy_optimize.minimize(
             tfunc,
             x0,
@@ -74,7 +73,7 @@ class ScipyOptimizer(HasStrictTraits):
             bounds=bounds
         )
 
-        #: get the optimal point (list of optimal parameter values)
+        # get the optimal point (list of optimal parameter values)
         optimal_point = self.translate_array_to_mco(
             optimization_result.x, params)
         yield optimal_point
@@ -98,14 +97,14 @@ class ScipyOptimizer(HasStrictTraits):
             The optimized
         """
 
-        #: Translate the numpy array into an MCO parameter list
+        # Translate the numpy array into an MCO parameter list
         param_values = self.translate_array_to_mco(array, params)
 
-        #: Call the function that takes a list of MCO parameter values
+        # Call the function that takes a list of MCO parameter values
         objective = func(param_values)
 
-        #: Translate the objective (kpis) into a scalar if it is not.
-        #: ??????????
+        # Translate the objective (kpis) into a scalar if it is not.
+        # ??????????
 
         return objective
 
@@ -137,14 +136,15 @@ class ScipyOptimizer(HasStrictTraits):
         not therefore be optimized). However it seems simpler (for now)
         just to raise an exception if there are any such parameters.
         """
+
         for p in params:
-            if not (isinstance(p, RangedMCOParameter) or
-                    isinstance(p, RangedVectorMCOParameter)):
+            if not isinstance(
+                    p, (RangedMCOParameter, RangedVectorMCOParameter)):
                 raise ScipyTypeError("Parameters must be ranged or vector")
 
     @staticmethod
-    def get_initial_values(params):
-        """ Get initial values ("x0") as a numpy array.
+    def get_initial_and_bounds(params):
+        """ Get initial values ("x0") as a numpy array and bounds as a list.
 
         Parameters
         ----------
@@ -155,32 +155,6 @@ class ScipyOptimizer(HasStrictTraits):
         ------
         numpy.array
             The initial values.
-
-        Notes
-        -----
-        MCO parameter types other than Ranged and RangedVector are ignored.
-        """
-
-        initial_values = []
-        for i, p in enumerate(params):
-            if isinstance(p, RangedVectorMCOParameter):
-                initial_values.extend(p.initial_value)
-            elif isinstance(p, RangedMCOParameter):
-                initial_values.append(p.initial_value)
-
-        return np.array(initial_values)
-
-    @staticmethod
-    def get_bounds(params):
-        """ Get bounds as a list.
-
-        Parameters
-        ----------
-        params: list of MCOParameter
-            The MCO parameter objects corresponding to the x0.
-
-        Return
-        ------
         list of tuples
             The bounds.
 
@@ -188,14 +162,18 @@ class ScipyOptimizer(HasStrictTraits):
         -----
         MCO parameter types other than Ranged and RangedVector are ignored.
         """
+
+        initial_values = []
         bounds = []
         for i, p in enumerate(params):
             if isinstance(p, RangedVectorMCOParameter):
+                initial_values.extend(p.initial_value)
                 bounds.extend(list(zip(p.lower_bound, p.upper_bound)))
             elif isinstance(p, RangedMCOParameter):
+                initial_values.append(p.initial_value)
                 bounds.append((p.lower_bound, p.upper_bound))
 
-        return bounds
+        return np.array(initial_values), bounds
 
     @staticmethod
     def translate_mco_to_array(param_values, params):
