@@ -35,14 +35,11 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
             Point of evaluation, objective value
         """
         #: get pareto set
-        pareto = self.optimizer.optimize_function(
-            self._score,
-            self.initial_parameter_value,
-            self.parameter_bounds
-        )
-        for optimal_point in pareto:
-            optimal_kpis = self._score(optimal_point)
-            yield optimal_point, optimal_kpis
+        for point in self.optimizer.optimize_function(
+                self._score,
+                self.parameters):
+            kpis = self._score(point)
+            yield point, kpis
 
     def unpacked_score(self, *unpacked_input):
         packed_input = list(unpacked_input)
