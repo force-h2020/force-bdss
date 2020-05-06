@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from force_bdss.api import (
     KPISpecification,
-    WeightedOptimizerEngine,
     RangedMCOParameterFactory,
 )
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
@@ -17,8 +16,21 @@ from force_bdss.mco.optimizer_engines.space_sampling import (
     DirichletSpaceSampler,
 )
 
+from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
+    WeightedOptimizerEngine
+)
+from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
 
-class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedOptimizerEngine):
+
+class WeightedScipyEngine(WeightedOptimizerEngine):
+    """Provide a ScipyOptimizer instance as the default optimizer
+    attribute
+    """
+    def _optimizer_default(self):
+        return ScipyOptimizer()
+
+
+class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
     pass
 
 
@@ -51,8 +63,6 @@ class TestWeightedOptimizer(TestCase):
         self.kpis = [KPISpecification(), KPISpecification()]
         self.parameters = [1, 1, 1, 1]
 
-        self.kpis = self.kpis
-
         self.parameters = [
             RangedMCOParameterFactory(self.factory).create_model(
                 {"lower_bound": 0.0, "upper_bound": 1.0}
@@ -60,7 +70,7 @@ class TestWeightedOptimizer(TestCase):
             for _ in self.parameters
         ]
 
-        self.optimizer = WeightedOptimizerEngine(
+        self.optimizer = WeightedScipyEngine(
             parameters=self.parameters, kpis=self.kpis
         )
         self.mocked_optimizer = DummyOptimizerEngine(
@@ -68,28 +78,18 @@ class TestWeightedOptimizer(TestCase):
         )
 
     def test_init(self):
-        self.assertIsInstance(self.optimizer, WeightedOptimizerEngine)
+        self.assertIsInstance(self.optimizer, WeightedScipyEngine)
         self.assertEqual("Weighted_Optimizer", self.optimizer.name)
         self.assertIs(self.optimizer.single_point_evaluator, None)
-        self.assertEqual("SLSQP", self.optimizer.algorithms)
+        self.assertEqual("SLSQP", self.optimizer.optimizer.algorithms)
         self.assertEqual(7, self.optimizer.num_points)
         self.assertEqual("Uniform", self.optimizer.space_search_mode)
-
-        self.assertListEqual(
-            self.optimizer.initial_parameter_value,
-            [0.5] * len(self.parameters),
-        )
-        self.assertListEqual(
-            self.optimizer.parameter_bounds,
-            [(0.0, 1.0)] * len(self.parameters),
-        )
 
     def test___getstate__(self):
         state = self.optimizer.__getstate__()
         self.assertDictEqual(
             {
                 "name": "Weighted_Optimizer",
-                "algorithms": "SLSQP",
                 "num_points": 7,
                 "space_search_mode": "Uniform",
                 "verbose_run": False,
@@ -143,14 +143,14 @@ class TestWeightedOptimizer(TestCase):
         )
 
     def test__weighted_optimize(self):
-        optimal_point, optimal_kpis = self.mocked_optimizer._weighted_optimize(
-            [1.0 for _ in range(self.mocked_optimizer.dimension)]
-        )
-        for kpi in optimal_kpis:
-            self.assertAlmostEqual(0.0, kpi)
+        for point, kpis in self.mocked_optimizer._weighted_optimize(
+                    [1.0 for _ in range(self.mocked_optimizer.dimension)]
+                ):
+            for kpi in kpis:
+                self.assertAlmostEqual(0.0, kpi)
 
-        self.assertAlmostEqual(0.33, optimal_point[0])
-        self.assertAlmostEqual(0.67, optimal_point[1])
+            self.assertAlmostEqual(0.33, point[0])
+            self.assertAlmostEqual(0.67, point[1])
 
     def test_weights_samples(self):
         samples_default = list(self.optimizer.weights_samples())

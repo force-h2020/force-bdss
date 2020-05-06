@@ -1,17 +1,19 @@
 import logging
 from functools import partial
+
 import numpy as np
 
-from traits.api import Enum, Str
+from traits.api import Enum, Str, Instance
 
 from force_bdss.api import PositiveInt
-
-from .scipy_optimizer_engine import ScipyOptimizerEngine
 
 from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
 )
+from force_bdss.mco.optimizers.i_optimizer import IOptimizer
+
+from .base_optimizer_engine import BaseOptimizerEngine
 
 log = logging.getLogger(__name__)
 
@@ -48,17 +50,32 @@ def sen_scaling_method(dimension, weighted_optimize):
 
         log.info(f"Doing extrema MCO run with weights: {weights}")
 
-        _, optimal_kpis = weighted_optimize(weights)
-        extrema[i] += np.asarray(optimal_kpis)
+        for _, optimal_kpis in weighted_optimize(weights):
+            extrema[i] += np.asarray(optimal_kpis)
 
     scaling_factors = np.reciprocal(extrema.max(0) - extrema.min(0))
     return scaling_factors
 
 
-class WeightedOptimizerEngine(ScipyOptimizerEngine):
-    """ Performs local optimization of multiobjective function using scipy.
-    The multiobjective function is converted to a scalar by dot product
-    with a weights vector (`weighted_score`).
+class WeightedOptimizerEngine(BaseOptimizerEngine):
+    """ A priori multi-objective optimization.
+
+    Notes
+    -----
+    A multi-objective function is optimized by the a priori method of
+    weighting/scalarisation. That is:
+    1) Create a single objective from the weighted sum of the muLtiple
+    objectives.
+    2) The single-objective function is optimized.
+    3) By sampling a range of weight combinations, part or all of the
+    Pareto-efficient set is found.
+
+    The weights are calculated by:
+    1) For each objective calculate a "scale" by Sen's method: Optimize each
+    objective individually to find both it's minimum and maximum. Use these
+    to calculate its "scale".
+    2) weight = scale x uniform-random-variate[0, 1), where
+    SUM(variates) over objectives = 1.0
     """
 
     #: Optimizer name
@@ -73,35 +90,42 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
     #: Space search distribution for weight points sampling
     space_search_mode = Enum("Uniform", "Dirichlet")
 
-    def weighted_score(self, input_point, weights):
-        """ Calculates the weighted score of the KPI vector at `input_point`,
-        by taking dot product with a vector of `weights`."""
-        score = np.dot(weights, self._score(input_point))
-        log.info("Weighted score: {}".format(score))
-        return score
+    #: IOptimizer class that provides library backend for optimizing a
+    #: callable
+    optimizer = Instance(IOptimizer, transient=True)
 
-    def optimize(self):
-        """ Generates optimization results with weighted optimization.
+    def optimize(self, *vargs):
+        """ Generates optimization results.
 
         Yields
         ----------
         optimization result: tuple(np.array, np.array, list)
-            Point of evaluation, objective value, dummy list of weights
+            Point of evaluation, objective value, weights
         """
-        #: Get scaling factors and non-zero weight combinations for each KPI
+
+        #: Get non-zero weight combinations for each KPI
         scaling_factors = self.get_scaling_factors()
+
+        #: loop through weight combinations
         for weights in self.weights_samples():
             log.info("Doing MCO run with weights: {}".format(weights))
 
+            #: multiply weights by scales
             scaled_weights = [
                 weight * scale
                 for weight, scale in zip(weights, scaling_factors)
             ]
 
-            optimal_point, optimal_kpis = self._weighted_optimize(
-                scaled_weights
-            )
-            yield optimal_point, optimal_kpis, scaled_weights
+            #: optimize
+            for point, kpis in self._weighted_optimize(scaled_weights):
+                yield point, kpis, scaled_weights
+
+    def weights_samples(self, **kwargs):
+        """ Generates necessary number of search space sample points
+        from the `space_search_mode` search strategy."""
+        return self._space_search_distribution(
+            **kwargs
+        ).generate_space_sample()
 
     def _weighted_optimize(self, weights):
         """ Performs single scipy.minimize operation on the dot product of
@@ -123,9 +147,31 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
             + "Bounds: {}".format(self.parameter_bounds)
         )
 
-        weighted_score_func = partial(self.weighted_score, weights=weights)
+        # partial of objective function.
+        weighted_score_func = partial(
+            self.weighted_score, weights=weights)
 
-        return self._scipy_optimize(weighted_score_func)
+        # optimize and evaluate
+        for point in self.optimizer.optimize_function(
+                weighted_score_func,
+                self.parameters):
+
+            # evaluate the function at the optimal point
+            kpis = self._score(point)
+
+            log.info(
+                "Optimal point : {}".format(point)
+                + "KPIs at optimal point : {}".format(kpis)
+            )
+
+            yield point, kpis
+
+    def weighted_score(self, input_point, weights):
+        """ Calculates the weighted score of the KPI vector at `input_point`,
+        by taking dot product with a vector of `weights`."""
+        score = np.dot(weights, self._score(input_point))
+        log.info("Weighted score: {}".format(score))
+        return score
 
     def get_scaling_factors(self):
         """ Calculates scaling factors for KPIs, defined in MCO.
@@ -175,10 +221,3 @@ class WeightedOptimizerEngine(ScipyOptimizerEngine):
         else:
             raise NotImplementedError
         return distribution(len(self.kpis), self.num_points, **kwargs)
-
-    def weights_samples(self, **kwargs):
-        """ Generates necessary number of search space sample points
-        from the `space_search_mode` search strategy."""
-        return self._space_search_distribution(
-            **kwargs
-        ).generate_space_sample()

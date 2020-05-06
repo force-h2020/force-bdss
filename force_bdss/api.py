@@ -37,13 +37,14 @@ from .mco.base_mco import BaseMCO  # noqa
 from .mco.base_mco_factory import BaseMCOFactory  # noqa
 from .mco.i_evaluator import IEvaluator  # noqa
 from .mco.i_mco_factory import IMCOFactory  # noqa
+from .mco.optimizers.i_optimizer import IOptimizer  # noqa
 from .mco.parameters.base_mco_parameter_factory import BaseMCOParameterFactory  # noqa
 from .mco.parameters.base_mco_parameter import BaseMCOParameter  # noqa
 from .mco.parameters.mco_parameters import FixedMCOParameterFactory, RangedMCOParameterFactory, ListedMCOParameterFactory, CategoricalMCOParameterFactory, RangedVectorMCOParameterFactory  # noqa
 from .mco.parameters.mco_parameters import FixedMCOParameter, RangedMCOParameter, ListedMCOParameter, CategoricalMCOParameter, RangedVectorMCOParameter  # noqa
 from .mco.optimizer_engines.base_optimizer_engine import BaseOptimizerEngine  # noqa
 from .mco.optimizer_engines.weighted_optimizer_engine import WeightedOptimizerEngine  # noqa
-from .mco.optimizer_engines.scipy_optimizer_engine import ScipyOptimizerEngine  # noqa
+from .mco.optimizers.scipy_optimizer import ScipyOptimizer # noqa
 
 from .notification_listeners.base_csv_writer import BaseCSVWriterFactory, BaseCSVWriterModel, BaseCSVWriter  # noqa
 from .notification_listeners.i_notification_listener_factory import INotificationListenerFactory  # noqa
