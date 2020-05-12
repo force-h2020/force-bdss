@@ -5,7 +5,7 @@ Factory Classes
 ---------------
 
 Factories are used in the BDSS to modularise the code and therefore allow additional components
-to be contributed using `plugins <plugin_development.rst>`_.
+to be contributed using `plugins <plugin_development>`_.
 
 The ``BaseFactory`` class fulfills an ``IFactory`` interface, and is therefore able to be
 contributed and subsequently located by the ``BaseExtensionPlugin`` and ``FactoryRegistryPlugin``
@@ -35,8 +35,8 @@ The ``BaseModel`` classes all share a common API for serialization, event handli
 
 The ``BaseModel.verify`` and ``BaseModel.serialize`` methods are expected to be overridden by any subclass to suit
 the needs of the developer, whereas the ``BaseModel.notify`` method is designed to be used as a setter method for
-the ``event`` attribute. Further information is available on both `event handling <event_handling.rst>`_
-and `verification <verification.rst>`_ pathways in the BDSS.
+the ``event`` attribute. Further information is available on both `event handling <event_handling>`_
+and `verification <verification>`_ pathways in the BDSS.
 
 Runtime Classes
 ---------------
