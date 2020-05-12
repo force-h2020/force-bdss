@@ -9,6 +9,10 @@ FORCE BDSS
    :target: http://codecov.io/github/force-h2020/force-bdss?branch=master
    :alt: Coverage status
 
+.. image:: https://readthedocs.org/projects/force-bdss/badge/?version=master
+   :target: https://readthedocs.org/projects/force-bdss/?badge=master
+   :alt: Documentation Status
+
 This repository contains the implementation of the Business Decision Support System (BDSS).
 It is implemented under the Formulations and Computational Engineering (FORCE) project within Horizon 2020
 (`NMBP-23-2016/721027 <https://www.the-force-project.eu>`_).
@@ -30,6 +34,8 @@ to FORCE projects in general.
 Documentation
 -------------
 
-To build the Sphinx documentation in the ``doc/build`` directory run::
+This documentation is being hosted on `ReadTheDocs <https://force-bdss.readthedocs.io/>`_
+
+To build the Sphinx documentation locally in the ``doc/build`` directory run::
 
     python -m ci docs
