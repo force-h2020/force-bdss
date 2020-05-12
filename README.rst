@@ -20,20 +20,20 @@ It is implemented under the Formulations and Computational Engineering (FORCE) p
 Installation
 ------------
 
-To install, follow the `installation instructions <doc/source/installation>`_
+To install, follow the `installation instructions <doc/source/installation.rst>`_
 
 Developer Notes
 ---------------
 
-The design of the BDSS command-line interface can be found `here <doc/source/design>`_
-
-Please also read the `documentation <doc/source/plugin_development>`_ regarding plugin development for the BDSS,
-as well as the `developer guidelines <doc/source/developer_guidelines>`_ for contributing code
+Please also read the `documentation <doc/source/plugin_development.rst>`_ regarding plugin development for the BDSS,
+as well as the `developer guidelines <doc/source/developer_guidelines.rst>`_ for contributing code
 to FORCE projects in general.
 
 Documentation
 -------------
 
-To build the Sphinx documentation locally in the ``doc/build`` directory run::
+Full documentation is being hosted at the `BDSS ReadTheDocs page <https://force-bdss.readthedocs.io>`_.
+
+Alternatively, to build the documentation locally in the ``doc/build`` directory, run::
 
     python -m ci docs
