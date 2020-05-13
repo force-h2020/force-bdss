@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from traits.api import HasStrictTraits, Enum
 
 from force_bdss.local_traits import Identifier

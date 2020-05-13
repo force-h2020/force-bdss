@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from traits.api import HasStrictTraits, Any, String, Enum
 
 from force_bdss.utilities import pop_dunder_recursive

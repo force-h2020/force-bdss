@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 import csv
 
 from traits.api import Str, Instance, List, Dict, File

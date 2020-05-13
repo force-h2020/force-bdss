@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from envisage.api import ServiceOffer
 from traits.api import Instance, List, Interface
 

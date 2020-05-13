@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 import sphinx.environment
 from docutils.utils import get_source_line
 import sys

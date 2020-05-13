@@ -1,3 +1,7 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
+
 def pop_recursive(dictionary, remove_key):
     """Recursively remove a named key from dictionary and any contained
     dictionaries."""

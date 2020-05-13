@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from force_bdss.core.data_value import DataValue
 from force_bdss.events.base_driver_event import BaseDriverEvent
 from force_bdss.notification_listeners.base_notification_listener import \

@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from copy import deepcopy
 import logging
 
@@ -7,6 +10,9 @@ from force_bdss.core.data_value import DataValue
 from force_bdss.core.verifier import VerifierError
 from force_bdss.data_sources.base_data_source_model import BaseDataSourceModel
 from force_bdss.events.event_notifier_mixin import EventNotifierMixin
+# (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+# All rights reserved.
+
 from force_bdss.utilities import pop_dunder_recursive, nested_getstate
 
 log = logging.getLogger(__name__)

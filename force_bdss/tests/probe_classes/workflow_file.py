@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from force_bdss.app.workflow_file import WorkflowFile
 from force_bdss.io.workflow_reader import WorkflowReader
 from force_bdss.io.workflow_writer import WorkflowWriter

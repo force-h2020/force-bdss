@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from unittest import mock, TestCase
 
 from traits.trait_errors import TraitError

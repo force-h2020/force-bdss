@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from traits.api import File, HasStrictTraits, Instance, List
 
 from force_bdss.core.workflow import Workflow

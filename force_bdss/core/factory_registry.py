@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from traits.api import HasStrictTraits, Instance, List, provides
 
 from force_bdss.core.i_factory_registry import IFactoryRegistry
