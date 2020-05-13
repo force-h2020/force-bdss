@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from .core.base_factory import BaseFactory  # noqa
 from .core.base_model import BaseModel  # noqa
 from .core.data_value import DataValue  # noqa

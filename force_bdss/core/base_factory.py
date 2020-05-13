@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from envisage.plugin import Plugin
 from traits.api import Bool, HasStrictTraits, Str
 

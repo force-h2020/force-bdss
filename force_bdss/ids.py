@@ -1,3 +1,7 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
+
 class ExtensionPointID:
     """The envisage extension points ids for the factories ExtensionPoints.
     These are populated by the envisage plugins.

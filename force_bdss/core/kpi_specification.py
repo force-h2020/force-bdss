@@ -1,7 +1,13 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from traits.api import Enum, HasStrictTraits, Float, Bool
 
 from force_bdss.local_traits import Identifier
 from force_bdss.utilities import pop_dunder_recursive
+
+# (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+# All rights reserved.
 
 from .verifier import VerifierError
 

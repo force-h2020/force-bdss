@@ -1,3 +1,6 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 from force_bdss.core_plugins.base_extension_plugin import BaseExtensionPlugin
 from force_bdss.ids import plugin_id
 from force_bdss.tests.probe_classes.data_source import ProbeDataSourceFactory
