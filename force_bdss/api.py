@@ -48,6 +48,7 @@ from .mco.parameters.mco_parameters import FixedMCOParameter, RangedMCOParameter
 from .mco.optimizer_engines.base_optimizer_engine import BaseOptimizerEngine  # noqa
 from .mco.optimizer_engines.weighted_optimizer_engine import WeightedOptimizerEngine  # noqa
 from .mco.optimizers.scipy_optimizer import ScipyOptimizer # noqa
+from .mco.optimizers.scipy_optimizer import SCIPY_ALGORITHMS_KEYS # noqa
 
 from .notification_listeners.base_csv_writer import BaseCSVWriterFactory, BaseCSVWriterModel, BaseCSVWriter  # noqa
 from .notification_listeners.i_notification_listener_factory import INotificationListenerFactory  # noqa

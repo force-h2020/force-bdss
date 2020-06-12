@@ -18,6 +18,12 @@ from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
 from scipy import optimize as scipy_optimize
 
+SCIPY_ALGORITHMS_KEYS = [
+    "SLSQP", "Nelder-Mead", "Powell", "CG", "BFGS",
+    "Newton-CG", "L-BFGS-B", "TNC", "COBYLA",
+    "trust-constr", "dogleg",
+    "trust-ncg", "trust-exact", "trust-krylov"
+]
 
 class ScipyTypeError(Exception):
     pass
@@ -29,10 +35,7 @@ class ScipyOptimizer(HasStrictTraits):
     """
 
     #: Algorithms available to work with
-    algorithms = Enum("SLSQP", "Nelder-Mead", "Powell", "CG", "BFGS",
-                      "Newton-CG", "L-BFGS-B", "TNC", "COBYLA",
-                      "trust-constr", "dogleg",
-                      "trust-ncg", "trust-exact", "trust-krylov")
+    algorithms = Enum(*SCIPY_ALGORITHMS_KEYS)
 
     def optimize_function(self, func, params):
         """ Minimize the passed function.
