@@ -25,6 +25,7 @@ SCIPY_ALGORITHMS_KEYS = [
     "trust-ncg", "trust-exact", "trust-krylov"
 ]
 
+
 class ScipyTypeError(Exception):
     pass
 
