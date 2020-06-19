@@ -172,7 +172,8 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     def weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
         by taking dot product with a vector of `weights`."""
-        score = np.dot(weights, self._score(input_point))
+        score = self._score(input_point)
+        score = np.dot(weights, self._minimization_score(score))
         log.info("Weighted score: {}".format(score))
         return score
 

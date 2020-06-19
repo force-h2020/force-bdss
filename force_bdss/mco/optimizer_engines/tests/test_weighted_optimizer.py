@@ -47,7 +47,10 @@ class TestSenScaling(TestCase):
             )
             for _ in range(4)
         ]
-        self.optimizer = DummyOptimizerEngine(parameters=self.parameters)
+        self.kpis = [KPISpecification()] * 2
+        self.optimizer = DummyOptimizerEngine(
+            kpis=self.kpis,
+            parameters=self.parameters)
         self.scaling_values = self.optimizer.scaling_values.tolist()
 
     def test_sen_scaling(self):

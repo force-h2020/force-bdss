@@ -9,7 +9,7 @@ from traits.api import ABCHasStrictTraits, List, Instance, Bool, Property
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.i_evaluator import IEvaluator
-from force_bdss.mco.optimizer_engines.utilities import convert_by_mask
+from force_bdss.mco.optimizer_engines.utilities import convert_to_score
 from force_bdss.utilities import pop_dunder_recursive
 
 log = logging.getLogger(__name__)
@@ -49,6 +49,11 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         depends_on="parameters.[lower_bound, upper_bound]", visible=False
     )
 
+    #: Input parameter bounds. Defines the search space.
+    kpi_bounds = Property(
+        depends_on="kpis.[lower_bound, upper_bound]", visible=False
+    )
+
     #: Yield data points on each workflow evaluation, or return filtered
     #: data, e.g. Pareto front only
     verbose_run = Bool(False)
@@ -58,6 +63,9 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
 
     def _get_parameter_bounds(self):
         return [(p.lower_bound, p.upper_bound) for p in self.parameters]
+
+    def _get_kpi_bounds(self):
+        return [(kpi.lower_bound, kpi.upper_bound) for kpi in self.kpis]
 
     @abc.abstractmethod
     def optimize(self):
@@ -84,9 +92,7 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         """ Transforms the optimization `score` array to the minimization
         format. The minimization format implies that all optimization KPIs
         are subject to minimization."""
-        return convert_by_mask(
-            score, [kpi.objective for kpi in self.kpis], "MINIMISE"
-        )
+        return convert_to_score(score, self.kpis)
 
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())
