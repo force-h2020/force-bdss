@@ -135,7 +135,7 @@ class TestWeightedOptimizer(TestCase):
     def test_weighted_score(self):
         self.assertEqual(
             0.0,
-            self.mocked_optimizer.weighted_score(
+            self.mocked_optimizer.objective_function(
                 [1.0] * 4,
                 [0.0 for _ in range(self.mocked_optimizer.dimension)],
             ),
@@ -143,7 +143,7 @@ class TestWeightedOptimizer(TestCase):
 
         self.assertAlmostEqual(
             0.67 ** 2 + 0.33 ** 2,
-            self.mocked_optimizer.weighted_score(
+            self.mocked_optimizer.objective_function(
                 [1.0] * 4, [1.0] * self.mocked_optimizer.dimension
             ),
         )

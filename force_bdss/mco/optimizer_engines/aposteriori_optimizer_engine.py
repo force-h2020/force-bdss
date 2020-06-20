@@ -3,7 +3,7 @@
 
 import logging
 
-from traits.api import Str, Instance
+from traits.api import Str, Instance, Dict
 
 from force_bdss.mco.optimizers.i_optimizer import IOptimizer
 
@@ -29,20 +29,38 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
     #: callable
     optimizer = Instance(IOptimizer, transient=True)
 
-    def optimize(self, *vargs):
+    #: Caches KPI values between optimization runs
+    _kpi_cache = Dict(transient=True)
+
+    def optimize(self, **kwargs):
         """ Generates optimization results.
 
         Yields
         ----------
-        optimization result: tuple(np.array, np.array, list)
-            Point of evaluation, objective value
+        optimization result: tuple(array-like, array-like)
+            MCO parameter and KPI values at point of optimization
         """
+        self._kpi_cache = {}
+
         #: get pareto set
         for point in self.optimizer.optimize_function(
-                self._score,
-                self.parameters):
-            kpis = self._score(point)
+                self.objective_function,
+                self.parameters,
+                **kwargs):
+            # Retrieve the cached raw KPI values
+            kpis = self._kpi_cache[tuple(point)]
             yield point, kpis
+
+    def objective_function(self, input_values):
+        """From a set of input values, return the objective
+        function for the minimization routine"""
+
+        # Calculate and cache the raw KPI values
+        kpi_values = self._score(input_values)
+        self._kpi_cache[tuple(input_values)] = kpi_values
+
+        # Return the score to be minimized
+        return self._minimization_score(kpi_values)
 
     def unpacked_score(self, *unpacked_input):
         packed_input = list(unpacked_input)

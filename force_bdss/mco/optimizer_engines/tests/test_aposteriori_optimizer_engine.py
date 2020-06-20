@@ -43,7 +43,8 @@ class TestAposterioriEngine(TestCase):
 
     def test_optimize(self):
         n_points = 0
-        for point, kpis in self.engine.optimize(self.parameters):
+        self.engine.parameters = self.parameters
+        for point, kpis in self.engine.optimize():
             n_points += 1
             self.assertEqual(len(self.parameters), len(point))
             self.assertEqual(2, len(kpis))

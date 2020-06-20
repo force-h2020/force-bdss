@@ -6,10 +6,9 @@ from functools import partial
 
 import numpy as np
 
-from traits.api import Enum, Str, Instance
+from traits.api import Enum, Str, Instance, Dict
 
 from force_bdss.api import PositiveInt
-
 from force_bdss.mco.optimizer_engines.space_sampling import (
     UniformSpaceSampler,
     DirichletSpaceSampler,
@@ -97,6 +96,9 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: callable
     optimizer = Instance(IOptimizer, transient=True)
 
+    #: Caches KPI values between optimization runs
+    _kpi_cache = Dict(transient=True)
+
     def optimize(self, *vargs):
         """ Generates optimization results.
 
@@ -130,7 +132,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             **kwargs
         ).generate_space_sample()
 
-    def _weighted_optimize(self, weights):
+    def _weighted_optimize(self, weights, **kwargs):
         """ Performs single scipy.minimize operation on the dot product of
         the multiobjective function with `weights`.
 
@@ -144,6 +146,9 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
         optimization result: tuple(np.array, np.array)
             Point of evaluation, and objective values
         """
+
+        self._kpi_cache = {}
+
         log.info(
             "Running optimisation."
             + "Initial point: {}".format(self.initial_parameter_value)
@@ -152,15 +157,16 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
         # partial of objective function.
         weighted_score_func = partial(
-            self.weighted_score, weights=weights)
+            self.objective_function, weights=weights)
 
         # optimize and evaluate
         for point in self.optimizer.optimize_function(
                 weighted_score_func,
-                self.parameters):
+                self.parameters,
+                **kwargs):
 
             # evaluate the function at the optimal point
-            kpis = self._score(point)
+            kpis = self._kpi_cache[tuple(point)]
 
             log.info(
                 "Optimal point : {}".format(point)
@@ -169,11 +175,16 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
             yield point, kpis
 
-    def weighted_score(self, input_point, weights):
+    def objective_function(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
         by taking dot product with a vector of `weights`."""
-        score = self._score(input_point)
-        score = np.dot(weights, self._minimization_score(score))
+
+        # Calculate and cache the raw KPI values
+        kpi_values = self._score(input_point)
+        self._kpi_cache[tuple(input_point)] = kpi_values
+
+        # Return the score to be minimized
+        score = np.dot(weights, self._minimization_score(kpi_values))
         log.info("Weighted score: {}".format(score))
         return score
 

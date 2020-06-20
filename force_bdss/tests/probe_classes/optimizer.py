@@ -36,4 +36,5 @@ class ProbeOptimizer(HasStrictTraits):
 
         # pretend we have 10 points in the Pareto-set
         for _ in range(10):
+            func(point)
             yield point
