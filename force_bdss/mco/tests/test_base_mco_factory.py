@@ -71,7 +71,7 @@ class TestBaseMCOFactory(unittest.TestCase):
         with self.assertRaises(TraitError):
             Broken(self.plugin)
 
-    def test_broken_get_optimizer_class(self):
+    def test_broken_get_optimiser_class(self):
         class Broken(DummyMCOFactory):
             def get_optimizer_class(self):
                 return None

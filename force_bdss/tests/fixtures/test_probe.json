@@ -16,7 +16,7 @@
                 "kpis": [
                     {
                         "name": "bar",
-                        "objective": "MINIMIZE"
+                        "objective": "MINIMISE"
                     }
                 ]
             }
