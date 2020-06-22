@@ -1,7 +1,11 @@
+#  (C) Copyright 2010-2020 Enthought, Inc., Austin, TX
+#  All rights reserved.
+
 import numpy as np
+
+from traits.api import HasStrictTraits, Array
+
 from force_bdss.local_traits import PositiveInt
-from traits.has_traits import HasStrictTraits
-from traits.trait_numeric import Array
 
 
 class MixinProbeOptimizerEngine(HasStrictTraits):
@@ -14,7 +18,3 @@ class MixinProbeOptimizerEngine(HasStrictTraits):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.scaling_values = np.array([1./0.17**2] * self.dimension)
-
-    def _score(self, input_point):
-        score = (input_point[0] - 0.33) ** 2, (input_point[1] - 0.67) ** 2
-        return score
