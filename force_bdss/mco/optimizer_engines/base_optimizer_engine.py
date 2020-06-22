@@ -4,7 +4,8 @@
 import abc
 import logging
 
-from traits.api import ABCHasStrictTraits, List, Instance, Bool, Property
+from traits.api import (
+    ABCHasStrictTraits, List, Instance, Bool, Property, Dict)
 
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
@@ -39,6 +40,9 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         IEvaluator, visible=False, transient=True
     )
 
+    #: Caches KPI values between optimization runs
+    _kpi_cache = Dict(transient=True)
+
     #: Default (initial) guess on input parameter values
     initial_parameter_value = Property(
         depends_on="parameters.[initial_value]", visible=False
@@ -68,7 +72,7 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         return [(kpi.lower_bound, kpi.upper_bound) for kpi in self.kpis]
 
     @abc.abstractmethod
-    def optimize(self):
+    def optimize(self, **kwargs):
         """ Main entry point to the OptimizerEngine. This is a general
         iterator. It yields [explored input space, objective space, kwargs].
         It can yield data as a single workflow evaluation has been completed
@@ -84,7 +88,13 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         This is also useful for the testing purposes, when the `evaluate`
         method is mocked.
         """
-        score = self.single_point_evaluator.evaluate(input_point)
+
+        # Calculate and cache the raw KPI values
+        kpi_values = self.single_point_evaluator.evaluate(input_point)
+        self._kpi_cache[tuple(input_point)] = kpi_values
+
+        # Return the score to be minimized
+        score = self._minimization_score(kpi_values)
         log.info("Objective score: {}".format(score))
         return score
 

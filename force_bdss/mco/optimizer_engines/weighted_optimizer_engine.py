@@ -6,7 +6,7 @@ from functools import partial
 
 import numpy as np
 
-from traits.api import Enum, Str, Instance, Dict
+from traits.api import Enum, Str, Instance
 
 from force_bdss.api import PositiveInt
 from force_bdss.mco.optimizer_engines.space_sampling import (
@@ -96,10 +96,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
     #: callable
     optimizer = Instance(IOptimizer, transient=True)
 
-    #: Caches KPI values between optimization runs
-    _kpi_cache = Dict(transient=True)
-
-    def optimize(self, *vargs):
+    def optimize(self, **kwargs):
         """ Generates optimization results.
 
         Yields
@@ -122,7 +119,8 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             ]
 
             #: optimize
-            for point, kpis in self._weighted_optimize(scaled_weights):
+            for point, kpis in self._weighted_optimize(
+                    scaled_weights, **kwargs):
                 yield point, kpis, scaled_weights
 
     def weights_samples(self, **kwargs):
@@ -157,7 +155,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
         # partial of objective function.
         weighted_score_func = partial(
-            self.objective_function, weights=weights)
+            self._weighted_score, weights=weights)
 
         # optimize and evaluate
         for point in self.optimizer.optimize_function(
@@ -175,16 +173,15 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
 
             yield point, kpis
 
-    def objective_function(self, input_point, weights):
+    def _weighted_score(self, input_point, weights):
         """ Calculates the weighted score of the KPI vector at `input_point`,
         by taking dot product with a vector of `weights`."""
 
-        # Calculate and cache the raw KPI values
-        kpi_values = self._score(input_point)
-        self._kpi_cache[tuple(input_point)] = kpi_values
+        # Calculate the value of the raw objective function
+        score = self._score(input_point)
 
         # Return the score to be minimized
-        score = np.dot(weights, self._minimization_score(kpi_values))
+        score = np.dot(weights, score)
         log.info("Weighted score: {}".format(score))
         return score
 
