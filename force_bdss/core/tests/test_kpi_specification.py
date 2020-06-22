@@ -44,6 +44,8 @@ class TestKPISpecification(TestCase):
         self.assertEqual(0, len(self.kpi.verify()))
 
         self.kpi.use_bounds = True
+        self.assertEqual(0, len(self.kpi.verify()))
+
         self.kpi.lower_bound = 0.75
         errors = [error.local_error for error in self.kpi.verify()]
         self.assertEqual(1, len(errors))
