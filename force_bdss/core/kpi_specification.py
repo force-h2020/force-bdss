@@ -17,7 +17,7 @@ class KPISpecification(HasStrictTraits):
     name = Identifier()
 
     #: The expected outcome of the procedure relative to this KPI.
-    objective = Enum("MINIMISE", "MAXIMISE", "TARGET")
+    objective = Enum("MINIMIZE", "MAXIMIZE", "TARGET")
 
     #: Whether to perform auto scaling in weighted cost function of MCO.
     auto_scale = Bool(True)

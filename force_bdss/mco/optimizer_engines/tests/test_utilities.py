@@ -11,8 +11,8 @@ from force_bdss.mco.optimizer_engines.utilities import (
 class TestConvertUtil(TestCase):
     def test_convert_to_score(self):
         kpis = [
-            KPISpecification(objective="MINIMISE"),
-            KPISpecification(objective="MAXIMISE"),
+            KPISpecification(objective="MINIMIZE"),
+            KPISpecification(objective="MAXIMIZE"),
             KPISpecification(objective="TARGET", target_value=10)
         ]
         values = [10.0, 20.0, 15.0]

@@ -71,7 +71,7 @@ class TestBaseOptimizerEngine(TestCase):
     def test__minimization_score(self):
         temp_kpis = [
             KPISpecification(),
-            KPISpecification(objective="MAXIMISE"),
+            KPISpecification(objective="MAXIMIZE"),
         ]
         self.optimizer_engine.kpis = temp_kpis
         score = [10.0, 20.0]
