@@ -8,9 +8,7 @@ from force_bdss.api import (
     RangedMCOParameterFactory,
 )
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
-from force_bdss.tests.dummy_classes.optimizer_engine import (
-    MixinDummyOptimizerEngine,
-)
+from force_bdss.tests.probe_classes.optimizer_engine import MixinProbeOptimizerEngine
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     sen_scaling_method,
 )
@@ -33,7 +31,7 @@ class WeightedScipyEngine(WeightedOptimizerEngine):
         return ScipyOptimizer()
 
 
-class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
+class DummyOptimizerEngine(MixinProbeOptimizerEngine, WeightedScipyEngine):
     pass
 
 
