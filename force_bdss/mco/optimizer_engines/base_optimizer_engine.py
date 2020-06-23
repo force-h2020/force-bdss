@@ -80,14 +80,16 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         the method.
 
         Any data points yielded will be communicated with the rest of the BDSS
-        framework as soon as they are generated, so a long optimization procedure
-        may wish to periodically report optimal values, rather than returning
-        all points at the end of the MCO. It is also expected that the `verbose_run`
-        attribute may be used to control the number of data points reported.
+        framework as soon as they are generated, so a long optimization
+        procedure may wish to periodically report optimal values, rather than
+        returning all points at the end of the MCO. It is also expected that
+        the `verbose_run` attribute may be used to control the number of
+        data points reported.
 
-        Although this method expects no arguments, it may be passed in additional
-        keywords if required. This can be useful when using a `IOptimizer` class
-        to provide a wrapper around an optimization library.
+        Although this method expects no arguments, it may be passed in
+        additional keywords if required. This can be useful when using
+        an `IOptimizer` class to provide a wrapper around an optimization
+        library.
         """
 
     def _score(self, input_point):
