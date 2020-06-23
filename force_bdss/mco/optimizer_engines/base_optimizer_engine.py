@@ -74,10 +74,20 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
     @abc.abstractmethod
     def optimize(self, **kwargs):
         """ Main entry point to the OptimizerEngine. This is a general
-        iterator. It yields [explored input space, objective space, kwargs].
-        It can yield data as a single workflow evaluation has been completed
-        (if `verbose_run` is True), or return the optimization data after all
-        required computations have finished (if `verbose_run` is False).
+        iterator, expected to yield both optimal values of MCO parameters
+        and the corresponding KPIs. Additional values can also be returned,
+        though they will need to be handled by any implementation calling
+        the method.
+
+        Any data points yielded will be communicated with the rest of the BDSS
+        framework as soon as they are generated, so a long optimization procedure
+        may wish to periodically report optimal values, rather than returning
+        all points at the end of the MCO. It is also expected that the `verbose_run`
+        attribute may be used to control the number of data points reported.
+
+        Although this method expects no arguments, it may be passed in additional
+        keywords if required. This can be useful when using a `IOptimizer` class
+        to provide a wrapper around an optimization library.
         """
 
     def _score(self, input_point):
