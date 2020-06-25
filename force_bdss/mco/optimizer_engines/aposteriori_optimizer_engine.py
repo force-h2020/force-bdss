@@ -37,6 +37,8 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
         optimization result: tuple(array-like, array-like)
             MCO parameter and KPI values at point of optimization
         """
+
+        # Clear the KPI cache at the start of the optimization
         self._kpi_cache = {}
 
         #: get pareto set
@@ -45,7 +47,7 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
                 self.parameters,
                 **kwargs):
             # Retrieve the cached raw KPI values
-            kpis = self._kpi_cache[tuple(point)]
+            kpis = self.retrieve_result(point)
             yield point, kpis
 
     def unpacked_score(self, *unpacked_input):

@@ -92,6 +92,32 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         library.
         """
 
+    def cache_result(self, input_point, kpi_values):
+        """Stores an evaluated set of MCO parameters and corresponding
+        KPI values"""
+        key = self._get_kpi_cache_key(input_point)
+        self._kpi_cache[key] = kpi_values
+
+    def retrieve_result(self, input_point):
+        """Returns the evaluated set KPI values for a given set of
+        corresponding of MCO parameters"""
+        key = self._get_kpi_cache_key(input_point)
+        return self._kpi_cache[key]
+
+    def _get_kpi_cache_key(self, input_point):
+        """Returns a hashable key object based on a set of MCO parameter
+         values corresponding to an evaluation point"""
+
+        key = []
+        for value in input_point:
+            # Handles nested vector parameters
+            if isinstance(value, (list, tuple)):
+                key.append(self._get_kpi_cache_key(value))
+            else:
+                key.append(value)
+
+        return tuple(key)
+
     def _score(self, input_point):
         """ Evaluates the workflow state at the `input_point` using the
         `single_point_evaluator`, and returns the resulting KPI data.
@@ -103,7 +129,7 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
 
         # Calculate and cache the raw KPI values
         kpi_values = self.single_point_evaluator.evaluate(input_point)
-        self._kpi_cache[tuple(input_point)] = kpi_values
+        self.cache_result(input_point, kpi_values)
 
         # Return the score to be minimized
         score = self._minimization_score(kpi_values)

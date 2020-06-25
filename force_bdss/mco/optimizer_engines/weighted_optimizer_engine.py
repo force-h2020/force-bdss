@@ -145,6 +145,7 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
             Point of evaluation, and objective values
         """
 
+        # Clear the KPI cache at the start of the optimization
         self._kpi_cache = {}
 
         log.info(
@@ -163,8 +164,8 @@ class WeightedOptimizerEngine(BaseOptimizerEngine):
                 self.parameters,
                 **kwargs):
 
-            # evaluate the function at the optimal point
-            kpis = self._kpi_cache[tuple(point)]
+            # retrieve the function at the optimal point
+            kpis = self.retrieve_result(point)
 
             log.info(
                 "Optimal point : {}".format(point)
