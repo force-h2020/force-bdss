@@ -4,12 +4,13 @@
 import abc
 import logging
 
-from traits.api import ABCHasStrictTraits, List, Instance, Bool, Property
+from traits.api import (
+    ABCHasStrictTraits, List, Instance, Bool, Property, Dict)
 
 from force_bdss.core.kpi_specification import KPISpecification
 from force_bdss.mco.parameters.base_mco_parameter import BaseMCOParameter
 from force_bdss.mco.i_evaluator import IEvaluator
-from force_bdss.mco.optimizer_engines.utilities import convert_by_mask
+from force_bdss.mco.optimizer_engines.utilities import convert_to_score
 from force_bdss.utilities import pop_dunder_recursive
 
 log = logging.getLogger(__name__)
@@ -39,6 +40,9 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         IEvaluator, visible=False, transient=True
     )
 
+    #: Caches KPI values between optimization runs
+    _kpi_cache = Dict(transient=True)
+
     #: Default (initial) guess on input parameter values
     initial_parameter_value = Property(
         depends_on="parameters.[initial_value]", visible=False
@@ -47,6 +51,11 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
     #: Input parameter bounds. Defines the search space.
     parameter_bounds = Property(
         depends_on="parameters.[lower_bound, upper_bound]", visible=False
+    )
+
+    #: Input parameter bounds. Defines the search space.
+    kpi_bounds = Property(
+        depends_on="kpis.[lower_bound, upper_bound]", visible=False
     )
 
     #: Yield data points on each workflow evaluation, or return filtered
@@ -59,14 +68,55 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
     def _get_parameter_bounds(self):
         return [(p.lower_bound, p.upper_bound) for p in self.parameters]
 
+    def _get_kpi_bounds(self):
+        return [(kpi.lower_bound, kpi.upper_bound) for kpi in self.kpis]
+
     @abc.abstractmethod
-    def optimize(self):
+    def optimize(self, **kwargs):
         """ Main entry point to the OptimizerEngine. This is a general
-        iterator. It yields [explored input space, objective space, kwargs].
-        It can yield data as a single workflow evaluation has been completed
-        (if `verbose_run` is True), or return the optimization data after all
-        required computations have finished (if `verbose_run` is False).
+        iterator, expected to yield both optimal values of MCO parameters
+        and the corresponding KPIs. Additional values can also be returned,
+        though they will need to be handled by any implementation calling
+        the method.
+
+        Any data points yielded will be communicated with the rest of the BDSS
+        framework as soon as they are generated, so a long optimization
+        procedure may wish to periodically report optimal values, rather than
+        returning all points at the end of the MCO. It is also expected that
+        the `verbose_run` attribute may be used to control the number of
+        data points reported.
+
+        Although this method expects no arguments, it may be passed in
+        additional keywords if required. This can be useful when using
+        an `IOptimizer` class to provide a wrapper around an optimization
+        library.
         """
+
+    def cache_result(self, input_point, kpi_values):
+        """Stores an evaluated set of MCO parameters and corresponding
+        KPI values"""
+        key = self._get_kpi_cache_key(input_point)
+        self._kpi_cache[key] = kpi_values
+
+    def retrieve_result(self, input_point):
+        """Returns the evaluated set KPI values for a given set of
+        corresponding of MCO parameters"""
+        key = self._get_kpi_cache_key(input_point)
+        return self._kpi_cache[key]
+
+    def _get_kpi_cache_key(self, input_point):
+        """Returns a hashable key object based on a set of MCO parameter
+         values corresponding to an evaluation point"""
+
+        key = []
+        for value in input_point:
+            # Handles nested vector parameters
+            if isinstance(value, (list, tuple)):
+                key.append(self._get_kpi_cache_key(value))
+            else:
+                key.append(value)
+
+        return tuple(key)
 
     def _score(self, input_point):
         """ Evaluates the workflow state at the `input_point` using the
@@ -76,7 +126,13 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         This is also useful for the testing purposes, when the `evaluate`
         method is mocked.
         """
-        score = self.single_point_evaluator.evaluate(input_point)
+
+        # Calculate and cache the raw KPI values
+        kpi_values = self.single_point_evaluator.evaluate(input_point)
+        self.cache_result(input_point, kpi_values)
+
+        # Return the score to be minimized
+        score = self._minimization_score(kpi_values)
         log.info("Objective score: {}".format(score))
         return score
 
@@ -84,9 +140,7 @@ class BaseOptimizerEngine(ABCHasStrictTraits):
         """ Transforms the optimization `score` array to the minimization
         format. The minimization format implies that all optimization KPIs
         are subject to minimization."""
-        return convert_by_mask(
-            score, [kpi.objective for kpi in self.kpis], "MINIMISE"
-        )
+        return convert_to_score(score, self.kpis)
 
     def __getstate__(self):
         return pop_dunder_recursive(super().__getstate__())

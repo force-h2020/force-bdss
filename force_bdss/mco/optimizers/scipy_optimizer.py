@@ -71,7 +71,7 @@ class ScipyOptimizer(HasStrictTraits):
         # numpy array as the parameter argument.
         tfunc = partial(self.translated_function, func=func, params=params)
 
-        # get the intitial parameter values and their bounds.
+        # get the initial parameter values and their bounds.
         x0, bounds = self.get_initial_and_bounds(params)
 
         # optimize the function
@@ -206,12 +206,12 @@ class ScipyOptimizer(HasStrictTraits):
 
         Example
         -------
-        params =
-        [RangedMCOParameter(),
-        RangedVectorMCOParameter(dimension=3)
-        RangedMCOParameter()]
-        param_values = [21, [2, 75, 10], 31]
-        array = nd.array([21, 2, 75, 10, 31])
+        >>> params = [RangedMCOParameter(),
+        ...           RangedVectorMCOParameter(dimension=3)
+        ...           RangedMCOParameter()]
+        >>> param_values = [21, [2, 75, 10], 31]
+        >>> ScipyOptimizer.translate_mco_to_array(param_values, params)
+        ... array([21, 2, 75, 10, 31])
 
         Notes
         -----
@@ -248,12 +248,13 @@ class ScipyOptimizer(HasStrictTraits):
 
         Example
         -------
-        array = nd.array([21, 2, 75, 10, 31])
-        params =
-        [RangedMCOParameter(),
-        RangedVectorMCOParameter(dimension=3)
-        RangedMCOParameter()]
-        param_values = [21, [2, 75, 10], 31]
+        >>> array = nd.array([21, 2, 75, 10, 31])
+        >>> params =
+        ...    [RangedMCOParameter(),
+        ...     RangedVectorMCOParameter(dimension=3)
+        ...     RangedMCOParameter()]
+        >>> ScipyOptimizer.translate_array_to_mco(array, params)
+        ... [21, [2, 75, 10], 31]
 
         Notes
         -----

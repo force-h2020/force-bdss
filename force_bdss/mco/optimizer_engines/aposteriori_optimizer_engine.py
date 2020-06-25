@@ -29,19 +29,25 @@ class AposterioriOptimizerEngine(BaseOptimizerEngine):
     #: callable
     optimizer = Instance(IOptimizer, transient=True)
 
-    def optimize(self, *vargs):
+    def optimize(self, **kwargs):
         """ Generates optimization results.
 
         Yields
         ----------
-        optimization result: tuple(np.array, np.array, list)
-            Point of evaluation, objective value
+        optimization result: tuple(array-like, array-like)
+            MCO parameter and KPI values at point of optimization
         """
+
+        # Clear the KPI cache at the start of the optimization
+        self._kpi_cache = {}
+
         #: get pareto set
         for point in self.optimizer.optimize_function(
                 self._score,
-                self.parameters):
-            kpis = self._score(point)
+                self.parameters,
+                **kwargs):
+            # Retrieve the cached raw KPI values
+            kpis = self.retrieve_result(point)
             yield point, kpis
 
     def unpacked_score(self, *unpacked_input):

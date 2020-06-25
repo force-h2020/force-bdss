@@ -8,9 +8,8 @@ from force_bdss.api import (
     RangedMCOParameterFactory,
 )
 from force_bdss.tests.dummy_classes.mco import DummyMCOFactory
-from force_bdss.tests.dummy_classes.optimizer_engine import (
-    MixinDummyOptimizerEngine,
-)
+from force_bdss.tests.probe_classes.optimizer_engine import (
+    MixinProbeOptimizerEngine)
 from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     sen_scaling_method,
 )
@@ -23,6 +22,7 @@ from force_bdss.mco.optimizer_engines.weighted_optimizer_engine import (
     WeightedOptimizerEngine
 )
 from force_bdss.mco.optimizers.scipy_optimizer import ScipyOptimizer
+from force_bdss.tests.probe_classes.evaluator import GaussProbeEvaluator
 
 
 class WeightedScipyEngine(WeightedOptimizerEngine):
@@ -33,7 +33,7 @@ class WeightedScipyEngine(WeightedOptimizerEngine):
         return ScipyOptimizer()
 
 
-class DummyOptimizerEngine(MixinDummyOptimizerEngine, WeightedScipyEngine):
+class DummyOptimizerEngine(MixinProbeOptimizerEngine, WeightedScipyEngine):
     pass
 
 
@@ -47,7 +47,11 @@ class TestSenScaling(TestCase):
             )
             for _ in range(4)
         ]
-        self.optimizer = DummyOptimizerEngine(parameters=self.parameters)
+        self.kpis = [KPISpecification()] * 2
+        self.optimizer = DummyOptimizerEngine(
+            kpis=self.kpis,
+            parameters=self.parameters,
+            single_point_evaluator=GaussProbeEvaluator())
         self.scaling_values = self.optimizer.scaling_values.tolist()
 
     def test_sen_scaling(self):
@@ -77,7 +81,8 @@ class TestWeightedOptimizer(TestCase):
             parameters=self.parameters, kpis=self.kpis
         )
         self.mocked_optimizer = DummyOptimizerEngine(
-            parameters=self.parameters, kpis=self.kpis
+            parameters=self.parameters, kpis=self.kpis,
+            single_point_evaluator=GaussProbeEvaluator()
         )
 
     def test_init(self):
@@ -132,7 +137,7 @@ class TestWeightedOptimizer(TestCase):
     def test_weighted_score(self):
         self.assertEqual(
             0.0,
-            self.mocked_optimizer.weighted_score(
+            self.mocked_optimizer._weighted_score(
                 [1.0] * 4,
                 [0.0 for _ in range(self.mocked_optimizer.dimension)],
             ),
@@ -140,7 +145,7 @@ class TestWeightedOptimizer(TestCase):
 
         self.assertAlmostEqual(
             0.67 ** 2 + 0.33 ** 2,
-            self.mocked_optimizer.weighted_score(
+            self.mocked_optimizer._weighted_score(
                 [1.0] * 4, [1.0] * self.mocked_optimizer.dimension
             ),
         )
