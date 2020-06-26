@@ -169,7 +169,7 @@ class BaseMCOModel(BaseModel):
         ----------
         optimal_point: List(Instance(DataValue))
             A list of DataValue objects describing the point in parameter
-            space that produces an optimised result.
+            space that produces an optimized result.
 
         optimal_kpis: List(Instance(DataValue))
             A list of DataValue objects describing the KPI values resulting
