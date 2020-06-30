@@ -10,7 +10,7 @@ from subprocess import check_call
 DEFAULT_PYTHON_VERSION = "3.6"
 PYTHON_VERSIONS = ["3.6"]
 
-CORE_DEPS = ["envisage==4.9.2-2",
+CORE_DEPS = ["envisage==4.9.2-3",
              "click==7.0-1"]
 
 DOCS_DEPS = ["sphinx==1.8.5-6"]
