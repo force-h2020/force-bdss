@@ -91,22 +91,5 @@ class KPISpecification(HasStrictTraits):
                         global_error="A KPI does not have a target value",
                     )
                 )
-            if self.use_bounds:
-                if (
-                        self.target_value > self.upper_bound
-                        or self.target_value < self.lower_bound
-                ):
-                    error = (
-                        "Target value of the KPI must be within the "
-                        "lower and the upper bounds."
-                    )
-                    errors.append(
-                        VerifierError(
-                            subject=self,
-                            trait_name="target_value",
-                            local_error=error,
-                            global_error=error,
-                        )
-                    )
 
         return errors
