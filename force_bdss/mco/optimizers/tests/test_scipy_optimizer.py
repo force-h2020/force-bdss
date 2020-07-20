@@ -4,6 +4,7 @@
 from unittest import TestCase
 
 from force_bdss.mco.optimizers.scipy_optimizer import (
+    ScipyTypeError,
     ScipyOptimizer
 )
 
@@ -25,6 +26,14 @@ class TestScipyOptimizer(TestCase):
 
     def test_init(self):
         self.assertEqual("SLSQP", self.optimizer.algorithms)
+
+    def test_verify_mco_parameters(self):
+        optimizer = ScipyOptimizer()
+        parameter_factory = self.factory.parameter_factories[0]
+        wrong_parameter = parameter_factory.create_model()
+
+        with self.assertRaises(ScipyTypeError):
+            optimizer.verify_mco_parameters([wrong_parameter])
 
     def test_optimize_function(self):
 
