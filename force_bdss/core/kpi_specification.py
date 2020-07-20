@@ -27,16 +27,18 @@ class KPISpecification(HasStrictTraits):
 
     #: Target value to be used if optimization objective is set to
     #: "TARGET"
-    target_value = Float
+    target_value = Float()
 
     #: Whether or not to use upper or lower boundaries on KPI values;
     #: may be used by some MCO engines
     use_bounds = Bool(False)
 
-    #: Lower threshold of KPI; may be used by some MCO engines
+    #: Lower threshold of KPI; may be used by some MCO engines. Only
+    #: expected to be used when objective == 'MAXIMISE'
     lower_bound = Float(0)
 
-    #: Upper threshold of KPI; may be used by some MCO engines
+    #: Upper threshold of KPI; may be used by some MCO engines. Only
+    #: expected to be used when objective != 'MINIMISE'
     upper_bound = Float(1)
 
     def __getstate__(self):
@@ -47,8 +49,6 @@ class KPISpecification(HasStrictTraits):
 
         Check that the KPI specification:
         - has a name
-        - has correctly assigned upper and lower bounds
-        - has a correctly assigned target value
 
         Returns
         -------
@@ -65,31 +65,5 @@ class KPISpecification(HasStrictTraits):
                     global_error="A KPI is not named",
                 )
             )
-
-        if self.use_bounds:
-            if self.upper_bound < self.lower_bound:
-                error = (
-                    "Upper bound value of the KPI must be greater "
-                    "than the lower bound value."
-                )
-                errors.append(
-                    VerifierError(
-                        subject=self,
-                        trait_name="upper_bound",
-                        local_error=error,
-                        global_error=error,
-                    )
-                )
-
-        if self.objective == "TARGET":
-            if self.target_value == 0:
-                errors.append(
-                    VerifierError(
-                        subject=self,
-                        trait_name='target_value',
-                        local_error="Target value must be non-zero",
-                        global_error="A KPI does not have a target value",
-                    )
-                )
 
         return errors
