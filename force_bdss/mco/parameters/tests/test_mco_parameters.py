@@ -249,18 +249,12 @@ class TestRangedVectorMCOParameter(TestCase):
 
         errors = parameter.verify()
         messages = [error.local_error for error in errors]
-        self.assertEqual(2, len(messages))
+        self.assertEqual(1, len(messages))
 
         expected_message = (
             'List attribute lower_bound must possess same length as '
             'determined by dimension attribute: 1')
         self.assertEqual(expected_message, messages[0])
-
-        expected_message = (
-            "Initial values at indices [0] of the Ranged Vector parameter "
-            "must be within the lower and the upper bounds."
-        )
-        self.assertEqual(expected_message, messages[1])
 
         parameter.lower_bound[:] = parameter.lower_bound[:1]
         parameter.initial_value = [0]
