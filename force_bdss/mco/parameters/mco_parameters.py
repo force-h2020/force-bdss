@@ -239,6 +239,7 @@ class RangedVectorMCOParameter(RangedMCOParameter):
         have the expected dimensionality according to dimension attribute"""
         errors = super(RangedMCOParameter, self).verify()
 
+        failed_lengths = []
         for name in ['initial_value', 'upper_bound', 'lower_bound']:
             bound_vector = getattr(self, name)
             if len(bound_vector) != self.dimension:
@@ -246,7 +247,7 @@ class RangedVectorMCOParameter(RangedMCOParameter):
                     f'List attribute {name} must possess same length as '
                     f'determined by dimension attribute: {self.dimension}'
                 )
-                errors.append(
+                failed_lengths.append(
                     VerifierError(
                         subject=self,
                         trait_name=name,
@@ -255,48 +256,51 @@ class RangedVectorMCOParameter(RangedMCOParameter):
                     )
                 )
 
-        failed_init_values = []
-        failed_bounds = []
+        if len(failed_lengths) == 0:
+            failed_init_values = []
+            failed_bounds = []
 
-        for dim in range(self.dimension):
-            initial_value = self.initial_value[dim]
-            upper_bound = self.upper_bound[dim]
-            lower_bound = self.lower_bound[dim]
+            for dim in range(self.dimension):
+                initial_value = self.initial_value[dim]
+                upper_bound = self.upper_bound[dim]
+                lower_bound = self.lower_bound[dim]
 
-            if initial_value > upper_bound or initial_value < lower_bound:
-                failed_init_values.append(dim)
-            if upper_bound < lower_bound:
-                failed_bounds.append(dim)
+                if initial_value > upper_bound or initial_value < lower_bound:
+                    failed_init_values.append(dim)
+                if upper_bound < lower_bound:
+                    failed_bounds.append(dim)
 
-        if failed_init_values:
-            error = (
-                f"Initial values at indices {failed_init_values} of the "
-                "Ranged Vector parameter must be within the lower and "
-                "the upper bounds."
-            )
-            errors.append(
-                VerifierError(
-                    subject=self,
-                    trait_name="initial_value",
-                    local_error=error,
-                    global_error=error,
+            if failed_init_values:
+                error = (
+                    f"Initial values at indices {failed_init_values} of the "
+                    "Ranged Vector parameter must be within the lower and "
+                    "the upper bounds."
                 )
-            )
-
-        if failed_bounds:
-            error = (
-                f"Upper bound values at indices {failed_bounds} of the "
-                "Ranged Vector parameter must greater than the lower "
-                "bound values."
-            )
-            errors.append(
-                VerifierError(
-                    subject=self,
-                    trait_name="upper_bound",
-                    local_error=error,
-                    global_error=error,
+                errors.append(
+                    VerifierError(
+                        subject=self,
+                        trait_name="initial_value",
+                        local_error=error,
+                        global_error=error,
+                    )
                 )
-            )
+
+            if failed_bounds:
+                error = (
+                    f"Upper bound values at indices {failed_bounds} of the "
+                    "Ranged Vector parameter must greater than the lower "
+                    "bound values."
+                )
+                errors.append(
+                    VerifierError(
+                        subject=self,
+                        trait_name="upper_bound",
+                        local_error=error,
+                        global_error=error,
+                    )
+                )
+        else:
+            errors += failed_lengths
 
         return errors
 
