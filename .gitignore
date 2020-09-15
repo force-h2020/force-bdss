@@ -7,3 +7,5 @@ force_bdss/version.py
 .DS_Store
 .idea/
 *.log
+.coverage
+htmlcov/
