@@ -30,7 +30,7 @@ At the application level, there are three main attributes of type:
 - ``IFactoryRegistry``: contains references to all ``IFactory`` classes that
   are contributed by currently installed plugins. This object is constructed from
   by the ``BDSSApplication``, using the Envisage plugins installed in the local
-  environment, but is actually used by ``WorkflowReader`` to instantiate serialised
+  environment, but is actually used by ``WorkflowReader`` to instantiate serialized
   ``Workflow`` objects from file.
 
 Upon start up, the ``BDSSApplication`` performs the following process:

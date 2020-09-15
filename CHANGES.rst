@@ -46,14 +46,14 @@ Features
 * New ``BaseOptimizerEngine`` class (#243), providing a standard interface between black-box
   optimization libraries (scipy, acado, nevergrad etc.) and functionalities of the ``BaseMCO`` class
 * ``WeightedOptimizer`` subclass (#243) ported from ITWM plugin and included as part of core library
-* ``BaseDriverEvents`` class now includes serialization and deserilaization methods (#247, #248, #275),
+* ``BaseDriverEvents`` class now includes serialization and deserialization methods (#247, #248, #275),
   generally based on those ported from the WfManager
 * New ``WeightedMCOStartEvent`` and ``WeightedMCOProgressEvent`` (#274) included as part of core library,
   designed to be used alongside ``WeightedOptmizer``
 * New ``UIEventNotificationMixin`` class (#296) and ability to stop and pause the ``OptimizeOperation``
   during an MCO run via a ``BaseDriverEvent``
 * New ``UIEventMixin`` class (#290) that can be used to specify ``BaseDriverEvent`` subclasses
-  required to be deleivered to a UI
+  required to be delivered to a UI
 * New ``DataSourceStartEvent`` and ``DataSourceFinishEvent`` classes (#290) that inform the
   ``OptimizeOperation`` when a ``BaseDataSource.run`` method has been called and finished
 
@@ -64,7 +64,7 @@ Changes
 * Major refactoring of ``BDSSApplication`` (#220) to separate core features from Envisage
 * ``BaseDriverEvents`` are propagated through the ``Workflow`` class, rather than the
   ``BaseMCO`` class (#269, #279).
-* Replaced (now obsolete) ``Unicode`` traits in favour of ``Str`` (#265, #280)
+* Replaced (now obsolete) ``Unicode`` traits in favor of ``Str`` (#265, #280)
 * ``Workflow.mco`` attribute renamed to ``Workflow.mco_model`` (#257)
 * ``WorkflowReader`` and ``WorkflowWriter`` classes refactored (#266, #263), resulting in new
   version 1.1 of workflow file formats

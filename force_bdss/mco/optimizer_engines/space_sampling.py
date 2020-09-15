@@ -146,7 +146,7 @@ class UniformSpaceSampler(SpaceSampler):
             n_combinations += self.dimension
 
         # If we are only returning one weight combination, it must
-        # equal 1.0 since the weights are all normalised. No zero
+        # equal 1.0 since the weights are all normalized. No zero
         # values will be allowed in this case.
         try:
             scaling = 1.0 / (n_combinations - 1)

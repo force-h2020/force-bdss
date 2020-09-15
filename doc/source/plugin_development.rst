@@ -179,7 +179,7 @@ case that the MCO is solving. The base class must simply define the following me
 
     def optimize(self):
 
-Which is expected to act as a generator, yielding values corresponding to optimised input parameters
+Which is expected to act as a generator, yielding values corresponding to optimized input parameters
 and their corresponding KPIs. A concrete implementation of this base class, the ``WeightedOptimizerEngine``,
 is provided that uses the ``SciPy`` library as a backend.
 

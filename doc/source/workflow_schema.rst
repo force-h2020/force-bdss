@@ -1,7 +1,7 @@
 Workflow
 ========
 
-The ``Workflow`` contains a full description of the system to be optimised, the optimisation
+The ``Workflow`` contains a full description of the system to be optimized, the optimisation
 procedure and any listener objects that are expected to react on events that are
 created during runtime.
 
@@ -52,7 +52,7 @@ implementation of a pipeline for the BDSS:
 -  The ``Workflow.mco_model`` attribute refers to a ``BaseMCOModel`` instance that
    defines user-inputted parameters for the MCO. It contains a list of ``BaseMCOParameter``
    instances that define the search space, as well as a list of ``KPISpecification`` instances
-   referring to variables that will be optimised. It also defined the types of
+   referring to variables that will be optimized. It also defined the types of
    ``MCOStartEvent``, ``MCOProgressEvent`` and ``MCOFinishEvent`` classes that will
    be emitted during the MCO run time.
 -  The ``Workflow.execution_layers`` attribute contains a list of ``ExecutionLayer``
@@ -68,7 +68,7 @@ implementation of a pipeline for the BDSS:
    ``BaseNotificationListener`` instances that define user-inputted parameters for each
    notification listener that will be active during the MCO run.
 
-During an Force BDSS run, the ``Workflow`` object is used to initialise the MCO and also
+During an Force BDSS run, the ``Workflow`` object is used to initialize the MCO and also
 perform each calculation of the system state for a given set of input parameter values.
 This is carried out by the following steps:
 
@@ -85,14 +85,14 @@ This is carried out by the following steps:
 Workflow JSON Files
 -------------------
 A ``Workflow`` object can be instantiated from an appropriately formatted workflow JSON file.
-Typically the structure of this JSON represents a serialised version of each object contained within
+Typically the structure of this JSON represents a serialized version of each object contained within
 the ``Workflow``. Currently the ``WorkflowReader`` supports two file versions: 1 and 1.1.
 There are only minor differences between both versions:
 
 1. ``Workflow.mco_model`` attribute data stored under ``mco`` key in version 1 vs ``mco_model`` key in 1.1
 2. ``Workflow.execution_layers`` attribute data represented as a list of lists in version 1 vs
    a list of dictionaries in version 1.1. In version 1, each element in the outer list implicitly represents
-   an execution layer, whilst each element in the the inner list represents the serialised status of a
+   an execution layer, whilst each element in the the inner list represents the serialized status of a
    ``DataSourceModel`` instance. In version 1.1, we explicitly include the status of each ``ExecutionLayer``
    instance in the outer list, and therefore each dictionary element is also expected to contain a
    ``data_sources`` key with a list of ``DataSourceModel`` statuses.
