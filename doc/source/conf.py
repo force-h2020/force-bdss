@@ -71,5 +71,5 @@ htmlhelp_basename = 'FORCEdoc'
 intersphinx_mapping = {'http://docs.python.org/': None}
 apidoc_module_dir = '../../force_bdss'
 apidoc_output_dir = 'api'
-apidoc_excluded_paths = ['*tests*']
+apidoc_excluded_paths = ['*tests*', 'api.py']
 apidoc_separate_modules = False
