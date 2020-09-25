@@ -42,8 +42,6 @@ def mock_modules():
 mock_modules()
 
 extensions = [
-    'sphinxcontrib.apidoc',
-    'sphinxcontrib.bibtex',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
