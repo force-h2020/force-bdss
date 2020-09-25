@@ -42,6 +42,8 @@ def mock_modules():
 mock_modules()
 
 extensions = [
+    'sphinxcontrib.apidoc',
+    'sphinxcontrib.bibtex',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -67,3 +69,7 @@ html_static_path = ['_static']
 html_logo = '_static/force_logo.png'
 htmlhelp_basename = 'FORCEdoc'
 intersphinx_mapping = {'http://docs.python.org/': None}
+apidoc_module_dir = '../../force_bdss'
+apidoc_output_dir = 'api'
+apidoc_excluded_paths = ['*tests*']
+apidoc_separate_modules = False
