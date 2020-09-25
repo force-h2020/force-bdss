@@ -25,6 +25,13 @@ User Manual
 
    Introduction <introduction>
    Installation instructions <installation>
+
+Developer Manual
+================
+
+.. toctree::
+   :maxdepth: 2
+
    Design documentation <design>
    Plugin development <plugin_development>
    Contributing Code <developer_guidelines>
