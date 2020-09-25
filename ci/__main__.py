@@ -13,7 +13,7 @@ PYTHON_VERSIONS = ["3.6"]
 CORE_DEPS = ["envisage==4.9.2-4",
              "click==7.0-1"]
 
-DOCS_DEPS = ["sphinx==1.8.5-6"]
+DOCS_DEPS = ["sphinx>=2.3.1-3"]
 
 DEV_DEPS = ["flake8==3.7.7-1",
             "coverage==4.3.4-1",
@@ -75,7 +75,8 @@ def build_env(python_version):
 
     if len(PIP_DEPS):
         check_call(
-            ["edm", "run", "-e", env_name, "--", "pip", "install"] + PIP_DEPS
+            ["edm", "run", "-e", env_name, "--", "pip", "install"]
+            + PIP_DEPS
         )
 
 
