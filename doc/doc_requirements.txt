@@ -2,3 +2,5 @@ sphinx==2.3.1
 docutils==0.16
 sphinxcontrib.apidoc==0.3.0
 sphinxcontrib.bibtex==1.0.0
+envisage>=4.9.2
+numpy>=1.15.4
