@@ -4,6 +4,76 @@ FORCE BDSS Changelog
 Release 0.5.0
 -------------
 
+Released:
+
+Release notes
+~~~~~~~~~~~~~
+
+Version 0.5.0 is a major update to the BDSS package, and includes a few
+backward incompatible changes to the main framework, including:
+
+* Removal of deprecated ``BaseMCO`` methods involved in message passing
+* Refactoring of ``OptimizerOperation`` and ``EvaluationOperation`` to inherit
+  from a base class
+
+Some breaking changes are also introduced to auxiliary components:
+
+* Refactoring of ``BaseOptimizerEngine`` class to separate backend
+  optimizer library from BDSS framework
+
+The following people contributed
+code changes for this release:
+
+* Frank Longford
+* Petr Kungurtsev
+* Sean Parsons
+
+Features
+~~~~~~~~
+* New ``DataSourceEvents`` class that allows communication before and after each
+  ``BaseDataSource.run`` method is invoked (#290, #297, #315, #325)
+* New ``RangedVectorMCOParameter`` class to support vector parameters (#295)
+* Expanded SciPy MCO algorithm options (#303, #352, #361)
+* New ``IOptimizer`` interface that simplifies the extension of MCO algorithms with
+  additional optimization libraries (#343, #344)
+* KPI values are now cached in the ``BaseOptimizerEngine`` class so as to avoid duplicate
+  calculations when reporting MCO results (#353)
+* Included supporting target value and bounds on KPIs into core framework (#353, #359)
+
+Changes
+~~~~~~~~
+* Refactored classes involved in message passing to the UI to inherit from ``UIEventMixin``
+  (#290, #304, #305)
+* Introduced ``BaseOperation`` class, from which operations performed by the BDSS
+  application (optimize, evaluate) must inherit (#316, #320, #322)
+* Refactored ``EvaluateOperation`` so that it performs a similar process flow to the
+  ``OptimizeOperation`` (#323, #335)
+* Separated SciPy backed library from ``WeightedOptimizerEngine`` (#340)
+
+Fixes
+~~~~~
+* Fixed broken error messages from BaseDataSourceModel slot verification (#326, #327)
+* ``UniformSampler`` class now returns same number of points as ``DirchletSampler`` (#334, #336)
+* Fixed ReadTheDocs build failures and updated layout (#349, #364)
+
+Deprecations
+~~~~~~~~~~~~
+* Removes deprecated ``BaseMCO.notify`` and ``BaseMCO.notify_progress_event`` methods (#313)
+* Licence files and source code headers included (#341, #351)
+
+Documentation
+~~~~~~~~~~~~~
+* Included BDSS developer guidelines and PR templates for reviewers (#302, #337)
+* Added UML style design diagrams to documentation for core BDSS processes and components
+  (#311)
+* Improved documentation on ``BaseOptimizerEngine`` and ``SpaceSampler`` classes (#338)
+* Improved installation documentation, with guidence for multi platforms (#358)
+
+Maintenance and code organization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Minor tidying and code refactoring to ``Interface`` classes (#308, #314, #329)
+* Envisage version updated to 4.9.2-4 (#356, #362) to support new Traits 6.1.1 classes
+
 Release 0.4.0
 -------------
 
