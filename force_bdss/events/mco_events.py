@@ -129,7 +129,7 @@ class WeightedMCOProgressEvent(MCOProgressEvent):
     weights = List(Float())
 
     def _weights_default(self):
-        """Default weights are normalised and uniform for each KPI"""
+        """Default weights are normalized and uniform for each KPI"""
         if self.optimal_kpis:
             return [1 / len(self.optimal_kpis)] * len(self.optimal_kpis)
         return []
